@@ -32,8 +32,12 @@ import javax.annotation.Nullable;
 import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
 import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateMatcher;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import org.orecruncher.lib.collections.ObjectArray;
+
+import com.google.common.base.MoreObjects;
+
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -51,9 +55,10 @@ public final class BlockAcousticMap {
 		IAcoustic[] resolve(@Nonnull final IBlockState state);
 	}
 
+	protected final Map<IBlockState, IAcoustic[]> cache = new Reference2ObjectOpenHashMap<>();
+
 	protected final IAcousticResolver resolver;
-	protected Map<BlockStateMatcher, IAcoustic[]> data = new Object2ObjectOpenHashMap<>();
-	protected Map<IBlockState, IAcoustic[]> cache = new Reference2ObjectOpenHashMap<>();
+	protected final Map<Block, ObjectArray<BlockMapEntry>> data = new Reference2ObjectOpenHashMap<>();
 
 	/**
 	 * CTOR for building a map that has no resolver and performs special lookups
@@ -65,22 +70,39 @@ public final class BlockAcousticMap {
 
 	public BlockAcousticMap(@Nonnull final IAcousticResolver resolver) {
 		this.resolver = resolver;
-		this.data.put(BlockStateMatcher.AIR, AcousticRegistry.NOT_EMITTER);
+		put(BlockStateMatcher.AIR, AcousticRegistry.NOT_EMITTER);
 	}
 
 	@Nonnull
 	protected IAcoustic[] cacheMiss(@Nonnull final IBlockState state) {
-		final BlockStateMatcher matcher = BlockStateMatcher.create(state);
-		IAcoustic[] result = this.data.get(matcher);
-		if (result != null)
-			return result;
-		if (matcher.hasSubtypes())
-			result = this.data.get(BlockStateMatcher.asGeneric(state));
-		if (result != null)
-			return result;
+		IAcoustic[] result = null;
+		final ObjectArray<BlockMapEntry> entries = this.data.get(state.getBlock());
+		if (entries != null) {
+			final BlockStateMatcher matcher = BlockStateMatcher.create(state);
+			result = find(entries, matcher);
+			if (result != null)
+				return result;
+			if (matcher.hasSubtypes())
+				result = find(entries, BlockStateMatcher.asGeneric(state));
+			if (result != null)
+				return result;
+		}
 		if (this.resolver != null)
 			result = this.resolver.resolve(state);
-		return result != null ? result : AcousticRegistry.EMPTY;
+		return MoreObjects.firstNonNull(result, AcousticRegistry.EMPTY);
+	}
+
+	@Nullable
+	private IAcoustic[] find(@Nonnull final ObjectArray<BlockMapEntry> entries,
+			@Nonnull final BlockStateMatcher matcher) {
+		// Search backwards.  In general highly specified states are at
+		// the end of the array.
+		for (int i = entries.size() - 1; i >= 0; i--) {
+			final BlockMapEntry e = entries.get(i);
+			if (matcher.equals(e.matcher))
+				return e.acoustics;
+		}
+		return null;
 	}
 
 	/**
@@ -98,11 +120,25 @@ public final class BlockAcousticMap {
 	}
 
 	public void put(@Nonnull final BlockStateMatcher info, @Nonnull final IAcoustic[] acoustics) {
-		this.data.put(info, acoustics);
+		ObjectArray<BlockMapEntry> entry = this.data.get(info.getBlock());
+		if (entry == null) {
+			this.data.put(info.getBlock(), entry = new ObjectArray<>(2));
+		}
+		entry.add(new BlockMapEntry(info, acoustics));
 	}
 
 	public void clear() {
-		this.data = new Object2ObjectOpenHashMap<>(this.data.size());
-		this.cache = new Reference2ObjectOpenHashMap<>(this.cache.size());
+		this.data.clear();
+		this.cache.clear();
+	}
+
+	private static class BlockMapEntry {
+		public final BlockStateMatcher matcher;
+		public final IAcoustic[] acoustics;
+
+		public BlockMapEntry(@Nonnull final BlockStateMatcher matcher, @Nonnull final IAcoustic[] acoustics) {
+			this.matcher = matcher;
+			this.acoustics = acoustics;
+		}
 	}
 }
