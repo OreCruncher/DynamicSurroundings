@@ -70,7 +70,7 @@ dependencies {
     compile "biomes-o-plenty:BiomesOPlenty-1.12.2:7.0.1.2422:universal"
 	
 	if (fileTree(dir: 'libs').filter { it.name.startsWith('OreLib') }.getFiles().size() == 0)
-		compile "orelib:OreLib-1.12.2:3.5.2.1BETA:deobf"
+		compile "orelib:OreLib-1.12.2:3.5.2.2:deobf"
 
 	//compile "creativecore:CreativeCore_v1.9.35_mc1.12.2"
 	

@@ -1,3 +1,14 @@
+### DynamicSurroundings-1.12.2-3.5.4.3
+**Requirements**
+* Forge 2768+
+* OreLib-1.12.2-3.5.2.1+
+* If upgrading from version 3.4.x or earlier:
+    * Delete your dsurround.cfg and let it regenerate
+    * Check your mods/1.12.2 folder and ensure there are no Dynamic Surroundings files within
+
+**Fixes**
+* Fix block state matching RE: BoP overgrown blocks
+
 ### DynamicSurroundings-1.12.2-3.5.4.2
 **Requirements**
 * Forge 2768+
