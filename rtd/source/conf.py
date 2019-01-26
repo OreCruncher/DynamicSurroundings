@@ -20,13 +20,13 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Dynamic Surroundings'
-copyright = '2018, OreCruncher'
+copyright = '2019, OreCruncher'
 author = 'OreCruncher'
 
 # The short X.Y version
-version = ''
+version = '3.5'
 # The full version, including alpha/beta/rc tags
-release = '3.5BETA'
+release = '3.5.x'
 
 
 # -- General configuration ---------------------------------------------------

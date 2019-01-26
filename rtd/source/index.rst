@@ -25,6 +25,8 @@ the server.  However, there will be limitations:
 	This will allow pack authors to include the mod in packs, and give players the ability to remove the mod
 	based on their desires.
 
+A complete list of changes for the 3.5 version is found here: :ref:`update-3.5`.
+
 Downloads: `CurseForge <http://minecraft.curseforge.com/projects/dynamic-surroundings>`_ |br|
 Source Code: `GitHub <https://github.com/OreCruncher/DynamicSurroundings>`_ |br|
 Issue Tracker: `GitHub Issues <https://github.com/OreCruncher/DynamicSurroundings/issues>`_
@@ -42,6 +44,7 @@ Issue Tracker: `GitHub Issues <https://github.com/OreCruncher/DynamicSurrounding
 			
 				license
 				credits
+				update-3.5
 				compatibility
 				howdoi
 				performance
