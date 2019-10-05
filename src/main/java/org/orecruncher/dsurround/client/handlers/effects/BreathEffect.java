@@ -101,7 +101,10 @@ public class BreathEffect extends EntityEffect {
 
 	protected boolean isBreathVisible(@Nonnull final Entity entity) {
 		final EntityPlayer player = getState().thePlayer();
-		return (entity == player) || (!entity.isInvisibleToPlayer(player) && player.canEntityBeSeen(entity));
+		if (entity == player) {
+			return !player.isSpectator();
+		}
+		return !entity.isInvisibleToPlayer(player) && player.canEntityBeSeen(entity);
 	}
 
 	protected IBlockState getHeadBlock(final Entity entity) {
