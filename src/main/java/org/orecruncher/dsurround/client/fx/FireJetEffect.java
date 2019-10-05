@@ -55,7 +55,10 @@ public class FireJetEffect extends JetEffect {
 	@Override
 	public boolean canTrigger(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
-		return provider.isAirBlock(pos.up()) && super.canTrigger(provider, state, pos, random);
+		if (state.getMaterial().isLiquid()) {
+			return provider.isAirBlock(pos.up()) && super.canTrigger(provider, state, pos, random);
+		}
+		return false;
 	}
 
 	@Override

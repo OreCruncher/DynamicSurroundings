@@ -53,8 +53,11 @@ public class BubbleJetEffect extends JetEffect {
 	@Override
 	public boolean canTrigger(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
-		final boolean isSolidBlock = provider.getBlockState(pos.down()).getMaterial().isSolid();
-		return isSolidBlock && super.canTrigger(provider, state, pos, random);
+		if (state.getMaterial().isLiquid()) {
+			final boolean isSolidBlock = provider.getBlockState(pos.down()).getMaterial().isSolid();
+			return isSolidBlock && super.canTrigger(provider, state, pos, random);
+		}
+		return false;
 	}
 
 	@Override
