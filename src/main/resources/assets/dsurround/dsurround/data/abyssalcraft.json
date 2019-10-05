@@ -6,7 +6,7 @@
 			"sounds": [
 				{
 					"sound": "dsurround:dimension.nether",
-					"conditions": "player.dimensionName == 'Omothol'"
+					"conditions": "dim.name == 'Omothol'"
 				}
 			]
 		},
@@ -63,7 +63,7 @@
 			"fogDensity": 0.4
 		},
 		{
-			"conditions": "biome.name == 'Abyssal Wasteland'",
+			"conditions": "biome.name == 'Abyssal Wastelands'",
 			"_comment": "Abyssal Wasteland dust override",
 			"dust": true,
 			"dustColor": "204,185,102"
