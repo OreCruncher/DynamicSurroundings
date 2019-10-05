@@ -31,7 +31,7 @@ import org.orecruncher.dsurround.client.keyboard.KeyHandler;
 import org.orecruncher.dsurround.client.renderer.BadgeRenderLayer.IItemStackProvider;
 import org.orecruncher.dsurround.client.renderer.BadgeRenderLayer.IShowBadge;
 
-import com.animania.common.entities.interfaces.IFoodEating;
+import com.animania.api.interfaces.IFoodEating;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;

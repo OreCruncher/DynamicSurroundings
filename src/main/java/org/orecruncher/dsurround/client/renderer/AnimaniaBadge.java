@@ -24,8 +24,6 @@
 
 package org.orecruncher.dsurround.client.renderer;
 
-import javax.annotation.Nonnull;
-
 import org.orecruncher.dsurround.ModOptions;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -46,19 +44,6 @@ public final class AnimaniaBadge {
 		if (!ModOptions.speechbubbles.enableAnimaniaBadges)
 			return;
 
-		boolean useNew = false;
-
-		try {
-			// Will throw exception if the interface is not present
-			Class.forName("com.animania.common.entities.interfaces.IFoodEating");
-			useNew = true;
-		} catch (@Nonnull final Throwable t) {
-			;
-		}
-
-		if (useNew)
-			AnimaniaBadge2.intitialize();
-		else
-			AnimaniaBadge1.intitialize();
+		AnimaniaBadge2.intitialize();
 	}
 }
