@@ -88,9 +88,11 @@ public class SteamJetEffect extends JetEffect {
 	public void doEffect(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		final int strength = lavaCount(provider, pos, false);
-		final float spawnHeight = BlockLiquid.getLiquidHeight(state, provider, pos);
-		final ParticleJet effect = new ParticleSteamJet(strength, provider.getWorld(), pos.getX() + 0.5D, spawnHeight,
-				pos.getZ() + 0.5D);
-		addEffect(effect);
+		if (strength > 0) {
+			final float spawnHeight = BlockLiquid.getLiquidHeight(state, provider, pos);
+			final ParticleJet effect = new ParticleSteamJet(strength, provider.getWorld(), pos.getX() + 0.5D, spawnHeight,
+					pos.getZ() + 0.5D);
+			addEffect(effect);
+		}
 	}
 }

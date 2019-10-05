@@ -124,14 +124,13 @@ public class WaterSplashJetEffect extends JetEffect {
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 
 		final int strength = liquidBlockCount(provider, pos);
-		if (strength <= 1)
-			return;
-
-		final float height = BlockLiquid.getLiquidHeightPercent(state.getBlock().getMetaFromState(state)) + 0.1F;
-		final double y = height + pos.getY();
-
-		final ParticleJet effect = new ParticleWaterSplash(strength, provider.getWorld(), pos, pos.getX() + 0.5D, y,
-				pos.getZ() + 0.5D);
-		addEffect(effect);
+		if (strength > 1) {
+			final float height = BlockLiquid.getLiquidHeightPercent(state.getBlock().getMetaFromState(state)) + 0.1F;
+			final double y = height + pos.getY();
+	
+			final ParticleJet effect = new ParticleWaterSplash(strength, provider.getWorld(), pos, pos.getX() + 0.5D, y,
+					pos.getZ() + 0.5D);
+			addEffect(effect);
+		}
 	}
 }

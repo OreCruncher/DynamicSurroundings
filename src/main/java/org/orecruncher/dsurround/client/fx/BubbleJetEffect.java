@@ -63,10 +63,12 @@ public class BubbleJetEffect extends JetEffect {
 	@Override
 	public void doEffect(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
-		final int waterBlocks = countBlocks(provider, pos, s -> s.getMaterial().isLiquid(), 1);
-		final ParticleJet effect = new ParticleBubbleJet(waterBlocks, provider.getWorld(), pos.getX() + 0.5D,
-				pos.getY() + 0.1D, pos.getZ() + 0.5D);
-		addEffect(effect);
+		final int liquidBlocks = countBlocks(provider, pos, s -> s.getMaterial().isLiquid(), 1);
+		if (liquidBlocks > 0) {
+			final ParticleJet effect = new ParticleBubbleJet(liquidBlocks, provider.getWorld(), pos.getX() + 0.5D,
+					pos.getY() + 0.1D, pos.getZ() + 0.5D);
+			addEffect(effect);
+		}
 	}
 
 }

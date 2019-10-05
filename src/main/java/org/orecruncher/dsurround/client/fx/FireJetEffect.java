@@ -65,9 +65,11 @@ public class FireJetEffect extends JetEffect {
 	public void doEffect(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		final int lavaBlocks = countBlocks(provider, pos, s -> s.getMaterial() == Material.LAVA, -1);
-		final float spawnHeight = BlockLiquid.getLiquidHeight(state, provider, pos);
-		final ParticleJet effect = new ParticleFireJet(lavaBlocks, provider.getWorld(), pos.getX() + 0.5D, spawnHeight,
-				pos.getZ() + 0.5D);
-		addEffect(effect);
+		if (lavaBlocks > 0) {
+			final float spawnHeight = BlockLiquid.getLiquidHeight(state, provider, pos);
+			final ParticleJet effect = new ParticleFireJet(lavaBlocks, provider.getWorld(), pos.getX() + 0.5D, spawnHeight,
+					pos.getZ() + 0.5D);
+			addEffect(effect);
+		}
 	}
 }
