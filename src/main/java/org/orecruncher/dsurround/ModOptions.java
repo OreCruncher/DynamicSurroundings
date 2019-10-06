@@ -564,10 +564,10 @@ public final class ModOptions {
 		public static float thunderVolume = 10000F;
 
 		@Option(CONFIG_ENABLE_JUMP_SOUND)
-		@DefaultValue("true")
+		@DefaultValue("false")
 		@LangKey("dsurround.cfg.sound.Jump")
 		@Comment("Enable player Jump sound effect")
-		public static boolean enableJumpSound = true;
+		public static boolean enableJumpSound = false;
 
 		@Option(CONFIG_ENABLE_EQUIP_SOUND)
 		@DefaultValue("true")
