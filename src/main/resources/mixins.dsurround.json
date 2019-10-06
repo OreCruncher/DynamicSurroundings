@@ -13,6 +13,7 @@
 	  "MixinSoundCategory",
 	  "MixinEntityRenderer",
 	  "MixinSoundManager",
-	  "MixinEntityArrow"
+	  "MixinEntityArrow",
+	  "MixinGuiScreenOptionsSounds"
   ]
 }
