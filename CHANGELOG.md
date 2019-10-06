@@ -1,3 +1,23 @@
+### DynamicSurroundings-1.12.2-3.5.5.0
+**Requirements**
+* Forge 2779+
+* OreLib-1.12.2-3.5.2.3+
+* If upgrading from version 3.4.x or earlier:
+    * Delete your dsurround.cfg and let it regenerate
+    * Check your mods/1.12.2 folder and ensure there are no Dynamic Surroundings files within
+
+**Fixes**
+* Waterfall splash sound should no longer linger after the waterfall effect is gone.  Yay!
+* No breath effect in spectator mode.
+* No footstep effects in spectator mode.
+* Fixed AbyssalCraft config.  Should no longer play Nether sounds in regular biomes.  (It should play in Omothol.)
+* Fixed non-positive random parameter to Random in fountain jet effects.
+
+**Changes**
+* Update to support Serene Seasons 1.12.2-1.2.18.  If you use Serene Seasons you must update otherwise Dynamic Surroundings will not start!
+* Update to support Animania 1.12.2-1.7.2.  If you use Animania you must update otherwise Dynamic Surroundings will not start!
+* Player jump sound is disabled by default.
+
 ### DynamicSurroundings-1.12.2-3.5.4.3
 **Requirements**
 * Forge 2768+
