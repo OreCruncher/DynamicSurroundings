@@ -26,6 +26,7 @@ package org.orecruncher.dsurround.capabilities;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.capabilities.dimension.DimensionInfo;
 import org.orecruncher.dsurround.capabilities.dimension.IDimensionInfo;
@@ -69,6 +70,8 @@ public class CapabilityDimensionInfo {
 		public static void attachCapabilities(@Nonnull final AttachCapabilitiesEvent<World> event) {
 			final World world = event.getObject();
 			if (world != null) {
+				String side = ModBase.proxy().effectiveSide().toString();
+				ModBase.log().info("Attaching capabilities to world [%s] (%s)", world.provider.getDimensionType().getName(), side);
 				final DimensionInfo info = new DimensionInfo(world);
 				event.addCapability(CAPABILITY_ID, createProvider(info));
 			}
