@@ -60,6 +60,8 @@ dsurround.cfg.asm.EnableWeather=Weather Control
 dsurround.cfg.asm.EnableWeather.tooltip=Enable/disable ASM transformations to permit weather (rain, snow, splash, dust storms, auroras)
 dsurround.cfg.asm.DisableArrow=Arrow Particle Trail
 dsurround.cfg.asm.DisableArrow.tooltip=Disable particle trail left by an arrow when it flies
+dsurround.cfg.asm.DisablePotionIcons=Disable Inventory Potion Icons
+dsurround.cfg.asm.DisablePotionIcons.tooltip=Disables the rendering of potion effects in the inventory GUI
 
 dsurround.cfg.logging.cat.Logging=Logging Options
 dsurround.cfg.logging.cat.Logging.tooltip=Defines how Dynamic Surroundings logging will behave
