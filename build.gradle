@@ -1,15 +1,33 @@
+// Credit for getting Mixins to work:
+// https://github.com/Darkhax-Minecraft/Nautilus/blob/master/build.gradle
+
 buildscript {
     repositories {
         jcenter()
         maven {
         	name = "Forge"
-        	url = "http://files.minecraftforge.net/maven"
+        	url 'http://files.minecraftforge.net/maven'
+        }
+    	maven {
+		url 'http://repo.spongepowered.org/maven'
+	}
+        maven {
+        	url 'https://plugins.gradle.org/m2/'
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+		classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+		classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
+        classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.1.0'
     }
 }
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'com.matthewprenger.cursegradle'
+apply plugin: 'maven-publish' 
+
+apply from: 'configuration.gradle'
 
 if (file('secrets.properties').exists()) {
 	println "Loading parameters from secrets.properties"
@@ -18,23 +36,19 @@ if (file('secrets.properties').exists()) {
 }
 
 repositories {
-    maven { url = "http://chickenbones.net/maven/" }        // dem bones!
-    maven { url = "http://dvs1.progwml6.com/files/maven" }	// mezz
-    maven { url = "http://maven.tterrag.com" }				// Chisel
-    maven { url = "https://repo.elytradev.com/" }
+    maven { url "http://chickenbones.net/maven/" }
+    maven { url "http://dvs1.progwml6.com/files/maven" }
+    maven { url "http://maven.tterrag.com" }
+    maven { url "https://repo.elytradev.com/" }
+    maven { url 'http://repo.spongepowered.org/maven' }
+    maven { url 'https://maven.mcmoddev.com' }
     maven {
         name = "CurseForge"
         url = "https://minecraft.curseforge.com/api/maven/"
     }
 }
 
-apply plugin: 'net.minecraftforge.gradle.forge'
-apply from: 'configuration.gradle'
-
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
-compileJava {
-    sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
-}
 
 minecraft {
 	if (project.ext.has('secrets')) {
@@ -56,8 +70,18 @@ minecraft {
     mappings = project.ext.snapshot
 }
 
-dependencies {
+configurations {
+    embed
+    implementation.extendsFrom(embed)
+}
 
+sourceSets {
+    main {
+        ext.refMap = "mixins.dsurround.refmap.json"
+    }
+}
+
+dependencies {
 	compile "craftstudio-api:CraftStudio-1.0.0.93:mc1.12:alpha"
 	compile "animania:animania:1.12.2:1.7.2"
 	compile "serene-seasons:SereneSeasons-1.12.2:1.2.18:universal"
@@ -76,7 +100,9 @@ dependencies {
 	
     deobfCompile "mezz.jei:jei_${project.mcVersion}:${project.jeiVersion}:api"
     runtime "mezz.jei:jei_${project.mcVersion}:${project.jeiVersion}"
-    deobfCompile "team.chisel:Chisel:MC${project.mcVersion}-${project.chiselVersion}"    
+    deobfCompile "team.chisel:Chisel:MC${project.mcVersion}-${project.chiselVersion}"
+    
+    embed("org.spongepowered:mixin:0.7.11-SNAPSHOT") { transitive = false }    
 }
 
 processResources
@@ -99,38 +125,6 @@ processResources
     }
 }
 
-// Reobfuscate the output of the mod JAR task with SRG names, otherwise the mod won't be able to reference MC classes
-reobf {
-    coreJar { mappingType = 'SEARGE' }
-}
-
-// Define a new task for the contained JAR
-// If you want to, you can distribute this as a separate artifact to a Maven
-task coreJar(type: Jar) {
-    // Copy all compiled files and resources from the source set to the JAR
-    // If you have additional source sets, add the same logic here
-    from(sourceSets.main.output) {
-        // Include the coremod package
-        // If you need additional files, add some more includes
-        include 'org/orecruncher/dsurround/asm/**'
-    }
-    
-    // Standard coremod manifest definitions
-    manifest {
-        // Added benefit of separating mod and coremod: No need for FMLCorePluginContainsFMLMod
-        attributes 'FMLCorePlugin': "org.orecruncher.dsurround.asm.TransformLoader"
-        
-        // Strictly speaking not required (right now)
-        // Allows Forge to extract the dependency to a local repository (Given that the corresponding PR is merged)
-        // If another mod ships the same dependency, it doesn't have to be extracted twice
-        attributes 'Maven-Artifact': "${project.group}:${project.archivesBaseName}-core:${project.version}"
-    }
-    // Add a classifier to the JAR ('-core' at the end of the file name)
-    // Distinguishes the mod JAR from the shipped one
-    classifier 'core'
-    group = 'build'
-}
-
 task sourcesJar(type: Jar, dependsOn: classes) {
     description = 'Creates a JAR containing the source code.'
     from sourceSets.main.allSource
@@ -142,29 +136,15 @@ task deobfJar(type: Jar) {
     from sourceSets.main.output
     classifier = "deobf"
     
-    manifest {
-        // The crucial manifest attribute: Make Forge extract the contained JAR
-        attributes 'ContainedDeps': coreJar.archivePath.name
-        attributes 'FMLAT': 'dsurround_at.cfg'
-        attributes 'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}"
-    }
-    
-}
-
-task signCoreJar(type: SignJar) {
-
-    onlyIf { // Skip the task if our secret data isn't available
-        project.hasProperty('keyStore')
-    }
-
-	dependsOn reobfCoreJar
-	
-    keyStore = project.keyStore // This needs to be a path to the keystore file
-    alias = project.keyStoreAlias
-    storePass = project.keyStorePass
-    keyPass = project.keyStoreKeyPass
-    inputFile = coreJar.archivePath.absolutePath
-    outputFile = coreJar.archivePath.absolutePath
+    manifest.attributes(
+        "FMLAT": "dsurround_at.cfg",
+        "FMLCorePluginContainsFMLMod": "true",
+        "ForceLoadAsMod": "true",
+	    "TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
+	    "TweakOrder": 0,
+        "MixinConfigs": "mixins.dsurround.json",
+        "FMLCorePlugin": "org.orecruncher.dsurround.mixins.TransformLoader"
+    )
 }
 
 // https://gist.github.com/matthewprenger/9b2da059b89433a01c1c
@@ -173,8 +153,6 @@ task signJar(type: SignJar) {
         project.hasProperty('keyStore')
     }
 
-	dependsOn reobfJar
-	
     keyStore = project.keyStore // This needs to be a path to the keystore file
     alias = project.keyStoreAlias
     storePass = project.keyStorePass
@@ -183,18 +161,9 @@ task signJar(type: SignJar) {
     outputFile = jar.archivePath
 }
 
-build.dependsOn signJar
-jar.dependsOn signCoreJar
-def libPrefix = 'META-INF/libraries'
 jar {
-    // Don't include the coremod in the main JAR
-    // If you have more coremod-related packages that aren't nested in the main one, add inclusions for them
-    exclude 'org/orecruncher/dsurround/asm/**'
-    
-    // Add the output of the coremod JAR task to the main JAR for later extraction
-    from(coreJar.archivePath.absolutePath) {
-        include '*' // Due to the way Gradle's copy tasks work, we need this line for the JAR to get added
-        into libPrefix
+    from(configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }) {
+        exclude "LICENSE.txt", "META-INF/MANIFSET.MF", "META-INF/maven/**", "META-INF/*.RSA", "META-INF/*.SF"
     }
     
     // Add CREDITS.md
@@ -202,12 +171,15 @@ jar {
         from('CREDITS.md')
     }
     
-    manifest {
-        // The crucial manifest attribute: Make Forge extract the contained JAR
-        attributes 'ContainedDeps': libPrefix + '/' + coreJar.archivePath.name
-        attributes 'FMLAT': 'dsurround_at.cfg'
-        attributes 'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}"
-    }
+    manifest.attributes(
+        "FMLAT": "dsurround_at.cfg",
+        "FMLCorePluginContainsFMLMod": "true",
+        "ForceLoadAsMod": "true",
+	    "TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
+	    "TweakOrder": 0,
+        "MixinConfigs": "mixins.dsurround.json",
+        "FMLCorePlugin": "org.orecruncher.dsurround.mixins.TransformLoader"
+    )
 }
 
 //Adds the artifact types added by this script to the actual artifacts list.
@@ -215,3 +187,5 @@ artifacts {
     archives sourcesJar
     archives deobfJar
 }
+
+build.dependsOn signJar

@@ -22,31 +22,25 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.asm;
+package org.orecruncher.dsurround.mixins;
 
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldNode;
+import org.orecruncher.dsurround.ModOptions;
+import org.orecruncher.dsurround.client.weather.RenderWeather;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-public class ItemInfoHook extends Transmorgrifier {
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.EntityRenderer;
 
-	public ItemInfoHook() {
-		super("net.minecraft.item.Item");
-	}
-
-	@Override
-	public String name() {
-		return "Item Info Hook";
-	}
-
-	@Override
-	public boolean transmorgrify(final ClassNode cn) {
-		if (findField(cn, new String[] { "dsurround_item_info" }) == null) {
-			cn.fields.add(new FieldNode(Opcodes.ACC_PUBLIC, "dsurround_item_info", "Ljava/lang/Object;", null, null));
-		} else {
-			Transformer.log().warn("Attempt to transmorgrify Item a second time");
+@Mixin(EntityRenderer.class)
+public abstract class MixinEntityRenderer {
+	@Inject(method = "addRainParticles()V", at = @At("HEAD"), cancellable = true)
+	public void myRainParticles(CallbackInfo ci) {
+		if (ModOptions.asm.enableWeatherASM) {
+			if (RenderWeather.addRainParticles(Minecraft.getMinecraft().entityRenderer))
+				ci.cancel();
 		}
-		return true;
 	}
-
 }

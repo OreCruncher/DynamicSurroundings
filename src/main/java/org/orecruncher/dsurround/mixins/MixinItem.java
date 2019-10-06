@@ -22,29 +22,24 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround;
+package org.orecruncher.dsurround.mixins;
 
-public final class ModInfo {
+import org.orecruncher.dsurround.registry.IDataAccessor;
+import org.orecruncher.dsurround.registry.item.IItemData;
+import org.spongepowered.asm.mixin.Mixin;
 
-	public static final String MOD_ID = "dsurround";
-	public static final String API_ID = MOD_ID + "API";
-	public static final String RESOURCE_ID = "dsurround";
-	public static final String MOD_NAME = "Dynamic Surroundings";
-	public static final String VERSION = "@VERSION@";
-	public static final String MINECRAFT_VERSIONS = "[1.12.2,)";
-	public static final String GUI_FACTORY = "org.orecruncher.dsurround.client.gui.ConfigGuiFactory";
-	public static final String UPDATE_URL = "@UPDATEURL@";
-	public static final String FINGERPRINT = "@FINGERPRINT@";
-	public static final String REMOTE_VERSIONS = "*";
+import net.minecraft.item.Item;
 
-	//@formatter:off
-	public static final String DEPENDENCIES =
-		"required-after:forge@[14.23.5.2768,);" +
-//		"required-after:dsurroundcore;" +
-		"required-after:orelib@[3.5.2.3,);" +
-		"after:sereneseasons@[1.2.18,);" +
-		"after:animania@[1.7.2,);" +
-		"after:galacticraftcore;" +
-		"after:ambientsounds;";
-	//@formatter:on
+@Mixin(Item.class)
+public abstract class MixinItem implements IDataAccessor<IItemData> {
+	
+	private IItemData dsurround_item_info = null;
+	
+	public IItemData getData() {
+		return this.dsurround_item_info;
+	}
+	
+	public void setData(IItemData data) {
+		this.dsurround_item_info = data;
+	}
 }

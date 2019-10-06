@@ -60,7 +60,6 @@ public final class ModOptions {
 	@Category(CATEGORY_ASM)
 	@LangKey("dsurround.cfg.asm.cat.ASM")
 	@Comment("Controls ASM transforms Dynamic Surroundings performs at startup")
-	@RestartRequired(server = true, world = true)
 	public static class asm {
 
 		public static String PATH = null;
@@ -69,14 +68,12 @@ public final class ModOptions {
 		@DefaultValue("true")
 		@LangKey("dsurround.cfg.asm.EnableWeather")
 		@Comment("Enable ASM transformations to permit weather (rain, snow, splash, dust storms, auroras)")
-		@RestartRequired(server = true)
 		public static boolean enableWeatherASM = true;
 
 		@Option(CONFIG_DISABLE_ARROW_CRITICAL_TRAIL)
 		@DefaultValue("true")
 		@LangKey("dsurround.cfg.asm.DisableArrow")
 		@Comment("Disable particle trail left by an arrow when it flies")
-		@RestartRequired(server = true)
 		public static boolean disableArrowParticleTrail = true;
 	}
 

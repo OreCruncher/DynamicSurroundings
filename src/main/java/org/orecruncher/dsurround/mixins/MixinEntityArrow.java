@@ -21,32 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.orecruncher.dsurround.mixins;
 
-package org.orecruncher.dsurround.asm;
+import org.orecruncher.dsurround.ModOptions;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.At;
 
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldNode;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.world.World;
 
-public class BiomeInfoHook extends Transmorgrifier {
+@Mixin(EntityArrow.class)
+public abstract class MixinEntityArrow extends Entity {
 
-	public BiomeInfoHook() {
-		super("net.minecraft.world.biome.Biome");
+	public MixinEntityArrow(World worldIn) {
+		super(worldIn);
 	}
 
-	@Override
-	public String name() {
-		return "Biome Info Hook";
+	@Shadow
+	public boolean getIsCritical() { return false; }
+	
+	@Redirect(method = "onUpdate()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/EntityArrow;getIsCritical()Z"))
+	private boolean isCriticalCheck(EntityArrow self) {
+		return !ModOptions.asm.disableArrowParticleTrail && self.getIsCritical();
 	}
-
-	@Override
-	public boolean transmorgrify(final ClassNode cn) {
-		if (findField(cn, new String[] { "dsurround_biome_info" }) == null) {
-			cn.fields.add(new FieldNode(Opcodes.ACC_PUBLIC, "dsurround_biome_info", "Ljava/lang/Object;", null, null));
-		} else {
-			Transformer.log().warn("Attempt to transmorgrify Biome a second time");
-		}
-		return true;
-	}
-
 }

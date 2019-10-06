@@ -22,29 +22,12 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround;
+package org.orecruncher.dsurround.registry;
 
-public final class ModInfo {
+public interface IDataAccessor<T> {
+	
+	T getData();
+	
+	void setData(T data);
 
-	public static final String MOD_ID = "dsurround";
-	public static final String API_ID = MOD_ID + "API";
-	public static final String RESOURCE_ID = "dsurround";
-	public static final String MOD_NAME = "Dynamic Surroundings";
-	public static final String VERSION = "@VERSION@";
-	public static final String MINECRAFT_VERSIONS = "[1.12.2,)";
-	public static final String GUI_FACTORY = "org.orecruncher.dsurround.client.gui.ConfigGuiFactory";
-	public static final String UPDATE_URL = "@UPDATEURL@";
-	public static final String FINGERPRINT = "@FINGERPRINT@";
-	public static final String REMOTE_VERSIONS = "*";
-
-	//@formatter:off
-	public static final String DEPENDENCIES =
-		"required-after:forge@[14.23.5.2768,);" +
-//		"required-after:dsurroundcore;" +
-		"required-after:orelib@[3.5.2.3,);" +
-		"after:sereneseasons@[1.2.18,);" +
-		"after:animania@[1.7.2,);" +
-		"after:galacticraftcore;" +
-		"after:ambientsounds;";
-	//@formatter:on
 }

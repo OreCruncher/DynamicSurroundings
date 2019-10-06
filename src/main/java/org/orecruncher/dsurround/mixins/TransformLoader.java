@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.asm;
+package org.orecruncher.dsurround.mixins;
 
 import java.io.File;
 import java.util.Map;
@@ -30,6 +30,8 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.spongepowered.asm.launch.MixinBootstrap;
+import org.spongepowered.asm.mixin.Mixins;
 
 import com.google.common.eventbus.EventBus;
 
@@ -40,7 +42,7 @@ import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 @IFMLLoadingPlugin.MCVersion("1.12.2")
-@IFMLLoadingPlugin.TransformerExclusions({ "org.orecruncher.dsurround.asm." })
+//@IFMLLoadingPlugin.TransformerExclusions({ "org.orecruncher.dsurround.mixins." })
 @IFMLLoadingPlugin.SortingIndex(10001)
 @IFMLLoadingPlugin.Name(TransformLoader.MOD_NAME)
 public class TransformLoader implements IFMLLoadingPlugin {
@@ -52,15 +54,21 @@ public class TransformLoader implements IFMLLoadingPlugin {
 
 	public static boolean enableWeatherASM = true;
 	public static boolean enableArrowPatch = true;
+	
+	public TransformLoader() {
+        MixinBootstrap.init();
+        Mixins.addConfiguration("mixins.dsurround.json");
+	}
 
 	@Override
 	public String getModContainerClass() {
-		return "org.orecruncher.dsurround.asm.TransformLoader$Container";
+		return "org.orecruncher.dsurround.mixins.TransformLoader$Container";
 	}
 
 	@Override
 	public String[] getASMTransformerClass() {
-		return new String[] { Transformer.class.getName() };
+		return new String[0];
+		//return new String[] { Transformer.class.getName() };
 	}
 
 	@Override

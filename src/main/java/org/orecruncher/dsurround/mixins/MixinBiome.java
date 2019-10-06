@@ -22,31 +22,25 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.asm;
+package org.orecruncher.dsurround.mixins;
 
-import org.apache.logging.log4j.Logger;
+import org.orecruncher.dsurround.registry.IDataAccessor;
+import org.orecruncher.dsurround.registry.biome.BiomeInfo;
+import org.spongepowered.asm.mixin.Mixin;
 
-public class Transformer extends MyTransformer {
+import net.minecraft.world.biome.Biome;
 
-	private static final Logger logger = TransformLoader.logger;
 
-	public static Logger log() {
-		return logger;
+@Mixin(Biome.class)
+public abstract class MixinBiome implements IDataAccessor<BiomeInfo> {
+	
+	private BiomeInfo dsurround_biome_info = null;
+	
+	public BiomeInfo getData() {
+		return this.dsurround_biome_info;
 	}
-
-	public Transformer() {
-		super(logger);
+	
+	public void setData(BiomeInfo data) {
+		this.dsurround_biome_info = data;
 	}
-
-	@Override
-	protected void initTransmorgrifiers() {
-		addTransmorgrifier(new PatchEntityRenderer());
-		addTransmorgrifier(new PatchSoundManagerClampVolume());
-		addTransmorgrifier(new PatchEntityArrow());
-		addTransmorgrifier(new SoundCategoryAdditions());
-		addTransmorgrifier(new BiomeInfoHook());
-		addTransmorgrifier(new BlockStateInfoHook());
-		addTransmorgrifier(new ItemInfoHook());
-	}
-
 }

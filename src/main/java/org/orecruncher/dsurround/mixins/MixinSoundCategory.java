@@ -22,33 +22,27 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.asm;
+package org.orecruncher.dsurround.mixins;
 
 import java.lang.reflect.Field;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import org.objectweb.asm.tree.ClassNode;
+import org.spongepowered.asm.mixin.Mixin;
 
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
-public class SoundCategoryAdditions extends Transmorgrifier {
-
-	public SoundCategoryAdditions() {
-		super("net.minecraft.client.settings.GameSettings");
-	}
-
-	@Override
-	public String name() {
-		return "SoundCategory Additions";
-	}
-
-	@Override
-	public boolean transmorgrify(final ClassNode cn) {
-
+@SuppressWarnings("deprecation")
+@Mixin(GameSettings.class)
+public abstract class MixinSoundCategory {
+	
+	static {
+		// Hacky way to get this done, but it works.  Longer term need to get rid of this.
+		// Not sure of the decent usable way to do this will be.
 		if (SoundCategory.getByName("ds_footsteps") == null) {
 			// Add our new sound categories
 			final SoundCategory fs = EnumHelper.addEnum(SoundCategory.class, "DS_FOOTSTEPS",
@@ -64,14 +58,8 @@ public class SoundCategoryAdditions extends Transmorgrifier {
 				theMap.put(fs.getName(), fs);
 				theMap.put(b.getName(), b);
 			} catch (@Nonnull final Throwable t) {
-				Transformer.log().error("Unable to update SoundCategory map: {}", t.toString());
-				return false;
 			}
-		} else {
-			Transformer.log().warn("Attempt to transmorgrify SoundCategory a second time");
 		}
-
-		return true;
 	}
-
+	
 }

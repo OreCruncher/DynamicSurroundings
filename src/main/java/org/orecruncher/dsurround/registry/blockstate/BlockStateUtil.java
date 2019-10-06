@@ -28,10 +28,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.registry.IDataAccessor;
 import org.orecruncher.dsurround.registry.RegistryManager;
-import org.orecruncher.lib.ReflectedField.ObjectField;
-
-import net.minecraft.block.state.BlockStateBase;
 import net.minecraft.block.state.IBlockState;
 
 /**
@@ -41,27 +39,18 @@ import net.minecraft.block.state.IBlockState;
  */
 public final class BlockStateUtil {
 
-	//@formatter:off
-	private static final ObjectField<BlockStateBase, BlockStateData> blockStateInfo =
-		new ObjectField<>(
-			BlockStateBase.class,
-			"dsurround_blockstate_info",
-			null
-		);
-	//@formatter:on
-
 	@SuppressWarnings("unchecked")
 	@Nullable
 	public static <T extends BlockStateData> T getStateData(@Nonnull final IBlockState state) {
-		final BlockStateBase base = (BlockStateBase) state;
-		BlockStateData result = blockStateInfo.get(base);
+		final IDataAccessor<T> accessor = (IDataAccessor<T>) state;
+		T result = accessor.getData();
 		if (result == null) {
 			RegistryManager.BLOCK.reload();
-			result = blockStateInfo.get(base);
+			result = accessor.getData();
 			if (result == null) {
 				ModBase.log().warn("Unable to find BlockStateData for state [%s]", state.toString());
-				result = BlockStateData.DEFAULT;
-				blockStateInfo.set(base, result);
+				result = (T)(BlockStateData.DEFAULT);
+				accessor.setData(result);
 			}
 		}
 
@@ -70,12 +59,12 @@ public final class BlockStateUtil {
 
 	@SuppressWarnings("unchecked")
 	static <T extends BlockStateData> T getStateDataRaw(@Nonnull final IBlockState state) {
-		return (T) blockStateInfo.get((BlockStateBase) state);
+		return (T) ((IDataAccessor<T>)state).getData();
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T extends BlockStateData> void setStateData(@Nonnull final IBlockState state,
 			@Nonnull final T data) {
-		blockStateInfo.set((BlockStateBase) state, data);
+		((IDataAccessor<T>)state).setData(data);
 	}
-
 }

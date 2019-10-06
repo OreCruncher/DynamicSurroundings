@@ -32,6 +32,7 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.registry.IDataAccessor;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.lib.Color;
 import org.orecruncher.lib.ReflectedField;
@@ -61,12 +62,6 @@ public final class BiomeUtil {
 	private static final Color NO_COLOR = new Color.ImmutableColor(1F, 1F, 1F);
 
 	//@formatter:off
-	private static final ObjectField<Biome, BiomeInfo> biomeInfo =
-		new ObjectField<>(
-			Biome.class,
-			"dsurround_biome_info",
-			null
-		);
 	private static final ObjectField<Biome, String> biomeName =
 		new ObjectField<>(
 			Biome.class,
@@ -95,14 +90,16 @@ public final class BiomeUtil {
 
 	private static final Class<?> bopBiome = ReflectedField.resolveClass("biomesoplenty.common.biome.BOPBiome");
 
+	@SuppressWarnings("unchecked")
 	@Nonnull
 	public static BiomeInfo getBiomeData(@Nonnull final Biome biome) {
+		IDataAccessor<BiomeInfo> accessor = (IDataAccessor<BiomeInfo>) biome;
 		BiomeInfo result = null;
 		if (biome != null) {
-			result = biomeInfo.get(biome);
+			result = accessor.getData();
 			if (result == null) {
 				RegistryManager.BIOME.reload();
-				result = biomeInfo.get(biome);
+				result = accessor.getData();
 			}
 		}
 
@@ -110,13 +107,14 @@ public final class BiomeUtil {
 			ModBase.log().warn("Unable to find configuration for biome [%s] (hc=%d)", biome.getRegistryName(),
 					System.identityHashCode(biome));
 			result = RegistryManager.BIOME.WTF_INFO;
-			setBiomeData(biome, result);
+			accessor.setData(result);
 		}
 		return result;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void setBiomeData(@Nonnull final Biome biome, @Nullable final BiomeInfo data) {
-		biomeInfo.set(biome, data);
+		((IDataAccessor<BiomeInfo>)biome).setData(data);
 	}
 
 	@Nonnull

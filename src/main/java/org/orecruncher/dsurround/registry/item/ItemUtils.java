@@ -28,9 +28,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.dsurround.registry.IDataAccessor;
 import org.orecruncher.dsurround.registry.RegistryManager;
-import org.orecruncher.lib.ReflectedField.ObjectField;
-
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -38,33 +37,26 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class ItemUtils {
 
-	//@formatter:off
-	private static final ObjectField<Item, IItemData> itemInfo =
-		new ObjectField<>(
-			Item.class,
-			"dsurround_item_info",
-			null
-		);
-	//@formatter:on
-
+	@SuppressWarnings("unchecked")
 	@Nullable
 	public static IItemData getItemData(@Nonnull final Item item) {
-		IItemData result = itemInfo.get(item);
+		IDataAccessor<IItemData> accessor = (IDataAccessor<IItemData>) item;
+		IItemData result = accessor.getData();
 		if (result == null) {
 			RegistryManager.ITEMS.reload();
-			result = itemInfo.get(item);
+			result = accessor.getData();
 			if (result == null) {
 				ModBase.log().warn("Unable to find IItemData for item [%s]", item.toString());
 				result = SimpleItemData.CACHE.get(ItemClass.NONE);
-				setItemData(item, result);
+				accessor.setData(result);
 			}
 		}
 
 		return result;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void setItemData(@Nonnull final Item item, @Nonnull final IItemData data) {
-		itemInfo.set(item, data);
+		((IDataAccessor<IItemData>)item).setData(data);
 	}
-
 }

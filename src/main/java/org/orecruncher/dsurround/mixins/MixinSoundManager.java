@@ -21,33 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.orecruncher.dsurround.mixins;
 
-package org.orecruncher.dsurround.asm;
+import org.orecruncher.dsurround.client.sound.SoundEngine;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.SoundManager;
 
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldNode;
-
-public class BlockStateInfoHook extends Transmorgrifier {
-
-	public BlockStateInfoHook() {
-		super("net.minecraft.block.state.BlockStateBase");
-	}
-
-	@Override
-	public String name() {
-		return "BlockStateBase Info Hook";
-	}
-
-	@Override
-	public boolean transmorgrify(final ClassNode cn) {
-		if (findField(cn, new String[] { "dsurround_blockstate_info" }) == null) {
-			cn.fields.add(
-					new FieldNode(Opcodes.ACC_PUBLIC, "dsurround_blockstate_info", "Ljava/lang/Object;", null, null));
-		} else {
-			Transformer.log().warn("Attempt to transmorgrify BlockStateBase a second time");
+@Mixin(SoundManager.class)
+public abstract class MixinSoundManager {
+	
+	@Overwrite
+	private float getClampedVolume(ISound sound) {
+		try {
+			return SoundEngine.getClampedVolume(sound);
+		} catch(final Exception ex) {
+			
 		}
-		return true;
+		return 1.0F;
 	}
-
 }
