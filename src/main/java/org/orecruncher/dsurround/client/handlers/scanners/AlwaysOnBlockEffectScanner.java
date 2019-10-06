@@ -32,7 +32,6 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.fx.BlockEffect;
 import org.orecruncher.dsurround.lib.scanner.CuboidScanner;
 import org.orecruncher.dsurround.lib.scanner.ScanLocus;
-import org.orecruncher.dsurround.registry.blockstate.BlockStateData;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateUtil;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
 
@@ -51,8 +50,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 public class AlwaysOnBlockEffectScanner extends CuboidScanner {
-
-	protected BlockStateData profile = null;
 
 	public AlwaysOnBlockEffectScanner(@Nonnull final ScanLocus locus, final int range) {
 		super(locus, "AlwaysOnBlockEffectScanner", range, 0);

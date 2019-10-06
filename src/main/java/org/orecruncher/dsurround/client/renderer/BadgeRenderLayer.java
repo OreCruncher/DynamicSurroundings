@@ -49,7 +49,7 @@ public class BadgeRenderLayer implements LayerRenderer<EntityLivingBase> {
 	 * intended to provide a hook for things like configuration or keybind. Per
 	 * entity suppression should be handled using the IItemStackProvider.
 	 */
-	public static interface IShowBadge {
+	public static interface IBadgeDisplayCheck {
 		boolean showBadge();
 	}
 
@@ -58,19 +58,37 @@ public class BadgeRenderLayer implements LayerRenderer<EntityLivingBase> {
 	 * badge. If there is no stack to render then it should return ItemStack.EMPTY.
 	 */
 	public static interface IItemStackProvider {
+		/**
+		 * Get the ItemStack to render as a badge
+		 * @param e Entity that is being rendered
+		 * @return ItemStack to render as a badge
+		 */
 		@Nonnull
 		ItemStack getStackToDisplay(@Nonnull final EntityLivingBase e);
 
-		// Up/Down micro adjustment for the badge render location.
-		default float adjustY() {
+		/**
+		 * Mircro adjustment of vertical position of the badge
+		 * @param e Entity that is being rendered
+		 * @return Vertical adjustment to the icon position
+		 */
+		default float adjustY(@Nonnull final EntityLivingBase e) {
 			return 0F;
+		}
+
+		/**
+		 * Scale factor to apply to the badge when rendering
+		 * @param e Entity that is being rendered
+		 * @return Scale factor to apply to icon render
+		 */
+		default float scale(@Nonnull final EntityLivingBase e) {
+			return 0.6F;
 		}
 	}
 
-	protected final IShowBadge displayCheck;
+	protected final IBadgeDisplayCheck displayCheck;
 	protected final IItemStackProvider stackProvider;
 
-	public BadgeRenderLayer(@Nonnull final IShowBadge check, @Nonnull final IItemStackProvider provider) {
+	public BadgeRenderLayer(@Nonnull final IBadgeDisplayCheck check, @Nonnull final IItemStackProvider provider) {
 		this.displayCheck = check;
 		this.stackProvider = provider;
 	}
@@ -93,9 +111,8 @@ public class BadgeRenderLayer implements LayerRenderer<EntityLivingBase> {
 			return;
 
 		final float age = entity.ticksExisted + partialTicks;
-		final float s = 0.6F;
-
-		final float dY = this.stackProvider.adjustY() + entity.height - 0.15F + (MathStuff.sin(age / 20F)) / 3F;
+		final float s = this.stackProvider.scale(entity);
+		final float dY = this.stackProvider.adjustY(entity) + entity.height - 0.15F + (MathStuff.sin(age / 20F)) / 3F;
 
 		GlStateManager.pushMatrix();
 		GlStateManager.rotate(180, 0, 0, 1);
