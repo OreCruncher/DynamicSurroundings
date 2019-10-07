@@ -1,5 +1,5 @@
 /*
- * This file is part of ModBase, licensed under the MIT License (MIT).
+ * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -24,51 +24,30 @@
 
 package org.orecruncher.dsurround.mixins;
 
-import java.io.File;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.Mixins;
 
-import com.google.common.eventbus.EventBus;
-
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.DummyModContainer;
-import net.minecraftforge.fml.common.LoadController;
-import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 @IFMLLoadingPlugin.MCVersion("1.12.2")
-//@IFMLLoadingPlugin.TransformerExclusions({ "org.orecruncher.dsurround.mixins." })
-@IFMLLoadingPlugin.SortingIndex(10001)
-@IFMLLoadingPlugin.Name(TransformLoader.MOD_NAME)
+@IFMLLoadingPlugin.SortingIndex(-5000)
 public class TransformLoader implements IFMLLoadingPlugin {
 
-	public static final String MOD_ID = "dsurroundcore";
-	public static final String MOD_NAME = "DynamicSurroundingsCore";
-
-	public static final Logger logger = LogManager.getLogger(MOD_ID);
-
-	public static boolean enableWeatherASM = true;
-	public static boolean enableArrowPatch = true;
-	
 	public TransformLoader() {
-        MixinBootstrap.init();
-        Mixins.addConfiguration("mixins.dsurround.json");
+		MixinBootstrap.init();
+		Mixins.addConfiguration("mixins.dsurround.json");
 	}
 
 	@Override
 	public String getModContainerClass() {
-		return "org.orecruncher.dsurround.mixins.TransformLoader$Container";
+		return null;
 	}
 
 	@Override
 	public String[] getASMTransformerClass() {
 		return new String[0];
-		//return new String[] { Transformer.class.getName() };
 	}
 
 	@Override
@@ -83,33 +62,5 @@ public class TransformLoader implements IFMLLoadingPlugin {
 
 	@Override
 	public void injectData(final Map<String, Object> map) {
-		// Tickle the configuration so we can get some options initialized
-		final File configFile = new File((File) map.get("mcLocation"), "/config/dsurround/dsurround.cfg");
-		if (configFile.exists()) {
-			final Configuration config = new Configuration(configFile);
-			enableArrowPatch = config.getBoolean("Disable Arrow Critical Particle Trail", "asm", true,
-					StringUtils.EMPTY);
-			enableWeatherASM = config.getBoolean("Enable Weather Control", "asm", true, StringUtils.EMPTY);
-		}
-	}
-
-	public static class Container extends DummyModContainer {
-
-		public Container() {
-			super(new ModMetadata());
-			final ModMetadata meta = getMetadata();
-			meta.modId = MOD_ID;
-			meta.name = TransformLoader.MOD_NAME;
-			meta.authorList.add("OreCruncher");
-			meta.version = "@VERSION@";
-			meta.description = "CoreMod for Dynamic Surroundings";
-			meta.url = "https://github.com/OreCruncher/DynamicSurroundings/wiki";
-		}
-
-		@Override
-		public boolean registerBus(final EventBus bus, final LoadController controller) {
-			bus.register(this);
-			return true;
-		}
 	}
 }
