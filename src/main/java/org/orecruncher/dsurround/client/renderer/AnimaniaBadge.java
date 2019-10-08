@@ -26,13 +26,19 @@ package org.orecruncher.dsurround.client.renderer;
 
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.lwjgl.input.Keyboard;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.keyboard.KeyHandler;
-import org.orecruncher.dsurround.client.renderer.BadgeRenderLayer.IItemStackProvider;
+import org.orecruncher.dsurround.client.renderer.BadgeRenderLayer.IEntityBadgeProvider;
 import org.orecruncher.dsurround.client.renderer.BadgeRenderLayer.IBadgeDisplayCheck;
 
 import com.animania.api.interfaces.IFoodEating;
+import com.animania.api.interfaces.ISleeping;
+import com.animania.common.entities.pigs.EntityAnimaniaPig;
+import com.animania.common.entities.pigs.EntityPigletBase;
+import com.animania.common.entities.sheep.EntityEweBase;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
@@ -49,7 +55,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public final class AnimaniaBadge implements IItemStackProvider {
+public final class AnimaniaBadge implements IEntityBadgeProvider {
 
 	// Possible food/water items for badging.
 	private final static ItemStack WATER_BUCKET = new ItemStack(Items.WATER_BUCKET);
@@ -57,32 +63,65 @@ public final class AnimaniaBadge implements IItemStackProvider {
 	private static final IBadgeDisplayCheck BADGE_DISPLAY_CHECK = () -> KeyHandler.ANIMANIA_BADGES == null
 			|| KeyHandler.ANIMANIA_BADGES.isKeyDown() || KeyHandler.ANIMANIA_BADGES.getKeyCode() == Keyboard.KEY_NONE;
 
-	
 	@Override
 	public ItemStack getStackToDisplay(final EntityLivingBase e) {
-		if (!getWatered(e))
+		IFoodEating fe = (IFoodEating) e;
+		if (!fe.getWatered())
 			return WATER_BUCKET;
-		else if (!getFed(e))
-			return getFoodItem(e);
+		else if (!fe.getFed())
+			return getFoodItem(fe);
 		else
 			return ItemStack.EMPTY;
 	}
 
-	private boolean getFed(final Entity e) {
-		return ((IFoodEating) e).getFed();
-	}
-
-	private boolean getWatered(final Entity e) {
-		return ((IFoodEating) e).getWatered();
-	}
-
-	private ItemStack getFoodItem(final Entity e) {
-		final Set<Item> food = ((IFoodEating) e).getFoodItems();
+	private ItemStack getFoodItem(IFoodEating fe) {
+		final Set<Item> food = fe.getFoodItems();
 		if (food.size() > 0) {
 			final Item item = food.iterator().next();
 			return new ItemStack(item);
 		}
 		return ItemStack.EMPTY;
+	}
+	
+	/**
+	 * Micro adjustment of vertical position of the badge
+	 * @param e Entity that is being rendered
+	 * @return Vertical adjustment to the icon position
+	 */
+	@Override
+	public float adjustY(@Nonnull final EntityLivingBase e) {
+		if (e instanceof EntityEweBase)
+			return 1F;
+		if (e instanceof EntityPigletBase)
+			return -0.5F;
+		return 0.15F;
+	}
+
+	/**
+	 * Scale factor to apply to the badge when rendering
+	 * @param e Entity that is being rendered
+	 * @return Scale factor to apply to icon render
+	 */
+	@Override
+	public float scale(@Nonnull final EntityLivingBase e) {
+		if (e instanceof EntityEweBase)
+			return 1.5F;
+		if (e instanceof EntityAnimaniaPig && !(e instanceof EntityPigletBase))
+			return 0.75F;
+		return 0.5F;
+	}
+
+	/**
+	 * Checks to see if the badge should be shown.  Good
+	 * for conditionals like sleeping, etc.
+	 * @param e Entity that is being rendered
+	 * @return true if a badges is to be shown; false otherwise
+	 */
+	@Override
+	public boolean show(@Nonnull final EntityLivingBase e) {
+		if (e instanceof ISleeping)
+			return !((ISleeping)e).getSleeping();
+		return true;
 	}
 
 	// ====================================================================
@@ -91,7 +130,7 @@ public final class AnimaniaBadge implements IItemStackProvider {
 	//
 	// ====================================================================
 	public static void intitialize() {
-		
+
 		if (!ModOptions.speechbubbles.enableAnimaniaBadges)
 			return;
 

@@ -47,19 +47,19 @@ public class BadgeRenderLayer implements LayerRenderer<EntityLivingBase> {
 	/**
 	 * Used to provide logic for when a badges should be displayed or not. It is
 	 * intended to provide a hook for things like configuration or keybind. Per
-	 * entity suppression should be handled using the IItemStackProvider.
+	 * entity suppression should be handled using the IEntityBadgeProvider.
 	 */
 	public static interface IBadgeDisplayCheck {
 		boolean showBadge();
 	}
 
 	/**
-	 * Method for the layer renderer to figure out what ItemStack to render as a
-	 * badge. If there is no stack to render then it should return ItemStack.EMPTY.
+	 * Methods for determining when and how to render a badge for an entity.
 	 */
-	public static interface IItemStackProvider {
+	public static interface IEntityBadgeProvider {
 		/**
 		 * Get the ItemStack to render as a badge
+		 * 
 		 * @param e Entity that is being rendered
 		 * @return ItemStack to render as a badge
 		 */
@@ -67,37 +67,50 @@ public class BadgeRenderLayer implements LayerRenderer<EntityLivingBase> {
 		ItemStack getStackToDisplay(@Nonnull final EntityLivingBase e);
 
 		/**
-		 * Mircro adjustment of vertical position of the badge
+		 * Micro adjustment of vertical position of the badge
+		 * 
 		 * @param e Entity that is being rendered
 		 * @return Vertical adjustment to the icon position
 		 */
 		default float adjustY(@Nonnull final EntityLivingBase e) {
-			return 0F;
+			return 0.15F;
 		}
 
 		/**
 		 * Scale factor to apply to the badge when rendering
+		 * 
 		 * @param e Entity that is being rendered
 		 * @return Scale factor to apply to icon render
 		 */
 		default float scale(@Nonnull final EntityLivingBase e) {
-			return 0.6F;
+			return 0.5F;
+		}
+
+		/**
+		 * Checks to see if the badge should be shown. Good for conditionals like
+		 * sleeping, etc.
+		 * 
+		 * @param e Entity that is being rendered
+		 * @return true if a badges is to be shown; false otherwise
+		 */
+		default boolean show(@Nonnull final EntityLivingBase e) {
+			return true;
 		}
 	}
 
 	protected final IBadgeDisplayCheck displayCheck;
-	protected final IItemStackProvider stackProvider;
+	protected final IEntityBadgeProvider badgeProvider;
 
-	public BadgeRenderLayer(@Nonnull final IBadgeDisplayCheck check, @Nonnull final IItemStackProvider provider) {
+	public BadgeRenderLayer(@Nonnull final IBadgeDisplayCheck check, @Nonnull final IEntityBadgeProvider provider) {
 		this.displayCheck = check;
-		this.stackProvider = provider;
+		this.badgeProvider = provider;
 	}
 
 	@Override
 	public void doRenderLayer(EntityLivingBase entity, float limbSwing, float limbSwingAmount, float partialTicks,
 			float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 
-		if (!this.displayCheck.showBadge())
+		if (!this.displayCheck.showBadge() || !this.badgeProvider.show(entity))
 			return;
 
 		// Only render if in range
@@ -106,20 +119,20 @@ public class BadgeRenderLayer implements LayerRenderer<EntityLivingBase> {
 			return;
 
 		// Only render if there is a stack to display
-		final ItemStack stackToRender = this.stackProvider.getStackToDisplay(entity);
+		final ItemStack stackToRender = this.badgeProvider.getStackToDisplay(entity);
 		if (stackToRender.isEmpty())
 			return;
 
 		final float age = entity.ticksExisted + partialTicks;
-		final float s = this.stackProvider.scale(entity);
-		final float dY = this.stackProvider.adjustY(entity) + entity.height - 0.15F + (MathStuff.sin(age / 20F)) / 3F;
+		final float s = this.badgeProvider.scale(entity);
+		final float dY = this.badgeProvider.adjustY(entity) + (MathStuff.sin(age / 20F)) * 0.1F;
 
 		GlStateManager.pushMatrix();
-		GlStateManager.rotate(180, 0, 0, 1);
-		GlStateManager.scale(s, s, s);
 		GlStateManager.rotate(age * CONST, 0F, 1F, 0F);
+		GlStateManager.rotate(180, 0, 0, 1);
 		GlStateManager.translate(0, dY, 0);
-		Minecraft.getMinecraft().getRenderItem().renderItem(stackToRender, ItemCameraTransforms.TransformType.FIXED);
+		GlStateManager.scale(s, s, s);
+		Minecraft.getMinecraft().getRenderItem().renderItem(stackToRender, ItemCameraTransforms.TransformType.GROUND);
 		GlStateManager.popMatrix();
 	}
 
