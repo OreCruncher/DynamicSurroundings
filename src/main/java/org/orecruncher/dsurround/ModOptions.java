@@ -631,13 +631,15 @@ public final class ModOptions {
 
 		@Option(CONFIG_SOUND_SETTINGS)
 		@Hidden
-		@DefaultValue("minecraft:block.water.ambient cull,minecraft:block.lava.ambient cull,minecraft:entity.sheep.ambient cull,minecraft:entity.chicken.ambient cull,minecraft:entity.cow.ambient cull,minecraft:entity.pig.ambient cull,dsurround:bison block")
+		@DefaultValue("minecraft:block.water.ambient cull,minecraft:block.lava.ambient cull,minecraft:entity.sheep.ambient cull,minecraft:entity.chicken.ambient cull,minecraft:entity.cow.ambient cull,minecraft:entity.pig.ambient cull,dsurround:bison block,dsurround:elephant block,dsurround:gnatt block,dsurround:insectbuzz block,dsurround:hiss block,dsurround:rattlesnake block")
 		@LangKey("dsurround.cfg.sound.SoundSettings")
 		@Comment("Configure how each individual sound will be handled")
 		public static String[] soundSettings = { "minecraft:block.water.ambient cull",
 				"minecraft:block.lava.ambient cull", "minecraft:entity.sheep.ambient cull",
 				"minecraft:entity.chicken.ambient cull", "minecraft:entity.cow.ambient cull",
-				"minecraft:entity.pig.ambient cull", "dsurround:bison block" };
+				"minecraft:entity.pig.ambient cull", "dsurround:bison block", "dsurround:elephant block",
+				"dsurround:gnatt block", "dsurround:insectbuzz block", "dsurround:hiss block",
+				"dsurround:rattlesnake block"};
 	}
 
 	public static final String CATEGORY_PLAYER = "player";
