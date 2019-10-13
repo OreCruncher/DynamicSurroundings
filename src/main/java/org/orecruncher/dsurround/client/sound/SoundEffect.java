@@ -207,7 +207,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 	public SoundInstance createTrackingSound(@Nonnull final Entity player, final boolean fadeIn) {
 		final TrackingSoundInstance sound = new TrackingSoundInstance(player, this, fadeIn);
 		if (EnvironState.isPlayer(player))
-			sound.setAttenuationType(AttenuationType.NONE);
+			sound.setAttenuationType(SoundInstance.noAttenuation());
 		return sound;
 	}
 
