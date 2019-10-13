@@ -37,6 +37,7 @@ import org.orecruncher.lib.WorldUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -74,12 +75,15 @@ public class PacketSpeechBubble implements IMessage {
 		public IMessage onMessage(@Nonnull final PacketSpeechBubble message, @Nullable final MessageContext ctx) {
 			if (ctx != null && ModOptions.speechbubbles.enableSpeechBubbles) {
 				ModBase.proxy().getThreadListener(ctx).addScheduledTask(() -> {
-					final Entity entity = WorldUtils.locateEntity(EnvironState.getWorld(), message.entityId);
-					if (entity == null || !(entity instanceof EntityPlayer))
-						return;
-					final ISpeechData data = CapabilitySpeechData.getCapability(entity);
-					if (data != null)
-						data.addMessage(message.message, (int) (ModOptions.speechbubbles.speechBubbleDuration * 20F));
+					final World world = EnvironState.getWorld();
+					if (world != null) {
+						final Entity entity = WorldUtils.locateEntity(world, message.entityId);
+						if (entity == null || !(entity instanceof EntityPlayer))
+							return;
+						final ISpeechData data = CapabilitySpeechData.getCapability(entity);
+						if (data != null)
+							data.addMessage(message.message, (int) (ModOptions.speechbubbles.speechBubbleDuration * 20F));
+					}
 				});
 			}
 			return null;

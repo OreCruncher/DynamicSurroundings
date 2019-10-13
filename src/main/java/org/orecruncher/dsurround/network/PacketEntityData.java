@@ -36,6 +36,7 @@ import org.orecruncher.lib.WorldUtils;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -76,13 +77,16 @@ public class PacketEntityData implements IMessage {
 		public IMessage onMessage(@Nonnull final PacketEntityData message, @Nullable final MessageContext ctx) {
 			if (ctx != null) {
 				ModBase.proxy().getThreadListener(ctx).addScheduledTask(() -> {
-					final Entity entity = WorldUtils.locateEntity(EnvironState.getWorld(), message.entityId);
-					if (entity != null) {
-						final IEntityDataSettable data = (IEntityDataSettable) CapabilityEntityData
-								.getCapability(entity);
-						if (data != null) {
-							data.setAttacking(message.isAttacking);
-							data.setFleeing(message.isFleeing);
+					final World world = EnvironState.getWorld();
+					if (world != null) {
+						final Entity entity = WorldUtils.locateEntity(world, message.entityId);
+						if (entity != null) {
+							final IEntityDataSettable data = (IEntityDataSettable) CapabilityEntityData
+									.getCapability(entity);
+							if (data != null) {
+								data.setAttacking(message.isAttacking);
+								data.setFleeing(message.isFleeing);
+							}
 						}
 					}
 				});
