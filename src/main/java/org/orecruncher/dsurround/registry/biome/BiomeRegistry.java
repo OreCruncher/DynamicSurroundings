@@ -24,10 +24,9 @@
 
 package org.orecruncher.dsurround.registry.biome;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Stream;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -36,6 +35,7 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.registry.Registry;
+import org.orecruncher.dsurround.registry.config.BiomeConfig;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.dsurround.registry.dimension.DimensionData;
 import org.orecruncher.lib.math.MathStuff;
@@ -137,11 +137,17 @@ public final class BiomeRegistry extends Registry {
 
 	@Override
 	protected void init(@Nonnull final ModConfiguration cfg) {
+		
 		cfg.biomeAlias.forEach((alias, biome) -> registerBiomeAlias(alias, biome));
-		cfg.biomes.forEach(entry -> {
-			final BiomeMatcher matcher = BiomeMatcher.getMatcher(entry);
-			getCombinedStream().filter(i -> matcher.match(i)).forEach(i -> i.update(entry));
-		});
+		List<BiomeInfo> infoList = getCombinedStream();
+		
+		for (final BiomeConfig c : cfg.biomes) {
+			final BiomeMatcher matcher = BiomeMatcher.getMatcher(c);
+			for (final BiomeInfo bi : infoList) {
+				if (matcher.match(bi))
+					bi.update(c);
+			}
+		}
 
 		// Make sure the default PLAINS biome is set. OTG can do some squirrelly things
 		final ResourceLocation plainsLoc = new ResourceLocation("plains");
@@ -154,7 +160,7 @@ public final class BiomeRegistry extends Registry {
 	protected void complete() {
 		if (ModOptions.logging.enableDebugLogging) {
 			ModBase.log().info("*** BIOME REGISTRY ***");
-			getCombinedStream().sorted().map(Object::toString).forEach(ModBase.log()::info);
+			getCombinedStream().stream().sorted().map(Object::toString).forEach(ModBase.log()::info);
 		}
 
 		// Free memory because we no longer need
@@ -218,11 +224,26 @@ public final class BiomeRegistry extends Registry {
 	private void registerBiomeAlias(@Nonnull final String alias, @Nonnull final String biome) {
 		this.biomeAliases.put(alias, biome);
 	}
-
-	private Stream<BiomeInfo> getCombinedStream() {
-		final Stream<BiomeInfo> s1 = ForgeRegistries.BIOMES.getValuesCollection().stream()
-				.map(biome -> BiomeUtil.getBiomeData(biome)).filter(Objects::nonNull);
-		final Stream<BiomeInfo> s2 = this.theFakes.stream().map(fb -> fb.getBiomeData());
-		return Stream.of(s1, s2).flatMap(i -> i);
+	
+	private List<BiomeInfo> getCombinedStream() {
+		ArrayList<BiomeInfo> infos = new ArrayList<>();
+		
+		for (final Biome b : ForgeRegistries.BIOMES.getValuesCollection()) {
+			BiomeInfo info = BiomeUtil.getBiomeData(b);
+			if (info != null)
+			{
+				infos.add(info);
+			}
+		}
+		
+		for (final FakeBiome b : this.theFakes) {
+			BiomeInfo info = b.getBiomeData();
+			if (info != null)
+			{
+				infos.add(info);
+			}
+		}
+		
+		return infos;
 	}
 }
