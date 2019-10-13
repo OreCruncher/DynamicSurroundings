@@ -47,7 +47,6 @@ import org.orecruncher.lib.random.XorShiftRandom;
 import com.google.common.base.MoreObjects;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.audio.ISound.AttenuationType;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
