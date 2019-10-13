@@ -25,8 +25,11 @@
 package org.orecruncher.dsurround.network;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
@@ -67,7 +70,7 @@ public final class Network {
 	// cause Mayhem.
 	private static final ObjectField<NetworkDispatcher, EntityPlayerMP> player = new ObjectField<>(
 			NetworkDispatcher.class, "player", null);
-	private static final Set<UUID> blockList = new ObjectOpenHashSet<>();
+	private static final ObjectOpenHashSet<UUID> blockList = new ObjectOpenHashSet<>();
 	private static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.MOD_ID);
 
 	public static void initialize() {
@@ -86,8 +89,6 @@ public final class Network {
 				Side.CLIENT);
 		NETWORK.registerMessage(PacketServerData.PacketHandler.class, PacketServerData.class, ++discriminator,
 				Side.CLIENT);
-
-		// Client -> Server messages
 	}
 
 	@SubscribeEvent
@@ -99,12 +100,16 @@ public final class Network {
 				final String version = dispatcher.getModList().get(ModInfo.MOD_ID);
 				if (StringUtils.isEmpty(version)) {
 					// Block the player from receiving network packets
-					blockList.add(p.getPersistentID());
+					synchronized (blockList) {
+						blockList.add(p.getPersistentID());
+					}
 					ModBase.log().info("Player [%s] connected without having %s installed", p.getDisplayNameString(),
 							ModInfo.MOD_NAME);
 				} else {
 					// Make sure the UUID is not in the list in case there was something lingering
-					blockList.remove(p.getPersistentID());
+					synchronized (blockList) {
+						blockList.remove(p.getPersistentID());
+					}
 					ModBase.log().info("Player [%s] connected with %s %s", p.getDisplayNameString(), ModInfo.MOD_NAME,
 							version);
 				}
@@ -122,7 +127,9 @@ public final class Network {
 		if (dispatcher != null) {
 			try {
 				final EntityPlayerMP p = player.get(dispatcher);
-				blockList.remove(p.getPersistentID());
+				synchronized (blockList) {
+					blockList.remove(p.getPersistentID());
+				}
 			} catch (@Nonnull final Throwable t) {
 				t.printStackTrace();
 			}
@@ -132,7 +139,9 @@ public final class Network {
 	// Handle normal client disconnects, like the player quitting.
 	@SubscribeEvent
 	public static void clientDisconnect(@Nonnull final PlayerLoggedOutEvent event) {
-		blockList.remove(event.player.getPersistentID());
+		synchronized (blockList) {
+			blockList.remove(event.player.getPersistentID());
+		}
 	}
 
 	// Package level helper method to fire client side events based on incoming
@@ -152,48 +161,58 @@ public final class Network {
 		postEvent(Side.SERVER, event);
 	}
 
-	private static void sendToList(@Nonnull final Stream<EntityPlayerMP> players, @Nonnull final IMessage msg) {
+	private static void sendToList(@Nonnull final List<EntityPlayerMP> players, @Nonnull final IMessage msg) {
 		synchronized (NETWORK) {
 			players.forEach(p -> NETWORK.sendTo(msg, p));
 		}
 	}
 
-	private static <T extends EntityPlayer> Stream<EntityPlayerMP> generateStream(@Nonnull final Collection<T> c) {
+	private static <T extends EntityPlayer> List<EntityPlayerMP> generateStream(@Nonnull final Collection<T> c,
+			Predicate<T> pred) {
 		//@formatter:off
-		return c.stream()
+		Stream<T> strm = c.stream()
 			.filter(p -> !(p instanceof FakePlayer))
-			.filter(p -> !blockList.contains(p.getPersistentID()))
-			.map(p -> (EntityPlayerMP) p);
+			.filter(p -> !blockList.contains(p.getPersistentID()));
+		
+		if (pred != null)
+			strm = strm.filter(pred);
+		
+		synchronized (blockList) {
+			return strm.map(p -> (EntityPlayerMP) p).collect(Collectors.toList());
+		}
 		//@formatter:on
 	}
 
 	// Basic server -> client packet routines
 	public static void sendToPlayer(@Nonnull final EntityPlayerMP player, @Nonnull final IMessage msg) {
+		synchronized (blockList) {
+			if (blockList.contains(player.getPersistentID()))
+				return;
+		}
 		synchronized (NETWORK) {
-			if (!blockList.contains(player.getPersistentID()))
-				NETWORK.sendTo(msg, player);
+			NETWORK.sendTo(msg, player);
 		}
 	}
 
 	public static void sendToEntityViewers(@Nonnull final Entity entity, @Nonnull final IMessage msg) {
 		final Set<? extends EntityPlayer> players = ((WorldServer) entity.getEntityWorld()).getEntityTracker()
 				.getTrackingPlayers(entity);
-		final Stream<EntityPlayerMP> list = generateStream(players);
+		final List<EntityPlayerMP> list = generateStream(players, null);
 		sendToList(list, msg);
 	}
 
 	public static void sendToDimension(final int dimensionId, @Nonnull final IMessage msg) {
 		final WorldServer world = DimensionManager.getWorld(dimensionId);
 		if (world != null) {
-			final Stream<EntityPlayerMP> players = generateStream(
-					DimensionManager.getWorld(dimensionId).playerEntities);
+			final List<EntityPlayerMP> players = generateStream(DimensionManager.getWorld(dimensionId).playerEntities,
+					null);
 			sendToList(players, msg);
 		}
 	}
 
 	public static void sendToAll(@Nonnull final IMessage msg) {
-		final Stream<EntityPlayerMP> players = generateStream(
-				FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers());
+		final List<EntityPlayerMP> players = generateStream(
+				FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers(), null);
 		sendToList(players, msg);
 	}
 
@@ -202,17 +221,13 @@ public final class Network {
 		if (world != null) {
 			final double rSq = point.range * point.range;
 			//@formatter:off
-			final Stream<EntityPlayerMP> players =
-				generateStream(DimensionManager.getWorld(point.dimension).playerEntities)
-				.filter(p -> p.getDistanceSq(point.x, point.y, point.z) <= rSq);
+			final List<EntityPlayerMP> players =
+				generateStream(
+					DimensionManager.getWorld(point.dimension).playerEntities,
+					p -> p.getDistanceSq(point.x, point.y, point.z) <= rSq
+				);
 			//@formatter:on
 			sendToList(players, msg);
 		}
-	}
-
-	// Basic client -> server packet routines
-	@SideOnly(Side.CLIENT)
-	public static void sendToServer(@Nonnull final IMessage msg) {
-		NETWORK.sendToServer(msg);
 	}
 }
