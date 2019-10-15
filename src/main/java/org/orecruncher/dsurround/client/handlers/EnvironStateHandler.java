@@ -381,6 +381,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		for (final String s : badScripts) {
 			event.output.add("BAD SCRIPT: " + s);
 		}
+		
+		event.output.add(EnvironState.getBattleScanner().toString());
 	}
 
 }

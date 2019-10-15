@@ -24,6 +24,10 @@
 
 package org.orecruncher.dsurround.client.handlers.scanners;
 
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.capabilities.CapabilityEntityData;
 import org.orecruncher.dsurround.capabilities.entitydata.IEntityData;
@@ -39,6 +43,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -52,6 +57,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class BattleScanner implements ITickable {
 
+	private static final String DEBUG_NOT_ENABLED = TextFormatting.RED + "<BATTLE MUSIC NOT ENABLED>";
+	
 	private static final int BOSS_RANGE = 65536; // 256 block range
 	private static final int MINI_BOSS_RANGE = 16384; // 128 block range
 	private static final int MOB_RANGE = 400; // 20 block range
@@ -62,7 +69,7 @@ public class BattleScanner implements ITickable {
 	protected boolean isWither;
 	protected boolean isDragon;
 	protected boolean isBoss;
-
+	
 	public void reset() {
 		this.inBattle = false;
 		this.isWither = false;
@@ -85,7 +92,7 @@ public class BattleScanner implements ITickable {
 	public boolean isBoss() {
 		return this.isBoss;
 	}
-
+	
 	private boolean isApplicableType(final Entity e) {
 		if (e instanceof IMob)
 			return true;
@@ -115,12 +122,13 @@ public class BattleScanner implements ITickable {
 		boolean isDragon = false;
 		boolean isWither = false;
 
-		for (final Entity e : world.getLoadedEntityList()) {
+		List<Entity> entities = world.getLoadedEntityList();
+		for (final Entity e : entities) {
 
 			// The player isn't a candidate
 			if (e == player)
 				continue;
-
+			
 			// Gotta be the right type of entity. Do this first
 			// to filter out all the animals.
 			if (!isApplicableType(e))
@@ -178,6 +186,23 @@ public class BattleScanner implements ITickable {
 		} else if (this.inBattle && tickCounter > this.battleTimer) {
 			reset();
 		}
+	}
+	
+	@Override
+	@Nonnull
+	public String toString() {
+		
+		if (!ModOptions.sound.enableBattleMusic) {
+			return DEBUG_NOT_ENABLED;
+		}
+		
+		StringBuilder builder = new StringBuilder();
+		builder.append(TextFormatting.RED);
+		builder.append("BattleScanner inBattle:").append(this.inBattle).append(';');
+		builder.append(" isBoss:").append(this.isBoss).append(';');
+		builder.append(" isWither:").append(this.isWither).append(';');
+		builder.append(" isDragon:").append(this.isDragon).append(';');
+		return builder.toString();
 	}
 
 }
