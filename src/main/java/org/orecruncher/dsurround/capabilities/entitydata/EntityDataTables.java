@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.capabilities.CapabilityEntityData;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -67,107 +66,131 @@ import net.minecraft.entity.passive.EntityWolf;
 
 public final class EntityDataTables {
 
-	private enum ClassType {
-		Neither, Attack, Flee
+	// Describes the type of EntityAIBase task instance
+	private enum TaskType {
+		//@formatter:off
+		None,
+		Attack,
+		Flee
+		//@formatter:on
 	}
 
-	private final static Map<Class<?>, ClassType> AI_TASKS = new Reference2ObjectOpenHashMap<>();
-	private final static Map<String, ClassType> MAPPINGS = new Object2ObjectOpenHashMap<>();
+	// Class types mapped to a TaskType
+	private final static Map<Class<?>, TaskType> AI_TASKS = new Reference2ObjectOpenHashMap<>(128);
+	
+	// Name mappings to types.  Need this because some of the AI task classes are not accessible
+	// to Dynamic Surroundings.  I'm looking at you Eclipse Open J9...
+	private final static Map<String, TaskType> MAPPINGS = new Object2ObjectOpenHashMap<>();
 
-	private static void add(@Nonnull final Class<?> clazz, @Nonnull ClassType ct) {
+	private static void add(@Nonnull final Class<?> clazz, @Nonnull TaskType ct) {
 		AI_TASKS.put(clazz, ct);
-		MAPPINGS.put(resolveName(clazz), ct);
+	}
+
+	@Nonnull
+	private static void add(@Nonnull final Class<? extends EntityLiving> clazz, @Nonnull final TaskType ct,
+			@Nonnull final String... className) {
+		for (String cn : className) {
+			String name = resolveName(clazz) + "$" + cn;
+			MAPPINGS.put(name, ct);
+		}
 	}
 
 	private static String resolveName(@Nonnull final Class<?> clazz) {
+		// Possible that the class name does not have dots because of
+		// obsfucation.
 		String n = clazz.getName();
 		int i = n.lastIndexOf('.');
-		return n.substring(i + 1);
+		return i > 0 ? n.substring(i + 1) : n;
 	}
 
-	private static ClassType find(@Nonnull final EntityAIBase aiTask) {
-		String name = resolveName(aiTask.getClass());
-		ClassType ct = MAPPINGS.get(name);
-
+	@Nonnull
+	private static TaskType find(@Nonnull final EntityAIBase aiTask) {
+		Class<?> clazz = aiTask.getClass();
+		TaskType ct = AI_TASKS.get(clazz);
 		if (ct == null) {
-			
-			try {
-				for (Entry<Class<?>, ClassType> kvp : AI_TASKS.entrySet()) {
-					if (kvp.getKey().isInstance(aiTask)) {
-						MAPPINGS.put(name, ct = kvp.getValue());
-						return ct;
-					}
+			// Find a match by inheritance
+			for (final Entry<Class<?>, TaskType> kvp : AI_TASKS.entrySet()) {
+				if (kvp.getKey().isInstance(aiTask)) {
+					ct = kvp.getValue();
+					break;
 				}
-			} catch(final Exception ex) {
-				// Weird.  Maybe Eclipse J9 - it's whacky
-				ModBase.log().catching(ex);
+			}
+
+			// If we can't find by inheritance look in name mappings
+			if (ct == null) {
+				String name = resolveName(clazz);
+				ct = MAPPINGS.get(name);
+				if (ct == null) {
+					// Not something we are interested in
+					ct = TaskType.None;
+				}
 			}
 			
-			MAPPINGS.put(name, ct = ClassType.Neither);
+			// Stick it in the map so we don't have to repeat
+			AI_TASKS.put(clazz, ct);
 		}
 
 		return ct;
 	}
 
-	private static void add(@Nonnull final Class<? extends EntityLiving> clazz, @Nonnull final String className,
-			final ClassType ct) {
-		String name = resolveName(clazz) + "$" + className;
-		MAPPINGS.put(name, ct);
-	}
-
 	static {
-		add(EntityAIAttackMelee.class, ClassType.Attack);
-		add(EntityAIAttackRanged.class, ClassType.Attack);
-		add(EntityAIAttackRangedBow.class, ClassType.Attack);
-		add(EntityAICreeperSwell.class, ClassType.Attack);
-		add(EntityAILeapAtTarget.class, ClassType.Attack);
-		add(EntityAIOcelotAttack.class, ClassType.Attack);
-		add(EntityAIOwnerHurtByTarget.class, ClassType.Attack);
-		add(EntityAIZombieAttack.class, ClassType.Attack);
-		add(EntityAINearestAttackableTarget.class, ClassType.Attack);
+		// General/generic AI tasks
+		add(EntityAIAttackMelee.class, TaskType.Attack);
+		add(EntityAIAttackRanged.class, TaskType.Attack);
+		add(EntityAIAttackRangedBow.class, TaskType.Attack);
+		add(EntityAICreeperSwell.class, TaskType.Attack);
+		add(EntityAILeapAtTarget.class, TaskType.Attack);
+		add(EntityAIOcelotAttack.class, TaskType.Attack);
+		add(EntityAIOwnerHurtByTarget.class, TaskType.Attack);
+		add(EntityAIZombieAttack.class, TaskType.Attack);
+		add(EntityAINearestAttackableTarget.class, TaskType.Attack);
+		add(EntitySpellcasterIllager.AICastingApell.class, TaskType.Attack);
+		add(EntitySpellcasterIllager.AIUseSpell.class, TaskType.Attack);
+		add(EntityAIAvoidEntity.class, TaskType.Flee);
+		add(EntityAIFleeSun.class, TaskType.Flee);
+		add(EntityAIHurtByTarget.class, TaskType.Flee);
+		add(EntityAIPanic.class, TaskType.Flee);
+		add(EntityAIRunAroundLikeCrazy.class, TaskType.Flee);
 
-		add(EntityAIAvoidEntity.class, ClassType.Flee);
-		add(EntityAIFleeSun.class, ClassType.Flee);
-		add(EntityAIHurtByTarget.class, ClassType.Flee);
-		add(EntityAIPanic.class, ClassType.Flee);
-		add(EntityAIRunAroundLikeCrazy.class, ClassType.Flee);
+		// Specials because they are inaccessible inner classes.  Have to take into account
+		// obsfucation.
+		add(EntityRabbit.class, TaskType.Attack, "AIEvilAttack", "a");
+		add(EntityRabbit.class, TaskType.Flee, "AIAvoidEntity", "b");
+		add(EntityRabbit.class, TaskType.Flee, "AIPanic", "f");
 
-		// Specials because they are inner classes
+		add(EntityPolarBear.class, TaskType.Attack, "AIMeleeAttack", "d");
+		add(EntityPolarBear.class, TaskType.Attack, "AIAttackPlayer", "a");
+		add(EntityPolarBear.class, TaskType.Flee, "AIPanic", "e");
 
-		add(EntityEnderman.class, "AIFindPlayer", ClassType.Attack);
-		add(EntityGhast.class, "AIFireballAttack", ClassType.Attack);
-		add(EntityGuardian.class, "AIGuardianAttack", ClassType.Attack);
-		add(EntityPolarBear.class, "AIMeleeAttack", ClassType.Attack);
-		add(EntityPolarBear.class, "AIAttackPlayer", ClassType.Attack);
-		add(EntityShulker.class, "AIAttackNearest", ClassType.Attack);
-		add(EntitySlime.class, "AISlimeAttack", ClassType.Attack);
-		add(EntitySpider.class, "AISpiderAttack", ClassType.Attack);
-		add(EntityBlaze.class, "AIFireballAttack", ClassType.Attack);
-		add(EntityEvoker.class, "AICastingSpell", ClassType.Attack);
-		add(EntityEvoker.class, "AISummonSpell", ClassType.Attack);
-		add(EntityEvoker.class, "AIAttackSpell", ClassType.Attack);
-		add(EntityEvoker.class, "AIWololoSpell", ClassType.Attack);
-		add(EntitySpellcasterIllager.class, "AICastingApell", ClassType.Attack);
-		add(EntitySpellcasterIllager.class, "AIMirriorSpell", ClassType.Attack);
-		add(EntitySpellcasterIllager.class, "AIBlindnessSpell", ClassType.Attack);
-		add(EntityShulker.class, "AIAttack", ClassType.Attack);
-		add(EntityVex.class, "AIChargeAttack", ClassType.Attack);
-		add(EntityVindicator.class, "AIJohnnyAttack", ClassType.Attack);
+		add(EntityShulker.class, TaskType.Attack, "AIAttack", "a");
+		add(EntityShulker.class, TaskType.Attack, "AIDefenseAttack", "c");
+		add(EntityShulker.class, TaskType.Attack, "AIAttackNearest", "d");
 
-		add(EntityPolarBear.class, "AIPanic", ClassType.Flee);
-		add(EntityRabbit.class, "AIAvoidEntity", ClassType.Flee);
-		add(EntityWolf.class, "AIAvoidEntity", ClassType.Flee);
+		add(EntityEvoker.class, TaskType.Attack, "AICastingSpell", "b");
+		add(EntityEvoker.class, TaskType.Attack, "AISummonSpell", "c");
+		add(EntityEvoker.class, TaskType.Attack, "AIAttackSpell", "a");
+		add(EntityEvoker.class, TaskType.Attack, "AIWololoSpell", "d");
+
+		add(EntityEnderman.class, TaskType.Attack, "AIFindPlayer", "b");
+		add(EntityGhast.class, TaskType.Attack, "AIFireballAttack", "c");
+		add(EntityGuardian.class, TaskType.Attack, "AIGuardianAttack", "a");
+		add(EntitySlime.class, TaskType.Attack, "AISlimeAttack", "a");
+		add(EntitySpider.class, TaskType.Attack, "AISpiderAttack", "a");
+		add(EntityBlaze.class, TaskType.Attack, "AIFireballAttack", "a");
+		add(EntityVex.class, TaskType.Attack, "AIChargeAttack", "a");
+		add(EntityVindicator.class, TaskType.Attack, "AIJohnnyAttack", "a");
+		add(EntityWolf.class, TaskType.Flee, "AIAvoidEntity", "a");
 	}
 
 	@Nonnull
-	private static boolean eval(@Nonnull final EntityLiving entity, @Nonnull ClassType desiredType) {
+	private static boolean eval(@Nonnull final EntityLiving entity, @Nonnull TaskType desiredType) {
 
-		for (EntityAITaskEntry task : entity.tasks.executingTaskEntries) {
+		for (final EntityAITaskEntry task : entity.tasks.executingTaskEntries) {
 			if (find(task.action) == desiredType)
 				return true;
 		}
 
-		for (EntityAITaskEntry task : entity.targetTasks.executingTaskEntries) {
+		for (final EntityAITaskEntry task : entity.targetTasks.executingTaskEntries) {
 			if (find(task.action) == desiredType)
 				return true;
 		}
@@ -179,8 +202,8 @@ public final class EntityDataTables {
 	public static void assess(@Nonnull final EntityLiving entity) {
 		final IEntityDataSettable data = (IEntityDataSettable) CapabilityEntityData.getCapability(entity);
 		if (data != null) {
-			final boolean isAttacking = eval(entity, ClassType.Attack);
-			final boolean isFleeing = eval(entity, ClassType.Flee);
+			final boolean isAttacking = eval(entity, TaskType.Attack);
+			final boolean isFleeing = eval(entity, TaskType.Flee);
 			data.setAttacking(isAttacking);
 			data.setFleeing(isFleeing);
 		}
