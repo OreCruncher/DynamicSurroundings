@@ -147,7 +147,7 @@ public class SeasonInfo implements ISeasonInfo {
 
 	/**
 	 * Determines the type of precipitation to render for the specified world
-	 * location/biome. The type is based on the heights block that precipipation can
+	 * location/biome. The type is based on the heights block that precipitation can
 	 * hit in the block column defined by the BlockPos.
 	 *
 	 * @param world The current client world

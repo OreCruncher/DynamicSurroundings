@@ -29,26 +29,31 @@ import javax.annotation.Nonnull;
 import org.orecruncher.dsurround.network.Network;
 import org.orecruncher.dsurround.network.PacketEntityData;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
 
 public final class EntityData implements IEntityDataSettable {
 
 	public static final int NO_ENTITY = -1;
 
-	private final Entity entity;
+	private final EntityLiving entity;
 	private boolean isAttacking;
 	private boolean isFleeing;
-	private boolean isDirty;
+	private boolean sync;
 
 	public EntityData() {
 		this.entity = null;
 	}
 
-	public EntityData(@Nonnull final Entity entity) {
+	public EntityData(@Nonnull final EntityLiving entity) {
 		this.entity = entity;
 	}
 
+	@Override
+	public EntityLiving getEntity() {
+		return this.entity;
+	}
+	
 	@Override
 	public int getEntityId() {
 		return this.entity != null ? this.entity.getEntityId() : NO_ENTITY;
@@ -61,7 +66,7 @@ public final class EntityData implements IEntityDataSettable {
 
 	@Override
 	public void setAttacking(final boolean flag) {
-		this.isDirty = (this.isAttacking != flag) | this.isDirty;
+		this.sync = (this.isAttacking != flag) | this.sync;
 		this.isAttacking = flag;
 	}
 
@@ -72,25 +77,24 @@ public final class EntityData implements IEntityDataSettable {
 
 	@Override
 	public void setFleeing(final boolean flag) {
-		this.isDirty = (this.isFleeing != flag) | this.isDirty;
+		this.sync = (this.isFleeing != flag) | this.sync;
 		this.isFleeing = flag;
 	}
 
 	@Override
-	public boolean isDirty() {
-		return this.isDirty;
+	public boolean needsSync() {
+		return this.sync;
 	}
 
-	@Override
-	public void clearDirty() {
-		this.isDirty = false;
+	private void clearSync() {
+		this.sync = false;
 	}
 
 	@Override
 	public void sync() {
-		if (this.entity != null && !this.entity.world.isRemote) {
+		if (needsSync() && this.entity != null && !this.entity.getEntityWorld().isRemote) {
 			Network.sendToEntityViewers(this.entity, new PacketEntityData(this));
-			clearDirty();
+			clearSync();
 		}
 	}
 

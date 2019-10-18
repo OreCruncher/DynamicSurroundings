@@ -25,9 +25,8 @@ package org.orecruncher.dsurround.client.handlers.fog;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.capabilities.dimension.IDimensionInfo;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.registry.dimension.DimensionData;
-
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -54,8 +53,8 @@ public class HazeFogRangeCalculator extends VanillaFogRangeCalculator {
 	@Override
 	@Nonnull
 	public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
-		final DimensionData di = EnvironState.getDimensionInfo();
-		if (di.getHasHaze()) {
+		final IDimensionInfo di = EnvironState.getDimensionInfo();
+		if (di.hasHaze()) {
 			final float lowY = di.getCloudHeight() - BAND_OFFSETS;
 			final float highY = di.getCloudHeight() + BAND_OFFSETS + BAND_CORE_SIZE;
 

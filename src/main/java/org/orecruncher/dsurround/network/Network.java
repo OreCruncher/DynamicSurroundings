@@ -38,6 +38,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.lib.ReflectedField.ObjectField;
+import org.orecruncher.lib.collections.EmptyList;
 import org.orecruncher.lib.task.Scheduler;
 
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -139,8 +140,12 @@ public final class Network {
 	// Handle normal client disconnects, like the player quitting.
 	@SubscribeEvent
 	public static void clientDisconnect(@Nonnull final PlayerLoggedOutEvent event) {
-		synchronized (blockList) {
-			blockList.remove(event.player.getPersistentID());
+		try {
+			synchronized (blockList) {
+				blockList.remove(event.player.getPersistentID());
+			}
+		} catch (@Nonnull final Throwable t) {
+			t.printStackTrace();
 		}
 	}
 
@@ -177,20 +182,29 @@ public final class Network {
 		if (pred != null)
 			strm = strm.filter(pred);
 		
-		synchronized (blockList) {
-			return strm.map(p -> (EntityPlayerMP) p).collect(Collectors.toList());
+		try {
+			synchronized (blockList) {
+				return strm.map(p -> (EntityPlayerMP) p).collect(Collectors.toList());
+			}
+		} catch (@Nonnull final Throwable t) {
+			t.printStackTrace();
+			return EmptyList.empty();
 		}
 		//@formatter:on
 	}
 
 	// Basic server -> client packet routines
 	public static void sendToPlayer(@Nonnull final EntityPlayerMP player, @Nonnull final IMessage msg) {
-		synchronized (blockList) {
-			if (blockList.contains(player.getPersistentID()))
-				return;
-		}
-		synchronized (NETWORK) {
-			NETWORK.sendTo(msg, player);
+		try {
+			synchronized (blockList) {
+				if (blockList.contains(player.getPersistentID()))
+					return;
+			}
+			synchronized (NETWORK) {
+				NETWORK.sendTo(msg, player);
+			}
+		} catch (@Nonnull final Throwable t) {
+			t.printStackTrace();
 		}
 	}
 

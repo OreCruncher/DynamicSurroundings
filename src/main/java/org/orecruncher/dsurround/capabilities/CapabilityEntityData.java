@@ -80,7 +80,7 @@ public final class CapabilityEntityData {
 		@SubscribeEvent
 		public static void attachCapabilities(final AttachCapabilitiesEvent<Entity> event) {
 			if (event.getObject() instanceof EntityLiving) {
-				final EntityData emojiData = new EntityData(event.getObject());
+				final EntityData emojiData = new EntityData((EntityLiving) event.getObject());
 				event.addCapability(CAPABILITY_ID, createProvider(emojiData));
 			}
 		}
@@ -112,9 +112,8 @@ public final class CapabilityEntityData {
 				return;
 			final IEntityDataSettable data = (IEntityDataSettable) getCapability(event.getEntity());
 			if (data != null) {
-				EntityDataTables.assess((EntityLiving) event.getEntity());
-				if (data.isDirty())
-					data.sync();
+				EntityDataTables.assess(data);
+				data.sync();
 			}
 		}
 	}

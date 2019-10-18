@@ -31,7 +31,10 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
+import org.orecruncher.dsurround.capabilities.CapabilityDimensionInfo;
 import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
+import org.orecruncher.dsurround.capabilities.dimension.DimensionInfo;
+import org.orecruncher.dsurround.capabilities.dimension.IDimensionInfo;
 import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
 import org.orecruncher.dsurround.capabilities.season.TemperatureRating;
 import org.orecruncher.dsurround.client.handlers.scanners.BattleScanner;
@@ -42,8 +45,6 @@ import org.orecruncher.dsurround.expression.ExpressionEngine;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.dsurround.registry.biome.BiomeRegistry;
-import org.orecruncher.dsurround.registry.dimension.DimensionData;
-import org.orecruncher.dsurround.registry.dimension.DimensionRegistry;
 import org.orecruncher.dsurround.registry.item.ItemClass;
 import org.orecruncher.lib.DiurnalUtils;
 import org.orecruncher.lib.DiurnalUtils.DayCycle;
@@ -74,7 +75,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		private static BiomeInfo truePlayerBiome = null;
 		private static int dimensionId;
 		private static String dimensionName;
-		private static DimensionData dimInfo = DimensionData.NONE;
+		private static IDimensionInfo dimInfo = DimensionInfo.NONE;
 		private static BlockPos playerPosition;
 		private static TemperatureRating playerTemperature;
 		private static TemperatureRating biomeTemperature;
@@ -106,7 +107,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			truePlayerBiome = WTF;
 			dimensionId = 0;
 			dimensionName = StringUtils.EMPTY;
-			dimInfo = DimensionData.NONE;
+			dimInfo = DimensionInfo.NONE;
 			playerPosition = BlockPos.ORIGIN;
 			playerTemperature = TemperatureRating.MILD;
 			biomeTemperature = TemperatureRating.MILD;
@@ -128,12 +129,11 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 			final BiomeRegistry biomes = RegistryManager.BIOME;
 			final ISeasonInfo season = CapabilitySeasonInfo.getCapability(getWorld());
-			final DimensionRegistry dimensions = RegistryManager.DIMENSION;
 			final EnvironStateHandler stateHandler = EffectManager.instance().lookupService(EnvironStateHandler.class);
 			if (stateHandler == null)
 				ModBase.log().warn("Null EnvironStateHandler in EnvironState.tick()");
 
-			EnvironState.dimInfo = dimensions.getData(player.getEntityWorld());
+			EnvironState.dimInfo = CapabilityDimensionInfo.getCapability(EnvironState.getWorld());
 			EnvironState.clock.update(getWorld());
 			EnvironState.playerBiome = biomes.getPlayerBiome(player, false);
 			EnvironState.dimensionId = world.provider.getDimension();
@@ -174,7 +174,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			return battle;
 		}
 
-		public static DimensionData getDimensionInfo() {
+		public static IDimensionInfo getDimensionInfo() {
 			return dimInfo;
 		}
 

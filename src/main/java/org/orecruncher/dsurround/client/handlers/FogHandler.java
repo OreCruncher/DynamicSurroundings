@@ -73,7 +73,7 @@ public class FogHandler extends EffectHandlerBase {
 	}
 
 	private boolean doFog() {
-		return ModOptions.fog.enableFogProcessing && EnvironState.getDimensionInfo().getHasFog();
+		return ModOptions.fog.enableFogProcessing && EnvironState.getDimensionInfo().hasFog();
 	}
 
 	@Override

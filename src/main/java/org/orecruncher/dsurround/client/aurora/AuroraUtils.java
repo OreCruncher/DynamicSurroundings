@@ -72,7 +72,7 @@ public class AuroraUtils {
 	 * dimension.
 	 */
 	public static boolean hasAuroras() {
-		return EnvironState.getDimensionInfo().getHasAuroras();
+		return EnvironState.getDimensionInfo().hasAuroras();
 	}
 
 	/*

@@ -40,7 +40,6 @@ public final class ModInfo {
 	//@formatter:off
 	public static final String DEPENDENCIES =
 		"required-after:forge@[14.23.5.2768,);" +
-//		"required-after:dsurroundcore;" +
 		"required-after:orelib@[3.5.2.3,);" +
 		"after:sereneseasons@[1.2.18,);" +
 		"after:animania@[1.7.2,);" +

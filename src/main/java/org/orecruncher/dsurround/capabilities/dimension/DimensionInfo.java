@@ -24,7 +24,6 @@
 
 package org.orecruncher.dsurround.capabilities.dimension;
 
-import java.lang.ref.WeakReference;
 import java.text.DecimalFormat;
 import java.util.Random;
 
@@ -32,48 +31,112 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.registry.RegistryManager;
-import org.orecruncher.dsurround.registry.dimension.DimensionData;
+import org.orecruncher.dsurround.registry.config.DimensionConfig;
 import org.orecruncher.lib.math.MathStuff;
 import org.orecruncher.lib.random.XorShiftRandom;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldType;
 
-public class DimensionInfo implements IDimensionInfoEx {
+public final class DimensionInfo implements IDimensionInfoEx {
 
+	public final static IDimensionInfo NONE = new DimensionInfo();
+	
 	public final static float MIN_INTENSITY = 0.0F;
 	public final static float MAX_INTENSITY = 1.0F;
 
+	private static final int SPACE_HEIGHT_OFFSET = 32;
 	private static final DecimalFormat FORMATTER = new DecimalFormat("0");
 
-	private final Random RANDOM = XorShiftRandom.current();
-
+	protected final Random RANDOM = XorShiftRandom.current();
 	protected final World world;
-	protected WeakReference<DimensionData> ref;
 
-	// Used server side for its stuff
+	// Rain/weather tracking data.  Some of the data is synchronized from the server.
 	private float intensity = 0.0F;
 	private float currentIntensity = 0.0F;
 	private float minIntensity = ModOptions.rain.defaultMinRainStrength;
 	private float maxIntensity = ModOptions.rain.defaultMaxRainStrength;
 	private int thunderTimer = 0;
+	
+	// Attributes about the dimension.  This is information is loaded from
+	// local configs.
+	protected int dimensionId;
+	protected String name;
+	protected int seaLevel;
+	protected int skyHeight;
+	protected int cloudHeight;
+	protected int spaceHeight;
+	protected boolean hasHaze = false;
+	protected boolean hasAuroras = false;
+	protected boolean hasWeather = false;
+	protected boolean hasFog = false;
+	protected boolean alwaysOutside = false;
+	protected boolean playBiomeSounds = true;
 
 	public DimensionInfo() {
 		this.world = null;
+		this.dimensionId = Integer.MIN_VALUE;
+		this.name = "<DEFAULT NONE>";
 	}
 
 	public DimensionInfo(@Nonnull final World world) {
 		this.world = world;
-		this.ref = new WeakReference<>(null);
-	}
+		
+		// Attributes that come from the world object itself.  Set
+		// now because the config may override.
+		this.dimensionId = world.provider.getDimension();
+		this.name = world.provider.getDimensionType().getName();
+		this.seaLevel = world.getSeaLevel();
+		this.skyHeight = world.getActualHeight();
+		this.cloudHeight = this.skyHeight;
+		this.spaceHeight = this.skyHeight + SPACE_HEIGHT_OFFSET;
 
-	protected DimensionData data() {
-		DimensionData result = this.ref.get();
-		if (result == null) {
-			result = RegistryManager.DIMENSION.getData(this.world);
-			this.ref = new WeakReference<>(result);
+		if (world.provider.isSurfaceWorld() && world.provider.hasSkyLight()) {
+			this.hasWeather = true;
+			this.hasAuroras = true;
+			this.hasFog = true;
 		}
-		return result;
+
+		// Force sea level based on known world types that give heartburn
+		final WorldType wt = world.getWorldType();
+
+		if (wt == WorldType.FLAT)
+			this.seaLevel = 0;
+		else if (this.dimensionId == 0 && ModOptions.biomes.worldSealevelOverride > 0)
+			this.seaLevel = ModOptions.biomes.worldSealevelOverride;
+
+		final String dim = Integer.toString(this.dimensionId);
+		for (int i = 0; i < ModOptions.biomes.dimensionBlacklist.length; i++)
+			if (dim.equals(ModOptions.biomes.dimensionBlacklist[i])) {
+				this.playBiomeSounds = false;
+				break;
+			}
+
+		// Override based on player config settings
+		final DimensionConfig entry = RegistryManager.DIMENSION.getData(this.world);
+		if (entry != null) {
+			if (entry.seaLevel != null)
+				this.seaLevel = entry.seaLevel;
+			if (entry.skyHeight != null)
+				this.skyHeight = entry.skyHeight;
+			if (entry.hasHaze != null)
+				this.hasHaze = entry.hasHaze;
+			if (entry.hasAurora != null)
+				this.hasAuroras = entry.hasAurora;
+			if (entry.hasWeather != null)
+				this.hasWeather = entry.hasWeather;
+			if (entry.cloudHeight != null)
+				this.cloudHeight = entry.cloudHeight;
+			else
+				this.cloudHeight = this.hasHaze ? this.skyHeight / 2 : this.skyHeight;
+			if (entry.hasFog != null)
+				this.hasFog = entry.hasFog;
+			if (entry.alwaysOutside != null)
+				this.alwaysOutside = entry.alwaysOutside;
+
+			this.spaceHeight = this.skyHeight + SPACE_HEIGHT_OFFSET;
+		}
 	}
 
 	// ===================================
@@ -83,58 +146,63 @@ public class DimensionInfo implements IDimensionInfoEx {
 	// ===================================
 	@Override
 	public int getId() {
-		return this.world.provider.getDimension();
+		return this.dimensionId;
 	}
 
 	@Override
 	@Nonnull
 	public String getName() {
-		return data().getName();
+		return this.name;
 	}
 
 	@Override
 	public int getSeaLevel() {
-		return data().getSeaLevel();
+		return this.seaLevel;
 	}
 
 	@Override
 	public int getSkyHeight() {
-		return data().getSkyHeight();
+		return this.skyHeight;
 	}
 
 	@Override
 	public int getCloudHeight() {
-		return data().getCloudHeight();
+		return this.cloudHeight;
 	}
 
 	@Override
 	public int getSpaceHeight() {
-		return data().getSpaceHeight();
+		return this.spaceHeight;
 	}
 
 	@Override
 	public boolean hasHaze() {
-		return data().getHasHaze();
+		return this.hasHaze;
 	}
 
 	@Override
 	public boolean hasAuroras() {
-		return data().getHasAuroras();
+		return this.hasAuroras;
 	}
 
 	@Override
 	public boolean hasWeather() {
-		return data().getHasWeather();
+		return this.hasWeather;
 	}
 
 	@Override
 	public boolean hasFog() {
-		return data().getHasFog();
+		return this.hasFog;
 	}
 
 	@Override
 	public boolean playBiomeSounds() {
-		return data().getPlayBiomeSounds();
+		return this.playBiomeSounds;
+	}
+	
+	@Override
+	public boolean alwaysOutside() {
+		return this.alwaysOutside;
 	}
 
 	// ===================================

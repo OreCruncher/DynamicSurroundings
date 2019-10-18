@@ -24,15 +24,17 @@
 
 package org.orecruncher.dsurround.capabilities.entitydata;
 
+import net.minecraft.entity.EntityLiving;
+
 public interface IEntityDataSettable extends IEntityData {
 
+	EntityLiving getEntity();
+	
 	void setAttacking(final boolean flag);
 
 	void setFleeing(final boolean flag);
 
-	boolean isDirty();
-
-	void clearDirty();
+	boolean needsSync();
 
 	void sync();
 }

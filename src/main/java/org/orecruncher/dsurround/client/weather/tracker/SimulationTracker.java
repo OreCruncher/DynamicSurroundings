@@ -28,8 +28,8 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.capabilities.CapabilityDimensionInfo;
 import org.orecruncher.dsurround.capabilities.dimension.DimensionInfo;
+import org.orecruncher.dsurround.capabilities.dimension.IDimensionInfo;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.weather.Weather.Properties;
 import org.orecruncher.dsurround.event.ThunderEvent;
@@ -96,7 +96,8 @@ public class SimulationTracker extends Tracker {
 
 	@Override
 	public void update() {
-		if (CapabilityDimensionInfo.getCapability(EnvironState.getWorld()).hasWeather()) {
+		final IDimensionInfo info = EnvironState.getDimensionInfo();
+		if (info != null && info.hasWeather()) {
 			updateRainState();
 			doAmbientThunder();
 		} else {
@@ -164,9 +165,9 @@ public class SimulationTracker extends Tracker {
 
 		// If it is thundering and the intensity exceeds our threshold...
 		if (backgroundThunderPossible()) {
-			final float intensity = getIntensityLevel();
 			int time = this.nextThunderEvent - 1;
 			if (time <= 0) {
+				final float intensity = getIntensityLevel();
 				if (time == 0) {
 					final EntityPlayer player = PlayerUtils.getRandomPlayer(EnvironState.getWorld());
 					if (player != null) {

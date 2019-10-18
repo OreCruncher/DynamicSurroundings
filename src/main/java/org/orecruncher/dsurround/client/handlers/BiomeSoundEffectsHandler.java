@@ -53,12 +53,12 @@ public class BiomeSoundEffectsHandler extends EffectHandlerBase {
 	@Override
 	public boolean doTick(final int tick) {
 		return ModOptions.sound.enableBiomeSounds && (tick % SCAN_INTERVAL) == 0
-				&& EnvironState.getDimensionInfo().getPlayBiomeSounds()
+				&& EnvironState.getDimensionInfo().playBiomeSounds()
 				&& EnvironState.getWorld().isBlockLoaded(EnvironState.getPlayerPosition());
 	}
 
 	private boolean doBiomeSounds() {
-		return EnvironState.isPlayerUnderground() || EnvironState.getDimensionInfo().getAlwaysOutside()
+		return EnvironState.isPlayerUnderground() || EnvironState.getDimensionInfo().alwaysOutside()
 				|| !EnvironState.isPlayerInside();
 	}
 

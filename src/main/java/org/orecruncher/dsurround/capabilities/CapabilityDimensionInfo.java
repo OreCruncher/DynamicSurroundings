@@ -34,6 +34,9 @@ import org.orecruncher.lib.capability.CapabilityProviderSerializable;
 import org.orecruncher.lib.capability.CapabilityUtils;
 import org.orecruncher.lib.capability.SimpleStorage;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
+
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -74,6 +77,19 @@ public class CapabilityDimensionInfo {
 				ModBase.log().info("Attaching capabilities to world [%s] (%s)", world.provider.getDimensionType().getName(), side);
 				final DimensionInfo info = new DimensionInfo(world);
 				event.addCapability(CAPABILITY_ID, createProvider(info));
+				
+				// Dump out some diagnostics...
+				final ToStringHelper builder = MoreObjects.toStringHelper(info);
+				builder.add("id", info.getId());
+				builder.add("name", info.getName());
+				builder.add("seaLevel", info.getSeaLevel());
+				builder.add("cloudHeight", info.getCloudHeight());
+				builder.add("skyHeight", info.getSkyHeight());
+				builder.add("haze", info.hasHaze());
+				builder.add("aurora", info.hasAuroras());
+				builder.add("weather", info.hasWeather());
+				builder.add("fog", info.hasFog());
+				ModBase.log().info(builder.toString());
 			}
 		}
 	}

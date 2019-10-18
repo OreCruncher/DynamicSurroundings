@@ -28,8 +28,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.capabilities.CapabilityEntityData;
-
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.entity.EntityLiving;
@@ -199,14 +197,12 @@ public final class EntityDataTables {
 	}
 
 	@Nonnull
-	public static void assess(@Nonnull final EntityLiving entity) {
-		final IEntityDataSettable data = (IEntityDataSettable) CapabilityEntityData.getCapability(entity);
-		if (data != null) {
-			final boolean isAttacking = eval(entity, TaskType.Attack);
-			final boolean isFleeing = eval(entity, TaskType.Flee);
-			data.setAttacking(isAttacking);
-			data.setFleeing(isFleeing);
-		}
+	public static void assess(@Nonnull final IEntityDataSettable data) {
+		EntityLiving entity = data.getEntity();
+		final boolean isAttacking = eval(entity, TaskType.Attack);
+		final boolean isFleeing = eval(entity, TaskType.Flee);
+		data.setAttacking(isAttacking);
+		data.setFleeing(isFleeing);
 	}
 
 }

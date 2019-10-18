@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
@@ -35,9 +36,7 @@ import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.config.DimensionConfig;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.world.World;
-import net.minecraft.world.border.WorldBorder;
 
 public final class DimensionRegistry extends Registry {
 
@@ -48,7 +47,6 @@ public final class DimensionRegistry extends Registry {
 	@Override
 	protected void preInit() {
 		this.cache.clear();
-		this.dimensionData.clear();
 	}
 
 	@Override
@@ -65,7 +63,6 @@ public final class DimensionRegistry extends Registry {
 	}
 
 	private final List<DimensionConfig> cache = new ArrayList<>();
-	private final Int2ObjectOpenHashMap<DimensionData> dimensionData = new Int2ObjectOpenHashMap<>();
 
 	public void loading(@Nonnull final World world) {
 		getData(world);
@@ -104,39 +101,34 @@ public final class DimensionRegistry extends Registry {
 		}
 	}
 
-	@Nonnull
-	public DimensionData getData(@Nonnull final World world) {
+	@Nullable
+	public DimensionConfig getData(@Nonnull final World world) {
+		// Dimension registry is shared so we need to guard access in case
+		// the client reloads.
 		synchronized (this) {
-			DimensionData data = this.dimensionData.get(world.provider.getDimension());
-			if (data == null) {
-				DimensionConfig entry = null;
-				for (final DimensionConfig e : this.cache)
-					if ((e.dimensionId != null && e.dimensionId == world.provider.getDimension())
-							|| (e.name != null && e.name.equals(world.provider.getDimensionType().getName()))) {
-						entry = e;
-						break;
-					}
-				if (entry == null) {
-					data = new DimensionData(world);
-				} else {
-					data = new DimensionData(world, entry);
+			for (final DimensionConfig e : this.cache)
+				if ((e.dimensionId != null && e.dimensionId == world.provider.getDimension())
+						|| (e.name != null && e.name.equals(world.provider.getDimensionType().getName()))) {
+					return e;
 				}
-
-				this.dimensionData.put(world.provider.getDimension(), data);
-				ModBase.log().info(data.toString());
-				final WorldBorder border = world.getWorldBorder();
-				if (border != null) {
-					final StringBuilder builder = new StringBuilder();
-					builder.append("x: ").append((long) border.minX()).append('/').append((long) border.maxX())
-							.append(", ");
-					builder.append("z: ").append((long) border.minZ()).append('/').append((long) border.maxZ())
-							.append(", ");
-					builder.append("center: (").append((long) border.getCenterX()).append(',')
-							.append((long) border.getCenterZ()).append(')');
-					ModBase.log().info(builder.toString());
-				}
+			return null;
+/*
+			this.dimensionData.put(world.provider.getDimension(), data);
+			ModBase.log().info(data.toString());
+			final WorldBorder border = world.getWorldBorder();
+			if (border != null) {
+				final StringBuilder builder = new StringBuilder();
+				builder.append("x: ").append((long) border.minX()).append('/').append((long) border.maxX())
+						.append(", ");
+				builder.append("z: ").append((long) border.minZ()).append('/').append((long) border.maxZ())
+						.append(", ");
+				builder.append("center: (").append((long) border.getCenterX()).append(',')
+						.append((long) border.getCenterZ()).append(')');
+				ModBase.log().info(builder.toString());
 			}
+
 			return data;
+			*/
 		}
 	}
 }
