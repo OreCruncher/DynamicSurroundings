@@ -26,6 +26,7 @@ package org.orecruncher.dsurround.capabilities.entitydata;
 
 import java.util.Map;
 import java.util.Map.Entry;
+
 import javax.annotation.Nonnull;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -75,9 +76,10 @@ public final class EntityDataTables {
 
 	// Class types mapped to a TaskType
 	private final static Map<Class<?>, TaskType> AI_TASKS = new Reference2ObjectOpenHashMap<>(128);
-	
-	// Name mappings to types.  Need this because some of the AI task classes are not accessible
-	// to Dynamic Surroundings.  I'm looking at you Eclipse Open J9...
+
+	// Name mappings to types. Need this because some of the AI task classes are not
+	// accessible
+	// to Dynamic Surroundings. I'm looking at you Eclipse Open J9...
 	private final static Map<String, TaskType> MAPPINGS = new Object2ObjectOpenHashMap<>();
 
 	private static void add(@Nonnull final Class<?> clazz, @Nonnull TaskType ct) {
@@ -87,8 +89,8 @@ public final class EntityDataTables {
 	@Nonnull
 	private static void add(@Nonnull final Class<? extends EntityLiving> clazz, @Nonnull final TaskType ct,
 			@Nonnull final String... className) {
-		for (String cn : className) {
-			String name = resolveName(clazz) + "$" + cn;
+		for (final String cn : className) {
+			final String name = resolveName(clazz) + "$" + cn;
 			MAPPINGS.put(name, ct);
 		}
 	}
@@ -96,14 +98,14 @@ public final class EntityDataTables {
 	private static String resolveName(@Nonnull final Class<?> clazz) {
 		// Possible that the class name does not have dots because of
 		// obsfucation.
-		String n = clazz.getName();
-		int i = n.lastIndexOf('.');
+		final String n = clazz.getName();
+		final int i = n.lastIndexOf('.');
 		return i > 0 ? n.substring(i + 1) : n;
 	}
 
 	@Nonnull
 	private static TaskType find(@Nonnull final EntityAIBase aiTask) {
-		Class<?> clazz = aiTask.getClass();
+		final Class<?> clazz = aiTask.getClass();
 		TaskType ct = AI_TASKS.get(clazz);
 		if (ct == null) {
 			// Find a match by inheritance
@@ -116,14 +118,14 @@ public final class EntityDataTables {
 
 			// If we can't find by inheritance look in name mappings
 			if (ct == null) {
-				String name = resolveName(clazz);
+				final String name = resolveName(clazz);
 				ct = MAPPINGS.get(name);
 				if (ct == null) {
 					// Not something we are interested in
 					ct = TaskType.None;
 				}
 			}
-			
+
 			// Stick it in the map so we don't have to repeat
 			AI_TASKS.put(clazz, ct);
 		}
@@ -150,7 +152,8 @@ public final class EntityDataTables {
 		add(EntityAIPanic.class, TaskType.Flee);
 		add(EntityAIRunAroundLikeCrazy.class, TaskType.Flee);
 
-		// Specials because they are inaccessible inner classes.  Have to take into account
+		// Specials because they are inaccessible inner classes. Have to take into
+		// account
 		// obsfucation.
 		add(EntityRabbit.class, TaskType.Attack, "AIEvilAttack", "a");
 		add(EntityRabbit.class, TaskType.Flee, "AIAvoidEntity", "b");
@@ -198,7 +201,7 @@ public final class EntityDataTables {
 
 	@Nonnull
 	public static void assess(@Nonnull final IEntityDataSettable data) {
-		EntityLiving entity = data.getEntity();
+		final EntityLiving entity = data.getEntity();
 		final boolean isAttacking = eval(entity, TaskType.Attack);
 		final boolean isFleeing = eval(entity, TaskType.Flee);
 		data.setAttacking(isAttacking);

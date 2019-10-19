@@ -26,18 +26,19 @@ package org.orecruncher.dsurround.mixins;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.SoundManager;
 
 @Mixin(SoundManager.class)
 public abstract class MixinSoundManager {
-	
+
 	@Overwrite
 	private float getClampedVolume(ISound sound) {
 		try {
 			return SoundEngine.getClampedVolume(sound);
-		} catch(final Exception ex) {
-			
+		} catch (final Exception ex) {
+
 		}
 		return 1.0F;
 	}

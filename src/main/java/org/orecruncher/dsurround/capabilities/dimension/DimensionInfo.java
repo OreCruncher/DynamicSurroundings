@@ -42,7 +42,7 @@ import net.minecraft.world.WorldType;
 public final class DimensionInfo implements IDimensionInfoEx {
 
 	public final static IDimensionInfo NONE = new DimensionInfo();
-	
+
 	public final static float MIN_INTENSITY = 0.0F;
 	public final static float MAX_INTENSITY = 1.0F;
 
@@ -52,14 +52,14 @@ public final class DimensionInfo implements IDimensionInfoEx {
 	protected final Random RANDOM = XorShiftRandom.current();
 	protected final World world;
 
-	// Rain/weather tracking data.  Some of the data is synchronized from the server.
+	// Rain/weather tracking data. Some of the data is synchronized from the server.
 	private float intensity = 0.0F;
 	private float currentIntensity = 0.0F;
 	private float minIntensity = ModOptions.rain.defaultMinRainStrength;
 	private float maxIntensity = ModOptions.rain.defaultMaxRainStrength;
 	private int thunderTimer = 0;
-	
-	// Attributes about the dimension.  This is information is loaded from
+
+	// Attributes about the dimension. This is information is loaded from
 	// local configs.
 	protected int dimensionId;
 	protected String name;
@@ -82,8 +82,8 @@ public final class DimensionInfo implements IDimensionInfoEx {
 
 	public DimensionInfo(@Nonnull final World world) {
 		this.world = world;
-		
-		// Attributes that come from the world object itself.  Set
+
+		// Attributes that come from the world object itself. Set
 		// now because the config may override.
 		this.dimensionId = world.provider.getDimension();
 		this.name = world.provider.getDimensionType().getName();
@@ -199,7 +199,7 @@ public final class DimensionInfo implements IDimensionInfoEx {
 	public boolean playBiomeSounds() {
 		return this.playBiomeSounds;
 	}
-	
+
 	@Override
 	public boolean alwaysOutside() {
 		return this.alwaysOutside;

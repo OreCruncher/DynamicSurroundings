@@ -31,8 +31,8 @@ import javax.annotation.Nonnull;
 import org.lwjgl.input.Keyboard;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.keyboard.KeyHandler;
-import org.orecruncher.dsurround.client.renderer.BadgeRenderLayer.IEntityBadgeProvider;
 import org.orecruncher.dsurround.client.renderer.BadgeRenderLayer.IBadgeDisplayCheck;
+import org.orecruncher.dsurround.client.renderer.BadgeRenderLayer.IEntityBadgeProvider;
 
 import com.animania.api.interfaces.IFoodEating;
 import com.animania.api.interfaces.ISleeping;
@@ -65,7 +65,7 @@ public final class AnimaniaBadge implements IEntityBadgeProvider {
 
 	@Override
 	public ItemStack getStackToDisplay(final EntityLivingBase e) {
-		IFoodEating fe = (IFoodEating) e;
+		final IFoodEating fe = (IFoodEating) e;
 		if (!fe.getWatered())
 			return WATER_BUCKET;
 		else if (!fe.getFed())
@@ -82,9 +82,10 @@ public final class AnimaniaBadge implements IEntityBadgeProvider {
 		}
 		return ItemStack.EMPTY;
 	}
-	
+
 	/**
 	 * Micro adjustment of vertical position of the badge
+	 *
 	 * @param e Entity that is being rendered
 	 * @return Vertical adjustment to the icon position
 	 */
@@ -99,6 +100,7 @@ public final class AnimaniaBadge implements IEntityBadgeProvider {
 
 	/**
 	 * Scale factor to apply to the badge when rendering
+	 *
 	 * @param e Entity that is being rendered
 	 * @return Scale factor to apply to icon render
 	 */
@@ -112,15 +114,16 @@ public final class AnimaniaBadge implements IEntityBadgeProvider {
 	}
 
 	/**
-	 * Checks to see if the badge should be shown.  Good
-	 * for conditionals like sleeping, etc.
+	 * Checks to see if the badge should be shown. Good for conditionals like
+	 * sleeping, etc.
+	 *
 	 * @param e Entity that is being rendered
 	 * @return true if a badges is to be shown; false otherwise
 	 */
 	@Override
 	public boolean show(@Nonnull final EntityLivingBase e) {
 		if (e instanceof ISleeping)
-			return !((ISleeping)e).getSleeping();
+			return !((ISleeping) e).getSleeping();
 		return true;
 	}
 

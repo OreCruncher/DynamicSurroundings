@@ -76,7 +76,7 @@ public final class ModOptions {
 		@LangKey("dsurround.cfg.asm.DisableArrow")
 		@Comment("Disable particle trail left by an arrow when it flies")
 		public static boolean disableArrowParticleTrail = true;
-		
+
 		@Option(CONFIG_DISABLE_POTION_ICONS)
 		@DefaultValue("false")
 		@LangKey("dsurround.cfg.asm.DisablePotionIcons")
@@ -639,7 +639,7 @@ public final class ModOptions {
 				"minecraft:entity.chicken.ambient cull", "minecraft:entity.cow.ambient cull",
 				"minecraft:entity.pig.ambient cull", "dsurround:bison block", "dsurround:elephant block",
 				"dsurround:gnatt block", "dsurround:insectbuzz block", "dsurround:hiss block",
-				"dsurround:rattlesnake block"};
+				"dsurround:rattlesnake block" };
 	}
 
 	public static final String CATEGORY_PLAYER = "player";

@@ -38,10 +38,12 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 @SuppressWarnings("deprecation")
 @Mixin(SoundCategory.class)
 public abstract class MixinSoundCategory {
-	
+
 	static {
-		// Hacky way to get this done, but it works.  Longer term need to get rid of this.
-		// Not sure of the decent usable way to do this will be.  SoundCategory is an enum,
+		// Hacky way to get this done, but it works. Longer term need to get rid of
+		// this.
+		// Not sure of the decent usable way to do this will be. SoundCategory is an
+		// enum,
 		// and we have our own categories.
 		if (SoundCategory.getByName("ds_footsteps") == null) {
 			// Add our new sound categories
@@ -60,5 +62,5 @@ public abstract class MixinSoundCategory {
 			}
 		}
 	}
-	
+
 }

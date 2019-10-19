@@ -59,7 +59,7 @@ public class BadgeRenderLayer implements LayerRenderer<EntityLivingBase> {
 	public static interface IEntityBadgeProvider {
 		/**
 		 * Get the ItemStack to render as a badge
-		 * 
+		 *
 		 * @param e Entity that is being rendered
 		 * @return ItemStack to render as a badge
 		 */
@@ -68,7 +68,7 @@ public class BadgeRenderLayer implements LayerRenderer<EntityLivingBase> {
 
 		/**
 		 * Micro adjustment of vertical position of the badge
-		 * 
+		 *
 		 * @param e Entity that is being rendered
 		 * @return Vertical adjustment to the icon position
 		 */
@@ -78,7 +78,7 @@ public class BadgeRenderLayer implements LayerRenderer<EntityLivingBase> {
 
 		/**
 		 * Scale factor to apply to the badge when rendering
-		 * 
+		 *
 		 * @param e Entity that is being rendered
 		 * @return Scale factor to apply to icon render
 		 */
@@ -89,7 +89,7 @@ public class BadgeRenderLayer implements LayerRenderer<EntityLivingBase> {
 		/**
 		 * Checks to see if the badge should be shown. Good for conditionals like
 		 * sleeping, etc.
-		 * 
+		 *
 		 * @param e Entity that is being rendered
 		 * @return true if a badges is to be shown; false otherwise
 		 */

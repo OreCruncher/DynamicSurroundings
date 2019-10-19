@@ -82,7 +82,8 @@ public class PacketSpeechBubble implements IMessage {
 							return;
 						final ISpeechData data = CapabilitySpeechData.getCapability(entity);
 						if (data != null)
-							data.addMessage(message.message, (int) (ModOptions.speechbubbles.speechBubbleDuration * 20F));
+							data.addMessage(message.message,
+									(int) (ModOptions.speechbubbles.speechBubbleDuration * 20F));
 					}
 				});
 			}

@@ -96,12 +96,12 @@ public class WaterSplashJetEffect extends JetEffect {
 		return MathStuff.clamp(count, 0, MAX_STRENGTH);
 	}
 
-	
 	public static boolean isValidSpawnBlock(final IBlockAccessEx provider, final BlockPos pos) {
 		return isValidSpawnBlock(provider, provider.getBlockState(pos), pos);
 	}
-	
-	private static boolean isValidSpawnBlock(final IBlockAccessEx provider, final IBlockState state, final BlockPos pos) {
+
+	private static boolean isValidSpawnBlock(final IBlockAccessEx provider, final IBlockState state,
+			final BlockPos pos) {
 		if (state.getMaterial() != Material.WATER)
 			return false;
 		if (isUnboundedLiquid(provider, pos)) {
@@ -127,7 +127,7 @@ public class WaterSplashJetEffect extends JetEffect {
 		if (strength > 1) {
 			final float height = BlockLiquid.getLiquidHeightPercent(state.getBlock().getMetaFromState(state)) + 0.1F;
 			final double y = height + pos.getY();
-	
+
 			final ParticleJet effect = new ParticleWaterSplash(strength, provider.getWorld(), pos, pos.getX() + 0.5D, y,
 					pos.getZ() + 0.5D);
 			addEffect(effect);

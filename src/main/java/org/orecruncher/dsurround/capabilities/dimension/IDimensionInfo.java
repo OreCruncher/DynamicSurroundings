@@ -50,6 +50,6 @@ public interface IDimensionInfo extends INBTSerializable<NBTTagCompound> {
 	boolean hasFog();
 
 	boolean playBiomeSounds();
-	
+
 	boolean alwaysOutside();
 }

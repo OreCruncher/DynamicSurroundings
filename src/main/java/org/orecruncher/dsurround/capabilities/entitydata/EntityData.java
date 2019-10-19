@@ -53,7 +53,7 @@ public final class EntityData implements IEntityDataSettable {
 	public EntityLiving getEntity() {
 		return this.entity;
 	}
-	
+
 	@Override
 	public int getEntityId() {
 		return this.entity != null ? this.entity.getEntityId() : NO_ENTITY;

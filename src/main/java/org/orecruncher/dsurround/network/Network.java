@@ -178,10 +178,10 @@ public final class Network {
 		Stream<T> strm = c.stream()
 			.filter(p -> !(p instanceof FakePlayer))
 			.filter(p -> !blockList.contains(p.getPersistentID()));
-		
+
 		if (pred != null)
 			strm = strm.filter(pred);
-		
+
 		try {
 			synchronized (blockList) {
 				return strm.map(p -> (EntityPlayerMP) p).collect(Collectors.toList());

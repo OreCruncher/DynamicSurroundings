@@ -127,7 +127,7 @@ public class Generator {
 		// If an entity is a passenger or is sleeping then no footsteps to process
 		if (entity.isRiding() || entity.isPlayerSleeping())
 			return;
-		
+
 		// No footstep or print effects for spectators
 		if ((entity instanceof EntityPlayer) && ((EntityPlayer) entity).isSpectator())
 			return;

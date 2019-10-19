@@ -26,8 +26,8 @@ package org.orecruncher.dsurround.mixins;
 import org.orecruncher.dsurround.ModOptions;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -41,8 +41,10 @@ public abstract class MixinEntityArrow extends Entity {
 	}
 
 	@Shadow
-	public boolean getIsCritical() { return false; }
-	
+	public boolean getIsCritical() {
+		return false;
+	}
+
 	@Redirect(method = "onUpdate()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/EntityArrow;getIsCritical()Z"))
 	private boolean isCriticalCheck(EntityArrow self) {
 		return !ModOptions.asm.disableArrowParticleTrail && self.getIsCritical();

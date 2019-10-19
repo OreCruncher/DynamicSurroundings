@@ -27,6 +27,7 @@ package org.orecruncher.dsurround.registry.biome;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -137,10 +138,10 @@ public final class BiomeRegistry extends Registry {
 
 	@Override
 	protected void init(@Nonnull final ModConfiguration cfg) {
-		
+
 		cfg.biomeAlias.forEach((alias, biome) -> registerBiomeAlias(alias, biome));
-		List<BiomeInfo> infoList = getCombinedStream();
-		
+		final List<BiomeInfo> infoList = getCombinedStream();
+
 		for (final BiomeConfig c : cfg.biomes) {
 			final BiomeMatcher matcher = BiomeMatcher.getMatcher(c);
 			for (final BiomeInfo bi : infoList) {
@@ -224,26 +225,24 @@ public final class BiomeRegistry extends Registry {
 	private void registerBiomeAlias(@Nonnull final String alias, @Nonnull final String biome) {
 		this.biomeAliases.put(alias, biome);
 	}
-	
+
 	private List<BiomeInfo> getCombinedStream() {
-		ArrayList<BiomeInfo> infos = new ArrayList<>();
-		
+		final ArrayList<BiomeInfo> infos = new ArrayList<>();
+
 		for (final Biome b : ForgeRegistries.BIOMES.getValuesCollection()) {
-			BiomeInfo info = BiomeUtil.getBiomeData(b);
-			if (info != null)
-			{
+			final BiomeInfo info = BiomeUtil.getBiomeData(b);
+			if (info != null) {
 				infos.add(info);
 			}
 		}
-		
+
 		for (final FakeBiome b : this.theFakes) {
-			BiomeInfo info = b.getBiomeData();
-			if (info != null)
-			{
+			final BiomeInfo info = b.getBiomeData();
+			if (info != null) {
 				infos.add(info);
 			}
 		}
-		
+
 		return infos;
 	}
 }

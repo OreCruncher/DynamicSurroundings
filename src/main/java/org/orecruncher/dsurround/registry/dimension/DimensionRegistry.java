@@ -112,23 +112,19 @@ public final class DimensionRegistry extends Registry {
 					return e;
 				}
 			return null;
-/*
-			this.dimensionData.put(world.provider.getDimension(), data);
-			ModBase.log().info(data.toString());
-			final WorldBorder border = world.getWorldBorder();
-			if (border != null) {
-				final StringBuilder builder = new StringBuilder();
-				builder.append("x: ").append((long) border.minX()).append('/').append((long) border.maxX())
-						.append(", ");
-				builder.append("z: ").append((long) border.minZ()).append('/').append((long) border.maxZ())
-						.append(", ");
-				builder.append("center: (").append((long) border.getCenterX()).append(',')
-						.append((long) border.getCenterZ()).append(')');
-				ModBase.log().info(builder.toString());
-			}
-
-			return data;
-			*/
+			/*
+			 * this.dimensionData.put(world.provider.getDimension(), data);
+			 * ModBase.log().info(data.toString()); final WorldBorder border =
+			 * world.getWorldBorder(); if (border != null) { final StringBuilder builder =
+			 * new StringBuilder(); builder.append("x: ").append((long)
+			 * border.minX()).append('/').append((long) border.maxX()) .append(", ");
+			 * builder.append("z: ").append((long) border.minZ()).append('/').append((long)
+			 * border.maxZ()) .append(", "); builder.append("center: (").append((long)
+			 * border.getCenterX()).append(',') .append((long)
+			 * border.getCenterZ()).append(')'); ModBase.log().info(builder.toString()); }
+			 *
+			 * return data;
+			 */
 		}
 	}
 }

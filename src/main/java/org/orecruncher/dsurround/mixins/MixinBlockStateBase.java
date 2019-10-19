@@ -32,13 +32,15 @@ import net.minecraft.block.state.BlockStateBase;
 
 @Mixin(BlockStateBase.class)
 public abstract class MixinBlockStateBase implements IDataAccessor<BlockStateData> {
-	
+
 	private BlockStateData dsurround_blockstate_info = null;
-	
+
+	@Override
 	public BlockStateData getData() {
 		return this.dsurround_blockstate_info;
 	}
-	
+
+	@Override
 	public void setData(BlockStateData data) {
 		this.dsurround_blockstate_info = data;
 	}

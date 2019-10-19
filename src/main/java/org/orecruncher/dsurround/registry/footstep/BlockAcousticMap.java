@@ -95,7 +95,7 @@ public final class BlockAcousticMap {
 	@Nullable
 	private IAcoustic[] find(@Nonnull final ObjectArray<BlockMapEntry> entries,
 			@Nonnull final BlockStateMatcher matcher) {
-		// Search backwards.  In general highly specified states are at
+		// Search backwards. In general highly specified states are at
 		// the end of the array.
 		for (int i = entries.size() - 1; i >= 0; i--) {
 			final BlockMapEntry e = entries.get(i);

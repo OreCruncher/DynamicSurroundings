@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.registry.IDataAccessor;
 import org.orecruncher.dsurround.registry.RegistryManager;
+
 import net.minecraft.block.state.IBlockState;
 
 /**
@@ -49,22 +50,22 @@ public final class BlockStateUtil {
 			result = accessor.getData();
 			if (result == null) {
 				ModBase.log().warn("Unable to find BlockStateData for state [%s]", state.toString());
-				result = (T)(BlockStateData.DEFAULT);
+				result = (T) (BlockStateData.DEFAULT);
 				accessor.setData(result);
 			}
 		}
 
-		return (T) result;
+		return result;
 	}
 
 	@SuppressWarnings("unchecked")
 	static <T extends BlockStateData> T getStateDataRaw(@Nonnull final IBlockState state) {
-		return (T) ((IDataAccessor<T>)state).getData();
+		return ((IDataAccessor<T>) state).getData();
 	}
 
 	@SuppressWarnings("unchecked")
 	public static <T extends BlockStateData> void setStateData(@Nonnull final IBlockState state,
 			@Nonnull final T data) {
-		((IDataAccessor<T>)state).setData(data);
+		((IDataAccessor<T>) state).setData(data);
 	}
 }

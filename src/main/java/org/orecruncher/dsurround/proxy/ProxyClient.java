@@ -146,7 +146,8 @@ public class ProxyClient extends Proxy implements ISelectiveResourceReloadListen
 			data.name = Localization.loadString("dsurround.metadata.Name");
 			data.credits = Localization.loadString("dsurround.metadata.Credits");
 			data.description = Localization.loadString("dsurround.metadata.Description");
-			data.authorList = Arrays.asList(StringUtils.split(Localization.loadString("dsurround.metadata.Authors"), ','));
+			data.authorList = Arrays
+					.asList(StringUtils.split(Localization.loadString("dsurround.metadata.Authors"), ','));
 		}
 
 		// Register for resource load events

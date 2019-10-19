@@ -46,7 +46,8 @@ public abstract class MixinInventoryEffectRenderer extends GuiContainer {
 
 	@Redirect(method = "updateActivePotionEffects()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/EntityPlayerSP;getActivePotionEffects()Ljava/util/Collection;"))
 	private Collection<PotionEffect> getPotionEffects(EntityPlayerSP self) {
-		return ModOptions.asm.disablePotionIconsInInventory ? new ArrayList<PotionEffect>() : self.getActivePotionEffects();
+		return ModOptions.asm.disablePotionIconsInInventory ? new ArrayList<>()
+				: self.getActivePotionEffects();
 	}
 
 }

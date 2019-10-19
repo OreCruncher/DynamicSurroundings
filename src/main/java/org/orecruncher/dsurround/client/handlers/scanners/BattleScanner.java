@@ -58,7 +58,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BattleScanner implements ITickable {
 
 	private static final String DEBUG_NOT_ENABLED = TextFormatting.RED + "<BATTLE MUSIC NOT ENABLED>";
-	
+
 	private static final int BOSS_RANGE = 65536; // 256 block range
 	private static final int MINI_BOSS_RANGE = 16384; // 128 block range
 	private static final int MOB_RANGE = 400; // 20 block range
@@ -69,7 +69,7 @@ public class BattleScanner implements ITickable {
 	protected boolean isWither;
 	protected boolean isDragon;
 	protected boolean isBoss;
-	
+
 	public void reset() {
 		this.inBattle = false;
 		this.isWither = false;
@@ -92,7 +92,7 @@ public class BattleScanner implements ITickable {
 	public boolean isBoss() {
 		return this.isBoss;
 	}
-	
+
 	private boolean isApplicableType(final Entity e) {
 		if (e instanceof IMob)
 			return true;
@@ -122,13 +122,13 @@ public class BattleScanner implements ITickable {
 		boolean isDragon = false;
 		boolean isWither = false;
 
-		List<Entity> entities = world.getLoadedEntityList();
+		final List<Entity> entities = world.getLoadedEntityList();
 		for (final Entity e : entities) {
 
 			// The player isn't a candidate
 			if (e == player)
 				continue;
-			
+
 			// Gotta be the right type of entity. Do this first
 			// to filter out all the animals.
 			if (!isApplicableType(e))
@@ -187,16 +187,16 @@ public class BattleScanner implements ITickable {
 			reset();
 		}
 	}
-	
+
 	@Override
 	@Nonnull
 	public String toString() {
-		
+
 		if (!ModOptions.sound.enableBattleMusic) {
 			return DEBUG_NOT_ENABLED;
 		}
-		
-		StringBuilder builder = new StringBuilder();
+
+		final StringBuilder builder = new StringBuilder();
 		builder.append(TextFormatting.RED);
 		builder.append("BattleScanner inBattle:").append(this.inBattle).append(';');
 		builder.append(" isBoss:").append(this.isBoss).append(';');

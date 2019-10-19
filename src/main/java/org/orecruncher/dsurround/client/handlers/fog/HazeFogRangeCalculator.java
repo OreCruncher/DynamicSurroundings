@@ -27,6 +27,7 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.capabilities.dimension.IDimensionInfo;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
+
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.fml.relauncher.Side;

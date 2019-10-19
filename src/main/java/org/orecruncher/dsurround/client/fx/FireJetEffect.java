@@ -63,11 +63,11 @@ public class FireJetEffect extends JetEffect {
 	@Override
 	public void doEffect(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
-		
+
 		final Material blockMaterial = state.getMaterial();
 		final int blockCount;
 		final float spawnHeight;
-		
+
 		if (blockMaterial.isSolid()) {
 			blockCount = 2;
 			spawnHeight = pos.getY() + 1.1F;
@@ -78,10 +78,10 @@ public class FireJetEffect extends JetEffect {
 			// Fail safe - shouldn't get here
 			return;
 		}
-		
+
 		if (blockCount > 0) {
-			final ParticleJet effect = new ParticleFireJet(blockCount, provider.getWorld(), pos.getX() + 0.5D, spawnHeight,
-					pos.getZ() + 0.5D);
+			final ParticleJet effect = new ParticleFireJet(blockCount, provider.getWorld(), pos.getX() + 0.5D,
+					spawnHeight, pos.getZ() + 0.5D);
 			addEffect(effect);
 		}
 	}

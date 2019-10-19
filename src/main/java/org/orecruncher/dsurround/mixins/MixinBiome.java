@@ -30,16 +30,17 @@ import org.spongepowered.asm.mixin.Mixin;
 
 import net.minecraft.world.biome.Biome;
 
-
 @Mixin(Biome.class)
 public abstract class MixinBiome implements IDataAccessor<BiomeInfo> {
-	
+
 	private BiomeInfo dsurround_biome_info = null;
-	
+
+	@Override
 	public BiomeInfo getData() {
 		return this.dsurround_biome_info;
 	}
-	
+
+	@Override
 	public void setData(BiomeInfo data) {
 		this.dsurround_biome_info = data;
 	}

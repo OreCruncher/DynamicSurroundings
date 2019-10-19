@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.registry.IDataAccessor;
 import org.orecruncher.dsurround.registry.RegistryManager;
+
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -40,7 +41,7 @@ public final class ItemUtils {
 	@SuppressWarnings("unchecked")
 	@Nullable
 	public static IItemData getItemData(@Nonnull final Item item) {
-		IDataAccessor<IItemData> accessor = (IDataAccessor<IItemData>) item;
+		final IDataAccessor<IItemData> accessor = (IDataAccessor<IItemData>) item;
 		IItemData result = accessor.getData();
 		if (result == null) {
 			RegistryManager.ITEMS.reload();
@@ -57,6 +58,6 @@ public final class ItemUtils {
 
 	@SuppressWarnings("unchecked")
 	public static void setItemData(@Nonnull final Item item, @Nonnull final IItemData data) {
-		((IDataAccessor<IItemData>)item).setData(data);
+		((IDataAccessor<IItemData>) item).setData(data);
 	}
 }

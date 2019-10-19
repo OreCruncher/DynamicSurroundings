@@ -29,7 +29,7 @@ import net.minecraft.entity.EntityLiving;
 public interface IEntityDataSettable extends IEntityData {
 
 	EntityLiving getEntity();
-	
+
 	void setAttacking(final boolean flag);
 
 	void setFleeing(final boolean flag);

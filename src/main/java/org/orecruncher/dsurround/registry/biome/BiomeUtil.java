@@ -93,7 +93,7 @@ public final class BiomeUtil {
 	@SuppressWarnings("unchecked")
 	@Nonnull
 	public static BiomeInfo getBiomeData(@Nonnull final Biome biome) {
-		IDataAccessor<BiomeInfo> accessor = (IDataAccessor<BiomeInfo>) biome;
+		final IDataAccessor<BiomeInfo> accessor = (IDataAccessor<BiomeInfo>) biome;
 		BiomeInfo result = null;
 		if (biome != null) {
 			result = accessor.getData();
@@ -114,7 +114,7 @@ public final class BiomeUtil {
 
 	@SuppressWarnings("unchecked")
 	public static void setBiomeData(@Nonnull final Biome biome, @Nullable final BiomeInfo data) {
-		((IDataAccessor<BiomeInfo>)biome).setData(data);
+		((IDataAccessor<BiomeInfo>) biome).setData(data);
 	}
 
 	@Nonnull
