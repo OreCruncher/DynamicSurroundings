@@ -31,24 +31,23 @@ import javax.annotation.Nonnull;
 
 import org.spongepowered.asm.mixin.Mixin;
 
-import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 @SuppressWarnings("deprecation")
-@Mixin(GameSettings.class)
+@Mixin(SoundCategory.class)
 public abstract class MixinSoundCategory {
 	
 	static {
 		// Hacky way to get this done, but it works.  Longer term need to get rid of this.
-		// Not sure of the decent usable way to do this will be.
+		// Not sure of the decent usable way to do this will be.  SoundCategory is an enum,
+		// and we have our own categories.
 		if (SoundCategory.getByName("ds_footsteps") == null) {
 			// Add our new sound categories
-			final SoundCategory fs = EnumHelper.addEnum(SoundCategory.class, "DS_FOOTSTEPS",
-					new Class<?>[] { String.class }, "ds_footsteps");
-			final SoundCategory b = EnumHelper.addEnum(SoundCategory.class, "DS_BIOME", new Class<?>[] { String.class },
-					"ds_biome");
+			final Class<?>[] parms = new Class<?>[] { String.class };
+			final SoundCategory fs = EnumHelper.addEnum(SoundCategory.class, "DS_FOOTSTEPS", parms, "ds_footsteps");
+			final SoundCategory b = EnumHelper.addEnum(SoundCategory.class, "DS_BIOME", parms, "ds_biome");
 
 			// Update the internal cached list
 			try {
