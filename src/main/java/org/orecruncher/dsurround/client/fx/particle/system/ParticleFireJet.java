@@ -26,6 +26,7 @@ package org.orecruncher.dsurround.client.fx.particle.system;
 
 import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
 import org.orecruncher.dsurround.client.sound.Sounds;
+import org.orecruncher.lib.ReflectedField.FloatField;
 
 import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.Particle;
@@ -39,6 +40,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleFireJet extends ParticleJet {
 
+	private static final FloatField<ParticleFlame> flameScale = new FloatField<>(
+			ParticleFlame.class,
+			"flameScale",
+			"field_70562_a"
+		);
+	
 	protected final boolean isLava;
 	protected final IParticleFactory factory;
 	protected final int particleId;
@@ -71,7 +78,7 @@ public class ParticleFireJet extends ParticleJet {
 				this.posZ, 0D, speedY, 0D);
 		if (!this.isLava) {
 			final ParticleFlame flame = (ParticleFlame) particle;
-			flame.flameScale *= this.jetStrength;
+			flameScale.set(flame, flameScale.get(flame) * this.jetStrength);
 		}
 		addParticle(particle);
 	}

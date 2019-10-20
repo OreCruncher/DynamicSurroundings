@@ -26,8 +26,11 @@ package org.orecruncher.dsurround.capabilities.entitydata;
 
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
+
+import org.orecruncher.lib.ReflectedField.ObjectField;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
@@ -46,6 +49,7 @@ import net.minecraft.entity.ai.EntityAIOcelotAttack;
 import net.minecraft.entity.ai.EntityAIOwnerHurtByTarget;
 import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAIRunAroundLikeCrazy;
+import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import net.minecraft.entity.ai.EntityAIZombieAttack;
 import net.minecraft.entity.monster.EntityBlaze;
@@ -65,6 +69,14 @@ import net.minecraft.entity.passive.EntityWolf;
 
 public final class EntityDataTables {
 
+	//formatter:off
+	private static final ObjectField<EntityAITasks, Set<EntityAITasks.EntityAITaskEntry>> executingTasks = new ObjectField<>(
+			EntityAITasks.class,
+			"executingTaskEntries",
+			"field_75780_b"
+		);
+	//formatter:on
+	
 	// Describes the type of EntityAIBase task instance
 	private enum TaskType {
 		//@formatter:off
@@ -186,12 +198,13 @@ public final class EntityDataTables {
 	@Nonnull
 	private static boolean eval(@Nonnull final EntityLiving entity, @Nonnull TaskType desiredType) {
 
-		for (final EntityAITaskEntry task : entity.tasks.executingTaskEntries) {
+		
+		for (final EntityAITaskEntry task : executingTasks.get(entity.tasks)) {
 			if (find(task.action) == desiredType)
 				return true;
 		}
 
-		for (final EntityAITaskEntry task : entity.targetTasks.executingTaskEntries) {
+		for (final EntityAITaskEntry task : executingTasks.get(entity.targetTasks)) {
 			if (find(task.action) == desiredType)
 				return true;
 		}

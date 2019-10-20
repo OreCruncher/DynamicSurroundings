@@ -38,6 +38,7 @@ import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.registry.RegistryDataEvent;
 import org.orecruncher.dsurround.registry.sound.SoundRegistry;
+import org.orecruncher.lib.ReflectedField.IntegerField;
 import org.orecruncher.lib.collections.ObjectArray;
 
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
@@ -56,6 +57,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class SoundEffectHandler extends EffectHandlerBase {
 
+	//formatter:off
+	private static final IntegerField<Object> ambienceTicks =
+			new IntegerField<>(
+				"net.minecraft.client.multiplayer.WorldClient",
+				"ambienceTicks",
+				"field_184158_M"
+			);
+	//formatter:on
+	
 	public static final SoundEffectHandler INSTANCE = new SoundEffectHandler();
 
 	private final static class PendingSound {
@@ -194,7 +204,8 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		// If we are at 1 it means we need to see if we can come up with a point
 		// around the player that matches the ambient requirement (an air block
 		// in the dark or something).
-		if (wc.ambienceTicks == 1) {
+		int ticks = ambienceTicks.get(wc);
+		if (ticks == 1) {
 			// Calculate a point around the player. +/- 15 blocks.
 			final int deltaX = this.RANDOM.nextInt(30) - 15;
 			final int deltaY = this.RANDOM.nextInt(30) - 15;
@@ -209,23 +220,24 @@ public class SoundEffectHandler extends EffectHandlerBase {
 							final SoundInstance fx = Sounds.AMBIENT_CAVE.createSoundAt(blockpos).setVolume(0.9F)
 									.setPitch(0.8F + this.RANDOM.nextFloat() * 0.2F);
 							playSound(fx);
-							wc.ambienceTicks = this.RANDOM.nextInt(12000) + 6000;
-							ModBase.log().debug("Next ambient event: %d ticks", wc.ambienceTicks);
+							ticks = this.RANDOM.nextInt(12000) + 6000;
+							ModBase.log().debug("Next ambient event: %d ticks", ticks);
 						}
 			}
 		}
 
 		// If it didn't process push it back a tick to avoid MC from
 		// triggering.
-		if (wc.ambienceTicks == 1)
-			wc.ambienceTicks = 2;
+		if (ticks == 1)
+			ticks = 2;
+		
+		ambienceTicks.set(wc, ticks);
 	}
 
 	@SubscribeEvent
 	public void diagnostics(@Nonnull final DiagnosticEvent.Gather event) {
 		if (EnvironState.getWorld() instanceof WorldClient) {
-			event.output
-					.add(String.format("Ambiance Timer: %d", ((WorldClient) EnvironState.getWorld()).ambienceTicks));
+			event.output.add(String.format("Ambiance Timer: %d", ambienceTicks.get(EnvironState.getWorld())));
 		}
 		this.emitters.values().forEach(emitter -> event.output.add("EMITTER: " + emitter.toString()));
 		this.pending.forEach(effect -> event.output

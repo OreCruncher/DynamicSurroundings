@@ -26,10 +26,21 @@ package org.orecruncher.dsurround.server.services;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.lib.ReflectedField.BooleanField;
+
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
 
 public class WeatherGeneratorNether extends WeatherGenerator {
 
+	//formatter:off
+	private static final BooleanField<WorldProvider> hasSkyLight = new BooleanField<>(
+			WorldProvider.class,
+			"hasSkyLight",
+			"field_191067_f"
+		);
+	//formatter:on
+	
 	public WeatherGeneratorNether(@Nonnull final World world) {
 		super(world);
 	}
@@ -44,15 +55,14 @@ public class WeatherGeneratorNether extends WeatherGenerator {
 	// it has no sky
 	@Override
 	protected void preProcess() {
-
-		this.world.provider.hasSkyLight = true;
+		hasSkyLight.set(this.world.provider, true);
 		try {
 			this.world.updateWeatherBody();
 		} catch (final Throwable t) {
 			;
+		} finally {
+			hasSkyLight.set(this.world.provider, false);
 		}
-		this.world.provider.hasSkyLight = false;
-
 	}
 
 	@Override
