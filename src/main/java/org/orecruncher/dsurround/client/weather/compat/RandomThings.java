@@ -23,13 +23,10 @@
  */
 package org.orecruncher.dsurround.client.weather.compat;
 
-import java.lang.reflect.Method;
-
-import org.orecruncher.dsurround.ModBase;
+import org.orecruncher.lib.ReflectedMethod;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -39,37 +36,21 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class RandomThings {
 
+	//formatter:off
+	private static final ReflectedMethod<Boolean> shouldRain = new ReflectedMethod<>(
+			"lumien.randomthings.tileentity.TileEntityRainShield",
+			"shouldRain",
+			null,
+			World.class,
+			BlockPos.class
+		);
+	//formatter:on
+	
 	private RandomThings() {
 
 	}
 
-	private static Method shouldRain;
-
-	static {
-
-		try {
-			final Class<?> rtClass = Class.forName("lumien.randomthings.tileentity.TileEntityRainShield");
-			shouldRain = ReflectionHelper.findMethod(rtClass, "shouldRain", null, World.class, BlockPos.class);
-			if (shouldRain != null) {
-				ModBase.log().info("RandomThings rain shield detected!");
-			}
-		} catch (final Exception ex) {
-			;
-		}
-	}
-
 	public static boolean shouldRain(final World world, final BlockPos pos) {
-		if (shouldRain == null)
-			return true;
-
-		try {
-			return (boolean) shouldRain.invoke(null, world, pos);
-		} catch (final Exception ex) {
-			ex.printStackTrace();
-			ModBase.log().warn("Exception checking rain shield!");
-			shouldRain = null;
-		}
-
-		return true;
+		return !shouldRain.isAvailable() || shouldRain.invoke(null, world, pos);
 	}
 }
