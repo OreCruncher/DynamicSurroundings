@@ -26,14 +26,16 @@ package org.orecruncher.dsurround.client.fx.particle.mote;
 
 import org.orecruncher.lib.Color;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class MoteFireFly extends MoteAnimatedBase {
+public class MoteFireFly extends MoteAnimatedBase implements IIlluminatedMote {
 
 	private static final int startColorRGB = Color.YELLOW.rgb();
 	private static final int fadeColorRGB = Color.LGREEN.rgb();
@@ -56,7 +58,7 @@ public class MoteFireFly extends MoteAnimatedBase {
 		this.gravity = 0D;
 
 		this.particleScale *= 0.75F * 0.25F * 0.1F;
-		this.maxAge = 48 + RANDOM.nextInt(12);
+		this.maxAge = 120 + RANDOM.nextInt(12);
 
 		setColor(startColorRGB);
 		setColorFade(fadeColorRGB);
@@ -76,5 +78,43 @@ public class MoteFireFly extends MoteAnimatedBase {
 		if (this.doRender)
 			super.renderParticle(buffer, entityIn, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
 
+	}
+
+	// IIlluminated implementation.  Used of there is a fancy graphics library installed to give some
+	// lighting.
+	protected double lightedX(final float partialTicks) {
+		return (float) (this.prevX + (this.posX - this.prevX) * partialTicks);
+	}
+
+	protected double lightedY(final float partialTicks) {
+		return (float) (this.prevY + (this.posY - this.prevY) * partialTicks);
+	}
+
+	protected double lightedZ(final float partialTicks) {
+		return (float) (this.prevZ + (this.posZ - this.prevZ) * partialTicks);
+	}
+
+	@Override
+	public Vec3d getPosition() {
+		final float partialTicks = Minecraft.getMinecraft().getRenderPartialTicks();
+		final double x = lightedX(partialTicks);
+		final double y = lightedY(partialTicks);
+		final double z = lightedZ(partialTicks);
+		return new Vec3d(x, y, z);
+	}
+	
+	@Override
+	public Color getColor() {
+		return new Color(this.red, this.green, this.blue);
+	}
+	
+	@Override
+	public float getAlpha() {
+		return this.alpha * 0.005F;
+	}
+
+	@Override
+	public float getRadius() {
+		return 3.0F;
 	}
 }

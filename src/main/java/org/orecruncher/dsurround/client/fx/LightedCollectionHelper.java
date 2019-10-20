@@ -25,13 +25,22 @@ package org.orecruncher.dsurround.client.fx;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.client.fx.particle.mote.IIlluminatedMote;
+import org.orecruncher.dsurround.client.fx.particle.mote.IParticleMote;
 import org.orecruncher.dsurround.client.fx.particle.mote.ParticleCollection;
 import org.orecruncher.dsurround.client.fx.particle.mote.ParticleCollection.ICollectionFactory;
+import org.orecruncher.lib.Color;
+import org.orecruncher.lib.collections.ObjectArray;
 
+import elucent.albedo.event.GatherLightsEvent;
+import elucent.albedo.lighting.Light;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.Optional;
 
 @SideOnly(Side.CLIENT)
 public class LightedCollectionHelper extends CollectionHelper {
@@ -44,5 +53,29 @@ public class LightedCollectionHelper extends CollectionHelper {
 			@Nonnull final ResourceLocation texture) {
 		super(name, factory, texture);
 		MinecraftForge.EVENT_BUS.register(this);
+	}
+	
+	@Optional.Method(modid = "albedo")
+	@SubscribeEvent
+	public void onGatherLight(@Nonnull final GatherLightsEvent event) {
+		final ParticleCollection pc = this.collection != null ? this.collection.get() : null;
+		if (pc != null) {
+			final ObjectArray<IParticleMote> motes = pc.getParticles();
+			if (motes == null || motes.size() == 0)
+				return;
+
+			for (int i = 0; i < motes.size(); i++) {
+				final IParticleMote m = motes.get(i);
+				if (m instanceof IIlluminatedMote) {
+					final IIlluminatedMote provider = (IIlluminatedMote) m;
+					Vec3d pos = provider.getPosition();
+					Color color = provider.getColor();
+					float alpha = provider.getAlpha();
+					float radius = provider.getRadius();
+					final Light l = Light.builder().pos(pos).color(color.red, color.green, color.blue, alpha).radius(radius).build();
+					event.add(l);
+				}
+			}
+		}
 	}
 }
