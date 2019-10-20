@@ -182,9 +182,13 @@ public class SoundInstance extends PositionedSound implements ISoundInstance {
 		builder.append("Sound{");
 		builder.append(getSoundLocation().toString());
 		builder.append(", ").append(getCategory().toString());
+		builder.append(", ").append(getAttenuationType().toString());
 		builder.append(", ").append(getState().toString());
 		builder.append(", v:").append(getVolume());
 		builder.append(", p:").append(getPitch());
+		builder.append(", locX:").append(getXPosF());
+		builder.append(", locY:").append(getYPosF());
+		builder.append(", locZ:").append(getZPosF());
 		builder.append("}");
 		return builder.toString();
 	}
