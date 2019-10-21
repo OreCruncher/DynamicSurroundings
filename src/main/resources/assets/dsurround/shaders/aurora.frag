@@ -24,9 +24,11 @@ uniform vec4 bottomColor;
 // Alpha to use when generating colors.
 uniform float alpha;
 
+vec2 hashConst = vec2(12.9898, 78.233);
+
 // Noise functions
 float hash(vec2 co) {
-	return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
+	return fract(sin(dot(co, hashConst)) * 43758.5453);
 }
 
 float hash(float x, float y) {
@@ -63,19 +65,57 @@ float noise(vec2 co) {
 	return mix(s1, s2, fpos.y);
 }
 
+float pnoise1(vec2 co)
+{
+	return noise(co);
+}
+
+float pnoise2(vec2 co)
+{
+	float total = 0.0;
+	total = noise(co);
+	total += noise(2.0 * co) * 0.5;
+	return total / 1.5;
+}
+
+float pnoise3(vec2 co)
+{
+	float total = 0.0;
+	total = noise(co);
+	total += noise(2.0 * co) * 0.5;
+	total += noise(4.0 * co) * 0.25;
+	return total / 1.75;
+}
+
+float pnoise4(vec2 co)
+{
+	float total = 0.0;
+	total = noise(co);
+	total += noise(2.0 * co) * 0.5;
+	total += noise(4.0 * co) * 0.25;
+	total += noise(8.0 * co) * 0.125;
+	return total / 1.875;
+}
+
 float pnoise(vec2 co, int oct) {
 	float total = 0.0;
-	float m = 0.0;
-
-	for (int i = 0; i < oct; i++) {
-		float freq = pow(2.0, float(i));
-		float amp = pow(0.5, float(i));
-
-		total += noise(freq * co) * amp;
-		m += amp;
+	
+	if (oct == 1)
+	{
+		return pnoise1(co);
+	}
+	
+	if (oct == 2)
+	{
+		return pnoise2(co);
+	}
+	
+	if (oct == 3)
+	{
+		return pnoise3(co);
 	}
 
-	return total / m;
+	return pnoise4(co);	
 }
 
 // FBM: repeatedly apply Perlin noise to position
@@ -95,7 +135,7 @@ vec3 lights(vec2 co) {
 
 	// Red (top)
 	r = fbm2(co * vec2(1.0, 0.5), 1);
-	d = pnoise(2.0 * co + vec2(0.3 * time), 1);
+	d = pnoise1(2.0 * co + vec2(0.3 * time));
 	rc = topColor.xyz * r * smoothstep(0.0, 2.5 + d * r, co.y)
 			* smoothstep(-5.0, 1.0, 5.0 - co.y - 2.0 * d);
 
@@ -113,7 +153,7 @@ vec3 lights(vec2 co) {
 			* smoothstep(0.0, 0.3, 1.1 + d - co.y);
 
 	// Blue (bottom)
-	h = pnoise(vec2(5.0 * co.x, 5.0 * time), 1);
+	h = pnoise1(vec2(5.0 * co.x, 5.0 * time));
 	hc = bottomColor.xyz * pow(h + 0.1, 2.0)
 			* smoothstep(-2.0 * d, 0.0, co.y + 0.2)
 			* smoothstep(-h, 0.0, -co.y - 0.4);
@@ -128,18 +168,16 @@ void main() {
 	vec3 col = vec3(0.0);
 
 	// Aurora (with some transformation)
-	float s = 0.1 * sin(time);
-	//float f = 0.3 + 0.4 * pnoise(vec2(5.0 * uv.x, 0.3 * time), 1);
-	float f = 0.15 * pnoise(vec2(5.0 * uv.x, 0.3 * time), 1);
+	float f = 0.15 * pnoise1(vec2(5.0 * uv.x, 0.3 * time));
 	vec2 aco = co;
 	aco.y -= f;  // This affects height of rendering
 	// aco *= 10.0 * uv.x + 5.0;
 	aco *= 10.0 * uv.x + 20.0;
 	col += 0.5 * lights(aco)
-			* (smoothstep(0.3, 0.6, pnoise(vec2(10.0 * uv.x, 0.3 * time), 1))
+			* (smoothstep(0.3, 0.6, pnoise1(vec2(10.0 * uv.x, 0.3 * time)))
 					+ 0.5
 							* smoothstep(0.5, 0.7,
-									pnoise(vec2(10.0 * uv.x, time), 1)));
+									pnoise1(vec2(10.0 * uv.x, time))));
 
 	// Need to tweak the alpha at the edges so they fade rather than end
 	// abruptly at the edge of the quad.  Because of how the alpha channel
