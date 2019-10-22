@@ -116,8 +116,6 @@ public class AuroraBand {
 			node.dY = f * 3.0F;
 
 			final float mZ = node.getModdedZ();
-			node.tetX = node.posX + node.cosDeg90;
-			node.tetX2 = node.posX + node.cosDeg270;
 			node.tetZ = mZ + node.sinDeg90;
 			node.tetZ2 = mZ + node.sinDeg270;
 		}

@@ -94,6 +94,9 @@ final class Panel {
 		this.cosDeg90 = COS_DEG90_FACTOR * w;
 		this.sinDeg270 = SIN_DEG270_FACTOR * w;
 		this.sinDeg90 = SIN_DEG90_FACTOR * w;
+		
+		this.tetX = this.posX + this.cosDeg90;
+		this.tetX2 = this.posX + this.cosDeg270;
 	}
 
 }

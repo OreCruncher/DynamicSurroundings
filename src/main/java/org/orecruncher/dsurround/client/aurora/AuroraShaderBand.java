@@ -143,8 +143,11 @@ public class AuroraShaderBand extends AuroraBase {
 						posY2 = 0.0D;
 					}
 
-					renderer.pos(posX, zero, posZ).tex(u1, v1).endVertex();
-					renderer.pos(posX, posY, posZ).tex(u1, v2).endVertex();
+					// Only render this on the first pass.
+					if (i == 0) {
+						renderer.pos(posX, zero, posZ).tex(u1, v1).endVertex();
+						renderer.pos(posX, posY, posZ).tex(u1, v2).endVertex();
+					}
 					renderer.pos(posX2, zero, posZ2).tex(u2, v1).endVertex();
 					renderer.pos(posX2, posY2, posZ2).tex(u2, v2).endVertex();
 				}

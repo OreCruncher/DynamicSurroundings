@@ -25,22 +25,14 @@ package org.orecruncher.dsurround.client.fx;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.dsurround.client.fx.particle.mote.IIlluminatedMote;
-import org.orecruncher.dsurround.client.fx.particle.mote.IParticleMote;
 import org.orecruncher.dsurround.client.fx.particle.mote.ParticleCollection;
 import org.orecruncher.dsurround.client.fx.particle.mote.ParticleCollection.ICollectionFactory;
-import org.orecruncher.lib.Color;
-import org.orecruncher.lib.collections.ObjectArray;
-
-import elucent.albedo.event.GatherLightsEvent;
-import elucent.albedo.lighting.Light;
+//import elucent.albedo.event.GatherLightsEvent;
+//import elucent.albedo.lighting.Light;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.common.Optional;
 
 @SideOnly(Side.CLIENT)
 public class LightedCollectionHelper extends CollectionHelper {
@@ -54,7 +46,8 @@ public class LightedCollectionHelper extends CollectionHelper {
 		super(name, factory, texture);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
-	
+
+/*	
 	@Optional.Method(modid = "albedo")
 	@SubscribeEvent
 	public void onGatherLight(@Nonnull final GatherLightsEvent event) {
@@ -78,4 +71,5 @@ public class LightedCollectionHelper extends CollectionHelper {
 			}
 		}
 	}
+	*/
 }
