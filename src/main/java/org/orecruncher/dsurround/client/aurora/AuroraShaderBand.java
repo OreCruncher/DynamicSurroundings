@@ -34,7 +34,6 @@ import org.orecruncher.lib.math.MathStuff;
 
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -45,10 +44,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class AuroraShaderBand extends AuroraBase {
 
+	private static final double zero = 0;
+	private static final float v1 = 0;
+	private static final float v2 = 1F;
+	
+	protected static final VertexUploader uploader = new VertexUploader();
+	
 	protected ShaderProgram program;
 	protected IShaderUseCallback callback;
 	protected final float auroraWidth;
 	protected final float panelTexWidth;
+	
+	protected final BufferBuilder buffer;
 
 	public AuroraShaderBand(final long seed) {
 		super(seed, true);
@@ -66,6 +73,8 @@ public class AuroraShaderBand extends AuroraBase {
 
 		this.auroraWidth = this.band.getNodeList().length * this.band.getNodeWidth();
 		this.panelTexWidth = this.band.getNodeWidth() / this.auroraWidth;
+
+		this.buffer = createList();
 	}
 
 	@Override
@@ -80,6 +89,52 @@ public class AuroraShaderBand extends AuroraBase {
 	protected float getAuroraHeight() {
 		return AuroraBand.AURORA_AMPLITUDE;
 	}
+	
+	// Build out our aurora render area so we can reapply it each
+	// render pass.  I am thinking there is a better way but
+	// I don't know alot about this area of Minecraft.
+	protected BufferBuilder createList() {
+		final BufferBuilder renderer = new BufferBuilder(4096);
+		final Panel[] array = this.band.getNodeList();
+		
+		renderer.begin(GL11.GL_TRIANGLE_STRIP, DefaultVertexFormats.POSITION_TEX);
+		
+		// Get the strip started
+		final double posY = array[0].getModdedY();
+		final double posX = array[0].tetX;
+		final double posZ = array[0].tetZ;
+		renderer.pos(posX, zero, posZ).tex(0, 0).endVertex();
+		renderer.pos(posX, posY, posZ).tex(0, 1F).endVertex();
+		
+		for (int i = 0; i < array.length - 1; i++) {
+
+			final float u1 = i * this.panelTexWidth;
+			final float u2 = u1 + this.panelTexWidth;
+
+			final double posX2;
+			final double posZ2;
+			final double posY2;
+
+			if (i < array.length - 2) {
+				final Panel nodePlus = array[i + 1];
+				posX2 = nodePlus.tetX;
+				posZ2 = nodePlus.tetZ;
+				posY2 = nodePlus.getModdedY();
+			} else {
+				final Panel node = array[i];
+				posX2 = node.posX;
+				posZ2 = node.getModdedZ();
+				posY2 = 0.0D;
+			}
+
+			renderer.pos(posX2, zero, posZ2).tex(u2, v1).endVertex();
+			renderer.pos(posX2, posY2, posZ2).tex(u2, v2).endVertex();
+		}
+		
+		renderer.finishDrawing();
+		
+		return renderer;
+	}
 
 	@Override
 	public void render(final float partialTick) {
@@ -87,22 +142,16 @@ public class AuroraShaderBand extends AuroraBase {
 		if (this.program == null)
 			return;
 
-		final Tessellator tess = Tessellator.getInstance();
-		final BufferBuilder renderer = tess.getBuffer();
+		this.band.translate(partialTick);
 
 		final double tranY = getTranslationY(partialTick);
 		final double tranX = getTranslationX(partialTick);
 		final double tranZ = getTranslationZ(partialTick);
 
 		final OpenGlState glState = OpenGlState.push();
-
 		GlStateManager.disableLighting();
 		OpenGlUtil.setAuroraBlend();
-
 		GL11.glFrontFace(GL11.GL_CW);
-
-		this.band.translate(partialTick);
-		final Panel[] array = this.band.getNodeList();
 
 		try {
 
@@ -112,47 +161,7 @@ public class AuroraShaderBand extends AuroraBase {
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(tranX, tranY, tranZ + this.offset * b);
 				GlStateManager.scale(0.5D, 10.0D, 0.5D);
-
-				renderer.begin(GL11.GL_TRIANGLE_STRIP, DefaultVertexFormats.POSITION_TEX);
-				for (int i = 0; i < array.length - 1; i++) {
-
-					final float v1 = 0;
-					final float v2 = 1F;
-					final float u1 = i * this.panelTexWidth;
-					final float u2 = u1 + this.panelTexWidth;
-
-					final Panel node = array[i];
-
-					final double posY = node.getModdedY();
-					final double posX = node.tetX;
-					final double posZ = node.tetZ;
-					final double zero = 0;
-
-					final double posX2;
-					final double posZ2;
-					final double posY2;
-
-					if (i < array.length - 2) {
-						final Panel nodePlus = array[i + 1];
-						posX2 = nodePlus.tetX;
-						posZ2 = nodePlus.tetZ;
-						posY2 = nodePlus.getModdedY();
-					} else {
-						posX2 = node.posX;
-						posZ2 = node.getModdedZ();
-						posY2 = 0.0D;
-					}
-
-					// Only render this on the first pass.
-					if (i == 0) {
-						renderer.pos(posX, zero, posZ).tex(u1, v1).endVertex();
-						renderer.pos(posX, posY, posZ).tex(u1, v2).endVertex();
-					}
-					renderer.pos(posX2, zero, posZ2).tex(u2, v1).endVertex();
-					renderer.pos(posX2, posY2, posZ2).tex(u2, v2).endVertex();
-				}
-				tess.draw();
-
+				uploader.draw(this.buffer);
 				GlStateManager.popMatrix();
 			}
 
@@ -174,6 +183,8 @@ public class AuroraShaderBand extends AuroraBase {
 
 	@Override
 	public String toString() {
-		return "<SHADER> " + super.toString();
+		StringBuilder builder = new StringBuilder();
+		builder.append("<SHADER> ").append(super.toString());
+		return builder.toString();
 	}
 }

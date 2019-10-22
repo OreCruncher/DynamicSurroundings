@@ -27,13 +27,14 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.capabilities.dimension.IDimensionInfo;
 import org.orecruncher.dsurround.client.aurora.AuroraFactory.AuroraGeometry;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.lib.Color;
 import org.orecruncher.lib.random.XorShiftRandom;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -47,6 +48,9 @@ public abstract class AuroraBase implements IAurora {
 	protected final AuroraLifeTracker tracker;
 	protected final AuroraColor colors;
 
+	protected final EntityPlayer player;
+	protected final IDimensionInfo dimInfo;
+
 	public AuroraBase(final long seed) {
 		this(seed, false);
 	}
@@ -57,13 +61,16 @@ public abstract class AuroraBase implements IAurora {
 
 	public AuroraBase(final Random rand, final boolean flag) {
 		this.random = rand;
-		this.bandCount = this.random.nextInt(3) + 1;
+		this.bandCount = Math.min(this.random.nextInt(3) + 1, ModOptions.aurora.maxBands);
 		this.offset = this.random.nextInt(20) + 20;
 		this.colors = AuroraColor.get(this.random);
 
 		final AuroraGeometry geo = AuroraGeometry.get(this.random);
 		this.band = new AuroraBand(this.random, geo, flag, flag);
 		this.tracker = new AuroraLifeTracker(AuroraUtils.AURORA_PEAK_AGE, AuroraUtils.AURORA_AGE_RATE);
+
+		this.player = EnvironState.getPlayer();
+		this.dimInfo = EnvironState.getDimensionInfo();
 	}
 
 	@Override
@@ -96,28 +103,24 @@ public abstract class AuroraBase implements IAurora {
 	}
 
 	protected double getTranslationX(final float partialTick) {
-		final Minecraft mc = Minecraft.getMinecraft();
-		return mc.player.posX - (mc.player.lastTickPosX + (mc.player.posX - mc.player.lastTickPosX) * partialTick);
+		return this.player.posX
+				- (this.player.lastTickPosX + (this.player.posX - this.player.lastTickPosX) * partialTick);
 	}
 
 	protected double getTranslationZ(final float partialTick) {
-		final Minecraft mc = Minecraft.getMinecraft();
-		return (mc.player.posZ - AuroraUtils.PLAYER_FIXED_Z_OFFSET)
-				- (mc.player.lastTickPosZ + (mc.player.posZ - mc.player.lastTickPosZ) * partialTick);
+		return (this.player.posZ - AuroraUtils.PLAYER_FIXED_Z_OFFSET)
+				- (this.player.lastTickPosZ + (this.player.posZ - this.player.lastTickPosZ) * partialTick);
 	}
 
 	protected double getTranslationY(final float partialTick) {
-		final IDimensionInfo dimInfo = EnvironState.getDimensionInfo();
-		final Minecraft mc = Minecraft.getMinecraft();
-		double heightScale = 1D;
-		if (mc.player.posY > dimInfo.getSeaLevel()) {
-			final double limit = (dimInfo.getSkyHeight() + dimInfo.getCloudHeight()) / 2D;
-			final double d1 = limit - dimInfo.getSeaLevel();
-			final double d2 = mc.player.posY - dimInfo.getSeaLevel();
-			heightScale = (d1 - d2) / d1;
+		if (this.player.posY > dimInfo.getSeaLevel()) {
+			final double limit = (this.dimInfo.getSkyHeight() + this.dimInfo.getCloudHeight()) / 2D;
+			final double d1 = limit - this.dimInfo.getSeaLevel();
+			final double d2 = player.posY - this.dimInfo.getSeaLevel();
+			return AuroraUtils.PLAYER_FIXED_Y_OFFSET * (d1 - d2) / d1;
 		}
 
-		return AuroraUtils.PLAYER_FIXED_Y_OFFSET * heightScale;
+		return AuroraUtils.PLAYER_FIXED_Y_OFFSET;
 	}
 
 	@Nonnull

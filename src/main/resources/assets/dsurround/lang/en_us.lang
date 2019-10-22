@@ -129,6 +129,8 @@ dsurround.cfg.aurora.EnableAurora=Auroras
 dsurround.cfg.aurora.EnableAurora.tooltip=Enable/disable Aurora processing on server/client
 dsurround.cfg.aurora.EnableShader=Use Shaders
 dsurround.cfg.aurora.EnableShader.tooltip=Use shader when rendering aurora
+dsurround.cfg.aurora.MaxBands=Maximum Bands
+dsurround.cfg.aurora.MaxBands.tooltip=Cap the maximum bands that will be rendered
 
 dsurround.cfg.biomes.cat.Biomes=Biome Options
 dsurround.cfg.biomes.cat.Biomes.tooltip=Options for controlling biome sound/effects

@@ -89,6 +89,10 @@ public class AuroraBand {
 		return this.nodeWidth;
 	}
 
+	public float getCycle() {
+		return this.cycle;
+	}
+	
 	public void update() {
 		if ((this.cycle += AURORA_SPEED) >= 360.0F)
 			this.cycle -= 360.0F;

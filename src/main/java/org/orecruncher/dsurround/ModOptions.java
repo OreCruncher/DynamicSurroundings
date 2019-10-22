@@ -300,6 +300,7 @@ public final class ModOptions {
 	public static final String CATEGORY_AURORA = "aurora";
 	public static final String CONFIG_AURORA_ENABLED = "Enabled";
 	public static final String CONFIG_AURORA_SHADER = "Use Shaders";
+	public static final String CONFIG_AURORA_MAX_BANDS = "Maximum Bands";
 
 	@Category(CATEGORY_AURORA)
 	@LangKey("dsurround.cfg.aurora.cat.Aurora")
@@ -320,6 +321,12 @@ public final class ModOptions {
 		@Comment("Use shader when rendering aurora")
 		@RestartRequired(world = true)
 		public static boolean auroraUseShader = true;
+		
+		@Option(CONFIG_AURORA_MAX_BANDS)
+		@DefaultValue("1")
+		@LangKey("dsurround.cfg.aurora.MaxBands")
+		@RangeInt(min = 1, max = 3)
+		public static int maxBands = 1;
 	}
 
 	public static final String CATEGORY_BIOMES = "biomes";
