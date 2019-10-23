@@ -37,9 +37,7 @@ import org.orecruncher.dsurround.lib.OutOfBandTimerEMA;
 import org.orecruncher.lib.DiurnalUtils.DayCycle;
 import org.orecruncher.lib.math.TimerEMA;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -70,27 +68,23 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 		this.current = null;
 	}
 
-	private boolean isAuroraVisible() {
+	private boolean isAuroraTimeOfDay() {
 		final DayCycle dc = EnvironState.getDayCycle();
 		return dc == DayCycle.SUNSET || dc == DayCycle.NIGHTTIME;
 	}
 
-	private boolean spawnAurora(@Nonnull final World world) {
-		if (!ModOptions.aurora.auroraEnable)
-			return false;
-
-		if (this.current != null || Minecraft.getMinecraft().gameSettings.renderDistanceChunks < 6
-				|| !isAuroraVisible())
-			return false;
-		return AuroraUtils.hasAuroras() && EnvironState.getTruePlayerBiome().getHasAurora();
+	private boolean canSpawnAurora() {
+		return this.current == null && canAuroraStay();
 	}
 
-	private boolean canAuroraStay(@Nonnull final World world) {
+	private boolean canAuroraStay() {
 		if (!ModOptions.aurora.auroraEnable)
 			return false;
 
-		return Minecraft.getMinecraft().gameSettings.renderDistanceChunks < 6
-				|| isAuroraVisible() && EnvironState.getTruePlayerBiome().getHasAurora();
+		return isAuroraTimeOfDay()
+				&& AuroraUtils.getChunkRenderDistance() >= 6
+				&& AuroraUtils.dimensionHasAuroras()
+				&& EnvironState.getTruePlayerBiome().getHasAurora();
 	}
 
 	@Override
@@ -106,7 +100,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 			} else {
 				this.current.update();
 				final boolean isDying = this.current.isDying();
-				final boolean canStay = canAuroraStay(player.getEntityWorld());
+				final boolean canStay = canAuroraStay();
 				if (isDying && canStay) {
 					ModBase.log().debug("Unfading aurora...");
 					this.current.setFading(false);
@@ -118,7 +112,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 		}
 
 		// If there isn't a current aurora see if it needs to spawn
-		if (spawnAurora(player.getEntityWorld())) {
+		if (canSpawnAurora()) {
 			this.current = AuroraFactory.produce(AuroraUtils.getSeed());
 			ModBase.log().debug("New aurora [%s]", this.current.toString());
 		}

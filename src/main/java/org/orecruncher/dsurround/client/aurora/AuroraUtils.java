@@ -52,26 +52,19 @@ public class AuroraUtils {
 	}
 
 	/*
-	 * Use cached dimension info to obtain the dimensions sealevel setting.
-	 */
-	public static int getSeaLevel() {
-		return EnvironState.getDimensionInfo().getSeaLevel();
-	}
-
-	/*
 	 * Returns a time calculation based on the number of ticks that have occured
 	 * combined with the current partial tick count. Not usable for actual time
 	 * calculations.
 	 */
 	public static float getTimeSeconds() {
-		return (EnvironState.getTickCounter() + EnvironState.getPartialTick()) / 20F;
+		return ((float) EnvironState.getTickCounter() + EnvironState.getPartialTick()) / 20F;
 	}
 
 	/*
 	 * Use cached dimension info to determine if auroras are possible for the
 	 * dimension.
 	 */
-	public static boolean hasAuroras() {
+	public static boolean dimensionHasAuroras() {
 		return EnvironState.getDimensionInfo().hasAuroras();
 	}
 
