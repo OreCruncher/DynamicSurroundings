@@ -26,18 +26,17 @@ public class VertexUploader
             ByteBuffer bytebuffer = bufferBuilderIn.getByteBuffer();
             List<VertexFormatElement> list = vertexformat.getElements();
 
-            for (int j = 0; j < list.size(); ++j)
+            int size = list.size();
+            for (int j = 0; j < size; ++j)
             {
                 VertexFormatElement vertexformatelement = list.get(j);
-                bytebuffer.position(vertexformat.getOffset(j));
                 // moved to VertexFormatElement.preDraw
                 vertexformatelement.getUsage().preDraw(vertexformat, j, i, bytebuffer);
             }
 
             GlStateManager.glDrawArrays(bufferBuilderIn.getDrawMode(), 0, bufferBuilderIn.getVertexCount());
-            int i1 = 0;
 
-            for (int j1 = list.size(); i1 < j1; ++i1)
+            for (int i1 = 0; i1 < size; ++i1)
             {
                 VertexFormatElement vertexformatelement1 = list.get(i1);
                 // moved to VertexFormatElement.postDraw

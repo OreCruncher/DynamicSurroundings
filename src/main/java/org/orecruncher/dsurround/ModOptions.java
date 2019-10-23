@@ -323,10 +323,10 @@ public final class ModOptions {
 		public static boolean auroraUseShader = true;
 		
 		@Option(CONFIG_AURORA_MAX_BANDS)
-		@DefaultValue("1")
+		@DefaultValue("3")
 		@LangKey("dsurround.cfg.aurora.MaxBands")
 		@RangeInt(min = 1, max = 3)
-		public static int maxBands = 1;
+		public static int maxBands = 3;
 	}
 
 	public static final String CATEGORY_BIOMES = "biomes";

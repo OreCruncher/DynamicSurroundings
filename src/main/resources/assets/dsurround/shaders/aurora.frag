@@ -97,35 +97,45 @@ float pnoise4(vec2 co)
 	return total / 1.875;
 }
 
-float pnoise(vec2 co, int oct) {
-	float total = 0.0;
-	
-	if (oct == 1)
-	{
-		return pnoise1(co);
-	}
-	
-	if (oct == 2)
-	{
-		return pnoise2(co);
-	}
-	
-	if (oct == 3)
-	{
-		return pnoise3(co);
-	}
-
-	return pnoise4(co);	
-}
-
 // FBM: repeatedly apply Perlin noise to position
-vec2 fbm(vec2 p, int oct) {
-	return vec2(pnoise(p + vec2(time, 0.0), oct),
-			pnoise(p + vec2(-time, 0.0), oct));
+vec2 fbm1(vec2 p)
+{
+	return vec2(pnoise1(p + vec2(time, 0.0)),
+			pnoise1(p + vec2(-time, 0.0)));
 }
 
-float fbm2(vec2 p, int oct) {
-	return pnoise(p + 10.0 * fbm(p, oct) + vec2(0.0, time), oct);
+vec2 fbm2(vec2 p)
+{
+	return vec2(pnoise2(p + vec2(time, 0.0)),
+			pnoise2(p + vec2(-time, 0.0)));
+}
+
+vec2 fbm3(vec2 p)
+{
+	return vec2(pnoise3(p + vec2(time, 0.0)),
+			pnoise3(p + vec2(-time, 0.0)));
+}
+
+vec2 fbm4(vec2 p)
+{
+	return vec2(pnoise4(p + vec2(time, 0.0)),
+			pnoise4(p + vec2(-time, 0.0)));
+}
+
+float fbm2_1(vec2 p) {
+	return pnoise1(p + 10.0 * fbm1(p) + vec2(0.0, time));
+}
+
+float fbm2_2(vec2 p) {
+	return pnoise2(p + 10.0 * fbm2(p) + vec2(0.0, time));
+}
+
+float fbm2_3(vec2 p) {
+	return pnoise3(p + 10.0 * fbm3(p) + vec2(0.0, time));
+}
+
+float fbm2_4(vec2 p) {
+	return pnoise4(p + 10.0 * fbm4(p) + vec2(0.0, time));
 }
 
 // Calculate the lights themselves
@@ -134,19 +144,19 @@ vec3 lights(vec2 co) {
 	vec3 rc, gc, bc, hc;
 
 	// Red (top)
-	r = fbm2(co * vec2(1.0, 0.5), 1);
+	r = fbm2_1(co * vec2(1.0, 0.5));
 	d = pnoise1(2.0 * co + vec2(0.3 * time));
 	rc = topColor.xyz * r * smoothstep(0.0, 2.5 + d * r, co.y)
 			* smoothstep(-5.0, 1.0, 5.0 - co.y - 2.0 * d);
 
 	// Green (middle)
-	g = fbm2(co * vec2(2.0, 0.5), 4);
+	g = fbm2_4(co * vec2(2.0, 0.5));
 	gc = 0.8 * middleColor.xyz
 			* clamp(2.0 * pow((3.0 - 2.0 * g) * g * g, 2.5) - 0.5 * co.y, 0.0,
 					1.0) * smoothstep(-2.0 * d, 0.0, co.y)
 			* smoothstep(0.0, 0.3, 1.1 + d - co.y);
 
-	g = fbm2(co * vec2(1.0, 0.2), 2);
+	g = fbm2_2(co * vec2(1.0, 0.2));
 	gc += 0.5 * middleColor.xyz
 			* clamp(2.0 * pow((3.0 - 2.0 * g) * g * g, 2.5) - 0.5 * co.y, 0.0,
 					1.0) * smoothstep(-2.0 * d, 0.0, co.y)
