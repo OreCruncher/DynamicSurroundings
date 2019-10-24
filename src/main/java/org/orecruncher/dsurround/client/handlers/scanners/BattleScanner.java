@@ -69,12 +69,14 @@ public class BattleScanner implements ITickable {
 	protected boolean isWither;
 	protected boolean isDragon;
 	protected boolean isBoss;
+	protected int hostileCount;
 
 	public void reset() {
 		this.inBattle = false;
 		this.isWither = false;
 		this.isDragon = false;
 		this.isBoss = false;
+		this.hostileCount = 0;
 	}
 
 	public boolean inBattle() {
@@ -91,6 +93,10 @@ public class BattleScanner implements ITickable {
 
 	public boolean isBoss() {
 		return this.isBoss;
+	}
+	
+	public int hostileCount() {
+		return this.hostileCount;
 	}
 
 	private boolean isApplicableType(final Entity e) {
@@ -109,7 +115,7 @@ public class BattleScanner implements ITickable {
 	public void update() {
 
 		if (!ModOptions.sound.enableBattleMusic) {
-			this.inBattle = this.isBoss = this.isDragon = this.isWither = false;
+			reset();
 			return;
 		}
 
@@ -121,6 +127,7 @@ public class BattleScanner implements ITickable {
 		boolean isBoss = false;
 		boolean isDragon = false;
 		boolean isWither = false;
+		int hostileCount = 0;
 
 		final List<Entity> entities = world.getLoadedEntityList();
 		for (final Entity e : entities) {
@@ -149,18 +156,16 @@ public class BattleScanner implements ITickable {
 				if (e instanceof EntityWither) {
 					inBattle = isWither = isBoss = true;
 					isDragon = false;
-					// Wither will override *any* other mob
-					// so terminate early.
-					break;
 				} else if (e instanceof EntityDragon) {
-					inBattle = isDragon = isBoss = true;
+					if (!isWither)
+						inBattle = isDragon = isBoss = true;
 				} else if (dist <= MINI_BOSS_RANGE) {
-					inBattle = isBoss = true;
+					if (!(isDragon || isWither))
+						inBattle = isBoss = true;
 				}
-			} else if (inBattle || dist > MOB_RANGE) {
-				// If we are flagged to be in battle or if the normal
-				// mob is outside of the mob range range it is
-				// not a candidate.
+				hostileCount++;
+			} else if (dist > MOB_RANGE) {
+				// If the mob is outside of our scan range we ignore it
 				continue;
 			} else {
 				// Use entity data to determine if the mob is attacking
@@ -169,8 +174,10 @@ public class BattleScanner implements ITickable {
 					// Only in battle if the entity sees the player, or the
 					// player sees the entity
 					final EntityLiving living = (EntityLiving) e;
-					if (living.getEntitySenses().canSee(player) || player.canEntityBeSeen(living))
+					if (living.getEntitySenses().canSee(player) || player.canEntityBeSeen(living)) {
 						inBattle = true;
+						hostileCount++;
+					}
 				}
 			}
 		}
@@ -182,6 +189,7 @@ public class BattleScanner implements ITickable {
 			this.isBoss = isBoss;
 			this.isWither = isWither;
 			this.isDragon = isDragon;
+			this.hostileCount = hostileCount;
 			this.battleTimer = tickCounter + BATTLE_TIMER_EXPIRY;
 		} else if (this.inBattle && tickCounter > this.battleTimer) {
 			reset();
@@ -198,10 +206,11 @@ public class BattleScanner implements ITickable {
 
 		final StringBuilder builder = new StringBuilder();
 		builder.append(TextFormatting.RED);
-		builder.append("BattleScanner inBattle:").append(this.inBattle).append(';');
-		builder.append(" isBoss:").append(this.isBoss).append(';');
-		builder.append(" isWither:").append(this.isWither).append(';');
-		builder.append(" isDragon:").append(this.isDragon).append(';');
+		builder.append("BattleScanner inBattle: ").append(this.inBattle).append(';');
+		builder.append(" hostiles: ").append(this.hostileCount).append(';');
+		builder.append(" isBoss: ").append(this.isBoss).append(';');
+		builder.append(" isWither: ").append(this.isWither).append(';');
+		builder.append(" isDragon: ").append(this.isDragon).append(';');
 		return builder.toString();
 	}
 

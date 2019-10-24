@@ -53,6 +53,12 @@ public class BattleVariables extends DynamicVariantList {
 				this.value = EnvironState.getBattleScanner().isDragon();
 			}
 		});
-
+		add(new Dynamic.DynamicNumber("battle.hostileCount") {
+			@Override
+			public void update() {
+				this.value = EnvironState.getBattleScanner().hostileCount();
+			}
+		});
+		
 	}
 }
