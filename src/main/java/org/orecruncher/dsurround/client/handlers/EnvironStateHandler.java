@@ -211,7 +211,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 
 		public static World getWorld() {
-			return Minecraft.getMinecraft().world;
+			final Minecraft mc = Minecraft.getMinecraft();
+			return mc != null ? mc.world : null;
 		}
 
 		public static BlockPos getPlayerPosition() {
