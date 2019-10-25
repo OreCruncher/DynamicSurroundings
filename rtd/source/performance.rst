@@ -49,7 +49,7 @@ a client tick event.  The ones colored in gray are considered "out of band", mea
 occur outside the normal client tick, but do incur processing overhead because of Dynamic Surroundings
 features.
 
-- :underlined:`State Handler`  Dynamic Surroundings gathers up a lot of state information about the player and the environment and stores it in one place.  This is to reduce redundent calls, especially if they are expensive.
+- :underlined:`State Handler`  Dynamic Surroundings gathers up a lot of state information about the player and the environment and stores it in one place.  This is to reduce redundant calls, especially if they are expensive.
 - :underlined:`Area Block Effects`  This is where several area scanners examine the environment around the player to do block effects like frog croaks, bees, bubbles in water, fire jets, etc.
 - :underlined:`Fog Handler`  Dynamic Surroundings calculates a variety of different fog equations, such as weather, morning fog, etc.  These calculations occur per tick.
 - :underlined:`Fog Rendering`  This is the accumulated time between ticks taken by fog color and density routines when rendering.  Since it is during the render pass it is out of band.
@@ -74,7 +74,7 @@ Surroundings to do it's thing when the debug HUD is hidden.
 :sectiontitle:`Server Information`
 
 If enabled, and if Dynamic Surroundings is installed on the server, TPS information that Forge collects
-will be forwarded to clients.  The information displayed here is that information.
+will be forwarded to clients.
 
 ..	note::
 

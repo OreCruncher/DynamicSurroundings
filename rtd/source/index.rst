@@ -48,6 +48,7 @@ Issue Tracker: `GitHub Issues <https://github.com/OreCruncher/DynamicSurrounding
 				compatibility
 				howdoi
 				performance
+				debugging
 				commands/calc
 				commands/ds
 		-	..	toctree::
