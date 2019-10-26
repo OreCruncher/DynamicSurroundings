@@ -27,7 +27,10 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
+import org.orecruncher.dsurround.capabilities.CapabilityEntityData;
+import org.orecruncher.dsurround.capabilities.entitydata.IEntityData;
 import org.orecruncher.dsurround.client.effects.EntityEffect;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactory;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactoryFilter;
@@ -39,10 +42,12 @@ import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.EntityEvoker;
+import net.minecraft.entity.monster.EntityVex;
+import net.minecraft.entity.monster.EntityVindicator;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -107,9 +112,24 @@ public class VillagerChatEffect extends EntityEffect {
 	}
 
 	protected boolean villagerThreatened(final Entity entity) {
-		final AxisAlignedBB bbox = entity.getEntityBoundingBox().expand(8.0, 3.0D, 8.0);
-		return !entity.getEntityWorld()
-				.<EntityZombie>getEntitiesWithinAABB(EntityZombie.class, bbox, Predicates.and(this.preds)).isEmpty();
+		// If there is server side support, use the entity capability data.  If not
+		// present or the server doesn't support, fall through and look for entities
+		// of the appropriate type.
+		if (ModBase.isInstalledOnServer()) {
+			final IEntityData data = CapabilityEntityData.getCapability(entity);
+			if (data != null)
+				return data.isFleeing();
+		}
+		
+		for (final Entity e : entity.getEntityWorld().loadedEntityList) {
+			if (e.getDistanceSq(entity) <= 64.0) {
+				// From EntityVillager's AvoidEntity AI
+				if (e instanceof EntityZombie || e instanceof EntityEvoker || e instanceof EntityVex || e instanceof EntityVindicator)
+					return true;
+			}
+		}
+		
+		return false;
 	}
 
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = (@Nonnull final Entity e,
