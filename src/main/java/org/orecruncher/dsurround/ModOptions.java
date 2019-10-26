@@ -133,6 +133,7 @@ public final class ModOptions {
 	public static final String CONFIG_RAIN_RIPPLE_STYLE = "Style of rain water ripple";
 	public static final String CONFIG_MIN_RAIN_STRENGTH = "Default Minimum Rain Strength";
 	public static final String CONFIG_MAX_RAIN_STRENGTH = "Default Maximum Rain Strength";
+	public static final String CONFIG_ENABLE_MAGMA_RACK_SPLASH = "Enable Netherrack and Magma Splash Effect";
 
 	@Category(CATEGORY_RAIN)
 	@LangKey("dsurround.cfg.rain.cat.Rain")
@@ -156,7 +157,7 @@ public final class ModOptions {
 		public static boolean useVanillaRainSound = false;
 
 		@Option(CONFIG_RAIN_RIPPLE_STYLE)
-		@DefaultValue("0")
+		@DefaultValue("3")
 		@LangKey("dsurround.cfg.rain.RippleStyle")
 		@RangeInt(min = 0, max = 3)
 		@Comment("0: original round, 1: darker round, 2: square, 3: pixelated")
@@ -188,6 +189,12 @@ public final class ModOptions {
 		@RangeFloat(min = 0.0F, max = 1.0F)
 		@Comment("Default maximum rain strength for a dimension")
 		public static float defaultMaxRainStrength = 1.0F;
+
+		@Option(CONFIG_ENABLE_MAGMA_RACK_SPLASH)
+		@DefaultValue("true")
+		@LangKey("dsurround.cfg.rain.EnableMagmaNetherrack")
+		@Comment("Enable lava particle rain splash effect on Netherrack and Magma blocks")
+		public static boolean enableNetherrackMagmaSplashEffect = true;
 
 	}
 
