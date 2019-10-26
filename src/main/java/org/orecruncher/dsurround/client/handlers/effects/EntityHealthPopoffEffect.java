@@ -75,7 +75,7 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 	@Override
 	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
 		super.intitialize(state);
-		final EntityLivingBase entity = (EntityLivingBase) getState().subject().get();
+		final EntityLivingBase entity = (EntityLivingBase) getState().subject();
 		this.lastHealth = entity.getHealth();
 	}
 

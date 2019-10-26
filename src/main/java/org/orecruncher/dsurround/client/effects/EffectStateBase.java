@@ -99,7 +99,7 @@ public class EffectStateBase implements IEffectState {
 	 */
 	@Override
 	public boolean isActivePlayer(@Nonnull final Entity player) {
-		final EntityPlayer ep = Minecraft.getMinecraft().player;
+		final EntityPlayer ep = thePlayer();
 		return ep != null && ep.getEntityId() == player.getEntityId();
 	}
 

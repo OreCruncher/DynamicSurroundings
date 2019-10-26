@@ -34,8 +34,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class Variator {
 
-	public static final Variator DEFAULT = new Variator();
-
 	public final int IMMOBILE_DURATION;
 	public final boolean EVENT_ON_JUMP;
 	public final float LAND_HARD_DISTANCE_MIN;

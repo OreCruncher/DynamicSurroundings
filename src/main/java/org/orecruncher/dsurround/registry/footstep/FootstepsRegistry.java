@@ -102,6 +102,7 @@ public final class FootstepsRegistry extends Registry {
 	private Set<IBlockState> FOOTPRINT_STATES;
 
 	private Map<String, Variator> variators;
+	private Variator defaultVariator;
 	private Variator childVariator;
 	private Variator playerVariator;
 	private Variator playerQuadrupedVariator;
@@ -169,6 +170,7 @@ public final class FootstepsRegistry extends Registry {
 		this.SPLASH = new IAcoustic[] {
 				new RainSplashAcoustic(RegistryManager.ACOUSTICS.compileAcoustics("waterfine")) };
 
+		this.defaultVariator = getVariator("default");
 		this.childVariator = getVariator("child");
 		this.playerVariator = getVariator(ModOptions.sound.firstPersonFootstepCadence ? "playerSlow" : "player");
 		this.playerQuadrupedVariator = getVariator(
@@ -285,18 +287,22 @@ public final class FootstepsRegistry extends Registry {
 
 	public Generator createGenerator(@Nonnull final EntityLivingBase entity) {
 		final EntityEffectInfo info = RegistryManager.EFFECTS.getEffects(entity);
-		Variator var = getVariator(info.variator);
+		
+		Variator var = null;
 		if (entity.isChild()) {
 			var = this.childVariator;
 		} else if (entity instanceof EntityPlayer) {
 			var = ModOptions.sound.foostepsQuadruped ? this.playerQuadrupedVariator : this.playerVariator;
+		} else {
+			var = getVariator(info.variator);
 		}
+		
 		return var.QUADRUPED ? new GeneratorQP(var) : new Generator(var);
 	}
 
 	@Nonnull
 	private Variator getVariator(@Nonnull final String varName) {
-		return this.variators.getOrDefault(varName, Variator.DEFAULT);
+		return this.variators.getOrDefault(varName, this.defaultVariator);
 	}
 
 	@Nonnull

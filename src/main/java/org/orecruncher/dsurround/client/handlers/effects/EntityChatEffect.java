@@ -250,7 +250,7 @@ public class EntityChatEffect extends EntityEffect {
 	}
 
 	public void genNextChatTime() {
-		this.nextChat = getWorldTicks(getState().subject().get()) + getNextChatTime();
+		this.nextChat = getWorldTicks(getState().subject()) + getNextChatTime();
 	}
 
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = (@Nonnull final Entity e,

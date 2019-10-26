@@ -64,7 +64,7 @@ public class BreathEffect extends EntityEffect {
 	@Override
 	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
 		super.intitialize(state);
-		this.seed = state.subject().get().getEntityId() * PRIME;
+		this.seed = state.subject().getEntityId() * PRIME;
 	}
 
 	@Override

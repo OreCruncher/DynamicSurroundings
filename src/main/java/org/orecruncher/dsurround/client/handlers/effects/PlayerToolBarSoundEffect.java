@@ -80,7 +80,7 @@ public class PlayerToolBarSoundEffect extends EntityEffect {
 		}
 
 		public void update(@Nonnull final IEntityEffectHandlerState state) {
-			final EntityPlayer player = (EntityPlayer) state.subject().get();
+			final EntityPlayer player = (EntityPlayer) state.subject();
 			if (triggerNewEquipSound(player)) {
 				clearState(state);
 				final ItemStack currentStack = player.getHeldItem(this.hand);
@@ -112,7 +112,7 @@ public class PlayerToolBarSoundEffect extends EntityEffect {
 		@Override
 		public void update(@Nonnull final IEntityEffectHandlerState state) {
 			super.update(state);
-			this.lastSlot = ((EntityPlayer) (state.subject().get())).inventory.currentItem;
+			this.lastSlot = ((EntityPlayer) (state.subject())).inventory.currentItem;
 		}
 	}
 

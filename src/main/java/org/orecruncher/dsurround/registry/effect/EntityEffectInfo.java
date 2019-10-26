@@ -48,7 +48,12 @@ public class EntityEffectInfo {
 
 	@Override
 	public String toString() {
-		return this.effects;
+		if (!this.effects.isEmpty()) {
+			StringBuilder builder = new StringBuilder();
+			builder.append(this.effects);
+			builder.append("; variator=").append(this.variator);
+			return builder.toString();
+		}
+		return "<NONE>";
 	}
-
 }

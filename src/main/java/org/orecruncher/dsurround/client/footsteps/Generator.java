@@ -95,6 +95,9 @@ public class Generator {
 
 	protected boolean isRightFoot;
 	protected boolean isOnLadder;
+	protected boolean isInWater;
+	protected boolean isSneaking;
+	protected boolean isJumping;
 
 	protected double xMovec;
 	protected double zMovec;
@@ -137,6 +140,9 @@ public class Generator {
 		this.stepThisFrame = false;
 
 		this.isOnLadder = entity.isOnLadder();
+		this.isInWater = entity.isInWater();
+		this.isSneaking = entity.isSneaking();
+		this.isJumping = EntityLivingBaseUtil.isJumping(entity);
 
 		simulateFootsteps(entity);
 		simulateAirborne(entity);
@@ -154,7 +160,7 @@ public class Generator {
 			this.pedometer++;
 
 		// Player jump breath
-		if (this.didJump && ModOptions.sound.enableJumpSound && this.VAR.PLAY_JUMP && !entity.isSneaking()) {
+		if (this.didJump && ModOptions.sound.enableJumpSound && this.VAR.PLAY_JUMP && !this.isSneaking) {
 			this.soundPlayer.playAcoustic(entity.getPositionVector(), RegistryManager.FOOTSTEPS.JUMP, EventType.JUMP,
 					null);
 		}
@@ -216,12 +222,12 @@ public class Generator {
 		this.xMovec = movX;
 		this.zMovec = movZ;
 
-		if (entity.onGround || entity.isInWater() || entity.isOnLadder()) {
+		if (entity.onGround || this.isInWater || this.isOnLadder) {
 			EventType event = null;
 
 			float dwm = distanceReference - this.dmwBase;
 			final boolean immobile = stoppedImmobile(distanceReference);
-			if (immobile && !entity.isOnLadder()) {
+			if (immobile && !this.isOnLadder) {
 				dwm = 0;
 				this.dmwBase = distanceReference;
 			}
@@ -230,13 +236,13 @@ public class Generator {
 
 			if (entity.isOnLadder() && !entity.onGround) {
 				distance = this.VAR.STRIDE_LADDER;
-			} else if (!entity.isInWater() && MathStuff.abs(this.yPosition - entity.posY) > 0.4d) {
+			} else if (!this.isInWater && MathStuff.abs(this.yPosition - entity.posY) > 0.4d) {
 				// This ensures this does not get recorded as landing, but as a
 				// step
 				if (this.yPosition < entity.posY) { // Going upstairs
 					distance = this.VAR.STRIDE_STAIR;
 					event = speedDisambiguator(entity, EventType.UP, EventType.UP_RUN);
-				} else if (!entity.isSneaking()) { // Going downstairs
+				} else if (!this.isSneaking) { // Going downstairs
 					distance = -1f;
 					event = speedDisambiguator(entity, EventType.DOWN, EventType.DOWN_RUN);
 				}
@@ -292,7 +298,7 @@ public class Generator {
 	}
 
 	protected void simulateAirborne(@Nonnull final EntityLivingBase entity) {
-		if ((entity.onGround || entity.isOnLadder()) == this.isFlying) {
+		if ((entity.onGround || this.isOnLadder) == this.isFlying) {
 			this.isFlying = !this.isFlying;
 			simulateJumpingLanding(entity);
 		}
@@ -305,7 +311,7 @@ public class Generator {
 		if (hasSpecialStoppingConditions(entity))
 			return;
 
-		if (this.isFlying && EntityLivingBaseUtil.isJumping(entity)) {
+		if (this.isFlying && this.isJumping) {
 			if (this.VAR.EVENT_ON_JUMP) {
 				// If climbing stairs motion will be negative
 				if (entity.motionY > 0) {
@@ -324,7 +330,7 @@ public class Generator {
 		} else if (!this.isFlying && this.fallDistance > 0) {
 			if (this.fallDistance > this.VAR.LAND_HARD_DISTANCE_MIN) {
 				playMultifoot(entity, 0d, EventType.LAND);
-			} else if (!this.stepThisFrame && !entity.isSneaking()) {
+			} else if (!this.stepThisFrame && !this.isSneaking) {
 				playSinglefoot(entity, 0d, speedDisambiguator(entity, EventType.CLIMB, EventType.CLIMB_RUN),
 						this.isRightFoot);
 				this.isRightFoot = !this.isRightFoot;
@@ -357,13 +363,13 @@ public class Generator {
 	}
 
 	protected boolean proceedWithStep(@Nonnull final EntityLivingBase entity) {
-		return !entity.isSneaking();
+		return !this.isSneaking;
 	}
 
 	protected void playSinglefoot(@Nonnull final EntityLivingBase entity, final double verticalOffsetAsMinus,
 			@Nonnull final EventType eventType, final boolean foot) {
 		if (proceedWithStep(entity)) {
-			final Association assos = findAssociationForPlayer(entity, verticalOffsetAsMinus, foot);
+			final Association assos = findAssociation(entity, verticalOffsetAsMinus, foot);
 			playAssociation(assos, eventType);
 		}
 	}
@@ -373,8 +379,8 @@ public class Generator {
 
 		if (proceedWithStep(entity)) {
 			// STILL JUMP
-			final Association leftFoot = findAssociationForPlayer(entity, verticalOffsetAsMinus, false);
-			final Association rightFoot = findAssociationForPlayer(entity, verticalOffsetAsMinus, true);
+			final Association leftFoot = findAssociation(entity, verticalOffsetAsMinus, false);
+			final Association rightFoot = findAssociation(entity, verticalOffsetAsMinus, true);
 			playAssociation(leftFoot, eventType);
 			playAssociation(rightFoot, eventType);
 		}
@@ -391,7 +397,7 @@ public class Generator {
 
 	protected boolean shouldProducePrint(@Nonnull final EntityLivingBase entity) {
 		return ModOptions.effects.enableFootprints && this.VAR.HAS_FOOTPRINT
-				&& (entity.onGround || !(EntityLivingBaseUtil.isJumping(entity) || entity.isAirBorne))
+				&& (entity.onGround || !(this.isJumping || entity.isAirBorne))
 				&& !entity.isInvisibleToPlayer(EnvironState.getPlayer());
 	}
 
@@ -402,7 +408,7 @@ public class Generator {
 	 * the edge of a block when walking over non-emitting blocks like air or water).
 	 */
 	@Nullable
-	protected Association findAssociationForPlayer(@Nonnull final EntityLivingBase entity,
+	protected Association findAssociation(@Nonnull final EntityLivingBase entity,
 			final double verticalOffsetAsMinus, final boolean isRightFoot) {
 
 		final float rotDegrees = MathStuff.wrapDegrees(entity.rotationYaw);

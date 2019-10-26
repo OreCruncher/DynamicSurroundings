@@ -61,7 +61,7 @@ public class EntityFootprintEffect extends EntityEffect {
 	@Override
 	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
 		super.intitialize(state);
-		final EntityLivingBase entity = (EntityLivingBase) getState().subject().get();
+		final EntityLivingBase entity = (EntityLivingBase) getState().subject();
 		this.generator = RegistryManager.FOOTSTEPS.createGenerator(entity);
 	}
 

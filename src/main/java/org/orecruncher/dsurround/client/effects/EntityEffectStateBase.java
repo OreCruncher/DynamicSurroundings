@@ -24,9 +24,8 @@
 package org.orecruncher.dsurround.client.effects;
 
 import java.lang.ref.WeakReference;
-import java.util.Optional;
-
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
@@ -48,12 +47,12 @@ public class EntityEffectStateBase extends EffectStateBase implements IEntityEff
 	 * The Entity subject the EntityEffectHandler is associated with. May be null if
 	 * the Entity is no longer in scope.
 	 *
-	 * @return Optional with a reference to the subject Entity, if any.
+	 * @return Reference to the subject Entity, if any.
 	 */
 	@Override
-	@Nonnull
-	public Optional<Entity> subject() {
-		return Optional.ofNullable(this.subject.get());
+	@Nullable
+	public Entity subject() {
+		return this.subject.get();
 	}
 
 	/**

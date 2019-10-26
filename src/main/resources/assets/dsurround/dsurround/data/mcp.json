@@ -3114,6 +3114,7 @@
 	],
 	"variators": {
 		"default": {
+			"volume_scale": 0.4
 		},
 		"player": {
 			"playJump": true
@@ -3147,11 +3148,11 @@
 			"strideStair": 0.24375,
 			"distanceToCenter": 0.1,
 			"footprintScale": 0.5,
-			"volumeScale": 0.4
+			"volumeScale": 0.3
 		},
 		"skeleton": {
 			"footprintScale": 0.5,
-			"volumeScale": 0.4
+			"volumeScale": 0.3
 		}
 	},
 	"entities": {

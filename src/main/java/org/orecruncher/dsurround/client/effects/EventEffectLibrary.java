@@ -31,7 +31,6 @@ import javax.annotation.Nonnull;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.client.sound.SoundInstance;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
@@ -81,7 +80,7 @@ public class EventEffectLibrary extends EffectStateBase implements IEventEffectL
 	 */
 	@Override
 	public boolean isActivePlayer(@Nonnull final Entity player) {
-		final EntityPlayer ep = Minecraft.getMinecraft().player;
+		final EntityPlayer ep = thePlayer();
 		return ep != null && ep.getEntityId() == player.getEntityId();
 	}
 
