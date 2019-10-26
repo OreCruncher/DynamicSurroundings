@@ -177,7 +177,8 @@ public class StormRenderer {
 				if (pt == PrecipitationType.NONE)
 					continue;
 
-				this.random.setSeed(gridX * gridX * 3121 + gridX * 45238971 ^ gridZ * gridZ * 418711 + gridZ * 13761);
+				final int seed = (gridZ << 16) ^ gridX;
+				this.random.setSeed(seed);
 				final int i3 = Math.max(precipHeight, locY);
 
 				final double d6 = gridX + 0.5F - entity.posX;
@@ -192,8 +193,7 @@ public class StormRenderer {
 					setupForRender(props.getRainTexture());
 
 					// d8 makes the rain fall down. Assumes texture height of 512 pixels.
-					final double d5 = ((double) (RenderWeather.rendererUpdateCount + gridX * gridX * 3121
-							+ gridX * 45238971 + gridZ * gridZ * 418711 + gridZ * 13761 & 31) + (double) partialTicks)
+					final double d5 = ((double) (RenderWeather.rendererUpdateCount + seed & 31) + (double) partialTicks)
 							/ 32.0D * (3.0D + this.random.nextDouble());
 
 					final float alpha = ((1.0F - f3 * f3) * 0.5F + 0.5F) * alphaRatio;
