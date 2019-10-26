@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.weather;
+package org.orecruncher.dsurround.client.renderer.weather;
 
 import javax.annotation.Nonnull;
 

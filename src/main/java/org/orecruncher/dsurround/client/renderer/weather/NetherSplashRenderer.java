@@ -22,11 +22,12 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.weather;
+package org.orecruncher.dsurround.client.renderer.weather;
 
 import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
 import org.orecruncher.dsurround.capabilities.season.PrecipitationType;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.orecruncher.dsurround.client.weather.Weather;
 import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.gfx.ParticleHelper;
 

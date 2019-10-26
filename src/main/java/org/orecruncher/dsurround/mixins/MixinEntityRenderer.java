@@ -25,7 +25,7 @@
 package org.orecruncher.dsurround.mixins;
 
 import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.weather.RenderWeather;
+import org.orecruncher.dsurround.client.renderer.weather.RenderWeather;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

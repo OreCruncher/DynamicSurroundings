@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.weather;
+package org.orecruncher.dsurround.client.renderer.weather;
 
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraftforge.fml.relauncher.Side;

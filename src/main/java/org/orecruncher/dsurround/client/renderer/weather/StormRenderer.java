@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.weather;
+package org.orecruncher.dsurround.client.renderer.weather;
 
 import java.util.Random;
 
@@ -34,6 +34,7 @@ import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
 import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
 import org.orecruncher.dsurround.capabilities.season.PrecipitationType;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.orecruncher.dsurround.client.weather.Weather;
 import org.orecruncher.dsurround.client.weather.compat.RandomThings;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.dsurround.registry.biome.BiomeUtil;
