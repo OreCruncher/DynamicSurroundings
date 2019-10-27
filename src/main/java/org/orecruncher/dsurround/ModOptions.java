@@ -328,7 +328,7 @@ public final class ModOptions {
 		@Comment("Use shader when rendering aurora")
 		@RestartRequired(world = true)
 		public static boolean auroraUseShader = true;
-		
+
 		@Option(CONFIG_AURORA_MAX_BANDS)
 		@DefaultValue("3")
 		@LangKey("dsurround.cfg.aurora.MaxBands")
@@ -648,12 +648,22 @@ public final class ModOptions {
 		@DefaultValue("minecraft:block.water.ambient cull,minecraft:block.lava.ambient cull,minecraft:entity.sheep.ambient cull,minecraft:entity.chicken.ambient cull,minecraft:entity.cow.ambient cull,minecraft:entity.pig.ambient cull,dsurround:bison block,dsurround:elephant block,dsurround:gnatt block,dsurround:insectbuzz block,dsurround:hiss block,dsurround:rattlesnake block")
 		@LangKey("dsurround.cfg.sound.SoundSettings")
 		@Comment("Configure how each individual sound will be handled")
-		public static String[] soundSettings = { "minecraft:block.water.ambient cull",
-				"minecraft:block.lava.ambient cull", "minecraft:entity.sheep.ambient cull",
-				"minecraft:entity.chicken.ambient cull", "minecraft:entity.cow.ambient cull",
-				"minecraft:entity.pig.ambient cull", "dsurround:bison block", "dsurround:elephant block",
-				"dsurround:gnatt block", "dsurround:insectbuzz block", "dsurround:hiss block",
-				"dsurround:rattlesnake block" };
+		//formatter:off
+		public static String[] soundSettings = {
+				"minecraft:block.water.ambient cull",
+				"minecraft:block.lava.ambient cull",
+				"minecraft:entity.sheep.ambient cull",
+				"minecraft:entity.chicken.ambient cull",
+				"minecraft:entity.cow.ambient cull",
+				"minecraft:entity.pig.ambient cull",
+				"dsurround:bison block",
+				"dsurround:elephant block",
+				"dsurround:gnatt block",
+				"dsurround:insectbuzz block",
+				"dsurround:hiss block",
+				"dsurround:rattlesnake block"
+			};
+		//formatter:on
 	}
 
 	public static final String CATEGORY_PLAYER = "player";
