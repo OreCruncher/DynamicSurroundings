@@ -25,6 +25,7 @@ package org.orecruncher.dsurround.client.handlers.effects;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -35,7 +36,6 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
@@ -83,9 +83,10 @@ public class EntityChatEffect extends EntityEffect {
 		setTimers(EntitySquid.class, 600, EntityChatData.DEFAULT_RANDOM);
 
 		try (final IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(SPLASH_TEXT)) {
-			@SuppressWarnings("deprecation")
-			final BufferedReader bufferedreader = new BufferedReader(
-					new InputStreamReader(resource.getInputStream(), Charsets.UTF_8));
+			
+			final InputStreamReader input = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8);
+			final BufferedReader bufferedreader = new BufferedReader(input);
+			
 			String s;
 
 			while ((s = bufferedreader.readLine()) != null) {
@@ -186,12 +187,13 @@ public class EntityChatEffect extends EntityEffect {
 	private String getSpeechFormatted(@Nonnull final Entity entity, @Nonnull final String message) {
 		String xlated = xlate.loadString(message);
 		if (minecraftSplashText.size() > 0 && SPLASH_TOKEN.equals(xlated)) {
-			xlated = minecraftSplashText.get(this.random.nextInt(minecraftSplashText.size()));
+			xlated = minecraftSplashText.get(random.nextInt(minecraftSplashText.size()));
 		}
 		return xlated;
 	}
 
-	protected final Random random = XorShiftRandom.current();
+	protected static final Random random = XorShiftRandom.current();
+	
 	protected final EntityChatData data;
 	protected long nextChat;
 
@@ -228,7 +230,7 @@ public class EntityChatEffect extends EntityEffect {
 	}
 
 	protected int getNextChatTime() {
-		return getBase() + this.random.nextInt(getRandom());
+		return getBase() + random.nextInt(getRandom());
 	}
 
 	@Override

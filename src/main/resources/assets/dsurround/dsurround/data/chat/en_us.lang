@@ -77,6 +77,10 @@ chat.villager.58=15,Never dig straight down.
 chat.villager.59=10,Don't Panic.
 chat.villager.60=5,More cow bell!
 chat.villager.61=15,Well that happened.
+chat.villager.62=15,This is perplexing.
+chat.villager.63=15,Yay!  A friend!
+chat.villager.64=10,I'm saying this now so I can have a flashback later.
+chat.villager.65=5,Of course he'd do it.  He had plot armor!
 
 chat.villager.flee.0=20,Run away! Run away!
 chat.villager.flee.1=20,!!! HELP !!!
@@ -115,8 +119,9 @@ chat.zombie.12=10,Groovy!
 chat.zombie.13=10,Hey kids you remember i'm a professional, don't try this at home!
 chat.zombie.14=10,So many villagers, so little time.
 chat.zombie.15=10,Everything's better with zombies!
+chat.zombie.16-10,Now that I've introduced my self I should like to know what's going on here?
 
-chat.skeleton.0=10,The short fortune teller who escaped from prison was a small medium at large…
+chat.skeleton.0=10,The short fortune teller who escaped from prison was a small medium at large.
 chat.skeleton.1=10,I don't know where I keep my arrows.  It's a mystery, like villagers having no hands.
 chat.skeleton.2=15,It's not like I had a choice or anything.
 chat.skeleton.3=5,What? You expected intelligent conversation?
@@ -132,6 +137,10 @@ chat.skeleton.12=5,If you cannot get rid of the family skeleton, you may as well
 chat.skeleton.13=5,There is something about a closet that makes a skeleton terribly restless.
 chat.skeleton.14=5,I can be a super model!
 chat.skeleton.15=10,A bazooka is the skeleton key of the impatient.
+chat.skeleton.16=10,Tact is for people who aren't witty enough to use sarcasm.
+chat.skeleton.17=10,On the other hand, you have different fingers.
+chat.skeleton.18=10,There is a strong need for a sarcasm font.
+chat.skeleton.19=10,I am an acquired taste.
 
 chat.witch.0=10,Yes, I can drive a stick.
 chat.witch.1=15,By the pricking of my thumbs, something wicked this way comes.
@@ -148,6 +157,8 @@ chat.witch.11=15,Have you ever had a rock as a familiar?  It was the rage back i
 chat.witch.12=15,It's not a wart! It's a beauty mark!
 chat.witch.13=10,Some days I think my nose has a life of it's own.
 chat.witch.14=15,My work is never done...
+chat.witch.15=10,Tis now the very witching time of night, when churchyards yawn and hell itself breathes out contagion to this world.
+chat.witch.16=10,Double, double toil and trouble; fire burn and cauldron bubble.
 
 # Special token for using splash screen sayings - don't translate!
 chat.squid.0=20,$MINECRAFT$
