@@ -140,7 +140,8 @@ public class StormRenderer {
 		GlStateManager.alphaFunc(516, 0.1F);
 
 		final int range = mc.gameSettings.fancyGraphics ? 10 : 5;
-		final float f1 = RenderWeather.rendererUpdateCount + partialTicks;
+		final int renderCount = RenderWeather.getRendererUpdateCount();
+		final float f1 = renderCount + partialTicks;
 
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -193,7 +194,7 @@ public class StormRenderer {
 					setupForRender(props.getRainTexture());
 
 					// d8 makes the rain fall down. Assumes texture height of 512 pixels.
-					final double d5 = ((double) (RenderWeather.rendererUpdateCount + seed & 31) + (double) partialTicks)
+					final double d5 = ((double) (renderCount + seed & 31) + (double) partialTicks)
 							/ 32.0D * (3.0D + this.random.nextDouble());
 
 					final float alpha = ((1.0F - f3 * f3) * 0.5F + 0.5F) * alphaRatio;
@@ -224,7 +225,7 @@ public class StormRenderer {
 					setupForRender(texture);
 
 					// d8 makes the snow fall down. Assumes texture height of 512 pixels.
-					final double d8 = ((RenderWeather.rendererUpdateCount & 511) + partialTicks) / 512.0F;
+					final double d8 = ((renderCount & 511) + partialTicks) / 512.0F;
 					// The 0.2F factor was originally 0.01F. It
 					// affects the horizontal movement of particles,
 					// which works well for dust.

@@ -170,7 +170,7 @@ public class StormSplashRenderer {
 		if (rainStrengthFactor <= 0.0F)
 			return;
 
-		this.RANDOM.setSeed(RenderWeather.rendererUpdateCount * 312987231L);
+		this.RANDOM.setSeed(RenderWeather.getRendererUpdateCount() * 312987231L);
 		final Entity entity = mc.getRenderViewEntity();
 		final int playerX = MathHelper.floor(entity.posX);
 		final int playerY = MathHelper.floor(entity.posY);

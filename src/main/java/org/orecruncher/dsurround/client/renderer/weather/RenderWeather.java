@@ -29,6 +29,7 @@ import javax.annotation.Nonnull;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.orecruncher.lib.ReflectedField.IntegerField;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -45,9 +46,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class RenderWeather extends IRenderHandler {
 
+	
+	private static final IntegerField<EntityRenderer> rendererUpdateCount = new IntegerField<>(
+			EntityRenderer.class,
+			"rendererUpdateCount",
+			"field_78529_t"
+		);
+	
+	public static int getRendererUpdateCount() {
+		return rendererUpdateCount.get(Minecraft.getMinecraft().entityRenderer);
+	}
+		
 	private final StormRenderer stormRenderer;
-
-	public static int rendererUpdateCount = 0;
 
 	protected RenderWeather() {
 		this.stormRenderer = new StormRenderer();
@@ -60,7 +70,6 @@ public final class RenderWeather extends IRenderHandler {
 	public static boolean addRainParticles(@Nonnull final EntityRenderer theThis) {
 		final World world = EnvironState.getWorld();
 		if (world != null && world.provider.getWeatherRenderer() instanceof RenderWeather) {
-			rendererUpdateCount++;
 			StormSplashRenderer.renderStormSplashes(EnvironState.getDimensionId(), theThis);
 			return true;
 		}
