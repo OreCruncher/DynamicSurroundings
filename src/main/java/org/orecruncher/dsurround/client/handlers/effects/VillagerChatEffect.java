@@ -24,6 +24,7 @@
 package org.orecruncher.dsurround.client.handlers.effects;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
 
@@ -37,8 +38,6 @@ import org.orecruncher.dsurround.client.effects.IEntityEffectFactoryFilter;
 import org.orecruncher.dsurround.client.effects.IEntityEffectHandlerState;
 import org.orecruncher.dsurround.registry.effect.EntityEffectInfo;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.entity.Entity;
@@ -59,19 +58,15 @@ public class VillagerChatEffect extends EntityEffect {
 		EntityChatEffect.setTimers("villager.flee", 250, 200);
 	}
 
-	protected final Predicate<Entity>[] preds;
+	protected final Predicate<Entity> pred;
 	protected final EntityChatEffect normalChat;
 	protected final EntityChatEffect fleeChat;
 	protected boolean runningScared = false;
 
-	@SuppressWarnings("unchecked")
 	public VillagerChatEffect(@Nonnull final Entity entity) {
-
 		final EntityVillager villager = (EntityVillager) entity;
-		this.preds = new Predicate[] { EntitySelectors.CAN_AI_TARGET,
-				entity1 -> ((Entity) entity1).isEntityAlive() && villager.getEntitySenses().canSee((Entity) entity1),
-				Predicates.<Entity>alwaysTrue() };
-
+		this.pred = EntitySelectors.CAN_AI_TARGET
+				.and(input -> input.isEntityAlive() && villager.getEntitySenses().canSee(input));
 		this.normalChat = new EntityChatEffect(entity);
 		this.fleeChat = new EntityChatEffect(entity, "villager.flee");
 	}
@@ -112,7 +107,7 @@ public class VillagerChatEffect extends EntityEffect {
 	}
 
 	protected boolean villagerThreatened(final Entity entity) {
-		// If there is server side support, use the entity capability data.  If not
+		// If there is server side support, use the entity capability data. If not
 		// present or the server doesn't support, fall through and look for entities
 		// of the appropriate type.
 		if (ModBase.isInstalledOnServer()) {
@@ -120,15 +115,19 @@ public class VillagerChatEffect extends EntityEffect {
 			if (data != null)
 				return data.isFleeing();
 		}
-		
+
 		for (final Entity e : entity.getEntityWorld().loadedEntityList) {
 			if (e.getDistanceSq(entity) <= 64.0) {
 				// From EntityVillager's AvoidEntity AI
-				if (e instanceof EntityZombie || e instanceof EntityEvoker || e instanceof EntityVex || e instanceof EntityVindicator)
-					return true;
+				if (e instanceof EntityZombie || e instanceof EntityEvoker || e instanceof EntityVex
+						|| e instanceof EntityVindicator) {
+					if (this.pred.test(e)) {
+						return true;
+					}
+				}
 			}
 		}
-		
+
 		return false;
 	}
 
