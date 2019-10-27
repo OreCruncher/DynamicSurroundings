@@ -102,7 +102,7 @@ public class WaterSplashJetEffect extends JetEffect {
 
 	private static boolean isValidSpawnBlock(final IBlockAccessEx provider, final IBlockState state,
 			final BlockPos pos) {
-		if (state.getMaterial() != Material.WATER)
+		if (!state.getMaterial().isLiquid())
 			return false;
 		if (isUnboundedLiquid(provider, pos)) {
 			final BlockPos down = pos.down();
