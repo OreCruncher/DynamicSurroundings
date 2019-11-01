@@ -27,7 +27,7 @@ import java.util.List;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.lib.expression.ExpressionCache;
 import org.orecruncher.lib.expression.IDynamicVariant;
-import org.orecruncher.lib.expression.Variant;
+import org.orecruncher.lib.expression.IVariant;
 
 public final class ExpressionEngine {
 
@@ -56,11 +56,11 @@ public final class ExpressionEngine {
 		this.cache.reset();
 	}
 
-	public List<IDynamicVariant<?>> getVariables() {
+	public List<IDynamicVariant> getVariables() {
 		return this.cache.getVariantList();
 	}
 
-	public Variant eval(final String exp) {
+	public IVariant eval(final String exp) {
 		return this.cache.eval(exp);
 	}
 

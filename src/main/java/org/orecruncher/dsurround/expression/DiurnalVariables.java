@@ -31,48 +31,14 @@ import org.orecruncher.lib.expression.DynamicVariantList;
 public class DiurnalVariables extends DynamicVariantList {
 
 	public DiurnalVariables() {
-		add(new Dynamic.DynamicBoolean("diurnal.isDay") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getDayCycle() == DayCycle.DAYTIME;
-			}
-		});
-		add(new Dynamic.DynamicBoolean("diurnal.isNight") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getDayCycle() == DayCycle.NIGHTTIME;
-			}
-		});
-		add(new Dynamic.DynamicBoolean("diurnal.isSunrise") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getDayCycle() == DayCycle.SUNRISE;
-			}
-		});
-		add(new Dynamic.DynamicBoolean("diurnal.isSunset") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getDayCycle() == DayCycle.SUNSET;
-			}
-		});
-		add(new Dynamic.DynamicBoolean("diurnal.isAuroraVisible") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getDayCycle() == DayCycle.SUNRISE
-						|| EnvironState.getDayCycle() == DayCycle.DAYTIME;
-			}
-		});
-		add(new Dynamic.DynamicNumber("diurnal.moonPhaseFactor") {
-			@Override
-			public void update() {
-				this.value = DiurnalUtils.getMoonPhaseFactor(EnvironState.getWorld());
-			}
-		});
-		add(new Dynamic.DynamicNumber("diurnal.celestialAngle") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getWorld().getCelestialAngle(0);
-			}
-		});
+		add(new Dynamic.DynamicBoolean("diurnal.isDay", () -> EnvironState.getDayCycle() == DayCycle.DAYTIME));
+		add(new Dynamic.DynamicBoolean("diurnal.isNight", () -> EnvironState.getDayCycle() == DayCycle.NIGHTTIME));
+		add(new Dynamic.DynamicBoolean("diurnal.isSunrise", () -> EnvironState.getDayCycle() == DayCycle.SUNRISE));
+		add(new Dynamic.DynamicBoolean("diurnal.isSunset", () -> EnvironState.getDayCycle() == DayCycle.SUNSET));
+		add(new Dynamic.DynamicBoolean("diurnal.isAuroraVisible", () -> EnvironState.getDayCycle() == DayCycle.SUNRISE
+				|| EnvironState.getDayCycle() == DayCycle.DAYTIME));
+		add(new Dynamic.DynamicNumber("diurnal.moonPhaseFactor",
+				() -> DiurnalUtils.getMoonPhaseFactor(EnvironState.getWorld())));
+		add(new Dynamic.DynamicNumber("diurnal.celestialAngle", () -> EnvironState.getWorld().getCelestialAngle(0)));
 	}
 }

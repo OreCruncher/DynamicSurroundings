@@ -29,36 +29,11 @@ import org.orecruncher.lib.expression.DynamicVariantList;
 public class BattleVariables extends DynamicVariantList {
 
 	public BattleVariables() {
-		add(new Dynamic.DynamicBoolean("battle.inBattle") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getBattleScanner().inBattle();
-			}
-		});
-		add(new Dynamic.DynamicBoolean("battle.isBoss") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getBattleScanner().isBoss();
-			}
-		});
-		add(new Dynamic.DynamicBoolean("battle.isWither") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getBattleScanner().isWither();
-			}
-		});
-		add(new Dynamic.DynamicBoolean("battle.isDragon") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getBattleScanner().isDragon();
-			}
-		});
-		add(new Dynamic.DynamicNumber("battle.hostileCount") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getBattleScanner().hostileCount();
-			}
-		});
-		
+		add(new Dynamic.DynamicBoolean("battle.inBattle", () -> EnvironState.getBattleScanner().inBattle()));
+		add(new Dynamic.DynamicBoolean("battle.isBoss", () -> EnvironState.getBattleScanner().isBoss()));
+		add(new Dynamic.DynamicBoolean("battle.isWither", () -> EnvironState.getBattleScanner().isWither()));
+		add(new Dynamic.DynamicBoolean("battle.isDragon", () -> EnvironState.getBattleScanner().isDragon()));
+		add(new Dynamic.DynamicNumber("battle.hostileCount",
+				() -> (float) EnvironState.getBattleScanner().hostileCount()));
 	}
 }

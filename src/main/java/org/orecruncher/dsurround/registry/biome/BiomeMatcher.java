@@ -31,6 +31,7 @@ import org.orecruncher.dsurround.registry.config.BiomeConfig;
 import org.orecruncher.lib.expression.BooleanValue;
 import org.orecruncher.lib.expression.Expression;
 import org.orecruncher.lib.expression.Function;
+import org.orecruncher.lib.expression.IVariant;
 import org.orecruncher.lib.expression.NumberValue;
 import org.orecruncher.lib.expression.StringValue;
 import org.orecruncher.lib.expression.Variant;
@@ -66,7 +67,7 @@ public abstract class BiomeMatcher {
 			}
 
 			@Override
-			public int compareTo(Variant o) {
+			public int compareTo(IVariant o) {
 				return Booleans.compare(asBoolean(), o.asBoolean());
 			}
 
@@ -86,7 +87,7 @@ public abstract class BiomeMatcher {
 			}
 
 			@Override
-			public Variant add(Variant term) {
+			public Variant add(IVariant term) {
 				return new BooleanValue(asBoolean() || term.asBoolean());
 			}
 		}
@@ -101,7 +102,7 @@ public abstract class BiomeMatcher {
 			this.exp.addVariable(new Variant("biome.name") {
 
 				@Override
-				public int compareTo(Variant o) {
+				public int compareTo(IVariant o) {
 					return asString().compareTo(o.asString());
 				}
 
@@ -121,7 +122,7 @@ public abstract class BiomeMatcher {
 				}
 
 				@Override
-				public Variant add(Variant term) {
+				public IVariant add(IVariant term) {
 					return new StringValue(asString().concat(term.asString()));
 				}
 
@@ -130,7 +131,7 @@ public abstract class BiomeMatcher {
 			this.exp.addVariable(new Variant("biome.id") {
 
 				@Override
-				public int compareTo(Variant o) {
+				public int compareTo(IVariant o) {
 					return asString().compareTo(o.asString());
 				}
 
@@ -150,7 +151,7 @@ public abstract class BiomeMatcher {
 				}
 
 				@Override
-				public Variant add(Variant term) {
+				public IVariant add(IVariant term) {
 					return new StringValue(asString().concat(term.asString()));
 				}
 
@@ -159,7 +160,7 @@ public abstract class BiomeMatcher {
 			this.exp.addVariable(new Variant("biome.modid") {
 
 				@Override
-				public int compareTo(Variant o) {
+				public int compareTo(IVariant o) {
 					return asString().compareTo(o.asString());
 				}
 
@@ -179,7 +180,7 @@ public abstract class BiomeMatcher {
 				}
 
 				@Override
-				public Variant add(Variant term) {
+				public IVariant add(IVariant term) {
 					return new StringValue(asString().concat(term.asString()));
 				}
 
@@ -187,7 +188,7 @@ public abstract class BiomeMatcher {
 
 			this.exp.addVariable(new Variant("biome.rainfall") {
 				@Override
-				public int compareTo(Variant o) {
+				public int compareTo(IVariant o) {
 					return Float.compare(asNumber(), o.asNumber());
 				}
 
@@ -207,7 +208,7 @@ public abstract class BiomeMatcher {
 				}
 
 				@Override
-				public Variant add(Variant term) {
+				public IVariant add(IVariant term) {
 					return new NumberValue(asNumber() + term.asNumber());
 				}
 
@@ -217,7 +218,7 @@ public abstract class BiomeMatcher {
 			this.exp.addVariable(new Variant("biome.isFake") {
 
 				@Override
-				public int compareTo(Variant o) {
+				public int compareTo(IVariant o) {
 					return asString().compareTo(o.asString());
 				}
 
@@ -237,7 +238,7 @@ public abstract class BiomeMatcher {
 				}
 
 				@Override
-				public Variant add(Variant term) {
+				public IVariant add(IVariant term) {
 					return new BooleanValue(asBoolean() || term.asBoolean());
 				}
 
@@ -256,7 +257,7 @@ public abstract class BiomeMatcher {
 			// Add a function to do some biome comparisons
 			this.exp.addFunction(new Function("biome.isLike", 1) {
 				@Override
-				public Variant eval(final Variant... params) {
+				public IVariant eval(final IVariant... params) {
 					final String biomeName = params[0].asString();
 					final Biome biome = Biome.REGISTRY.getObject(new ResourceLocation(biomeName));
 					return biome != null && ConditionsImpl.this.current.areBiomesSameClass(biome) ? Expression.TRUE

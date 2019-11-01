@@ -31,25 +31,11 @@ import net.minecraft.world.World;
 public class DimensionVariables extends DynamicVariantList {
 
 	public DimensionVariables() {
-		add(new Dynamic.DynamicNumber("dim.id") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getDimensionId();
-			}
-		});
-		add(new Dynamic.DynamicString("dim.name") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getDimensionName();
-			}
-		});
-		add(new Dynamic.DynamicBoolean("dim.hasSky") {
-			@Override
-			public void update() {
-				final World world = EnvironState.getWorld();
-				this.value = world != null && world.provider.hasSkyLight();
-			}
-		});
-
+		add(new Dynamic.DynamicNumber("dim.id", () -> (float) EnvironState.getDimensionId()));
+		add(new Dynamic.DynamicString("dim.name", () -> EnvironState.getDimensionName()));
+		add(new Dynamic.DynamicBoolean("dim.hasSky", () -> {
+			final World world = EnvironState.getWorld();
+			return world != null && world.provider.hasSkyLight();
+		}));
 	}
 }

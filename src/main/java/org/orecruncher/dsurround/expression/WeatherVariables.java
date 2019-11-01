@@ -34,57 +34,21 @@ import net.minecraft.world.World;
 public class WeatherVariables extends DynamicVariantList {
 
 	public WeatherVariables() {
-		add(new Dynamic.DynamicBoolean("weather.isRaining") {
-			@Override
-			public void update() {
-				this.value = Weather.isRaining();
-			}
-		});
-		add(new Dynamic.DynamicBoolean("weather.isThundering") {
-			@Override
-			public void update() {
-				this.value = Weather.isThundering();
-			}
-		});
-		add(new Dynamic.DynamicBoolean("weather.isNotRaining") {
-			@Override
-			public void update() {
-				this.value = !Weather.isRaining();
-			}
-		});
-		add(new Dynamic.DynamicBoolean("weather.isNotThundering") {
-			@Override
-			public void update() {
-				this.value = !Weather.isThundering();
-			}
-		});
-		add(new Dynamic.DynamicNumber("weather.rainfall") {
-			@Override
-			public void update() {
-				this.value = Weather.getIntensityLevel();
-			}
-		});
-		add(new Dynamic.DynamicNumber("weather.temperatureValue") {
-			@Override
-			public void update() {
-				final World world = EnvironState.getWorld();
-				final ISeasonInfo season = CapabilitySeasonInfo.getCapability(world);
-				this.value = season.getTemperature(EnvironState.getPlayerPosition());
-			}
-		});
-		add(new Dynamic.DynamicString("weather.temperature") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getBiomeTemperature().getValue();
-			}
-		});
-		add(new Dynamic.DynamicBoolean("weather.canWaterFreeze") {
-			@Override
-			public void update() {
-				final World world = EnvironState.getWorld();
-				final ISeasonInfo season = CapabilitySeasonInfo.getCapability(world);
-				this.value = season.canWaterFreeze(EnvironState.getPlayerPosition());
-			}
-		});
+		add(new Dynamic.DynamicBoolean("weather.isRaining", () -> Weather.isRaining()));
+		add(new Dynamic.DynamicBoolean("weather.isThundering", () -> Weather.isThundering()));
+		add(new Dynamic.DynamicString("weather.temperature", () -> EnvironState.getBiomeTemperature().getValue()));
+		add(new Dynamic.DynamicBoolean("weather.isNotRaining", () -> !Weather.isRaining()));
+		add(new Dynamic.DynamicBoolean("weather.isNotThundering", () -> !Weather.isThundering()));
+		add(new Dynamic.DynamicNumber("weather.rainfall", () -> (float) Weather.getIntensityLevel()));
+		add(new Dynamic.DynamicNumber("weather.temperatureValue", () -> {
+			final World world = EnvironState.getWorld();
+			final ISeasonInfo season = CapabilitySeasonInfo.getCapability(world);
+			return season.getTemperature(EnvironState.getPlayerPosition());
+		}));
+		add(new Dynamic.DynamicBoolean("weather.canWaterFreeze", () -> {
+			final World world = EnvironState.getWorld();
+			final ISeasonInfo season = CapabilitySeasonInfo.getCapability(world);
+			return season.canWaterFreeze(EnvironState.getPlayerPosition());
+		}));
 	}
 }

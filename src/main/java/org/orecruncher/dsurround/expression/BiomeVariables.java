@@ -29,48 +29,12 @@ import org.orecruncher.lib.expression.DynamicVariantList;
 public class BiomeVariables extends DynamicVariantList {
 
 	public BiomeVariables() {
-		add(new Dynamic.DynamicString("biome.name") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getBiomeName();
-			}
-		});
-		add(new Dynamic.DynamicString("biome.id") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getPlayerBiome().getKey().toString();
-			}
-		});
-		add(new Dynamic.DynamicString("biome.modid") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getPlayerBiome().getKey().getNamespace();
-			}
-		});
-		add(new Dynamic.DynamicString("biome.temperature") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getBiomeTemperature().getValue();
-			}
-		});
-		add(new Dynamic.DynamicNumber("biome.rainfall") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getPlayerBiome().getRainfall();
-			}
-		});
-		add(new Dynamic.DynamicNumber("biome.temperatureValue") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getPlayerBiome().getTemperature();
-			}
-		});
-		add(new Dynamic.DynamicString("biome.traits") {
-			@Override
-			public void update() {
-				this.value = EnvironState.getPlayerBiome().getBiomeTraits();
-			}
-		});
-
+		add(new Dynamic.DynamicString("biome.name", () -> EnvironState.getBiomeName()));
+		add(new Dynamic.DynamicString("biome.id", () -> EnvironState.getPlayerBiome().getKey().toString()));
+		add(new Dynamic.DynamicString("biome.modid", () -> EnvironState.getPlayerBiome().getKey().getNamespace()));
+		add(new Dynamic.DynamicString("biome.temperature", () -> EnvironState.getBiomeTemperature().getValue()));
+		add(new Dynamic.DynamicNumber("biome.rainfall", () -> EnvironState.getPlayerBiome().getRainfall()));
+		add(new Dynamic.DynamicNumber("biome.temperatureValue", () -> EnvironState.getPlayerBiome().getTemperature()));
+		add(new Dynamic.DynamicString("biome.traits", () -> EnvironState.getPlayerBiome().getBiomeTraits()));
 	}
 }

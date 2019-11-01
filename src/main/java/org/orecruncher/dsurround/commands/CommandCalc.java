@@ -29,8 +29,7 @@ import java.util.List;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.lib.expression.Expression;
 import org.orecruncher.lib.expression.ExpressionException;
-import org.orecruncher.lib.expression.Variant;
-
+import org.orecruncher.lib.expression.IVariant;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.command.CommandBase;
@@ -105,7 +104,7 @@ public class CommandCalc extends CommandBase {
 			} else {
 				try {
 					final Expression exp = new Expression(buildString(parms, 0));
-					final Variant result = exp.eval();
+					final IVariant result = exp.eval();
 					sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "-> " + result.asString()));
 				} catch (final ExpressionException t) {
 					sender.sendMessage(new TextComponentString(TextFormatting.RED + t.getMessage()));

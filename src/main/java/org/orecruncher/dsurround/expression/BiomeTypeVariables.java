@@ -37,11 +37,7 @@ public class BiomeTypeVariables extends DynamicVariantList {
 		// Scan the BiomeDictionary adding the the types
 		final Set<BiomeDictionary.Type> types = BiomeUtil.getBiomeTypes();
 		for (final BiomeDictionary.Type t : types)
-			add(new Dynamic.DynamicBoolean("biome.is" + t.getName()) {
-				@Override
-				public void update() {
-					this.value = EnvironState.getTruePlayerBiome().isBiomeType(t);
-				}
-			});
+			add(new Dynamic.DynamicBoolean("biome.is" + t.getName(),
+					() -> EnvironState.getTruePlayerBiome().isBiomeType(t)));
 	}
 }
