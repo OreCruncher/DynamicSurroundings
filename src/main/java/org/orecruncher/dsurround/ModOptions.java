@@ -294,8 +294,12 @@ public final class ModOptions {
 		@DefaultValue("minecraft:entity.experience_orb.pickup,minecraft:entity.chicken.egg")
 		@LangKey("dsurround.cfg.general.StartupSounds")
 		@Comment("Possible sounds to play when client reaches main game menu")
-		public static String[] startupSoundList = { "minecraft:entity.experience_orb.pickup",
-				"minecraft:entity.chicken.egg" };
+		//@formatter:off
+		public static String[] startupSoundList = {
+				"minecraft:entity.experience_orb.pickup",
+				"minecraft:entity.chicken.egg"
+			};
+		//@formatter:on
 
 		@Option(CONFIG_ENABLE_CLIENT_CHUNK_CACHING)
 		@DefaultValue("true")
@@ -648,7 +652,7 @@ public final class ModOptions {
 		@DefaultValue("minecraft:block.water.ambient cull,minecraft:block.lava.ambient cull,minecraft:entity.sheep.ambient cull,minecraft:entity.chicken.ambient cull,minecraft:entity.cow.ambient cull,minecraft:entity.pig.ambient cull,dsurround:bison block,dsurround:elephant block,dsurround:gnatt block,dsurround:insectbuzz block,dsurround:hiss block,dsurround:rattlesnake block")
 		@LangKey("dsurround.cfg.sound.SoundSettings")
 		@Comment("Configure how each individual sound will be handled")
-		//formatter:off
+		//@formatter:off
 		public static String[] soundSettings = {
 				"minecraft:block.water.ambient cull",
 				"minecraft:block.lava.ambient cull",
@@ -663,7 +667,7 @@ public final class ModOptions {
 				"dsurround:hiss block",
 				"dsurround:rattlesnake block"
 			};
-		//formatter:on
+		//@formatter:on
 	}
 
 	public static final String CATEGORY_PLAYER = "player";

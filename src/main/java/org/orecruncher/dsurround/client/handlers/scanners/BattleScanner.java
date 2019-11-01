@@ -41,7 +41,6 @@ import net.minecraft.entity.monster.EntityGolem;
 import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -55,7 +54,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * fighting nearby.
  */
 @SideOnly(Side.CLIENT)
-public class BattleScanner implements ITickable {
+public class BattleScanner {
 
 	private static final String DEBUG_NOT_ENABLED = TextFormatting.RED + "<BATTLE MUSIC NOT ENABLED>";
 
@@ -111,17 +110,15 @@ public class BattleScanner implements ITickable {
 		return false;
 	}
 
-	@Override
-	public void update() {
+	public void update(final EntityPlayer player) {
 
 		if (!ModOptions.sound.enableBattleMusic) {
 			reset();
 			return;
 		}
 
-		final EntityPlayer player = EnvironState.getPlayer();
-		final BlockPos playerPos = EnvironState.getPlayerPosition();
-		final World world = EnvironState.getWorld();
+		final World world = player.getEntityWorld();
+		final BlockPos playerPos = new BlockPos(player.posX, player.getEntityBoundingBox().minY, player.posZ);;
 
 		boolean inBattle = false;
 		boolean isBoss = false;
@@ -205,7 +202,6 @@ public class BattleScanner implements ITickable {
 		}
 
 		final StringBuilder builder = new StringBuilder();
-		builder.append(TextFormatting.RED);
 		builder.append("BattleScanner inBattle: ").append(this.inBattle).append(';');
 		builder.append(" hostiles: ").append(this.hostileCount).append(';');
 		builder.append(" isBoss: ").append(this.isBoss).append(';');

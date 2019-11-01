@@ -87,6 +87,8 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 	protected final boolean isRiver;
 	protected final boolean isOcean;
 	protected final boolean isDeepOcean;
+	
+	protected final String traits;
 
 	public BiomeInfo(@Nonnull final IBiome biome) {
 		this.biome = biome;
@@ -112,6 +114,8 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 		this.isRiver = this.biome.getTypes().contains(Type.RIVER);
 		this.isOcean = this.biome.getTypes().contains(Type.OCEAN);
 		this.isDeepOcean = this.isOcean && getBiomeName().matches("(?i).*deep.*ocean.*|.*abyss.*");
+	
+		this.traits = getBiomeTypes().stream().map(BiomeDictionary.Type::getName).collect(Collectors.joining(" "));
 	}
 
 	public boolean isRiver() {
@@ -140,6 +144,10 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 
 	public Set<Type> getBiomeTypes() {
 		return this.biome.getTypes();
+	}
+	
+	public String getBiomeTraits() {
+		return this.traits;
 	}
 
 	void addComment(@Nonnull final String comment) {
@@ -353,8 +361,7 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 				.append(getBiomeId()).append("):");
 		if (!isFake()) {
 			builder.append("\n+ ").append('<');
-			builder.append(
-					getBiomeTypes().stream().map(BiomeDictionary.Type::getName).collect(Collectors.joining(",")));
+			builder.append(getBiomeTraits());
 			builder.append('>').append('\n');
 			builder.append("+ temp: ").append(getTemperature()).append(" (").append(getTemperatureRating().getValue())
 					.append(")");

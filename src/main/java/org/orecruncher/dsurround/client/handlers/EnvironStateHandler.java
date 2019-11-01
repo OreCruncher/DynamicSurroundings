@@ -29,7 +29,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
-import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.capabilities.CapabilityDimensionInfo;
 import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
@@ -67,143 +66,76 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EnvironStateHandler extends EffectHandlerBase {
 
-	public static class EnvironState {
-
+	protected final static class EnvironStateData {
 		// State that is gathered from the various sources
 		// to avoid requery. Used during the tick.
-		private static BiomeInfo playerBiome = null;
-		private static BiomeInfo truePlayerBiome = null;
-		private static int dimensionId;
-		private static String dimensionName;
-		private static IDimensionInfo dimInfo = DimensionInfo.NONE;
-		private static BlockPos playerPosition;
-		private static TemperatureRating playerTemperature;
-		private static TemperatureRating biomeTemperature;
-		private static boolean inside;
-		private static ItemStack armorStack;
-		private static ItemStack footArmorStack;
-		private static boolean inVillage;
+		public BiomeInfo playerBiome = RegistryManager.BIOME.WTF_INFO;
+		public BiomeInfo truePlayerBiome = RegistryManager.BIOME.WTF_INFO;
+		public int dimensionId;
+		public String dimensionName = StringUtils.EMPTY;
+		public IDimensionInfo dimInfo = DimensionInfo.NONE;
+		public BlockPos playerPosition = BlockPos.ORIGIN;
+		public TemperatureRating playerTemperature = TemperatureRating.MILD;
+		public TemperatureRating biomeTemperature = TemperatureRating.MILD;
+		public ItemStack armorStack = ItemStack.EMPTY;
+		public ItemStack footArmorStack = ItemStack.EMPTY;
+		
+		public boolean inside;
+		public boolean inVillage;
+		public boolean isUnderground;
+		public boolean isInSpace;
+		public boolean isInClouds;
+		public int lightLevel;
+		public int tickCounter = 1;
 
-		private static boolean isUnderground;
-		private static boolean isInSpace;
-		private static boolean isInClouds;
+		public DayCycle dayCycle = DayCycle.NO_SKY;
 
-		private static int lightLevel;
-		private static int tickCounter;
-
-		private static DayCycle dayCycle;
-
-		private static MinecraftClock clock = new MinecraftClock();
-		private static BattleScanner battle = new BattleScanner();
-
-		private static BlockPos getPlayerPos() {
-			final EntityPlayer player = getPlayer();
-			return new BlockPos(player.posX, player.getEntityBoundingBox().minY, player.posZ);
-		}
-
-		private static void reset() {
-			final BiomeInfo WTF = RegistryManager.BIOME.WTF_INFO;
-			playerBiome = WTF;
-			truePlayerBiome = WTF;
-			dimensionId = 0;
-			dimensionName = StringUtils.EMPTY;
-			dimInfo = DimensionInfo.NONE;
-			playerPosition = BlockPos.ORIGIN;
-			playerTemperature = TemperatureRating.MILD;
-			biomeTemperature = TemperatureRating.MILD;
-			inside = false;
-			armorStack = ItemStack.EMPTY;
-			footArmorStack = ItemStack.EMPTY;
-			inVillage = false;
-			isUnderground = false;
-			isInSpace = false;
-			isInClouds = false;
-			lightLevel = 0;
-			tickCounter = 1;
-			dayCycle = DayCycle.NO_SKY;
-			clock = new MinecraftClock();
-			battle = new BattleScanner();
-		}
-
-		private static void tick(final World world, final EntityPlayer player) {
-
-			final BiomeRegistry biomes = RegistryManager.BIOME;
-			final ISeasonInfo season = CapabilitySeasonInfo.getCapability(getWorld());
-			final EnvironStateHandler stateHandler = EffectManager.instance().lookupService(EnvironStateHandler.class);
-			if (stateHandler == null)
-				ModBase.log().warn("Null EnvironStateHandler in EnvironState.tick()");
-
-			EnvironState.dimInfo = CapabilityDimensionInfo.getCapability(EnvironState.getWorld());
-			EnvironState.clock.update(getWorld());
-			EnvironState.playerBiome = biomes.getPlayerBiome(player, false);
-			EnvironState.dimensionId = world.provider.getDimension();
-			EnvironState.dimensionName = world.provider.getDimensionType().getName();
-			EnvironState.playerPosition = getPlayerPos();
-			EnvironState.inside = stateHandler == null ? false : stateHandler.isReallyInside();
-
-			EnvironState.truePlayerBiome = biomes.getPlayerBiome(player, true);
-			EnvironState.playerTemperature = season.getPlayerTemperature();
-			EnvironState.biomeTemperature = season.getBiomeTemperature(getPlayerPosition());
-
-			EnvironState.armorStack = ItemClass.effectiveArmorStack(player);
-			EnvironState.footArmorStack = ItemClass.footArmorStack(player);
-
-			EnvironState.isUnderground = EnvironState.playerBiome == biomes.UNDERGROUND_INFO;
-			EnvironState.isInSpace = EnvironState.playerBiome == biomes.OUTERSPACE_INFO;
-			EnvironState.isInClouds = EnvironState.playerBiome == biomes.CLOUDS_INFO;
-
-			final BlockPos pos = EnvironState.getPlayerPosition();
-			final int blockLight = world.getLightFor(EnumSkyBlock.BLOCK, pos);
-			final int skyLight = world.getLightFor(EnumSkyBlock.SKY, pos) - world.calculateSkylightSubtracted(1.0F);
-			EnvironState.lightLevel = Math.max(blockLight, skyLight);
-
-			EnvironState.dayCycle = DiurnalUtils.getCycle(world);
-
-			// Trigger the battle scanner
-			EnvironState.battle.update();
-
-			if (!Minecraft.getMinecraft().isGamePaused())
-				EnvironState.tickCounter++;
-		}
+		public MinecraftClock clock = new MinecraftClock();
+		public BattleScanner battle = new BattleScanner();
+	};
+	
+	public final static class EnvironState {
+		
+		private static EnvironStateData data = new EnvironStateData();
 
 		public static MinecraftClock getClock() {
-			return clock;
+			return data.clock;
 		}
 
 		public static BattleScanner getBattleScanner() {
-			return battle;
+			return data.battle;
 		}
 
 		public static IDimensionInfo getDimensionInfo() {
-			return dimInfo;
+			return data.dimInfo;
 		}
 
 		public static BiomeInfo getPlayerBiome() {
-			return playerBiome;
+			return data.playerBiome;
 		}
 
 		public static BiomeInfo getTruePlayerBiome() {
-			return truePlayerBiome;
+			return data.truePlayerBiome;
 		}
 
 		public static String getBiomeName() {
-			return EnvironState.playerBiome.getBiomeName();
+			return getPlayerBiome().getBiomeName();
 		}
 
 		public static TemperatureRating getPlayerTemperature() {
-			return playerTemperature;
+			return data.playerTemperature;
 		}
 
 		public static TemperatureRating getBiomeTemperature() {
-			return biomeTemperature;
+			return data.biomeTemperature;
 		}
 
 		public static int getDimensionId() {
-			return dimensionId;
+			return data.dimensionId;
 		}
 
 		public static String getDimensionName() {
-			return dimensionName;
+			return data.dimensionName;
 		}
 
 		public static EntityPlayer getPlayer() {
@@ -216,23 +148,25 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 
 		public static BlockPos getPlayerPosition() {
-			return playerPosition;
+			return data.playerPosition;
 		}
 
 		public static boolean isPlayer(final Entity entity) {
-			return entity instanceof EntityPlayer && entity.getPersistentID().equals(getPlayer().getPersistentID());
+			return entity.getPersistentID().equals(getPlayer().getPersistentID());
 		}
 
 		public static boolean isPlayerHurt() {
+			if (ModOptions.player.playerHurtThreshold == 0)
+				return false;
 			final EntityPlayer player = getPlayer();
-			return ModOptions.player.playerHurtThreshold != 0 && !player.isCreative()
-					&& player.getHealth() <= (ModOptions.player.playerHurtThreshold * player.getMaxHealth());
+			return !player.isCreative() && player.getHealth() <= (ModOptions.player.playerHurtThreshold * player.getMaxHealth());
 		}
 
 		public static boolean isPlayerHungry() {
+			if (ModOptions.player.playerHungerThreshold == 0)
+				return false;
 			final EntityPlayer player = getPlayer();
-			return ModOptions.player.playerHungerThreshold != 0 && !player.isCreative()
-					&& player.getFoodStats().getFoodLevel() <= ModOptions.player.playerHungerThreshold;
+			return !player.isCreative()	&& player.getFoodStats().getFoodLevel() <= ModOptions.player.playerHungerThreshold;
 		}
 
 		public static boolean isPlayerBurning() {
@@ -240,7 +174,8 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 
 		public static boolean isPlayerSuffocating() {
-			return getPlayer().getAir() <= 0;
+			final EntityPlayer player = getPlayer();
+			return !player.isCreative() && player.getAir() <= 0;
 		}
 
 		public static boolean isPlayerFlying() {
@@ -277,51 +212,59 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 
 		public static boolean isPlayerInside() {
-			return inside;
+			return data.inside;
 		}
 
 		public static boolean isPlayerUnderground() {
-			return isUnderground;
+			return data.isUnderground;
 		}
 
 		public static boolean isPlayerInSpace() {
-			return isInSpace;
+			return data.isInSpace;
 		}
 
 		public static boolean isPlayerInClouds() {
-			return isInClouds;
+			return data.isInClouds;
 		}
 
 		public static ItemStack getPlayerItemStack() {
-			return armorStack;
+			return data.armorStack;
 		}
 
 		public static ItemStack getPlayerFootArmorStack() {
-			return footArmorStack;
+			return data.footArmorStack;
 		}
 
 		public static boolean inVillage() {
-			return inVillage;
+			return data.inVillage;
 		}
 
 		public static void setInVillage(final boolean f) {
-			inVillage = f;
+			data.inVillage = f;
 		}
 
 		public static int getLightLevel() {
-			return lightLevel;
+			return data.lightLevel;
 		}
 
 		public static int getTickCounter() {
-			return tickCounter;
+			return data.tickCounter;
 		}
 
 		public static DayCycle getDayCycle() {
-			return dayCycle;
+			return data.dayCycle;
 		}
 
 		public static float getPartialTick() {
 			return Minecraft.getMinecraft().getRenderPartialTicks();
+		}
+		
+		protected static void setData(final EnvironStateData d) {
+			data = d;
+		}
+		
+		protected static EnvironStateData getData() {
+			return data;
 		}
 
 	}
@@ -334,25 +277,67 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
-		EnvironState.tick(player.getEntityWorld(), player);
-		Weather.update();
-		ExpressionEngine.instance().reset();
-		this.ceiling.update();
-	}
 
-	public boolean isReallyInside() {
-		return this.ceiling.isReallyInside();
+		// Gather fast references
+		final EnvironStateData data = EnvironState.getData();
+		final World world = player.getEntityWorld();
+		final BiomeRegistry biomes = RegistryManager.BIOME;
+		final ISeasonInfo season = CapabilitySeasonInfo.getCapability(world);
+
+		// Advance our tick counter if the game isn't paused
+		if (!Minecraft.getMinecraft().isGamePaused())
+			data.tickCounter++;
+
+		// Update scanners and things that feed into other operations
+		Weather.update();
+		this.ceiling.update();
+		data.clock.update(world);
+		data.battle.update(player);
+		
+		// Gather frequently accessed info
+		data.dimInfo = CapabilityDimensionInfo.getCapability(world);
+		data.playerBiome = biomes.getPlayerBiome(player, false);
+		data.dimensionId = world.provider.getDimension();
+		data.dimensionName = world.provider.getDimensionType().getName();
+		data.playerPosition = new BlockPos(player.posX, player.getEntityBoundingBox().minY, player.posZ);
+		data.inside = this.ceiling.isReallyInside();
+
+		data.truePlayerBiome = biomes.getPlayerBiome(player, true);
+		data.playerTemperature = season.getPlayerTemperature();
+		data.biomeTemperature = season.getBiomeTemperature(data.playerPosition);
+
+		data.armorStack = ItemClass.effectiveArmorStack(player);
+		data.footArmorStack = ItemClass.footArmorStack(player);
+
+		data.isUnderground = data.playerBiome == biomes.UNDERGROUND_INFO;
+		data.isInSpace = data.playerBiome == biomes.OUTERSPACE_INFO;
+		data.isInClouds = data.playerBiome == biomes.CLOUDS_INFO;
+
+		final int blockLight = world.getLightFor(EnumSkyBlock.BLOCK, data.playerPosition);
+		final int skyLight = world.getLightFor(EnumSkyBlock.SKY, data.playerPosition) - world.calculateSkylightSubtracted(1.0F);
+		data.lightLevel = Math.max(blockLight, skyLight);
+
+		data.dayCycle = DiurnalUtils.getCycle(world);
+
+		// Resets cached script variables so they are updated
+		ExpressionEngine.instance().reset();
+	}
+	
+	private void reset() {
+		EnvironState.setData(new EnvironStateData());
 	}
 
 	@Override
 	public void onConnect() {
-		EnvironState.reset();
+		this.reset();
+		
+		// Ensures we have an expression instance up
 		ExpressionEngine.instance();
 	}
 
 	@Override
 	public void onDisconnect() {
-		EnvironState.reset();
+		this.reset();
 	}
 
 	// Use the new scripting system to pull out data to display
@@ -360,7 +345,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 	private final static String[] scripts = {
 		//@formatter:off
 		"'Dim: ' + dim.id + '/' + dim.name",
-		"'Biome: ' + biome.name + ' (' + biome.id + '); Temp ' + biome.temperature + '/' + biome.temperatureValue + ' rainfall: ' + biome.rainfall",
+		"'Biome: ' + biome.name + ' (' + biome.id + '); Temp ' + biome.temperature + '/' + biome.temperatureValue + ' rainfall: ' + biome.rainfall + ' traits: ' + biome.traits",
 		"'Weather: ' + IF(weather.isRaining,'rainfall: ' + weather.rainfall,'not raining') + IF(weather.isThundering,' thundering','') + ' Temp: ' + weather.temperature + '/' + weather.temperatureValue + ' ice: ' + IF(weather.canWaterFreeze, 'true', 'false') + ' ' + IF(weather.temperatureValue < 0.2, '(breath)', '')",
 		"'Season: ' + season.season + IF(diurnal.isNight,' night',' day') + IF(player.isInside,' inside',' outside') + ' celestialAngle: ' + diurnal.celestialAngle",
 		"'Player: Temp ' + player.temperature + '; health ' + player.health + '/' + player.maxHealth + '; food ' + player.food.level + '; saturation ' + player.food.saturation + IF(player.isHurt,' isHurt','') + IF(player.isHungry,' isHungry','') + ' pos: (' + player.X + ',' + player.Y + ',' + player.Z + ') light: ' + player.lightLevel",
@@ -383,7 +368,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 			event.output.add("BAD SCRIPT: " + s);
 		}
 
-		event.output.add(EnvironState.getBattleScanner().toString());
+		event.output.add(TextFormatting.RED + EnvironState.getBattleScanner().toString());
 	}
 
 }
