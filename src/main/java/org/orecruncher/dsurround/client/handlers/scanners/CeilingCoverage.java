@@ -33,9 +33,11 @@ import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironStat
 import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.math.MathStuff;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -76,12 +78,17 @@ public final class CeilingCoverage implements ITickable {
 	@Override
 	public void update() {
 		if (EnvironState.getTickCounter() % SURVEY_INTERVAL == 0) {
-			final BlockPos pos = EnvironState.getPlayerPosition();
-			float score = 0.0F;
-			for (int i = 0; i < cells.length; i++)
-				score += cells[i].score(pos);
-			this.ceilingCoverageRatio = 1.0F - (score / TOTAL_POINTS);
-			this.reallyInside = this.ceilingCoverageRatio > INSIDE_THRESHOLD;
+			if (EnvironState.getDimensionInfo().alwaysOutside()) {
+				this.ceilingCoverageRatio = 0F;
+				this.reallyInside = false;
+			} else {
+				final BlockPos pos = EnvironState.getPlayerPosition();
+				float score = 0.0F;
+				for (int i = 0; i < cells.length; i++)
+					score += cells[i].score(pos);
+				this.ceilingCoverageRatio = 1.0F - (score / TOTAL_POINTS);
+				this.reallyInside = this.ceilingCoverageRatio > INSIDE_THRESHOLD;
+			}
 		}
 	}
 
@@ -109,10 +116,39 @@ public final class CeilingCoverage implements ITickable {
 		}
 
 		public float score(@Nonnull final BlockPos playerPos) {
-			this.working.setPos(playerPos.getX() + this.offset.getX(), playerPos.getY() + this.offset.getY(),
-					playerPos.getZ() + this.offset.getZ());
-			final int y = ClientChunkCache.instance().getTopSolidOrLiquidBlock(this.working).getY();
-			return ((y - playerPos.getY()) < 3) ? this.points : 0.0F;
+			//@formatter:off
+			this.working.setPos(
+					playerPos.getX() + this.offset.getX(),
+					playerPos.getY() + this.offset.getY(),
+					playerPos.getZ() + this.offset.getZ()
+				);
+			//@formatter:on
+
+			final World world = EnvironState.getWorld();
+			final int playerHeight = Math.max(playerPos.getY() + 1, 0);
+
+			// Get the precipitation height
+			this.working.setPos(ClientChunkCache.instance().getPrecipitationHeight(this.working));
+
+			// Scan down looking for blocks that are considered "cover"
+			while (this.working.getY() > playerHeight) {
+
+				final IBlockState state = ClientChunkCache.instance().getBlockState(this.working);
+
+				//@formatter:off
+	            if (state.getMaterial().blocksMovement()
+	            	&& !state.getBlock().isLeaves(state, world, this.working)
+	            	&& !state.getBlock().isFoliage(world, this.working)) {
+	            	// Cover block - no points for you!
+	                return 0;
+	            }
+	            //@formatter:on
+
+				this.working.setY(this.working.getY() - 1);
+			}
+
+			// Scanned down to the players head and found nothing. So give the points.
+			return this.points;
 		}
 
 		@Override
