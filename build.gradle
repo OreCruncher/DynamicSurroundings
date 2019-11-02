@@ -82,16 +82,17 @@ sourceSets {
 }
 
 dependencies {
-	compile "craftstudio-api:CraftStudio-1.0.0.93:mc1.12:alpha"
-	compile "animania:animania:1.12.2:1.7.2"
-	compile "serene-seasons:SereneSeasons-1.12.2:1.2.18:universal"
-	compile "codechicken-lib-1-8:CodeChickenLib-1.12.2:3.2.2.353:universal"
-	compile "forge-multipart-cbe:ForgeMultipart-1.12.2:2.6.0.79:universal"
+	compile "craftstudio-api:CraftStudioAPI-universal-1.0.1.95:mc1.12:alpha"
+	compile "animania:animania:${project.mcVersion}:${project.animaniaVersion}"
+	compile "serene-seasons:SereneSeasons-${project.mcVersion}:${project.ssVersion}:universal"
+	compile "codechicken-lib-1-8:CodeChickenLib-1.12.2:3.2.3.358:universal"
+	compile "forge-multipart-cbe:ForgeMultipart-1.12.2:2.6.2.83:universal"
 	compile "ctm:CTM:MC1.12.2:${project.ctmVersion}"
 	compile "cosmetic-armor-reworked:CosmeticArmorReworked:1.12.2:v3"
-	compile "littletiles:LittleTiles_v1.5.0:pre122_mc1.12.2"
+	compile "littletiles:LittleTiles_v1.5.0:pre169_mc1.12.2"
 	compile "iron-chests:ironchest:1.12.2:7.0.72.847"
     compile "biomes-o-plenty:BiomesOPlenty-1.12.2:7.0.1.2441:universal"
+    //compile "albedo:albedo:1.12.2:1.1.0"
 	
 	if (fileTree(dir: 'libs').filter { it.name.startsWith('OreLib') }.getFiles().size() == 0)
 		compile "orelib:OreLib-1.12.2:3.5.2.3:deobf"
@@ -137,7 +138,6 @@ task deobfJar(type: Jar) {
     classifier = "deobf"
     
     manifest.attributes(
-        "FMLAT": "dsurround_at.cfg",
         "FMLCorePluginContainsFMLMod": "true",
         "ForceLoadAsMod": "true",
 	    "TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
@@ -172,7 +172,6 @@ jar {
     }
     
     manifest.attributes(
-        "FMLAT": "dsurround_at.cfg",
         "FMLCorePluginContainsFMLMod": "true",
         "ForceLoadAsMod": "true",
 	    "TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
