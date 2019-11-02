@@ -93,6 +93,7 @@ public class ModBase {
 	protected static File dataDirectory;
 	protected static boolean installedOnServer;
 	protected static boolean devMode;
+	protected static boolean isInitialized = false;
 
 	@Nonnull
 	public static Proxy proxy() {
@@ -120,6 +121,10 @@ public class ModBase {
 
 	public static boolean isDeveloperMode() {
 		return devMode;
+	}
+	
+	public static boolean isInitialized() {
+		return isInitialized;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -171,6 +176,7 @@ public class ModBase {
 	@EventHandler
 	public void loadCompleted(@Nonnull final FMLLoadCompleteEvent event) {
 		proxy.loadCompleted(event);
+		isInitialized = true;
 	}
 
 	@EventHandler
