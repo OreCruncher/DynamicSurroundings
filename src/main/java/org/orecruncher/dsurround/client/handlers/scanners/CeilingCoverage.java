@@ -78,7 +78,7 @@ public final class CeilingCoverage implements ITickable {
 	@Override
 	public void update() {
 		if (EnvironState.getTickCounter() % SURVEY_INTERVAL == 0) {
-			if (EnvironState.getDimensionInfo().alwaysOutside()) {
+			if (EnvironState.getDimensionId() == -1 || EnvironState.getDimensionInfo().alwaysOutside()) {
 				this.ceilingCoverageRatio = 0F;
 				this.reallyInside = false;
 			} else {
