@@ -1,3 +1,42 @@
+### DynamicSurroundings-1.12.2-3.6.0.1
+**Requirements**
+* Forge 2779+
+* OreLib-1.12.2-3.6.0.0+; **Do not use the deobf version of OreLib**; it's provided to developers for mod development
+* If upgrading from version 3.4.x or earlier:
+     * Delete your dsurround.cfg and let it regenerate
+     * Check your mods/1.12.2 folder and ensure there are no Dynamic Surroundings files within
+
+**What's New**
+* Changed from having a separate coremod to using the Sponge Mixin framework.  (Why didn't I do this sooner?)
+     * Change should be transparent.  If you have a problem open an issue in the tracker.
+* Eliminated AT transforms.
+     * Change should be transparent.  If you have a problem open an issue in the tracker.
+* Option to turn off the potion icon display to the left of the inventory screen.  You will have to enable.  Option is under the ASM options in the config.
+* Fire Jet effect can be applied to solid blocks.  The height of the effect is currently fixed.
+* Option to disable the lava particle effect when generating rainsplash on netherrack and magma blocks
+
+**Fixes**
+* NPE when a mod creates a fake world before mod initialization is complete
+* Default splash ripple effect on water should be pixelated
+* Sound Physics updates from djpadbit.  Apparently some stuff got lost along the way.
+* Compatibility changes for Cubic Chunks and Nether to help avoid extreme lag spikes on client.
+* [OpenEye] Fixed some edge cases in server side network code which caused concurrency issues.
+* [OpenEye] Several speculative fixes for NPEs when receiving capability data when client not entirely ready.
+* [OpenEye] Speculative fix for concurrency exception initializing biome registry.
+* [OpenEye] Speculative fix for Eclipse Open J9 compatibility when processing entity data server side.  If anyone uses Open J9 I would appreciate feedback.
+
+**Changes**
+* Changed ASM options no longer require world/client restart.  Yay Mixins!
+* Cleaned up Animania badging a bit.  As a result badges will not display when the animal is sleeping.
+* Blocked the following sounds as a default: elephant, gnatt, insectbuzz, hiss, and rattlesnake.  These are some of the most disliked sounds in the mod, and most folks aren't aware that they can be blocked in the configuration.  If you want these sounds you will need to turn them on.
+* Gave auroras some TLC:
+     * Render optimizations both in code and shader - big improvements.
+     * Added config option to cap number of bands.  The default is max of 3 bands but can be turned down to 1 for potatoes.
+     * I have a GTX 980 and I can drive a 3 band aurora at 120FPS.
+* Updates for biome sounds to clean up some high frequency noise (thanks TechnoMysterio!)
+     * Savanna Day, Forest, Bog, and Wind
+* Adusted footstep volume scaling for non-EntityPlayer mobs so they are not as loud
+
 ### DynamicSurroundings-1.12.2-3.6.0.0
 **Requirements**
 * Forge 2779+
