@@ -222,54 +222,6 @@ dsurround.cfg.player.HurtThreshold.tooltip=До какого значения д
 dsurround.cfg.player.HungerThreshold=Порог голода
 dsurround.cfg.player.HungerThreshold.tooltip=До какого значения должна опустеть полоска еды, чтобы появились звуки урчания (0, чтобы выключить)
 
-dsurround.cfg.huds.cat.Huds=Интерфейс и наложения
-dsurround.cfg.huds.cat.Huds.tooltip=Настройки для различных элементов интерфейса и наложений
-
-dsurround.cfg.huds.potionHud.cat.PotionHud=Интерфейс зелий
-dsurround.cfg.huds.potionHud.cat.PotionHud.tooltip=Настройки отображения интерфейса зелий
-dsurround.cfg.huds.potionHud.NoHUD=Откл. интерфейс зелий
-dsurround.cfg.huds.potionHud.NoHUD.tooltip=Выключает интерфейс зелий как оригинальный, так и мода
-dsurround.cfg.huds.potionHud.Enable=Интерфейс зелий
-dsurround.cfg.huds.potionHud.tooltip=Вкл/выкл отображение плашек с иконкой и именем зелья на экране
-dsurround.cfg.huds.potionHud.Transparency=Прозрачность
-dsurround.cfg.huds.potionHud.Transparency.tooltip=Величина прозрачности для плашек (чем выше – тем непрозрачнее)
-dsurround.cfg.huds.potionHud.LeftOffset=Смещение по горизонтали
-dsurround.cfg.huds.potionHud.LeftOffset.tooltip=Смещение от левой стороны экрана
-dsurround.cfg.huds.potionHud.TopOffset=Смещение по вертикали
-dsurround.cfg.huds.potionHud.TopOffset.tooltip=Смещение от верхней части экрана
-dsurround.cfg.huds.potionHud.Scale=Размер интерфейса
-dsurround.cfg.huds.potionHud.Scale.tooltip=Размер плашки с иконкой и именем зелья
-dsurround.cfg.huds.potionHud.Location=Расположение интерфейса
-dsurround.cfg.huds.potionHud.Location.tooltip=0 - сверху слева, 1 - сверху справа
-
-dsurround.cfg.huds.lightlevel.cat.LightLevel=Отображение уровня освещённости
-dsurround.cfg.huds.lightlevel.cat.LightLevel.tooltip=Настройки для интерфейса уровня освещённости
-dsurround.cfg.huds.lightlevel.Range=Расстояние
-dsurround.cfg.huds.lightlevel.Range.tooltip=На каком расстоянии в блоках анализировать уровень освещённости
-dsurround.cfg.huds.lightlevel.MobSpawnThreshold=Уровень света для появления существ
-dsurround.cfg.huds.lightlevel.MobSpawnThreshold.tooltip=Уровень света, при котором могут появляться существа
-dsurround.cfg.huds.lightlevel.HideSafe=Не показывать безопасные блоки
-dsurround.cfg.huds.lightlevel.HideSafe.tooltip=Не показывать уровень освещённости блоков, на которых не могут появляться существа
-dsurround.cfg.huds.lightlevel.IndicateCaution=Показывать предупреждение
-dsurround.cfg.huds.lightlevel.IndicateCaution.tooltip=Показывать, что уровень освещённости сменится ночью и это приведёт к появлению существ
-dsurround.cfg.huds.lightlevel.Colors=Набор цветов
-dsurround.cfg.huds.lightlevel.Colors.tooltip=0 - светлый, 1 - тёмный
-dsurround.cfg.huds.lightlevel.DisplayMode=Режим отображения
-dsurround.cfg.huds.lightlevel.DisplayMode.tooltip=0: освещённость блока, 1: освещённость блока + свет неба
-
-dsurround.cfg.huds.compass.cat.Compass=Компас/часы
-dsurround.cfg.huds.compass.cat.Compass.tooltip=Настройки для компаса и часов
-dsurround.cfg.huds.compass.Enable=Интерфейс компаса
-dsurround.cfg.huds.compass.Enable.tooltip=Вкл/выкл отображение компаса на экране
-dsurround.cfg.huds.compass.ClockEnable=Интерфейс часов
-dsurround.cfg.huds.compass.ClockEnable.tooltip=Вкл/выкл отображение часов на экране
-dsurround.cfg.huds.compass.Style=Вид компаса
-dsurround.cfg.huds.compass.Style.tooltip=Выбор стиля компаса
-dsurround.cfg.huds.compass.Transparency=Прозрачность компаса
-dsurround.cfg.huds.compass.Transparency.tooltip=Величина прозрачности компаса при отрисовке
-dsurround.cfg.huds.compass.Format=Формат координат
-dsurround.cfg.huds.compass.Format.tooltip=Формат строки координат для отображения местоположения
-
 dsurround.cfg.speech.cat.Speech=Пузырьки с речью
 dsurround.cfg.speech.cat.Speech.tooltip=Настройки для пузырьков с речью
 dsurround.cfg.speech.EnableSpeechBubbles=Пузырьки с речью
