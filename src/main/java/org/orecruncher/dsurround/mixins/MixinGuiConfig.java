@@ -35,13 +35,13 @@ import net.minecraftforge.fml.client.config.GuiConfigEntries;
 @Mixin(GuiConfig.class)
 public class MixinGuiConfig {
 
-	@Redirect(method = "<init>(Lnet/minecraft/client/gui/GuiScreen;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;ZZLjava/lang/String;Ljava/lang/String;)V", at = @At(value = "NEW", target = "(Lnet/minecraftforge/fml/client/config/GuiConfig;Lnet/minecraft/client/Minecraft;)Lnet/minecraftforge/fml/client/config/GuiConfigEntries;"))
+	//@formatter:off
+	@Redirect(
+		method = "*",
+		at = @At(value = "NEW", target = "(Lnet/minecraftforge/fml/client/config/GuiConfig;Lnet/minecraft/client/Minecraft;)Lnet/minecraftforge/fml/client/config/GuiConfigEntries;")
+	)
+	//@formatter:on
 	public GuiConfigEntries constructEntries(GuiConfig parent, Minecraft mc) {
-		return new GuiFilteredConfigEntries(parent, mc);
-	}
-
-	@Redirect(method = "initGui()V", at = @At(value = "NEW", target = "(Lnet/minecraftforge/fml/client/config/GuiConfig;Lnet/minecraft/client/Minecraft;)Lnet/minecraftforge/fml/client/config/GuiConfigEntries;"))
-	public GuiConfigEntries constructEntries1(GuiConfig parent, Minecraft mc) {
 		return new GuiFilteredConfigEntries(parent, mc);
 	}
 }
