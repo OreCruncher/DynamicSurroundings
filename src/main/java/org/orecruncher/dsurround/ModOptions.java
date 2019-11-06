@@ -57,6 +57,7 @@ public final class ModOptions {
 	public static final String CONFIG_ENABLE_WEATHER = "Enable Weather Control";
 	public static final String CONFIG_DISABLE_ARROW_CRITICAL_TRAIL = "Disable Arrow Critical Particle Trail";
 	public static final String CONFIG_DISABLE_POTION_ICONS = "Disable Potion Icons in Inventory Display";
+	public static final String CONFIG_ENABLE_OPTION_SEARCH = "Enable Search Option in Configuration";
 
 	@Category(CATEGORY_ASM)
 	@LangKey("dsurround.cfg.asm.cat.ASM")
@@ -82,6 +83,12 @@ public final class ModOptions {
 		@LangKey("dsurround.cfg.asm.DisablePotionIcons")
 		@Comment("Disable Potion Icons in Inventory Display")
 		public static boolean disablePotionIconsInInventory = false;
+		
+		@Option(CONFIG_ENABLE_OPTION_SEARCH)
+		@DefaultValue("true")
+		@LangKey("dsurround.cfg.asm.EnableOptionSearch")
+		@Comment("Enable search field in config option display")
+		public static boolean enableOptionSearchASM = true;
 	}
 
 	public static final String CATEGORY_LOGGING_CONTROL = "logging";

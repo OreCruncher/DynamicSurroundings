@@ -23,6 +23,7 @@
  */
 package org.orecruncher.dsurround.mixins;
 
+import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.gui.GuiFilteredConfigEntries;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -42,6 +43,8 @@ public class MixinGuiConfig {
 	)
 	//@formatter:on
 	public GuiConfigEntries constructEntries(GuiConfig parent, Minecraft mc) {
-		return new GuiFilteredConfigEntries(parent, mc);
+		if (ModOptions.asm.enableOptionSearchASM)
+			return new GuiFilteredConfigEntries(parent, mc);
+		return new GuiConfigEntries(parent, mc);
 	}
 }

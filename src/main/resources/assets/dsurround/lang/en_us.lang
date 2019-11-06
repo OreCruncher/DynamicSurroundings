@@ -54,6 +54,9 @@ dsurround.msg.ThunderThresholdSet=§9Thunder threshold set to %1$s
 dsurround.msg.NewVersion=["§6Update Available: §9[",{"text":"§2%1$s §ev%2$s§f","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Click for CurseForge Project Page","color":"aqua"}},"clickEvent":{"action":"open_url","value":"%3$s"}},"§9]"]
 
 # Configuration option strings
+dsurround.cfg.individual=Individual Sound Configuration
+dsurround.cfg.individual.tooltip=Options to configure sounds on an individual basis
+
 dsurround.cfg.asm.cat.ASM=ASM Transformer Options
 dsurround.cfg.asm.cat.ASM.tooltip=Controls ASM transforms Dynamic Surroundings performs at startup
 dsurround.cfg.asm.EnableWeather=Weather Control
@@ -62,6 +65,8 @@ dsurround.cfg.asm.DisableArrow=Arrow Particle Trail
 dsurround.cfg.asm.DisableArrow.tooltip=Disable particle trail left by an arrow when it flies
 dsurround.cfg.asm.DisablePotionIcons=Disable Inventory Potion Icons
 dsurround.cfg.asm.DisablePotionIcons.tooltip=Disables the rendering of potion effects in the inventory GUI
+dsurround.cfg.asm.EnableOptionSearch=Enable Search Option in Configuration
+dsurround.cfg.asm.EnableOptionSearch.tooltip=Enables the search filter textbox in mod configuration options
 
 dsurround.cfg.logging.cat.Logging=Logging Options
 dsurround.cfg.logging.cat.Logging.tooltip=Defines how Dynamic Surroundings logging will behave
@@ -227,54 +232,6 @@ dsurround.cfg.player.HurtThreshold=Hurt Threshold
 dsurround.cfg.player.HurtThreshold.tooltip=Percentage of player health bar remaining to trigger player hurt sound (0 disable)
 dsurround.cfg.player.HungerThreshold=Hunger Threshold
 dsurround.cfg.player.HungerThreshold.tooltip=Amount of food bar remaining to trigger player hunger sound (0 disable)
-
-dsurround.cfg.huds.cat.Huds=HUDs and Overlays
-dsurround.cfg.huds.cat.Huds.tooltip=Options to control various heads up displays and overlays
-
-dsurround.cfg.huds.potionHud.cat.PotionHud=Potion HUD Options
-dsurround.cfg.huds.potionHud.cat.PotionHud.tooltip=Options for the Potion HUD overlay
-dsurround.cfg.huds.potionHud.NoHUD=No Potion HUD
-dsurround.cfg.huds.potionHud.NoHUD.tooltip=Disables Vanilla and Dynamic Surroundings potion HUD
-dsurround.cfg.huds.potionHud.Enable=Potion HUD
-dsurround.cfg.huds.potionHud.tooltip=Enable/disable display of potion icons in display
-dsurround.cfg.huds.potionHud.Transparency=Transparency
-dsurround.cfg.huds.potionHud.Transparency.tooltip=Transparency factor for icons (higher more solid)
-dsurround.cfg.huds.potionHud.LeftOffset=Horizontal Offset
-dsurround.cfg.huds.potionHud.LeftOffset.tooltip=Offset from left side of screen
-dsurround.cfg.huds.potionHud.TopOffset=Vertical Offset
-dsurround.cfg.huds.potionHud.TopOffset.tooltip=Offset from top of screen
-dsurround.cfg.huds.potionHud.Scale=Display Scale
-dsurround.cfg.huds.potionHud.Scale.tooltip=Size scale of icons (lower is smaller)
-dsurround.cfg.huds.potionHud.Location=HUD Location
-dsurround.cfg.huds.potionHud.Location.tooltip=Area of the display the Potion HUD is displayed (0 upper left, 1 upper right)
-
-dsurround.cfg.huds.lightlevel.cat.LightLevel=Light Level HUD Options
-dsurround.cfg.huds.lightlevel.cat.LightLevel.tooltip=Options for configuring the Light Level HUD
-dsurround.cfg.huds.lightlevel.Range=Block Range
-dsurround.cfg.huds.lightlevel.Range.tooltip=Block range for light level analysis
-dsurround.cfg.huds.lightlevel.MobSpawnThreshold=Mob Spawn Light Threshold
-dsurround.cfg.huds.lightlevel.MobSpawnThreshold.tooltip=Light level at which mobs can spawn
-dsurround.cfg.huds.lightlevel.HideSafe=Hide Safe Blocks
-dsurround.cfg.huds.lightlevel.HideSafe.tooltip=Do not show light level for blocks where mobs will not spawn
-dsurround.cfg.huds.lightlevel.IndicateCaution=Indicate Caution
-dsurround.cfg.huds.lightlevel.IndicateCaution.tooltip=Indicate current light levels that will change at night which could result in mob spawns
-dsurround.cfg.huds.lightlevel.Colors=Color Set
-dsurround.cfg.huds.lightlevel.Colors.tooltip=0 bright, 1 dark
-dsurround.cfg.huds.lightlevel.DisplayMode=Display Mode
-dsurround.cfg.huds.lightlevel.DisplayMode.tooltip=0: block light, 1: block light + skylight
-
-dsurround.cfg.huds.compass.cat.Compass=Compass/Clock Options
-dsurround.cfg.huds.compass.cat.Compass.tooltip=Options for configuring the Compass/Clock HUD
-dsurround.cfg.huds.compass.Enable=Enable Compass HUD
-dsurround.cfg.huds.compass.Enable.tooltip=Enable/disable the Compass HUD display
-dsurround.cfg.huds.compass.ClockEnable=Enable Clock HUD
-dsurround.cfg.huds.compass.ClockEnable.tooltip=Enable/disable the Clock HUD display
-dsurround.cfg.huds.compass.Style=Compass Style
-dsurround.cfg.huds.compass.Style.tooltip=The style of compass rendering
-dsurround.cfg.huds.compass.Transparency=Compass HUD Transparency
-dsurround.cfg.huds.compass.Transparency.tooltip=Transparency factor to apply when rendering the Compass HUD
-dsurround.cfg.huds.compass.Format=Coord Format
-dsurround.cfg.huds.compass.Format.tooltip=Format string for location coordinates
 
 dsurround.cfg.speech.cat.Speech=SpeechBubble Options
 dsurround.cfg.speech.cat.Speech.tooltip=Options for configuring SpeechBubbles
