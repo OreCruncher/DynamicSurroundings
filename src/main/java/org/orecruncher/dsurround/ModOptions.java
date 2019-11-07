@@ -59,7 +59,7 @@ public final class ModOptions {
 
 	@Category(CATEGORY_ASM)
 	@LangKey(asm.PREFIX)
-	@Comment("Controls ASM transforms at startup")
+	@Comment("Controls ASM/Mixin transforms at startup")
 	public static class asm {
 		
 		protected static final String PREFIX = ModOptions.PREFIX + ".asm";
@@ -67,7 +67,7 @@ public final class ModOptions {
 		@Option("Enable Weather Control")
 		@DefaultValue("true")
 		@LangKey(asm.PREFIX + ".EnableWeather")
-		@Comment("Enable ASM transformations to permit weather (rain, snow, splash, dust storms, auroras)")
+		@Comment("Enable weather rendering and handling")
 		public static boolean enableWeatherASM = true;
 
 		@Option("Disable Arrow Critical Particle Trail")
@@ -101,7 +101,7 @@ public final class ModOptions {
 		@Option("Enable Debug Logging")
 		@DefaultValue("false")
 		@LangKey(logging.PREFIX + ".EnableDebug")
-		@Comment("Enables/disables debug logging of the mod")
+		@Comment("Enables/disables debug log tracing")
 		@RestartRequired
 		public static boolean enableDebugLogging = false;
 
@@ -115,7 +115,7 @@ public final class ModOptions {
 		@Option("Report Server Stats")
 		@DefaultValue("false")
 		@LangKey(logging.PREFIX + ".ServerStats")
-		@Comment("Enables/disables reporting of server stats")
+		@Comment("Enables/disables reporting of server TPS and memory stats (has to be enabled server side as well)")
 		public static boolean reportServerStats = false;
 
 		@Option("Debug Flag Mask")
@@ -246,7 +246,7 @@ public final class ModOptions {
 		@DefaultValue("1")
 		@RangeInt(min = 1, max = 10)
 		@LangKey(fog.PREFIX + ".MorningFogChance")
-		@Comment("Chance morning fog will occurs expressed as 1 in N")
+		@Comment("Chance morning fog will occurs expressed as 1 in N (1 means always)")
 		public static int morningFogChance = 1;
 	}
 
@@ -259,12 +259,6 @@ public final class ModOptions {
 
 		protected static final String PREFIX = ModOptions.PREFIX + ".general";
 
-		@Option("Hide Chat Notices")
-		@DefaultValue("false")
-		@LangKey(general.PREFIX + ".HideChat")
-		@Comment("Toggles display of Dynamic Surroundings chat notices")
-		public static boolean hideChatNotices = false;
-
 		@Option("External Configuration Files")
 		@DefaultValue("")
 		@LangKey(general.PREFIX + ".ExternalScripts")
@@ -274,7 +268,7 @@ public final class ModOptions {
 		@Option("Startup Sound List")
 		@DefaultValue("minecraft:entity.experience_orb.pickup,minecraft:entity.chicken.egg")
 		@LangKey(general.PREFIX + ".StartupSounds")
-		@Comment("Possible sounds to play when client reaches main game menu")
+		@Comment("Possible sounds to play when client finishes loading and reaches the main game menu")
 		//@formatter:off
 		public static String[] startupSoundList = {
 				"minecraft:entity.experience_orb.pickup",
@@ -285,7 +279,7 @@ public final class ModOptions {
 		@Option("Enable Client Chunk Caching")
 		@DefaultValue("true")
 		@LangKey(general.PREFIX + ".ChunkCaching")
-		@Comment("Enable/disable client side chunk caching for performance")
+		@Comment("Enable/disable client side chunk caching (performance)")
 		public static boolean enableClientChunkCaching = true;
 	}
 
@@ -301,7 +295,7 @@ public final class ModOptions {
 		@Option("Enabled")
 		@DefaultValue("true")
 		@LangKey(aurora.PREFIX + ".EnableAurora")
-		@Comment("Enable/disable Aurora processing on server/client")
+		@Comment("Enable/disable aurora processing and rendering")
 		public static boolean auroraEnable = true;
 
 		@Option("Use Shaders")
@@ -314,6 +308,7 @@ public final class ModOptions {
 		@Option("Maximum Bands")
 		@DefaultValue("3")
 		@LangKey(aurora.PREFIX + ".MaxBands")
+		@Comment("Maximum number of bands to render")
 		@RangeInt(min = 1, max = 3)
 		public static int maxBands = 3;
 	}
@@ -373,8 +368,8 @@ public final class ModOptions {
 		@Option("Waterfall Cutoff")
 		@DefaultValue("0")
 		@LangKey(effects.PREFIX + ".WaterfallCutoff")
-		@RangeInt(min = 0, max = 10)
-		@Comment("Waterfall strength below which sounds will not play")
+		@RangeInt(min = 0, max = 16)
+		@Comment("Waterfall strength below which sounds will not play (> 10 to turn off)")
 		public static int waterfallCutoff = 0;
 
 		@Option("Enable Steam")
@@ -422,7 +417,7 @@ public final class ModOptions {
 		@Option("Damage Popoffs")
 		@DefaultValue("true")
 		@LangKey(effects.PREFIX + ".Popoffs")
-		@Comment("Controls display of damage pop-offs when an entity is damaged")
+		@Comment("Controls display of damage pop-offs when an entity is damaged/healed")
 		public static boolean enableDamagePopoffs = true;
 
 		@Option("Show Crit Words")
@@ -447,7 +442,7 @@ public final class ModOptions {
 		@Option("Show Frost Breath")
 		@DefaultValue("true")
 		@LangKey(effects.PREFIX + ".ShowBreath")
-		@Comment("Show player frost breath in cold weather")
+		@Comment("Show player breath in cold weather and underwater")
 		public static boolean showBreath = true;
 	}
 
@@ -464,7 +459,7 @@ public final class ModOptions {
 		@Option("Battle Music")
 		@DefaultValue("false")
 		@LangKey(sound.PREFIX + ".BattleMusic")
-		@Comment("Enable/disable Battle Music")
+		@Comment("Enable/disable Battle Music (must also have BattleMusic resource pack installed to hear)")
 		public static boolean enableBattleMusic = false;
 
 		@Option("Enable Biomes Sounds")
@@ -591,7 +586,7 @@ public final class ModOptions {
 		@Hidden
 		@DefaultValue("minecraft:block.water.ambient cull,minecraft:block.lava.ambient cull,minecraft:entity.sheep.ambient cull,minecraft:entity.chicken.ambient cull,minecraft:entity.cow.ambient cull,minecraft:entity.pig.ambient cull,dsurround:bison block,dsurround:elephant block,dsurround:gnatt block,dsurround:insectbuzz block,dsurround:hiss block,dsurround:rattlesnake block")
 		@LangKey(sound.PREFIX + ".SoundSettings")
-		@Comment("Configure how each individual sound will be handled")
+		@Comment("Configure how each individual sound will be handled (block, cull, and volume scale)")
 		//@formatter:off
 		public static String[] soundSettings = {
 				"minecraft:block.water.ambient cull",
@@ -622,7 +617,7 @@ public final class ModOptions {
 		@Option("Suppress Potion Particles")
 		@DefaultValue("false")
 		@LangKey(player.PREFIX + ".PotionParticles")
-		@Comment("Suppress player's potion particles from rendering")
+		@Comment("Suppress rendering of player's potion particles")
 		public static boolean suppressPotionParticles = false;
 
 		@Option("Hurt Threshold")
@@ -652,7 +647,7 @@ public final class ModOptions {
 		@Option("Enable SpeechBubbles")
 		@DefaultValue("false")
 		@LangKey(speechbubbles.PREFIX + ".EnableSpeechBubbles")
-		@Comment("Enables/disables speech bubbles above player heads")
+		@Comment("Enables/disables speech bubbles above player heads (needs to be enabled server side as well)")
 		public static boolean enableSpeechBubbles = false;
 
 		@Option("Enable Entity Chat")
@@ -672,7 +667,7 @@ public final class ModOptions {
 		@DefaultValue("16")
 		@LangKey(speechbubbles.PREFIX + ".Range")
 		@RangeInt(min = 16, max = 32)
-		@Comment("Range at which a SpeechBubble is visible.  Filtering occurs server side.")
+		@Comment("Range at which a SpeechBubble is visible (filtering occurs server side)")
 		public static float speechBubbleRange = 16;
 
 		@Option("Animania Badges")
