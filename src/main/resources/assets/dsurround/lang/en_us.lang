@@ -57,8 +57,8 @@ dsurround.msg.NewVersion=["§6Update Available: §9[",{"text":"§2%1$s §ev%2$s�
 dsurround.cfg.individual=Individual Sound Configuration
 dsurround.cfg.individual.tooltip=Options to configure sounds on an individual basis
 
-dsurround.cfg.asm.cat.ASM=ASM Transformer Options
-dsurround.cfg.asm.cat.ASM.tooltip=Controls ASM transforms Dynamic Surroundings performs at startup
+dsurround.cfg.asm=ASM Transformer Options
+dsurround.cfg.asm.tooltip=Controls ASM transforms Dynamic Surroundings performs at startup
 dsurround.cfg.asm.EnableWeather=Weather Control
 dsurround.cfg.asm.EnableWeather.tooltip=Enable/disable ASM transformations to permit weather (rain, snow, splash, dust storms, auroras)
 dsurround.cfg.asm.DisableArrow=Arrow Particle Trail
@@ -68,8 +68,8 @@ dsurround.cfg.asm.DisablePotionIcons.tooltip=Disables the rendering of potion ef
 dsurround.cfg.asm.EnableOptionSearch=Enable Search Option in Configuration
 dsurround.cfg.asm.EnableOptionSearch.tooltip=Enables the search filter textbox in mod configuration options
 
-dsurround.cfg.logging.cat.Logging=Logging Options
-dsurround.cfg.logging.cat.Logging.tooltip=Defines how Dynamic Surroundings logging will behave
+dsurround.cfg.logging=Logging Options
+dsurround.cfg.logging.tooltip=Defines how Dynamic Surroundings logging will behave
 dsurround.cfg.logging.EnableDebug=Debug Logging
 dsurround.cfg.logging.EnableDebug.tooltip=Enables/disables debug logging of the mod
 dsurround.cfg.logging.VersionCheck=Online Version Check Result
@@ -79,8 +79,8 @@ dsurround.cfg.logging.ServerStats.tooltip=Enables/disables reporting of server s
 dsurround.cfg.logging.FlagMask=Debug Flag Mask
 dsurround.cfg.logging.FlagMask.tooltip=Bitmask for toggling various debug traces
 
-dsurround.cfg.rain.cat.Rain=Rain Options
-dsurround.cfg.rain.cat.Rain.tooltip=Options that control rain effects in the client
+dsurround.cfg.rain=Rain Options
+dsurround.cfg.rain.tooltip=Options that control rain effects in the client
 dsurround.cfg.rain.RippleStyle=Style of rain water ripple
 dsurround.cfg.rain.RippleStyle.tooltip=0: original round, 1: darker round, 2: square, 3: pixelated
 dsurround.cfg.rain.RainVolume=Rain Sound Level
@@ -100,8 +100,8 @@ dsurround.cfg.rain.UseVanillaSound.tooltip=Use the Vanilla rain sound rather tha
 dsurround.cfg.rain.EnableMagmaNetherrack=Enable Netherrack and Magma Splash Effect
 dsurround.cfg.rain.EnableMagmaNetherrack.tooltip=Enables/disables the lava particle effect on Netherrack and Magma blocks when raining
 
-dsurround.cfg.fog.cat.Fog=Fog Options
-dsurround.cfg.fog.cat.Fog.tooltip=Options that control the various fog effects in the client
+dsurround.cfg.fog=Fog Options
+dsurround.cfg.fog.tooltip=Options that control the various fog effects in the client
 dsurround.cfg.fog.Enable=Enable Fog Processing
 dsurround.cfg.fog.Enable.tooltip=Enable/disable fog processing
 dsurround.cfg.fog.EnableMorning=Morning Fog
@@ -119,8 +119,8 @@ dsurround.cfg.fog.ElevationHaze.tooltip=Higher the player elevation the more haz
 dsurround.cfg.fog.BiomeFog=Biome Fog
 dsurround.cfg.fog.BiomeFog.tooltip=Enable biome specific fog density and color
 
-dsurround.cfg.general.cat.General=General Options
-dsurround.cfg.general.cat.General.tooltip=Miscellaneous settings
+dsurround.cfg.general=General Options
+dsurround.cfg.general.tooltip=Miscellaneous settings
 dsurround.cfg.general.HideChat=Hide Chat Notices
 dsurround.cfg.general.HideChat.tooltip=Toggles display of Dynamic Surroundings chat notices
 dsurround.cfg.general.ExternalScripts=External Configuration Files
@@ -130,8 +130,8 @@ dsurround.cfg.general.StartupSounds.tooltip=Possible sounds to play when client 
 dsurround.cfg.general.ChunkCaching=Enable Client Chunk Caching
 dsurround.cfg.general.ChunkCaching.tooltip=Enable/disable client side chunk caching for performance
 
-dsurround.cfg.aurora.cat.Aurora=Aurora Options
-dsurround.cfg.aurora.cat.Aurora.tooltip=Options that control Aurora behavior and rendering
+dsurround.cfg.aurora=Aurora Options
+dsurround.cfg.aurora.tooltip=Options that control Aurora behavior and rendering
 dsurround.cfg.aurora.EnableAurora=Auroras
 dsurround.cfg.aurora.EnableAurora.tooltip=Enable/disable Aurora processing on server/client
 dsurround.cfg.aurora.EnableShader=Use Shaders
@@ -139,8 +139,8 @@ dsurround.cfg.aurora.EnableShader.tooltip=Use shader when rendering aurora
 dsurround.cfg.aurora.MaxBands=Maximum Bands
 dsurround.cfg.aurora.MaxBands.tooltip=Cap the maximum bands that will be rendered
 
-dsurround.cfg.biomes.cat.Biomes=Biome Options
-dsurround.cfg.biomes.cat.Biomes.tooltip=Options for controlling biome sound/effects
+dsurround.cfg.biomes=Biome Options
+dsurround.cfg.biomes.tooltip=Options for controlling biome sound/effects
 dsurround.cfg.biomes.Sealevel=Overworld Sealevel Override
 dsurround.cfg.biomes.Sealevel.tooltip=Sealevel to set for Overworld (0 use default for World)
 dsurround.cfg.biomes.Aliases=Biomes Alias
@@ -148,8 +148,8 @@ dsurround.cfg.biomes.Aliases.tooltip=Biomes alias list
 dsurround.cfg.biomes.DimBlacklist=Dimension Blacklist
 dsurround.cfg.biomes.DimBlacklist.tooltip=Dimension IDs where biome sounds will not be played
 
-dsurround.cfg.effects.cat.Effects=Effect Options
-dsurround.cfg.effects.cat.Effects.tooltip=Options for controlling various effects
+dsurround.cfg.effects=Effect Options
+dsurround.cfg.effects.tooltip=Options for controlling various effects
 dsurround.cfg.effects.WaterfallCutoff=Waterfall Cutoff
 dsurround.cfg.effects.WaterfallCutoff.tooltip=Waterfall strength below which sounds will not play
 dsurround.cfg.effects.FXRange=Special Effect Range
@@ -181,8 +181,8 @@ dsurround.cfg.effects.FootprintStyle.tooltip=0: shoe print, 1: square print, 2: 
 dsurround.cfg.effects.ShowBreath=Show Frost Breath
 dsurround.cfg.effects.ShowBreath.tooltip=Show entity frost breath in cold weather
 
-dsurround.cfg.sound.cat.Sound=Sound Options
-dsurround.cfg.sound.cat.Sound.tooltip=General options for defining sound effects
+dsurround.cfg.sound=Sound Options
+dsurround.cfg.sound.tooltip=General options for defining sound effects
 dsurround.cfg.sound.BiomeSounds=Biome Sounds
 dsurround.cfg.sound.BiomeSounds.tooltip=Enable/disable biome background and spot sounds
 dsurround.cfg.sound.AutoConfig=Auto-configure Sound Channels
@@ -224,8 +224,8 @@ dsurround.cfg.sound.SoundSettings.tooltip=Configure how each sound will be handl
 dsurround.cfg.sound.BattleMusic=Battle Music
 dsurround.cfg.sound.BattleMusic.tooltip=Enable/disable playing of Battle Music when in combat
 
-dsurround.cfg.player.cat.Player=Player Options
-dsurround.cfg.player.cat.Player.tooltip=General options for defining sound and effects the player entity
+dsurround.cfg.player=Player Options
+dsurround.cfg.player.tooltip=General options for defining sound and effects the player entity
 dsurround.cfg.player.PotionParticles=Suppress Potion Particles
 dsurround.cfg.player.PotionParticles.tooltip=Suppress player's potion particles from rendering
 dsurround.cfg.player.HurtThreshold=Hurt Threshold
@@ -233,8 +233,8 @@ dsurround.cfg.player.HurtThreshold.tooltip=Percentage of player health bar remai
 dsurround.cfg.player.HungerThreshold=Hunger Threshold
 dsurround.cfg.player.HungerThreshold.tooltip=Amount of food bar remaining to trigger player hunger sound (0 disable)
 
-dsurround.cfg.speech.cat.Speech=SpeechBubble Options
-dsurround.cfg.speech.cat.Speech.tooltip=Options for configuring SpeechBubbles
+dsurround.cfg.speech=SpeechBubble Options
+dsurround.cfg.speech.tooltip=Options for configuring SpeechBubbles
 dsurround.cfg.speech.EnableSpeechBubbles=SpeechBubbles
 dsurround.cfg.speech.EnableSpeechBubbles.tooltip=Enables/disables speech bubbles above player heads
 dsurround.cfg.speech.EnableEntityChat=Entity Chat
@@ -246,8 +246,8 @@ dsurround.cfg.speech.Range.tooltip=Range at which a SpeechBubble is visible.  Fi
 dsurround.cfg.speech.AnimaniaBadges=Animania Badges
 dsurround.cfg.speech.AnimaniaBadges.tooltip=Enable/disable display of food/water badges over Animania mobs
 
-dsurround.cfg.commands.cat.Commands=Command Options
-dsurround.cfg.commands.cat.Commands.tooltip=Options for configuring Commands
+dsurround.cfg.commands=Command Options
+dsurround.cfg.commands.tooltip=Options for configuring Commands
 dsurround.cfg.commands.DS.Name=/ds Command Name
 dsurround.cfg.commands.DS.Name.tooltip=Name to give the /ds command
 dsurround.cfg.commands.DS.Alias=Alias to give the /ds command
@@ -257,8 +257,8 @@ dsurround.cfg.commands.Calc.Name.tooltip=Name to give the /calc command
 dsurround.cfg.commands.Calc.Alias=Alias to give the /calc command
 dsurround.cfg.commands.Calc.Alias.tooltip=One or more alias names to give the /calc command (space separated)
 
-dsurround.cfg.profiles.cat.Profiles=Built-in Profiles
-dsurround.cfg.profiles.cat.Profiles.tooltip=Enable/disable built-in configuration profiles
+dsurround.cfg.profiles=Built-in Profiles
+dsurround.cfg.profiles.tooltip=Enable/disable built-in configuration profiles
 
 dsurround.season.format=%1$s %2$s
 dsurround.season.noseason=No Season

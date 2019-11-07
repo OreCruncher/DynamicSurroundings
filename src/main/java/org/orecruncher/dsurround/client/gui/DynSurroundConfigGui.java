@@ -71,19 +71,19 @@ public class DynSurroundConfigGui extends GuiConfigBase {
 		this.configElements.add(this.soundElement);
 
 		// Tack on the rest of the categories for configuration
-		addConfigCategory(ModOptions.general.PATH);
-		addConfigCategory(ModOptions.player.PATH);
-		addConfigCategory(ModOptions.rain.PATH);
-		addConfigCategory(ModOptions.fog.PATH);
-		addConfigCategory(ModOptions.aurora.PATH);
-		addConfigCategory(ModOptions.effects.PATH);
-		addConfigCategory(ModOptions.biomes.PATH);
-		addConfigCategory(ModOptions.sound.PATH);
-		addConfigCategory(ModOptions.profiles.PATH);
-		addConfigCategory(ModOptions.speechbubbles.PATH);
-		addConfigCategory(ModOptions.commands.PATH);
-		addConfigCategory(ModOptions.asm.PATH);
-		addConfigCategory(ModOptions.logging.PATH);
+		addConfigCategory(ModOptions.CATEGORY_GENERAL);
+		addConfigCategory(ModOptions.CATEGORY_PLAYER);
+		addConfigCategory(ModOptions.CATEGORY_RAIN);
+		addConfigCategory(ModOptions.CATEGORY_FOG);
+		addConfigCategory(ModOptions.CATEGORY_AURORA);
+		addConfigCategory(ModOptions.CATEGORY_EFFECTS);
+		addConfigCategory(ModOptions.CATEGORY_BIOMES);
+		addConfigCategory(ModOptions.CATEGORY_SOUND);
+		addConfigCategory(ModOptions.CATEGORY_PROFILES);
+		addConfigCategory(ModOptions.CATEGORY_SPEECHBUBBLES);
+		addConfigCategory(ModOptions.CATEGORY_COMMANDS);
+		addConfigCategory(ModOptions.CATEGORY_ASM);
+		addConfigCategory(ModOptions.CATEGORY_LOGGING_CONTROL);
 	}
 
 	private void addConfigCategory(@Nonnull final String category) {
@@ -109,7 +109,7 @@ public class DynSurroundConfigGui extends GuiConfigBase {
 		}
 
 		final String[] results = soundVolumes.toArray(new String[soundVolumes.size()]);
-		this.config.getCategory(ModOptions.sound.PATH).get(ModOptions.CONFIG_SOUND_SETTINGS).set(results);
+		this.config.getCategory(ModOptions.CATEGORY_SOUND).get(ModOptions.CONFIG_SOUND_SETTINGS).set(results);
 	}
 
 	protected void generateSoundList(final ConfigCategory cat) {
