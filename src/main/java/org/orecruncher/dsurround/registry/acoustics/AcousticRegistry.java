@@ -77,33 +77,42 @@ public class AcousticRegistry extends Registry {
 
 	static {
 		// No macros in this list!
-		materialProfiles.put(Material.ANVIL, "metalcompressed,hardmetal");
-		materialProfiles.put(Material.CACTUS, "grass");
-		materialProfiles.put(Material.CAKE, "organic");
-		materialProfiles.put(Material.CARPET, "rug");
-		materialProfiles.put(Material.CIRCUITS, "stoneutility");
-		materialProfiles.put(Material.CLAY, "dirt");
-		materialProfiles.put(Material.CLOTH, "rug");
-		materialProfiles.put(Material.CRAFTED_SNOW, "snow");
-		materialProfiles.put(Material.GLASS, "glass");
-		materialProfiles.put(Material.GOURD, "organic_dry");
+		materialProfiles.put(Material.AIR, "NOT_EMITTER");
 		materialProfiles.put(Material.GRASS, "grass");
 		materialProfiles.put(Material.GROUND, "dirt");
-		materialProfiles.put(Material.ICE, "ice");
-		materialProfiles.put(Material.IRON, "hardmetal");
-		materialProfiles.put(Material.LEAVES, "leaves");
-		materialProfiles.put(Material.PACKED_ICE, "ice");
-		materialProfiles.put(Material.PISTON, "stonemachine");
-		materialProfiles.put(Material.REDSTONE_LIGHT, "NOT_EMITTER");
-		materialProfiles.put(Material.ROCK, "stone");
-		materialProfiles.put(Material.SAND, "sand");
-		materialProfiles.put(Material.SNOW, "snow");
-		materialProfiles.put(Material.SPONGE, "organic_dry");
-		materialProfiles.put(Material.TNT, "equipment");
-		materialProfiles.put(Material.VINE, "leaves");
-		materialProfiles.put(Material.WEB, "NOT_EMITTER");
 		materialProfiles.put(Material.WOOD, "wood");
+		materialProfiles.put(Material.ROCK, "stone");
+		materialProfiles.put(Material.IRON, "hardmetal");
+		materialProfiles.put(Material.ANVIL, "metalcompressed,hardmetal");
+		materialProfiles.put(Material.WATER, "NOT_EMITTER");
+		materialProfiles.put(Material.LAVA, "NOT_EMITTER");
+		materialProfiles.put(Material.LEAVES, "leaves");
+		materialProfiles.put(Material.PLANTS, "brush");
+		materialProfiles.put(Material.VINE, "leaves");
+		materialProfiles.put(Material.SPONGE, "organic_dry");
+		materialProfiles.put(Material.CLOTH, "rug");
 		materialProfiles.put(Material.FIRE, "NOT_EMITTER");
+		materialProfiles.put(Material.SAND, "sand");
+		materialProfiles.put(Material.CIRCUITS, "stoneutility");
+		materialProfiles.put(Material.CARPET, "rug");
+		materialProfiles.put(Material.GLASS, "glass");
+		materialProfiles.put(Material.REDSTONE_LIGHT, "NOT_EMITTER");
+		materialProfiles.put(Material.TNT, "equipment");
+		materialProfiles.put(Material.CORAL, "NOT_EMITTER");
+		materialProfiles.put(Material.ICE, "ice");
+		materialProfiles.put(Material.PACKED_ICE, "ice");
+		materialProfiles.put(Material.SNOW, "snow");
+		materialProfiles.put(Material.CRAFTED_SNOW, "snow");
+		materialProfiles.put(Material.CACTUS, "grass");
+		materialProfiles.put(Material.CLAY, "dirt");
+		materialProfiles.put(Material.GOURD, "organic_dry");
+		materialProfiles.put(Material.DRAGON_EGG, "obsidian");
+		materialProfiles.put(Material.PORTAL, "NOT_EMITTER");
+		materialProfiles.put(Material.CAKE, "organic");
+		materialProfiles.put(Material.WEB, "NOT_EMITTER");
+		materialProfiles.put(Material.PISTON, "stonemachine");
+		materialProfiles.put(Material.BARRIER, "glass");
+		materialProfiles.put(Material.STRUCTURE_VOID, "NOT_EMITTER");
 	}
 
 	/*
@@ -197,7 +206,7 @@ public class AcousticRegistry extends Registry {
 
 		IAcoustic[] acoustics = null;
 
-		// If we don't have a step sound, or the sound belongs to Minecraft
+		// If we don't have a step sound, or the sound belongs to Minecraft,
 		// resolve based on material. This lets modded sounds through, like
 		// for Chisel's Laboratory blocks.
 		//
