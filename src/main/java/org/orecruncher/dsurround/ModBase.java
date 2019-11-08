@@ -31,7 +31,7 @@ import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
-import org.orecruncher.dsurround.proxy.Proxy;
+import org.orecruncher.dsurround.proxy.IProxy;
 import org.orecruncher.lib.VersionChecker;
 import org.orecruncher.lib.VersionHelper;
 import org.orecruncher.lib.logging.ModLog;
@@ -87,7 +87,7 @@ public class ModBase {
 	}
 
 	@SidedProxy(clientSide = "org.orecruncher.dsurround.proxy.ProxyClient", serverSide = "org.orecruncher.dsurround.proxy.Proxy")
-	protected static Proxy proxy;
+	protected static IProxy proxy;
 	protected static ModLog logger = ModLog.NULL_LOGGER;
 	protected static Configuration config;
 	protected static File dataDirectory;
@@ -96,7 +96,7 @@ public class ModBase {
 	protected static boolean isInitialized = false;
 
 	@Nonnull
-	public static Proxy proxy() {
+	public static IProxy proxy() {
 		return proxy;
 	}
 

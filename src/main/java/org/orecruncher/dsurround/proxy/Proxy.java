@@ -44,18 +44,14 @@ import net.minecraft.util.IThreadListener;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
-public class Proxy {
+public class Proxy implements IProxy {
 
 	protected void registerLanguage() {
 		Localization.initialize(Side.SERVER, ModInfo.MOD_ID);
@@ -92,20 +88,8 @@ public class Proxy {
 		Network.initialize();
 	}
 
-	public void postInit(@Nonnull final FMLPostInitializationEvent event) {
-		// Intentionally left blank
-	}
-
 	public void loadCompleted(@Nonnull final FMLLoadCompleteEvent event) {
 		RegistryManager.initialize();
-	}
-
-	public void clientConnect(@Nonnull final ClientConnectedToServerEvent event) {
-		// NOTHING SHOULD BE HERE - OVERRIDE IN ProxyClient!
-	}
-
-	public void clientDisconnect(@Nonnull final ClientDisconnectionFromServerEvent event) {
-		// NOTHING SHOULD BE HERE - OVERRIDE IN ProxyClient!
 	}
 
 	public void serverAboutToStart(@Nonnull final FMLServerAboutToStartEvent event) {
@@ -119,20 +103,10 @@ public class Proxy {
 		serverCommand.registerCommand(new CommandDS());
 	}
 
-	public void serverStopping(@Nonnull final FMLServerStoppingEvent event) {
-		// Intentionally left blank
-	}
-
 	public void serverStopped(@Nonnull final FMLServerStoppedEvent event) {
 		ServiceManager.deinitialize();
 	}
 
-	/**
-	 * Force a proxy to pick a side in this fight
-	 *
-	 * @param context
-	 * @return
-	 */
 	public IThreadListener getThreadListener(@Nonnull final MessageContext context) {
 		if (context.side.isServer()) {
 			return context.getServerHandler().player.getServer();
