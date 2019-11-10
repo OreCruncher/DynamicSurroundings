@@ -1,3 +1,23 @@
+### DynamicSurroundings-1.12.2-3.6.0.2
+**Requirements**
+* Forge 2779+
+* OreLib-1.12.2-3.6.0.1+; **Do not use the deobf version of OreLib**; it's provided to developers for mod development
+* If upgrading from version 3.4.x or earlier:
+     * Delete your dsurround.cfg and let it regenerate
+     * Check your mods/1.12.2 folder and ensure there are no Dynamic Surroundings files within
+
+**What's New**
+* Search/Filter bar in config options.  This search/filter function is general, meaning it should show up and work for any config page.
+     * Case insensitive searching
+     * Matches labels that contain the text you enter
+     * Option to disable
+     * Useful on the Individual Sound Configuration page
+
+**Fixes**
+* Fixed issue where Auroras would sometimes render in front of terrain when BetweenLands is installed
+* Fixed waterfall cutoff so it can be set to > 10 to disable waterfall sound effect
+* Fixed SoundEngine crash when missing mods or outdated dependencies are present
+
 ### DynamicSurroundings-1.12.2-3.6.0.1
 **Requirements**
 * Forge 2779+
