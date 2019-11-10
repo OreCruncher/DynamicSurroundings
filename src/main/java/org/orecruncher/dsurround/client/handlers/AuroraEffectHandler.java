@@ -124,7 +124,7 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 		this.nanos = 0;
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void doRender(@Nonnull final RenderWorldLastEvent event) {
 		if (this.current != null) {
 			final long start = System.nanoTime();

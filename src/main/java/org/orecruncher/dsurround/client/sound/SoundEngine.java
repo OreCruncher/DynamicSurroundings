@@ -54,7 +54,6 @@ import org.orecruncher.lib.math.MathStuff;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
-import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.client.audio.SoundRegistry;
 import net.minecraft.client.settings.GameSettings;
@@ -74,58 +73,28 @@ import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 import paulscode.sound.Source;
 
+
+import org.orecruncher.dsurround.mixins.ISoundHandlerMixin;
+import org.orecruncher.dsurround.mixins.ISoundManagerMixin;
+import org.orecruncher.dsurround.mixins.ISoundSystemMixin;
+
 @EventBusSubscriber(value = Side.CLIENT, modid = ModInfo.MOD_ID)
 public final class SoundEngine {
 
 	//@formatter:off
-	private static final ObjectField<SoundHandler, SoundManager> getSoundManager =
-		new ObjectField<>(
-			SoundHandler.class,
-			"sndManager",
-			"field_147694_f"
-		);
-	private static final ObjectField<SoundHandler, SoundRegistry> getSoundRegistry =
-		new ObjectField<>(
-			SoundHandler.class,
-			"soundRegistry",
-			"field_147697_e"
-		);
+	// Can't mixin for now due to private class usage
 	private static final ObjectField<SoundManager, SoundSystem> getSoundSystem =
-		new ObjectField<>(
-			SoundManager.class,
-			"sndSystem",
-			"field_148620_e"
-		);
-	private static final ObjectField<SoundManager, Map<String, ISound>> getPlayingSounds =
-		new ObjectField<>(
-			SoundManager.class,
-			"playingSounds",
-			"field_148629_h"
-		);
-	private static final ObjectField<SoundManager, Map<ISound, String>> getPlayingSoundsInv =
-		new ObjectField<>(
-			SoundManager.class,
-			"invPlayingSounds",
-			"field_148630_i"
-		);
-	private static final ObjectField<SoundManager, Map<ISound, Integer>> getDelayedSounds =
-		new ObjectField<>(
-			SoundManager.class,
-			"delayedSounds",
-			"field_148626_m"
-		);
-	private static final ObjectField<SoundSystem, Library> getSoundLibrary =
-		new ObjectField<>(
-			SoundSystem.class,
-			"soundLibrary",
-			null
-		);
+			new ObjectField<>(
+				SoundManager.class,
+				"sndSystem",
+				"field_148620_e"
+			);
 	private static final BooleanField<Source> removed =
-		new BooleanField<>(
-			Source.class,
-			"removed",
-			null
-		);
+			new BooleanField<>(
+				Source.class,
+				"removed",
+				null
+			);
 	private static final FloatField<Object> soundPhysicsGlobalVolume =
 		new FloatField<>(
 			"com.sonicether.soundphysics.SoundPhysics",
@@ -166,7 +135,7 @@ public final class SoundEngine {
 	 */
 	@Nonnull
 	public SoundRegistry getSoundRegistry() {
-		return getSoundRegistry.get(Minecraft.getMinecraft().getSoundHandler());
+		return ((ISoundHandlerMixin)(Minecraft.getMinecraft().getSoundHandler())).getSoundRegistry();
 	}
 
 	/**
@@ -176,7 +145,7 @@ public final class SoundEngine {
 	 */
 	@Nonnull
 	public SoundManager getSoundManager() {
-		return getSoundManager.get(Minecraft.getMinecraft().getSoundHandler());
+		return ((ISoundHandlerMixin)(Minecraft.getMinecraft().getSoundHandler())).getSoundManager();
 	}
 
 	private int currentSoundCount() {
@@ -196,19 +165,19 @@ public final class SoundEngine {
 	}
 
 	private Library getSoundLibrary() {
-		return getSoundLibrary.get(getSoundSystem());
+		return ((ISoundSystemMixin)getSoundSystem()).getSoundLibrary();
 	}
 
 	private Map<String, ISound> getPlayingSounds() {
-		return getPlayingSounds.get(getSoundManager());
+		return ((ISoundManagerMixin)getSoundManager()).getPlayingSounds();
 	}
 
 	private Map<ISound, String> getPlayingSoundsInv() {
-		return getPlayingSoundsInv.get(getSoundManager());
+		return ((ISoundManagerMixin)getSoundManager()).getPlayingSoundsInv();
 	}
 
 	private Map<ISound, Integer> getDelayedSounds() {
-		return getDelayedSounds.get(getSoundManager());
+		return ((ISoundManagerMixin)getSoundManager()).getDelayedSounds();
 	}
 
 	/**

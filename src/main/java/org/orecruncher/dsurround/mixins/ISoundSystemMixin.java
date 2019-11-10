@@ -23,30 +23,16 @@
  */
 package org.orecruncher.dsurround.mixins;
 
-import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.ISound;
-import net.minecraft.client.audio.SoundManager;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraftforge.fml.client.GuiErrorBase;
+import paulscode.sound.Library;
+import paulscode.sound.SoundSystem;
 
-@Mixin(SoundManager.class)
-public abstract class MixinSoundManager {
-
-	@Inject(method = "getClampedVolume(Lnet/minecraft/client/audio/ISound;)F", at = @At("HEAD"), cancellable = true)
-	private void getClampedVolume(ISound sound, CallbackInfoReturnable<Float> ci) {
-		final GuiScreen current = Minecraft.getMinecraft().currentScreen;
-		if (!(current instanceof GuiErrorBase)) {
-			try {
-				ci.setReturnValue(SoundEngine.getClampedVolume(sound));
-			} catch (final Exception ex) {
+@Mixin(SoundSystem.class)
+public interface ISoundSystemMixin {
 	
-			}
-		}
-	}
+	@Accessor(value = "soundLibrary", remap = false)
+	Library getSoundLibrary();
+	
 }

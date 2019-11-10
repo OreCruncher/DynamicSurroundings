@@ -15,6 +15,11 @@
 		"MixinSoundManager",
 		"MixinEntityArrow",
 		"MixinGuiScreenOptionsSounds",
-		"MixinInventoryEffectRenderer"
+		"MixinInventoryEffectRenderer",
+		"MixinGuiConfig",
+		"ISoundHandlerMixin",
+		"ISoundManagerMixin",
+		"ISoundSystemMixin",
+		"IPositionedSoundMixin"
 	]
 }

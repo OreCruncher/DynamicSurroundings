@@ -24,8 +24,7 @@ package org.orecruncher.dsurround.client.sound;
 
 import javax.annotation.Nonnull;
 
-import org.orecruncher.lib.compat.PositionedSoundUtil;
-
+import org.orecruncher.dsurround.mixins.IPositionedSoundMixin;
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -47,8 +46,10 @@ public class SoundBuilder {
 		this.sound.setCategory(ps.getCategory());
 		this.sound.setPosition(ps.getXPosF(), ps.getYPosF(), ps.getZPosF());
 		this.sound.setAttenuationType(ps.getAttenuationType());
-		this.sound.setVolume(PositionedSoundUtil.getVolume(ps));
-		this.sound.setPitch(PositionedSoundUtil.getPitch(ps));
+		
+		final IPositionedSoundMixin sound = (IPositionedSoundMixin) ps;
+		this.sound.setVolume(sound.getVolumeRaw());
+		this.sound.setPitch(sound.getPitchRaw());
 		return this;
 	}
 

@@ -21,32 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.orecruncher.dsurround.mixins;
 
-import org.orecruncher.dsurround.client.sound.SoundEngine;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+package org.orecruncher.dsurround.client.hud;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.ISound;
-import net.minecraft.client.audio.SoundManager;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraftforge.fml.client.GuiErrorBase;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-@Mixin(SoundManager.class)
-public abstract class MixinSoundManager {
+@SideOnly(Side.CLIENT)
+public interface IGuiOverlay {
 
-	@Inject(method = "getClampedVolume(Lnet/minecraft/client/audio/ISound;)F", at = @At("HEAD"), cancellable = true)
-	private void getClampedVolume(ISound sound, CallbackInfoReturnable<Float> ci) {
-		final GuiScreen current = Minecraft.getMinecraft().currentScreen;
-		if (!(current instanceof GuiErrorBase)) {
-			try {
-				ci.setReturnValue(SoundEngine.getClampedVolume(sound));
-			} catch (final Exception ex) {
-	
-			}
-		}
+	/*
+	 * Override to provide pre render logic.
+	 */
+	default void doRender(final RenderGameOverlayEvent.Pre event) {
+	}
+
+	/*
+	 * Override to provide post render logic
+	 */
+	default public void doRender(final RenderGameOverlayEvent.Post event) {
+	}
+
+	/*
+	 * Override if the overlay needs to be ticked during the client tick phase.
+	 */
+	default public void doTick(final int tickRef) {
 	}
 }

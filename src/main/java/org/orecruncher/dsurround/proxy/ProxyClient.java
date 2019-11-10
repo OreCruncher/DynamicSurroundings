@@ -79,7 +79,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ProxyClient extends Proxy implements ISelectiveResourceReloadListener {
+public class ProxyClient extends Proxy implements IProxy, ISelectiveResourceReloadListener {
 
 	@Override
 	protected void registerLanguage() {
@@ -98,8 +98,6 @@ public class ProxyClient extends Proxy implements ISelectiveResourceReloadListen
 		register(Weather.class);
 		register(WorldEventDetector.class);
 		register(ParticleCollections.class);
-
-		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	@Override

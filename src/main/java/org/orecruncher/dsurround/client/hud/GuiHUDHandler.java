@@ -24,10 +24,8 @@
 
 package org.orecruncher.dsurround.client.hud;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.orecruncher.lib.collections.ObjectArray;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -48,9 +46,9 @@ public final class GuiHUDHandler {
 		register(new InspectionHUD());
 	}
 
-	private final List<GuiOverlay> overlays = new ArrayList<>();
+	private final ObjectArray<IGuiOverlay> overlays = new ObjectArray<>(1);
 
-	public void register(final GuiOverlay overlay) {
+	public void register(final IGuiOverlay overlay) {
 		this.overlays.add(overlay);
 	}
 
@@ -68,14 +66,12 @@ public final class GuiHUDHandler {
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void onRenderGameOverlayEvent(final RenderGameOverlayEvent.Pre event) {
-		for (int i = 0; i < this.overlays.size(); i++)
-			this.overlays.get(i).doRender(event);
+		this.overlays.forEach(o -> o.doRender(event));
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void onRenderGameOverlayEvent(final RenderGameOverlayEvent.Post event) {
-		for (int i = 0; i < this.overlays.size(); i++)
-			this.overlays.get(i).doRender(event);
+		this.overlays.forEach(o -> o.doRender(event));
 	}
 
 	@SubscribeEvent
@@ -90,8 +86,6 @@ public final class GuiHUDHandler {
 			return;
 
 		final int tickRef = EnvironState.getTickCounter();
-		for (int i = 0; i < this.overlays.size(); i++)
-			this.overlays.get(i).doTick(tickRef);
-
+		this.overlays.forEach(o -> o.doTick(tickRef));
 	}
 }

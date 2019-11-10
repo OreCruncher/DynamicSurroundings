@@ -71,6 +71,12 @@ public class CapabilityDimensionInfo {
 	public static class EventHandler {
 		@SubscribeEvent
 		public static void attachCapabilities(@Nonnull final AttachCapabilitiesEvent<World> event) {
+			
+			if (!ModBase.isInitialized()) {
+				ModBase.log().info("Attempt to attach world capability before mod is inititalized - silly fake worlds.");
+				return;
+			}
+			
 			final World world = event.getObject();
 			if (world != null) {
 				final String side = ModBase.proxy().effectiveSide().toString();
