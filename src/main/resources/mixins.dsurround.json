@@ -20,7 +20,6 @@
 		"ISoundHandlerMixin",
 		"ISoundManagerMixin",
 		"ISoundSystemMixin",
-		"ISourceMixin",
 		"IPositionedSoundMixin"
 	]
 }

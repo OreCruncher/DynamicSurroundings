@@ -32,7 +32,7 @@ import paulscode.sound.SoundSystem;
 @Mixin(SoundSystem.class)
 public interface ISoundSystemMixin {
 	
-	@Accessor("soundLibrary")
+	@Accessor(value = "soundLibrary", remap = false)
 	Library getSoundLibrary();
 	
 }

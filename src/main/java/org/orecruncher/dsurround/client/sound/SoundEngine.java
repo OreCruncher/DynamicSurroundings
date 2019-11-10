@@ -44,6 +44,7 @@ import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.ModOptions.Trace;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.registry.RegistryManager;
+import org.orecruncher.lib.ReflectedField.BooleanField;
 import org.orecruncher.lib.ReflectedField.FloatField;
 import org.orecruncher.lib.ReflectedField.ObjectField;
 import org.orecruncher.lib.ThreadGuard;
@@ -76,7 +77,6 @@ import paulscode.sound.Source;
 import org.orecruncher.dsurround.mixins.ISoundHandlerMixin;
 import org.orecruncher.dsurround.mixins.ISoundManagerMixin;
 import org.orecruncher.dsurround.mixins.ISoundSystemMixin;
-import org.orecruncher.dsurround.mixins.ISourceMixin;
 
 @EventBusSubscriber(value = Side.CLIENT, modid = ModInfo.MOD_ID)
 public final class SoundEngine {
@@ -88,6 +88,12 @@ public final class SoundEngine {
 				SoundManager.class,
 				"sndSystem",
 				"field_148620_e"
+			);
+	private static final BooleanField<Source> removed =
+			new BooleanField<>(
+				Source.class,
+				"removed",
+				null
 			);
 	private static final FloatField<Object> soundPhysicsGlobalVolume =
 		new FloatField<>(
@@ -276,7 +282,7 @@ public final class SoundEngine {
 
 	private static void cleanupSource(final Source source) {
 		if (source.toStream) {
-			((ISourceMixin)source).setRemoved(true);
+			removed.set(source, true);
 		} else {
 			source.cleanup();
 		}
