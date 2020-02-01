@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 import org.orecruncher.dsurround.client.footsteps.Generator;
 
 import com.creativemd.littletiles.common.api.te.ILittleTileTE;
-import com.creativemd.littletiles.common.blocks.BlockTile;
+import com.creativemd.littletiles.common.block.BlockTile;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
