@@ -25,6 +25,7 @@ package org.orecruncher.dsurround.client.footsteps.facade;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.client.footsteps.Generator;
+import org.orecruncher.lib.ReflectedField;
 
 import com.creativemd.littletiles.common.api.te.ILittleTileTE;
 
@@ -49,17 +50,9 @@ final class LittleTilesAccessor implements IFacadeAccessor {
 	
 	static {
 		
-		Class<?> theClass = null;
-		try {
-			theClass = Class.forName("com.creativemd.littletiles.common.blocks.BlockTile");
-		} catch(@Nonnull final Throwable t) {
-		}
-		
+		Class<?> theClass = ReflectedField.resolveClass("com.creativemd.littletiles.common.blocks.BlockTile");
 		if (theClass == null) {
-			try {
-				theClass = Class.forName("com.creativemd.littletiles.common.block.BlockTile");
-			} catch(@Nonnull final Throwable t) {
-			}
+			theClass = ReflectedField.resolveClass("com.creativemd.littletiles.common.block.BlockTile");
 		}
 		
 		BLOCK_CLASS = theClass;

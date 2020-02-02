@@ -28,22 +28,24 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.StringUtils;
 import org.spongepowered.asm.mixin.Mixin;
+
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 
-@SuppressWarnings("deprecation")
 @Mixin(SoundCategory.class)
 public abstract class MixinSoundCategory {
 
 	static {
-		// Hacky way to get this done, but it works. Longer term need to get rid of
-		// this.
-		// Not sure of the decent usable way to do this will be. SoundCategory is an
-		// enum,
+		// Hacky way to get this done, but it works. Longer term need to get rid of this.
+		// Not sure of the decent usable way to do this will be. SoundCategory is an enum,
 		// and we have our own categories.
 		if (SoundCategory.getByName("ds_footsteps") == null) {
 			// Add our new sound categories
@@ -53,7 +55,7 @@ public abstract class MixinSoundCategory {
 
 			// Update the internal cached list
 			try {
-				final Field f = ReflectionHelper.findField(SoundCategory.class, "SOUND_CATEGORIES", "field_187961_k");
+				final Field f = findField(SoundCategory.class, "SOUND_CATEGORIES", "field_187961_k");
 				@SuppressWarnings("unchecked")
 				final Map<String, SoundCategory> theMap = (Map<String, SoundCategory>) f.get(null);
 				theMap.put(fs.getName(), fs);
@@ -62,5 +64,17 @@ public abstract class MixinSoundCategory {
 			}
 		}
 	}
+	
+    @Nonnull
+    private static Field findField(@Nonnull Class<?> clazz, @Nonnull String fieldName, @Nullable String fieldObfName) throws NoSuchFieldException, SecurityException
+    {
+        Preconditions.checkNotNull(clazz);
+        Preconditions.checkArgument(StringUtils.isNotEmpty(fieldName), "Field name cannot be empty");
+
+        final String nameToFind = FMLLaunchHandler.isDeobfuscatedEnvironment() ? fieldName : MoreObjects.firstNonNull(fieldObfName, fieldName);
+        final Field f = clazz.getDeclaredField(nameToFind);
+        f.setAccessible(true);
+        return f;
+    }
 
 }
