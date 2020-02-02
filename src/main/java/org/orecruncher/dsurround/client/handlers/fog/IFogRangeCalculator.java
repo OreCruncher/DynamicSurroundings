@@ -33,6 +33,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public interface IFogRangeCalculator {
 
 	/**
+	 * The name of the calculator for logging purposes
+	 * 
+	 * @return The name of the calculator
+	 */
+	@Nonnull
+	String getName();
+	
+	/**
 	 * Called during the render pass to obtain parameters for fog rendering.
 	 *
 	 * @param event The event that is being fired

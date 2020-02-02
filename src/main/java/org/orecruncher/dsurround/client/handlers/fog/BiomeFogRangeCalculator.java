@@ -71,6 +71,12 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 
 	@Override
 	@Nonnull
+	public String getName() {
+		return "BiomeFogRangeCalculator";
+	}
+
+	@Override
+	@Nonnull
 	public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
 
 		final EntityLivingBase player = EnvironState.getPlayer();

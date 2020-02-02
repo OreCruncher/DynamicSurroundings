@@ -162,7 +162,7 @@ public class FogHandler extends EffectHandlerBase {
 
 		this.fogColor = new HolisticFogColorCalculator();
 		this.fogRange = new HolisticFogRangeCalculator();
-
+		
 		if (this.theme.doBiomeFog()) {
 			this.fogColor.add(new BiomeFogColorCalculator());
 			this.fogRange.add(new BiomeFogRangeCalculator());

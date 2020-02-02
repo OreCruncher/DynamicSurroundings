@@ -45,6 +45,12 @@ public class WeatherFogRangeCalculator extends VanillaFogRangeCalculator {
 
 	@Override
 	@Nonnull
+	public String getName() {
+		return "WeatherFogRangeCalculator";
+	}
+
+	@Override
+	@Nonnull
 	public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
 		// Start with what vanilla thinks
 		this.cache.set(event);

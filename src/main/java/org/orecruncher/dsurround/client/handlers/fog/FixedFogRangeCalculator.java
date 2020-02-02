@@ -40,6 +40,12 @@ public class FixedFogRangeCalculator extends VanillaFogRangeCalculator {
 
 	@Override
 	@Nonnull
+	public String getName() {
+		return "FixedFogRangeCalculator";
+	}
+
+	@Override
+	@Nonnull
 	public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
 		return this.cached;
 	}

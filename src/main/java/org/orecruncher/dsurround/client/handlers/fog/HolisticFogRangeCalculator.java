@@ -25,6 +25,7 @@ package org.orecruncher.dsurround.client.handlers.fog;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.lib.collections.ObjectArray;
 
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -44,17 +45,37 @@ public class HolisticFogRangeCalculator implements IFogRangeCalculator {
 	public void add(@Nonnull final IFogRangeCalculator calc) {
 		this.calculators.add(calc);
 	}
+	
+	@Override
+	@Nonnull
+	public String getName() {
+		return "HolisticFogRangeCalculator";
+	}
 
 	@Override
 	@Nonnull
 	public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
-		float start = event.getFarPlaneDistance();
-		float end = event.getFarPlaneDistance();
-		for (int i = 0; i < this.calculators.size(); i++) {
-			final FogResult result = this.calculators.get(i).calculate(event);
-			start = Math.min(start, result.getStart());
-			end = Math.min(end, result.getEnd());
+		
+		if (event.getFarPlaneDistance() < 0) {
+			ModBase.log().warn("Far plane distance in RenderFogEvent is negative: %d", event.getFarPlaneDistance());
 		}
+		
+		this.cached.set(event);
+		float start = this.cached.getStart();
+		float end = this.cached.getEnd();
+		
+		for (int i = 0; i < this.calculators.size(); i++) {
+			final IFogRangeCalculator calc = this.calculators.get(i);
+			final FogResult result = calc.calculate(event);
+			if (result.getStart() >= result.getEnd() || result.getStart() < 0 || result.getEnd() < 0) {
+				// Some how the values are invalid
+				ModBase.log().warn("Fog calculator '%s' has invalid results (start %f, end %f); ignoring", calc.getName(), result.getStart(), result.getEnd());
+			} else {
+				start = Math.min(start, result.getStart());
+				end = Math.min(end, result.getEnd());
+			}
+		}
+
 		this.cached.set(start, end);
 		return this.cached;
 	}
