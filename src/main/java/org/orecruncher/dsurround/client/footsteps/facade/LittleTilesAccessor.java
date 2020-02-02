@@ -27,7 +27,6 @@ import javax.annotation.Nonnull;
 import org.orecruncher.dsurround.client.footsteps.Generator;
 
 import com.creativemd.littletiles.common.api.te.ILittleTileTE;
-import com.creativemd.littletiles.common.blocks.BlockTile;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -45,6 +44,26 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 final class LittleTilesAccessor implements IFacadeAccessor {
 
 	private static final float RANGE = 0.25F / 2F;
+	
+	private static final Class<?> BLOCK_CLASS;
+	
+	static {
+		
+		Class<?> theClass = null;
+		try {
+			theClass = Class.forName("com.creativemd.littletiles.common.blocks.BlockTile");
+		} catch(@Nonnull final Throwable t) {
+		}
+		
+		if (theClass == null) {
+			try {
+				theClass = Class.forName("com.creativemd.littletiles.common.block.BlockTile");
+			} catch(@Nonnull final Throwable t) {
+			}
+		}
+		
+		BLOCK_CLASS = theClass;
+	}
 
 	@Override
 	public String getName() {
@@ -53,12 +72,12 @@ final class LittleTilesAccessor implements IFacadeAccessor {
 
 	@Override
 	public boolean instanceOf(@Nonnull final Block block) {
-		return isValid() && block instanceof BlockTile;
+		return isValid() && BLOCK_CLASS.isInstance(block);
 	}
 
 	@Override
 	public boolean isValid() {
-		return true;
+		return BLOCK_CLASS != null;
 	}
 
 	@Override
