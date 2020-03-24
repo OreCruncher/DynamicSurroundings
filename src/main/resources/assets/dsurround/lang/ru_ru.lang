@@ -54,12 +54,19 @@ dsurround.msg.ThunderThresholdSet=§9Порог грозы: %1$s
 dsurround.msg.NewVersion.dsurround=["§6Доступно обновление: §9[",{"text":"§2%1$s §ev%2$s§f","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Нажмите, чтобы открыть страницу мода на CurseForge","color":"aqua"}},"clickEvent":{"action":"open_url","value":"%3$s"}},"§9]"]
 
 # Настройки
+dsurround.cfg.individual=Индивидуальная настройка звука
+dsurround.cfg.individual.tooltip=Опции для настройки звуков индивидуально
+
 dsurround.cfg.asm=Настройки ASM преобразователя
 dsurround.cfg.asm.tooltip=Управляет ASM преобразованиями Dynamic Surroundings, происходящими при запуске
 dsurround.cfg.asm.EnableWeather=Управление погодой
 dsurround.cfg.asm.EnableWeather.tooltip=Вкл/выкл ASM преобразования для возможности управлять погодой (дождь, снег, брызги, песчаная буря, северное сияние)
 dsurround.cfg.asm.DisableArrow=Откл. след от стрелы
 dsurround.cfg.asm.DisableArrow.tooltip=Отключает след из частиц во время полёта стрелы
+dsurround.cfg.asm.DisablePotionIcons=Отключить иконки эффектов зелий инвентаря
+dsurround.cfg.asm.DisablePotionIcons.tooltip=Отключает отрисовку эффектов зелий в инвентаре
+dsurround.cfg.asm.EnableOptionSearch=Включить опцию поиска в настройках
+dsurround.cfg.asm.EnableOptionSearch.tooltip=Включает текстовое поле фильтра поиска в опциях конфигурации мода
 
 dsurround.cfg.logging=Настройки логирования
 dsurround.cfg.logging.tooltip=Определяет как Dynamic Surroundings будет вести лог
@@ -90,6 +97,8 @@ dsurround.cfg.rain.MaxRainStrength=Макс. сила дождя по умолч
 dsurround.cfg.rain.MaxRainStrength.tooltip=Максимальная сила дождя по умолчанию для измерения
 dsurround.cfg.rain.UseVanillaSound=Оригинальный звук дождя
 dsurround.cfg.rain.UseVanillaSound.tooltip=Использовать оригинальный звук дождя вместо звуков из мода
+dsurround.cfg.rain.EnableMagmaNetherrack=Включить брызги на Адском камне и Магмовом блоке
+dsurround.cfg.rain.EnableMagmaNetherrack.tooltip=Включает/отключает частицы лавы на Адском камне и Магмовом блоке во время дождя
 
 dsurround.cfg.fog=Туман
 dsurround.cfg.fog.tooltip=Настройки различных эффектов тумана в клиенте
@@ -127,6 +136,8 @@ dsurround.cfg.aurora.EnableAurora=Северное сияние
 dsurround.cfg.aurora.EnableAurora.tooltip=Вкл/выкл северное сияние на стороне клиента и сервера
 dsurround.cfg.aurora.EnableShader=Использовать шейдеры
 dsurround.cfg.aurora.EnableShader.tooltip=Использовать шейдеры при отрисовке северного сияния
+dsurround.cfg.aurora.MaxBands=Максимум полос
+dsurround.cfg.aurora.MaxBands.tooltip=Ограничение макс. количества полос в сиянии
 
 dsurround.cfg.biomes=Настройки биомов
 dsurround.cfg.biomes.tooltip=Настройки звуков и эффектов в биомах
@@ -248,13 +259,14 @@ dsurround.cfg.commands.Calc.Alias.tooltip=Один или несколько п�
 
 dsurround.cfg.profiles=Встроенные профили
 dsurround.cfg.profiles.tooltip=Настройка встроенных профилей
+
 dsurround.cfg.profiles.noNetherWeather=Откл. погоду в Нижнем мире
 dsurround.cfg.profiles.noNetherWeather.tooltip=Выключает погодные эффекты в Нижнем мире
 dsurround.cfg.profiles.noDustEffects=Откл. пыль
 dsurround.cfg.profiles.noDustEffects.tooltip=Отключает эффект пыли во всех биомах
 
 dsurround.season.format=%1$s %2$s
-dsurround.season.noseason=Нет сизона
+dsurround.season.noseason=Нет сезона
 dsurround.season.spring=Весна
 dsurround.season.summer=Лето
 dsurround.season.fall=Осень
