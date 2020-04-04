@@ -33,7 +33,9 @@ import org.orecruncher.lib.random.XorShiftRandom;
 
 import com.google.common.base.MoreObjects;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -93,6 +95,15 @@ public abstract class EffectHandlerBase {
 	public void onDisconnect() {
 	}
 
+	// Helper methods
+	protected static EntityPlayer getPlayer() {
+		return Minecraft.getMinecraft().player;
+	}
+	
+	protected static World getWorld() {
+		return Minecraft.getMinecraft().world;
+	}
+	
 	//////////////////////////////
 	//
 	// DO NOT HOOK THESE EVENTS!

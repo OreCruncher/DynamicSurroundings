@@ -189,7 +189,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 
 	@SubscribeEvent
 	public void playerJoinWorldEvent(@Nonnull final EntityJoinWorldEvent event) {
-		if (event.getEntity().getEntityWorld().isRemote && EnvironState.isPlayer(event.getEntity())
+		if (getPlayer() != null && event.getEntity().getEntityWorld().isRemote && EnvironState.isPlayer(event.getEntity())
 				&& !event.getEntity().isDead)
 			clearSounds();
 	}
