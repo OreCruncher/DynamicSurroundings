@@ -1,3 +1,21 @@
+### DynamicSurroundings-1.12.2-3.6.1.0
+**Requirements**
+* Forge 2779+
+* OreLib-1.12.2-3.6.0.1+; **Do not use the deobf version of OreLib**; it's provided to developers for mod development
+* If upgrading from version 3.4.x or earlier:
+     * Delete your dsurround.cfg and let it regenerate
+     * Check your mods/1.12.2 folder and ensure there are no Dynamic Surroundings files within
+
+**Fixes**
+* Updated embedded Mixin library to 0.8 (the latest STABLE version of Mixin as of this publish).  Should fix compatibility with a other mods that rely on Mixin.
+* Speculative fix for rare fog "white out".
+* Speculative fix for client crash when using wrong Forge version but client is not able to give appropriate error info to user.
+
+**Changes**
+* Compatibility update for the latest versions of Little Tiles.
+* Updated Russian translations (thanks Smollet777!)
+* Update Roots compatibility
+
 ### DynamicSurroundings-1.12.2-3.6.0.2
 **Requirements**
 * Forge 2779+

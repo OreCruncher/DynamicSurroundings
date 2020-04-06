@@ -94,8 +94,8 @@ dependencies {
     compile "biomes-o-plenty:BiomesOPlenty-1.12.2:7.0.1.2441:universal"
     //compile "albedo:albedo:1.12.2:1.1.0"
 	
-	if (fileTree(dir: 'libs').filter { it.name.startsWith('OreLib') }.getFiles().size() == 0)
-		compile "orelib:OreLib-1.12.2:3.5.2.3:deobf"
+//	if (fileTree(dir: 'libs').filter { it.name.startsWith('OreLib') }.getFiles().size() == 0)
+//		compile "orelib:OreLib-1.12.2:3.6.0.1:deobf"
 
 	//compile "creativecore:CreativeCore_v1.9.35_mc1.12.2"
 	
@@ -103,7 +103,7 @@ dependencies {
     runtime "mezz.jei:jei_${project.mcVersion}:${project.jeiVersion}"
     deobfCompile "team.chisel:Chisel:MC${project.mcVersion}-${project.chiselVersion}"
     
-    embed("org.spongepowered:mixin:0.7.11-SNAPSHOT") { transitive = false }    
+    embed("org.spongepowered:mixin:0.8") { transitive = false }    
 }
 
 processResources
