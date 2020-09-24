@@ -46,6 +46,7 @@ repositories {
         name = "CurseForge"
         url = "https://minecraft.curseforge.com/api/maven/"
     }
+    maven { url "https://maven.blamejared.com/" }
 }
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
@@ -83,7 +84,6 @@ sourceSets {
 
 dependencies {
 	compile "craftstudio-api:CraftStudioAPI-universal-1.0.1.95:mc1.12:alpha"
-	compile "animania:animania:${project.mcVersion}:${project.animaniaVersion}"
 	compile "serene-seasons:SereneSeasons-${project.mcVersion}:${project.ssVersion}:universal"
 	compile "codechicken-lib-1-8:CodeChickenLib-1.12.2:3.2.3.358:universal"
 	compile "forge-multipart-cbe:ForgeMultipart-1.12.2:2.6.2.83:universal"
@@ -101,8 +101,10 @@ dependencies {
 	
     deobfCompile "mezz.jei:jei_${project.mcVersion}:${project.jeiVersion}:api"
     runtime "mezz.jei:jei_${project.mcVersion}:${project.jeiVersion}"
+    deobfCompile "com.animania:animania-${project.mcVersion}-base:${project.animaniaVersion}"
     deobfCompile "team.chisel:Chisel:MC${project.mcVersion}-${project.chiselVersion}"
-    
+    deobfCompile "com.animania:animania-${project.mcVersion}-farm:${project.animaniaFarmVersion}"
+
     embed("org.spongepowered:mixin:0.8") { transitive = false }    
 }
 
