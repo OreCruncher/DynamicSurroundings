@@ -36,9 +36,9 @@ import org.orecruncher.dsurround.client.renderer.BadgeRenderLayer.IEntityBadgePr
 
 import com.animania.api.interfaces.IFoodEating;
 import com.animania.api.interfaces.ISleeping;
-import com.animania.common.entities.pigs.EntityAnimaniaPig;
-import com.animania.common.entities.pigs.EntityPigletBase;
-import com.animania.common.entities.sheep.EntityEweBase;
+import com.animania.addons.farm.common.entity.pigs.EntityAnimaniaPig;
+import com.animania.addons.farm.common.entity.pigs.EntityPigletBase;
+import com.animania.addons.farm.common.entity.sheep.EntityEweBase;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
@@ -48,7 +48,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -75,10 +74,9 @@ public final class AnimaniaBadge implements IEntityBadgeProvider {
 	}
 
 	private ItemStack getFoodItem(IFoodEating fe) {
-		final Set<Item> food = fe.getFoodItems();
+		final Set<ItemStack> food = fe.getFoodItems();
 		if (food.size() > 0) {
-			final Item item = food.iterator().next();
-			return new ItemStack(item);
+			return food.iterator().next();
 		}
 		return ItemStack.EMPTY;
 	}
