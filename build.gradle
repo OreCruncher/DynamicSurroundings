@@ -42,6 +42,7 @@ repositories {
     maven { url "https://repo.elytradev.com/" }
     maven { url 'http://repo.spongepowered.org/maven' }
     maven { url 'https://maven.mcmoddev.com' }
+	maven { url 'https://maven.blamejared.com' }
     maven {
         name = "CurseForge"
         url = "https://minecraft.curseforge.com/api/maven/"
@@ -83,7 +84,8 @@ sourceSets {
 
 dependencies {
 	compile "craftstudio-api:CraftStudioAPI-universal-1.0.1.95:mc1.12:alpha"
-	compile "animania:animania:${project.mcVersion}:${project.animaniaVersion}"
+	compile "com.animania:animania-${project.mcVersion}-base:${project.animaniaBaseVersion}"
+	compile "com.animania:animania-${project.mcVersion}-farm:${project.animaniaFarmVersion}"
 	compile "serene-seasons:SereneSeasons-${project.mcVersion}:${project.ssVersion}:universal"
 	compile "codechicken-lib-1-8:CodeChickenLib-1.12.2:3.2.3.358:universal"
 	compile "forge-multipart-cbe:ForgeMultipart-1.12.2:2.6.2.83:universal"
