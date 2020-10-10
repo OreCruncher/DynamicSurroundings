@@ -45,7 +45,6 @@ import org.orecruncher.dsurround.ModOptions.Trace;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.lib.ReflectedField.BooleanField;
-import org.orecruncher.lib.ReflectedField.FloatField;
 import org.orecruncher.lib.ReflectedField.ObjectField;
 import org.orecruncher.lib.ThreadGuard;
 import org.orecruncher.lib.ThreadGuard.Action;
@@ -95,12 +94,6 @@ public final class SoundEngine {
 				"removed",
 				null
 			);
-	private static final FloatField<Object> soundPhysicsGlobalVolume =
-		new FloatField<>(
-			"com.sonicether.soundphysics.SoundPhysics",
-			"globalVolumeMultiplier",
-			null
-		);
 	//@formatter:on
 
 	private static final float MUTE_VOLUME = 0.00001F;
@@ -456,12 +449,6 @@ public final class SoundEngine {
 		final float volume = sound.getVolume() * getVolume(sound.getCategory()) * volumeScale;
 		final float result = MathStuff.clamp(volume, 0.0F, 1.0F);
 
-		try {
-			if (soundPhysicsGlobalVolume.isAvailable())
-				return result * soundPhysicsGlobalVolume.get(null);
-		} catch (final Exception ex) {
-			;
-		}
 		return result;
 	}
 
