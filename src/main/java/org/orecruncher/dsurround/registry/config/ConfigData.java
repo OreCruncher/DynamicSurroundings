@@ -235,14 +235,15 @@ public final class ConfigData implements Iterable<ModConfiguration> {
 			for (final String cfg : ModOptions.general.externalScriptFiles) {
 				final File file = getFileReference(cfg);
 				if (file.exists()) {
+					ModBase.log().info("Loading external configuration script '%s'", cfg);
 					try (final InputStream stream = new FileInputStream(file)) {
 						try (final InputStreamReader input = new InputStreamReader(stream)) {
 							prependComma = copy(input, output, cfg, prependComma);
 						} catch (final Throwable t) {
-							ModBase.log().error("Really??", t);
+							ModBase.log().error(String.format("Unable to load configuration script '%s'", cfg), t);
 						}
 					} catch (final Throwable t) {
-						ModBase.log().error("Really??", t);
+						ModBase.log().error(String.format("Unable to load configuration script '%s'", cfg), t);
 					}
 				}
 			}

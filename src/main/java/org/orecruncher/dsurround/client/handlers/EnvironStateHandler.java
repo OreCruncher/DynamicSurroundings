@@ -143,8 +143,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 
 		public static World getWorld() {
-			final Minecraft mc = Minecraft.getMinecraft();
-			return mc != null ? mc.world : null;
+			return Minecraft.getMinecraft().world;
 		}
 
 		public static BlockPos getPlayerPosition() {
@@ -152,7 +151,12 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 
 		public static boolean isPlayer(final Entity entity) {
-			return entity.getPersistentID().equals(getPlayer().getPersistentID());
+			if (entity == null)
+				return false;
+			EntityPlayer player = getPlayer();
+			if (player == null)
+				return false;
+			return entity.getPersistentID().equals(player.getPersistentID());
 		}
 
 		public static boolean isPlayerHurt() {
