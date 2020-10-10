@@ -69,7 +69,7 @@ public class HolisticFogRangeCalculator implements IFogRangeCalculator {
 			final FogResult result = calc.calculate(event);
 			if (result.getStart() >= result.getEnd() || result.getStart() < 0 || result.getEnd() < 0) {
 				// Some how the values are invalid
-				ModBase.log().warn("Fog calculator '%s' has invalid results (start %f, end %f); ignoring", calc.getName(), result.getStart(), result.getEnd());
+				ModBase.log().debug("Fog calculator '%s' has invalid results (start %f, end %f); ignoring", calc.getName(), result.getStart(), result.getEnd());
 			} else {
 				start = Math.min(start, result.getStart());
 				end = Math.min(end, result.getEnd());

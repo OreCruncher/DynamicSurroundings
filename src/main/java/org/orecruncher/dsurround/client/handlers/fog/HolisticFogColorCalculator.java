@@ -42,6 +42,7 @@ public class HolisticFogColorCalculator implements IFogColorCalculator {
 		this.calculators.add(calc);
 	}
 
+	@Nonnull
 	@Override
 	public Color calculate(@Nonnull final EntityViewRenderEvent.FogColors event) {
 		Color result = null;
@@ -49,7 +50,7 @@ public class HolisticFogColorCalculator implements IFogColorCalculator {
 			final Color color = this.calculators.get(i).calculate(event);
 			if (result == null)
 				result = color;
-			else if (color != null)
+			else
 				result = result.mix(color);
 
 		}
