@@ -34,11 +34,11 @@ import org.orecruncher.dsurround.client.keyboard.KeyHandler;
 import org.orecruncher.dsurround.client.renderer.BadgeRenderLayer.IBadgeDisplayCheck;
 import org.orecruncher.dsurround.client.renderer.BadgeRenderLayer.IEntityBadgeProvider;
 
+import com.animania.addons.farm.common.entity.pigs.EntityAnimaniaPig;
+import com.animania.addons.farm.common.entity.pigs.EntityPigletBase;
+import com.animania.addons.farm.common.entity.sheep.EntityEweBase;
 import com.animania.api.interfaces.IFoodEating;
 import com.animania.api.interfaces.ISleeping;
-import com.animania.common.entities.pigs.EntityAnimaniaPig;
-import com.animania.common.entities.pigs.EntityPigletBase;
-import com.animania.common.entities.sheep.EntityEweBase;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
@@ -75,10 +75,10 @@ public final class AnimaniaBadge implements IEntityBadgeProvider {
 	}
 
 	private ItemStack getFoodItem(IFoodEating fe) {
-		final Set<Item> food = fe.getFoodItems();
+		final Set<ItemStack> food = fe.getFoodItems();
 		if (food.size() > 0) {
-			final Item item = food.iterator().next();
-			return new ItemStack(item);
+			final ItemStack item = food.iterator().next();
+			return item.copy();
 		}
 		return ItemStack.EMPTY;
 	}
