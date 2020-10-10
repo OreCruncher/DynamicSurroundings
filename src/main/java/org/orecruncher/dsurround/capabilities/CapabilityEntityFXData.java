@@ -55,7 +55,7 @@ public class CapabilityEntityFXData {
 
 	@SideOnly(Side.CLIENT)
 	public static void register() {
-		CapabilityManager.INSTANCE.register(IEntityFX.class, new NullStorage<IEntityFX>(), EntityFXData::new);
+		CapabilityManager.INSTANCE.register(IEntityFX.class, new NullStorage<>(), EntityFXData::new);
 	}
 
 	@SideOnly(Side.CLIENT)

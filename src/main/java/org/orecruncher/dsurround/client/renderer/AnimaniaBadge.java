@@ -42,6 +42,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
+import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.keyboard.KeyHandler;
 import org.orecruncher.dsurround.client.renderer.BadgeRenderLayer.IBadgeDisplayCheck;
@@ -129,7 +130,7 @@ public final class AnimaniaBadge implements IEntityBadgeProvider {
 	// Initialization for the entity models and what not
 	//
 	// ====================================================================
-	public static void intitialize() {
+	public static void initialize() {
 
 		if (!ModOptions.speechbubbles.enableAnimaniaBadges)
 			return;
@@ -144,6 +145,7 @@ public final class AnimaniaBadge implements IEntityBadgeProvider {
 				final Render<Entity> renderer = rm.getEntityClassRenderObject(clazz);
 				if (renderer instanceof RenderLivingBase) {
 					((RenderLivingBase<?>) renderer).addLayer(layer);
+					ModBase.log().debug("Adding Animania badging to %s", renderer.getClass().getSimpleName());
 				}
 			}
 		}

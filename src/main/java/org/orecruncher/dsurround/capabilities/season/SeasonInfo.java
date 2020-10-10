@@ -50,6 +50,7 @@ public class SeasonInfo implements ISeasonInfo {
 	protected static final float BREATH_TEMP = 0.2F;
 	protected static final String noSeason = Localization.loadString("dsurround.season.noseason");
 
+	@Nullable
 	protected final World world;
 
 	public SeasonInfo() {
@@ -61,7 +62,7 @@ public class SeasonInfo implements ISeasonInfo {
 	}
 
 	@Override
-	@Nonnull
+	@Nullable
 	public World getWorld() {
 		return this.world;
 	}
@@ -150,7 +151,6 @@ public class SeasonInfo implements ISeasonInfo {
 	 * location/biome. The type is based on the heights block that precipitation can
 	 * hit in the block column defined by the BlockPos.
 	 *
-	 * @param world The current client world
 	 * @param pos   Position in the world for which the determination is being made
 	 * @param biome BiomeInfo reference for the biome in question
 	 * @return The precipitation type to render when raining

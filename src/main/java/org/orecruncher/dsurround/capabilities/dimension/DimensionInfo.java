@@ -319,7 +319,7 @@ public final class DimensionInfo implements IDimensionInfoEx {
 		return builder.toString();
 	}
 
-	private final class NBT {
+	private static final class NBT {
 		public final static String INTENSITY = "i";
 		public final static String CURRENT_INTENSITY = "ci";
 		public final static String MIN_INTENSITY = "min";

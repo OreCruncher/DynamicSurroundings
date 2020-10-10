@@ -303,8 +303,15 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		data.inside = this.ceiling.isReallyInside();
 
 		data.truePlayerBiome = biomes.getPlayerBiome(player, true);
-		data.playerTemperature = season.getPlayerTemperature();
-		data.biomeTemperature = season.getBiomeTemperature(data.playerPosition);
+
+		// Seen in the wild where the capability was not attached for some reason
+		if (season != null) {
+			data.playerTemperature = season.getPlayerTemperature();
+			data.biomeTemperature = season.getBiomeTemperature(data.playerPosition);
+		} else {
+			data.playerTemperature = TemperatureRating.MILD;
+			data.biomeTemperature = TemperatureRating.MILD;
+		}
 
 		data.armorStack = ItemClass.effectiveArmorStack(player);
 		data.footArmorStack = ItemClass.footArmorStack(player);

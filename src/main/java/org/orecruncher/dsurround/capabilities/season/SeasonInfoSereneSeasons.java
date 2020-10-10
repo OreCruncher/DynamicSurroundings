@@ -52,6 +52,9 @@ public class SeasonInfoSereneSeasons extends SeasonInfo {
 	@Override
 	@Nonnull
 	public SeasonType getSeasonType() {
+		if (this.world == null)
+			return SeasonType.SPRING;
+
 		final Season season = SeasonHelper.getSeasonState(this.world).getSeason();
 		switch (season) {
 		case SUMMER:
@@ -70,6 +73,9 @@ public class SeasonInfoSereneSeasons extends SeasonInfo {
 	@Override
 	@Nonnull
 	public SeasonType.SubType getSeasonSubType() {
+		if (this.world == null)
+			return SeasonType.SubType.MID;
+
 		final Season.SubSeason sub = SeasonHelper.getSeasonState(this.world).getSubSeason();
 		switch (sub) {
 		case EARLY_SUMMER:
@@ -99,6 +105,9 @@ public class SeasonInfoSereneSeasons extends SeasonInfo {
 
 	@Override
 	public PrecipitationType getPrecipitationType(@Nonnull final BlockPos pos, @Nullable BiomeInfo biome) {
+
+		if (this.world == null)
+			return PrecipitationType.NONE;
 
 		if (biome == null)
 			biome = BiomeUtil.getBiomeData(ClientChunkCache.instance().getBiome(pos));

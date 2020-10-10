@@ -38,7 +38,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public interface ISeasonInfo {
 
-	@Nonnull
+	@Nullable
 	World getWorld();
 
 	@Nonnull

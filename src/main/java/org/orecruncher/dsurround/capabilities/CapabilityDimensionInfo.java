@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModInfo;
+import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.capabilities.dimension.DimensionInfo;
 import org.orecruncher.dsurround.capabilities.dimension.IDimensionInfo;
 import org.orecruncher.lib.capability.CapabilityProviderSerializable;
@@ -54,7 +55,7 @@ public class CapabilityDimensionInfo {
 	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(ModInfo.MOD_ID, "dimensioninfo");
 
 	public static void register() {
-		CapabilityManager.INSTANCE.register(IDimensionInfo.class, new SimpleStorage<IDimensionInfo>(),
+		CapabilityManager.INSTANCE.register(IDimensionInfo.class, new SimpleStorage<>(),
 				DimensionInfo::new);
 	}
 
@@ -73,14 +74,14 @@ public class CapabilityDimensionInfo {
 		public static void attachCapabilities(@Nonnull final AttachCapabilitiesEvent<World> event) {
 			
 			if (!ModBase.isInitialized()) {
-				ModBase.log().info("Attempt to attach world capability before mod is inititalized - silly fake worlds.");
+				ModBase.log().debug(ModOptions.Trace.WORLD_CAPABILITIES, "Attempt to attach world capability before mod is initialized - silly fake worlds.");
 				return;
 			}
 			
 			final World world = event.getObject();
 			if (world != null) {
 				final String side = ModBase.proxy().effectiveSide().toString();
-				ModBase.log().info("Attaching capabilities to world [%s] (%s)",
+				ModBase.log().debug(ModOptions.Trace.WORLD_CAPABILITIES, "Attaching capabilities to world [%s] (%s)",
 						world.provider.getDimensionType().getName(), side);
 				final DimensionInfo info = new DimensionInfo(world);
 				event.addCapability(CAPABILITY_ID, createProvider(info));
@@ -96,7 +97,7 @@ public class CapabilityDimensionInfo {
 				builder.add("aurora", info.hasAuroras());
 				builder.add("weather", info.hasWeather());
 				builder.add("fog", info.hasFog());
-				ModBase.log().info(builder.toString());
+				ModBase.log().debug(builder.toString());
 			}
 		}
 	}

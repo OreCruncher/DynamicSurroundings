@@ -53,7 +53,7 @@ public class CapabilitySeasonInfo {
 
 	@SideOnly(Side.CLIENT)
 	public static void register() {
-		CapabilityManager.INSTANCE.register(ISeasonInfo.class, new NullStorage<ISeasonInfo>(), SeasonInfo::new);
+		CapabilityManager.INSTANCE.register(ISeasonInfo.class, new NullStorage<>(), SeasonInfo::new);
 	}
 
 	@SideOnly(Side.CLIENT)

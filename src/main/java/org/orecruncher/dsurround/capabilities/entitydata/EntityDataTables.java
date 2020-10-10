@@ -98,7 +98,6 @@ public final class EntityDataTables {
 		AI_TASKS.put(clazz, ct);
 	}
 
-	@Nonnull
 	private static void add(@Nonnull final Class<? extends EntityLiving> clazz, @Nonnull final TaskType ct,
 			@Nonnull final String... className) {
 		for (final String cn : className) {
@@ -195,7 +194,6 @@ public final class EntityDataTables {
 		add(EntityWolf.class, TaskType.Flee, "AIAvoidEntity", "a");
 	}
 
-	@Nonnull
 	private static boolean eval(@Nonnull final EntityLiving entity, @Nonnull TaskType desiredType) {
 
 		
@@ -212,7 +210,6 @@ public final class EntityDataTables {
 		return false;
 	}
 
-	@Nonnull
 	public static void assess(@Nonnull final IEntityDataSettable data) {
 		final EntityLiving entity = data.getEntity();
 		final boolean isAttacking = eval(entity, TaskType.Attack);
