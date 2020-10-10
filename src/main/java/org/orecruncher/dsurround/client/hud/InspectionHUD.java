@@ -88,8 +88,8 @@ public class InspectionHUD extends Gui implements IGuiOverlay {
 		return result;
 	}
 
-	private List<String> gatherBlockText(final ItemStack stack, final List<String> text, final IBlockState state,
-			final BlockPos pos) {
+	private void gatherBlockText(final ItemStack stack, final List<String> text, final IBlockState state,
+								 final BlockPos pos) {
 
 		if (ItemStackUtil.isValidItemStack(stack)) {
 			text.add(TextFormatting.RED + stack.getDisplayName());
@@ -163,10 +163,9 @@ public class InspectionHUD extends Gui implements IGuiOverlay {
 				text.add(TextFormatting.GOLD + ore);
 		}
 
-		return text;
 	}
 
-	private List<String> gatherEntityText(@Nonnull final Entity entity, @Nonnull final List<String> text) {
+	private void gatherEntityText(@Nonnull final Entity entity, @Nonnull final List<String> text) {
 		try {
 			final ResourceLocation key = EntityList.getKey(entity);
 			final String keyName;
@@ -179,7 +178,7 @@ public class InspectionHUD extends Gui implements IGuiOverlay {
 			text.add(entity.getClass().getName());
 
 			final Set<String> tags = entity.getTags();
-			if (tags != null && tags.size() > 0) {
+			if (tags.size() > 0) {
 				text.add(TextFormatting.GOLD + "Entity Tags");
 				text.addAll(tags);
 			}
@@ -194,7 +193,6 @@ public class InspectionHUD extends Gui implements IGuiOverlay {
 		} catch (@Nonnull final Exception ex) {
 			text.add(TextFormatting.RED + "!! ERROR !!");
 		}
-		return text;
 	}
 
 	private static boolean isHolding() {
@@ -222,9 +220,10 @@ public class InspectionHUD extends Gui implements IGuiOverlay {
 					if (current.entityHit != null) {
 						gatherEntityText(current.entityHit, data);
 					} else {
-						final BlockPos targetBlock = (current == null || current.getBlockPos() == null)
-								? BlockPos.ORIGIN
-								: current.getBlockPos();
+						if (current != null) {
+							current.getBlockPos();
+						}
+						final BlockPos targetBlock = current.getBlockPos();
 						final IBlockState state = WorldUtils.getBlockState(EnvironState.getWorld(), targetBlock);
 
 						if (!WorldUtils.isAirBlock(state)) {

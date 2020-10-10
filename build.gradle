@@ -9,8 +9,8 @@ buildscript {
         	url 'http://files.minecraftforge.net/maven'
         }
     	maven {
-		url 'http://repo.spongepowered.org/maven'
-	}
+		    url 'http://repo.spongepowered.org/maven'
+	    }
         maven {
         	url 'https://plugins.gradle.org/m2/'
         }
@@ -18,7 +18,7 @@ buildscript {
     dependencies {
 		classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
 		classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
-        classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.1.0'
+        classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.4.0'
     }
 }
 
@@ -32,7 +32,7 @@ apply from: 'configuration.gradle'
 if (file('secrets.properties').exists()) {
 	println "Loading parameters from secrets.properties"
 	ext.secrets = new Properties()
-	file('secrets.properties').withReader {secrets.load(it)}
+	file('secrets.properties').withReader {ext.secrets.load(it)}
 }
 
 repositories {
@@ -42,7 +42,7 @@ repositories {
     maven { url "https://repo.elytradev.com/" }
     maven { url 'http://repo.spongepowered.org/maven' }
     maven { url 'https://maven.mcmoddev.com' }
-	maven { url 'https://maven.blamejared.com' }
+    maven { url "https://maven.blamejared.com/" }
     maven {
         name = "CurseForge"
         url = "https://minecraft.curseforge.com/api/maven/"
@@ -53,17 +53,18 @@ sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
 minecraft {
 	if (project.ext.has('secrets')) {
-		if (secrets.uuid != null)
-    		clientRunArgs += ["--uuid ${secrets.uuid}"]
-    	if (secrets.username != null)
-    		clientRunArgs += ["--username ${secrets.username}"]
-    	if (secrets.password != null)
-    		clientRunArgs += ["--password ${secrets.password}"]
-    	if (secrets.jvmArgs != null) {
-    		clientJvmArgs += secrets.jvmArgs
-    		serverJvmArgs += secrets.jvmArgs
+		if (project.ext.secrets.uuid != null)
+    		clientRunArgs.AddAll(["--uuid ${project.ext.secrets.uuid}"])
+    	if (project.ext.secrets.username != null)
+    		clientRunArgs.AddAll(["--username ${project.ext.secrets.username}"])
+    	if (project.ext.secrets.password != null)
+    		clientRunArgs.AddAll(["--password ${project.ext.secrets.password}"])
+    	if (project.ext.secrets.jvmArgs != null) {
+    		clientJvmArgs.AddAll(project.ext.secrets.jvmArgs)
+    		serverJvmArgs.AddAll(project.ext.secrets.jvmArgs)
     	}
     }
+
     runDir = "run"
     replace '@VERSION@', project.ext.modVersion
     replace '@FINGERPRINT@', project.ext.fingerprint
@@ -84,8 +85,8 @@ sourceSets {
 
 dependencies {
 	compile "craftstudio-api:CraftStudioAPI-universal-1.0.1.95:mc1.12:alpha"
-	compile "com.animania:animania-${project.mcVersion}-base:${project.animaniaBaseVersion}"
-	compile "com.animania:animania-${project.mcVersion}-farm:${project.animaniaFarmVersion}"
+    compile "com.animania:animania-${project.mcVersion}-base:${project.animaniaBaseVersion}"
+    compile "com.animania:animania-${project.mcVersion}-farm:${project.animaniaFarmVersion}"
 	compile "serene-seasons:SereneSeasons-${project.mcVersion}:${project.ssVersion}:universal"
 	compile "codechicken-lib-1-8:CodeChickenLib-1.12.2:3.2.3.358:universal"
 	compile "forge-multipart-cbe:ForgeMultipart-1.12.2:2.6.2.83:universal"
@@ -94,18 +95,17 @@ dependencies {
 	compile "littletiles:LittleTiles_v1.5.0:pre169_mc1.12.2"
 	compile "iron-chests:ironchest:1.12.2:7.0.72.847"
     compile "biomes-o-plenty:BiomesOPlenty-1.12.2:7.0.1.2441:universal"
-    //compile "albedo:albedo:1.12.2:1.1.0"
-	
-//	if (fileTree(dir: 'libs').filter { it.name.startsWith('OreLib') }.getFiles().size() == 0)
-//		compile "orelib:OreLib-1.12.2:3.6.0.1:deobf"
+    compile "org.spongepowered:mixin:0.8.1-SNAPSHOT"
+    //compile "mixinbootstrap:MixinBootstrap:${project.mbVersion}"
+
+	if (fileTree(dir: 'libs').filter { it.name.startsWith('OreLib') }.getFiles().size() == 0)
+        compile "orelib:OreLib:1.12.2:3.6.0.1"
 
 	//compile "creativecore:CreativeCore_v1.9.35_mc1.12.2"
 	
     deobfCompile "mezz.jei:jei_${project.mcVersion}:${project.jeiVersion}:api"
     runtime "mezz.jei:jei_${project.mcVersion}:${project.jeiVersion}"
     deobfCompile "team.chisel:Chisel:MC${project.mcVersion}-${project.chiselVersion}"
-    
-    embed("org.spongepowered:mixin:0.8") { transitive = false }    
 }
 
 processResources
@@ -122,22 +122,21 @@ processResources
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
         
-    // copy everything else, thats not the mcmod.info
+    // copy everything else that's not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    description = 'Creates a JAR containing the source code.'
-    from sourceSets.main.allSource
-    classifier = 'sources'
-}
-
-task deobfJar(type: Jar) {
-    description = 'Creates a JAR containing the non-obfuscated compiled code.'
-    from sourceSets.main.output
-    classifier = "deobf"
+jar {
+    from(configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }) {
+        exclude "LICENSE.txt", "META-INF/MANIFSET.MF", "META-INF/maven/**", "META-INF/*.RSA", "META-INF/*.SF"
+    }
+    
+    // Add CREDITS.md
+    into('/') {
+        from('CREDITS.md')
+    }
     
     manifest.attributes(
         "FMLCorePluginContainsFMLMod": "true",
@@ -161,32 +160,6 @@ task signJar(type: SignJar) {
     keyPass = project.keyStoreKeyPass
     inputFile = jar.archivePath
     outputFile = jar.archivePath
-}
-
-jar {
-    from(configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }) {
-        exclude "LICENSE.txt", "META-INF/MANIFSET.MF", "META-INF/maven/**", "META-INF/*.RSA", "META-INF/*.SF"
-    }
-    
-    // Add CREDITS.md
-    into('/') {
-        from('CREDITS.md')
-    }
-    
-    manifest.attributes(
-        "FMLCorePluginContainsFMLMod": "true",
-        "ForceLoadAsMod": "true",
-	    "TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
-	    "TweakOrder": 0,
-        "MixinConfigs": "mixins.dsurround.json",
-        "FMLCorePlugin": "org.orecruncher.dsurround.mixins.TransformLoader"
-    )
-}
-
-//Adds the artifact types added by this script to the actual artifacts list.
-artifacts {
-    archives sourcesJar
-    archives deobfJar
 }
 
 build.dependsOn signJar

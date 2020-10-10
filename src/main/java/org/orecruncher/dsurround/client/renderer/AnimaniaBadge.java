@@ -24,22 +24,11 @@
 
 package org.orecruncher.dsurround.client.renderer;
 
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.lwjgl.input.Keyboard;
-import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.keyboard.KeyHandler;
-import org.orecruncher.dsurround.client.renderer.BadgeRenderLayer.IBadgeDisplayCheck;
-import org.orecruncher.dsurround.client.renderer.BadgeRenderLayer.IEntityBadgeProvider;
-
 import com.animania.addons.farm.common.entity.pigs.EntityAnimaniaPig;
 import com.animania.addons.farm.common.entity.pigs.EntityPigletBase;
 import com.animania.addons.farm.common.entity.sheep.EntityEweBase;
 import com.animania.api.interfaces.IFoodEating;
 import com.animania.api.interfaces.ISleeping;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
@@ -48,11 +37,18 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Keyboard;
+import org.orecruncher.dsurround.ModOptions;
+import org.orecruncher.dsurround.client.keyboard.KeyHandler;
+import org.orecruncher.dsurround.client.renderer.BadgeRenderLayer.IBadgeDisplayCheck;
+import org.orecruncher.dsurround.client.renderer.BadgeRenderLayer.IEntityBadgeProvider;
+
+import javax.annotation.Nonnull;
+import java.util.Set;
 
 @SideOnly(Side.CLIENT)
 public final class AnimaniaBadge implements IEntityBadgeProvider {
@@ -63,8 +59,9 @@ public final class AnimaniaBadge implements IEntityBadgeProvider {
 	private static final IBadgeDisplayCheck BADGE_DISPLAY_CHECK = () -> KeyHandler.ANIMANIA_BADGES == null
 			|| KeyHandler.ANIMANIA_BADGES.isKeyDown() || KeyHandler.ANIMANIA_BADGES.getKeyCode() == Keyboard.KEY_NONE;
 
+	@Nonnull
 	@Override
-	public ItemStack getStackToDisplay(final EntityLivingBase e) {
+	public ItemStack getStackToDisplay(@Nonnull final EntityLivingBase e) {
 		final IFoodEating fe = (IFoodEating) e;
 		if (!fe.getWatered())
 			return WATER_BUCKET;

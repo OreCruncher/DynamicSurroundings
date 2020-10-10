@@ -80,7 +80,7 @@ public class SpeechDataRenderer {
 
 	private static boolean isThirdPersonView() {
 		final GameSettings settings = getRenderManager().options;
-		return settings == null ? false : settings.thirdPersonView == 2;
+		return settings != null && settings.thirdPersonView == 2;
 	}
 
 	private static void doRender(@Nonnull final Entity entity, @Nonnull final ISpeechData data,
@@ -152,9 +152,7 @@ public class SpeechDataRenderer {
 	private static boolean canBeSeen(@Nonnull EntityPlayer player, @Nonnull Entity subject) {
 		if (subject.isInvisibleToPlayer(player))
 			return false;
-		if (!player.canEntityBeSeen(subject))
-			return false;
-		return true;
+		return player.canEntityBeSeen(subject);
 	}
 
 	@SubscribeEvent
