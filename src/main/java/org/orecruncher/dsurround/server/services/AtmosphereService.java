@@ -82,7 +82,7 @@ public final class AtmosphereService extends Service {
 		return result;
 	}
 
-	private boolean doVanillaRain(@Nonnull final World world) {
+	private boolean doVanillaRain() {
 		return ModOptions.rain.doVanillaRain || ModEnvironment.Weather2.isLoaded();
 	}
 
@@ -90,7 +90,7 @@ public final class AtmosphereService extends Service {
 		WeatherGenerator result = null;
 		if (CapabilityDimensionInfo.getCapability(world).hasWeather()) {
 			final int dimId = world.provider.getDimension();
-			if (doVanillaRain(world)) {
+			if (doVanillaRain()) {
 				if (dimId != -1) {
 					result = new WeatherGeneratorVanilla(world);
 				}

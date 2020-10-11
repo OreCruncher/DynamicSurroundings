@@ -78,7 +78,7 @@ public class PacketSpeechBubble implements IMessage {
 					final World world = EnvironState.getWorld();
 					if (world != null) {
 						final Entity entity = WorldUtils.locateEntity(world, message.entityId);
-						if (entity == null || !(entity instanceof EntityPlayer))
+						if (!(entity instanceof EntityPlayer))
 							return;
 						final ISpeechData data = CapabilitySpeechData.getCapability(entity);
 						if (data != null)

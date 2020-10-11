@@ -58,8 +58,7 @@ public class WeatherGeneratorNether extends WeatherGenerator {
 		hasSkyLight.set(this.world.provider, true);
 		try {
 			this.world.updateWeatherBody();
-		} catch (final Throwable t) {
-			;
+		} catch (final Throwable ignore) {
 		} finally {
 			hasSkyLight.set(this.world.provider, false);
 		}
