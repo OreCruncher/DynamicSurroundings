@@ -2,7 +2,7 @@
 	"armor.light_walk": {
 		"category": "player",
 		"credits": [
-			"§aFoley",
+			"ï¿½aFoley",
 			"Samulis"
 		],
 		"sounds": [
@@ -14,7 +14,7 @@
 	"armor.light_run": {
 		"category": "player",
 		"credits": [
-			"§aFoley",
+			"ï¿½aFoley",
 			"Samulis"
 		],
 		"sounds": [
@@ -26,10 +26,10 @@
 	"armor.medium_walk": {
 		"category": "player",
 		"credits": [
-			"§aFoley",
+			"ï¿½aFoley",
 			"Samulis",
 			"",
-			"§achain drop",
+			"ï¿½achain drop",
 			"satanicupsman",
 			"Creative Commons 0"
 		],
@@ -89,7 +89,7 @@
 	"armor.heavy_walk": {
 		"category": "player",
 		"credits": [
-			"§aClanking Armor",
+			"ï¿½aClanking Armor",
 			"LordSane",
 			"Attribution"
 		],
@@ -105,7 +105,7 @@
 	"armor.heavy_run": {
 		"category": "player",
 		"credits": [
-			"§aClanking Armor",
+			"ï¿½aClanking Armor",
 			"LordSane",
 			"Attribution"
 		],
@@ -870,27 +870,27 @@
 	"thunder": {
 		"category": "weather",
 		"credits": [
-			"§aThunder 1",
+			"ï¿½aThunder 1",
 			"Yoyodaman234",
 			"Creative Commons 0",
 			"",
-			"§aDonner1.wav",
+			"ï¿½aDonner1.wav",
 			"swuing",
 			"Attribution",
 			"",
-			"§aThunder - 1",
+			"ï¿½aThunder - 1",
 			"bone666138",
 			"Attribution",
 			"",
-			"§aThunder - 2",
+			"ï¿½aThunder - 2",
 			"bone666138",
 			"Attribution",
 			"",
-			"§aDistant Thunder.wav",
+			"ï¿½aDistant Thunder.wav",
 			"sarson",
 			"Creative Commons 0",
 			"",
-			"§aNM-Mejor-Lado-Thunder-01.wav",
+			"ï¿½aNM-Mejor-Lado-Thunder-01.wav",
 			"aaronstar",
 			"Creative Commons 0"
 		],
@@ -964,7 +964,7 @@
 	"bullfrog": {
 		"category": "ambient",
 		"credits": [
-			"§aNight Crickets & Bullfrogs.wav",
+			"ï¿½aNight Crickets & Bullfrogs.wav",
 			"sunsinger",
 			"Creative Commons Attributions 3.0 Unported"
 		],
@@ -986,7 +986,7 @@
 	"wind": {
 		"category": "ds_biome",
 		"credits": [
-			"§aWind blowing into some cactus spine, on the top of the mountain, in the desert of Atacama (Chile).",
+			"ï¿½aWind blowing into some cactus spine, on the top of the mountain, in the desert of Atacama (Chile).",
 			"felix.blume",
 			"Creative Commons 0"
 		],
@@ -1000,7 +1000,7 @@
 	"desert.wind": {
 		"category": "ds_biome",
 		"credits": [
-			"§adesertwind1FINAL.wav",
+			"ï¿½adesertwind1FINAL.wav",
 			"nageor",
 			"Creative Commons 0"
 		],
@@ -1013,7 +1013,7 @@
 	"savanna.day": {
 		"category": "ds_biome",
 		"credits": [
-			"§aMerlothPark_morning_ambiance.wav",
+			"ï¿½aMerlothPark_morning_ambiance.wav",
 			"reinsamba",
 			"Attribution"
 		],
@@ -1027,7 +1027,7 @@
 	"savanna.night": {
 		"category": "ds_biome",
 		"credits": [
-			"§aMerlothPark_crickets2.WAV",
+			"ï¿½aMerlothPark_crickets2.WAV",
 			"reinsamba",
 			"Attribution"
 		],
@@ -1041,7 +1041,7 @@
 	"crickets": {
 		"category": "ds_biome",
 		"credits": [
-			"§aSoft, Chilled Crickets Field Recording",
+			"ï¿½aSoft, Chilled Crickets Field Recording",
 			"rayjensen",
 			"Creative Commons 0"
 		],
@@ -1064,7 +1064,7 @@
 	"plains": {
 		"category": "ds_biome",
 		"credits": [
-			"§aCalm Morning Outdoor Ambience",
+			"ï¿½aCalm Morning Outdoor Ambience",
 			"blouhond",
 			"Attribution"
 		],
@@ -1078,7 +1078,7 @@
 	"forest": {
 		"category": "ds_biome",
 		"credits": [
-			"§a001_forrest.wav",
+			"ï¿½a001_forrest.wav",
 			"joepsporck",
 			"Creative Commons 0"
 		],
@@ -1101,7 +1101,7 @@
 	"beach": {
 		"category": "ds_biome",
 		"credits": [
-			"§aFiji Beach (Stereo)128kbps.mp3",
+			"ï¿½aFiji Beach (Stereo)128kbps.mp3",
 			"c97059890",
 			"Creative Commons 0"
 		],
@@ -1115,7 +1115,7 @@
 	"river": {
 		"category": "ds_biome",
 		"credits": [
-			"§aunderwater ambience.wav",
+			"ï¿½aunderwater ambience.wav",
 			"AlienXXX",
 			"Attribution"
 		],
@@ -1129,7 +1129,7 @@
 	"bog": {
 		"category": "ds_biome",
 		"credits": [
-			"§arbh Mpls Bog birds.wav",
+			"ï¿½arbh Mpls Bog birds.wav",
 			"RHumphries",
 			"Attribution"
 		],
@@ -1145,7 +1145,7 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/outside/jungle",
-				"volume": 0.08,
+				"volume": 0.2,
 				"pitch": 0.8,
 				"stream": true
 			}
@@ -1223,7 +1223,7 @@
 	"crow": {
 		"category": "ambient",
 		"credits": [
-			"§aANML_M_Ext_Crow_Calls_Single1.wav",
+			"ï¿½aANML_M_Ext_Crow_Calls_Single1.wav",
 			"conleec",
 			"Creative Commons 0"
 		],
@@ -1298,11 +1298,11 @@
 	"rockfall": {
 		"category": "ambient",
 		"credits": [
-			"§aRocks falling over rocks, over a steep hill, like a cliff.flac",
+			"ï¿½aRocks falling over rocks, over a steep hill, like a cliff.flac",
 			"gfrog",
 			"Creative Commons 0",
 			"",
-			"§aRocks.wav",
+			"ï¿½aRocks.wav",
 			"adamgryu",
 			"Creative Commons 0"
 		],
@@ -1315,11 +1315,11 @@
 	"bigrockfall": {
 		"category": "ambient",
 		"credits": [
-			"§aRockfall in mine.wav",
+			"ï¿½aRockfall in mine.wav",
 			"Benboncan",
 			"Attribution",
 			"",
-			"§aRocks.wav",
+			"ï¿½aRocks.wav",
 			"adamgryu",
 			"Creative Commons 0"
 		],
@@ -1354,7 +1354,7 @@
 	"waterdrips": {
 		"category": "ambient",
 		"credits": [
-			"§aDripping, Very Fast, A.wav",
+			"ï¿½aDripping, Very Fast, A.wav",
 			"InspectorJ",
 			"Attribution"
 		],
@@ -1381,7 +1381,7 @@
 	"coyote": {
 		"category": "ambient",
 		"credits": [
-			"§acoyote barks and howls",
+			"ï¿½acoyote barks and howls",
 			"dkaufman",
 			"Creative Commons 0"
 		],
@@ -1418,7 +1418,7 @@
 	"underdeepocean": {
 		"category": "ds_biome",
 		"credits": [
-			"§aunderwater ambience.wav",
+			"ï¿½aunderwater ambience.wav",
 			"AlienXXX",
 			"Attribution"
 		],
@@ -1432,7 +1432,7 @@
 	"underocean": {
 		"category": "ds_biome",
 		"credits": [
-			"§aunderwater ambience.wav",
+			"ï¿½aunderwater ambience.wav",
 			"AlienXXX",
 			"Attribution"
 		],
@@ -1455,7 +1455,7 @@
 	"underwater": {
 		"category": "ds_biome",
 		"credits": [
-			"§aUnderwaterDrowning01.wav",
+			"ï¿½aUnderwaterDrowning01.wav",
 			"Abolla",
 			"Creative Commons 0"
 		],
@@ -1761,7 +1761,7 @@
 	"waterfall.0": {
 		"category": "ambient",
 		"credits": [
-			"§aWaterfall Winspit Dorset.wav",
+			"ï¿½aWaterfall Winspit Dorset.wav",
 			"genghis attenborough",
 			"Attribution Noncommercial"
 		],
@@ -1772,7 +1772,7 @@
 	"waterfall.1": {
 		"category": "ambient",
 		"credits": [
-			"§aRunning-water-mountain-stream.mp3",
+			"ï¿½aRunning-water-mountain-stream.mp3",
 			"Alexander",
 			"Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)"
 		],
@@ -1783,7 +1783,7 @@
 	"waterfall.2": {
 		"category": "ambient",
 		"credits": [
-			"§aWaterfall",
+			"ï¿½aWaterfall",
 			"Orpheuz",
 			"Creative Commons 0"
 		],
@@ -1794,7 +1794,7 @@
 	"waterfall.3": {
 		"category": "ambient",
 		"credits": [
-			"§aSmall Waterfall at the Mill",
+			"ï¿½aSmall Waterfall at the Mill",
 			"willstepp",
 			"Creative Commons 0"
 		],
@@ -1805,7 +1805,7 @@
 	"waterfall.4": {
 		"category": "ambient",
 		"credits": [
-			"§a Waterfall, Large, A.wav",
+			"ï¿½a Waterfall, Large, A.wav",
 			"InspectorJ",
 			"Attribution"
 		],
@@ -1816,7 +1816,7 @@
 	"waterfall.5": {
 		"category": "ambient",
 		"credits": [
-			"§aWaterfall, Small, B.wav",
+			"ï¿½aWaterfall, Small, B.wav",
 			"InspectorJ",
 			"Attribution"
 		],
@@ -1827,7 +1827,7 @@
 	"village.rooster": {
 		"category": "ambient",
 		"credits": [
-			"§aVillage ambience rooster and light birds with wind .wav",
+			"ï¿½aVillage ambience rooster and light birds with wind .wav",
 			"Ramston",
 			"Creative Commons 0"
 		],
@@ -1840,7 +1840,7 @@
 	"village.anvil": {
 		"category": "ambient",
 		"credits": [
-			"§aAnvil",
+			"ï¿½aAnvil",
 			"MrAuralization",
 			"Attribution"
 		],
@@ -1856,7 +1856,7 @@
 	"village.dogbark": {
 		"category": "ambient",
 		"credits": [
-			"§aDogs Barking",
+			"ï¿½aDogs Barking",
 			"darranambler",
 			"Creative Commons 0"
 		],
@@ -1872,7 +1872,7 @@
 	"dimension.nether": {
 		"category": "ds_biome",
 		"credits": [
-			"§aCreepy Dungeon Ambience",
+			"ï¿½aCreepy Dungeon Ambience",
 			"DrMinky",
 			"Attribution"
 		],
