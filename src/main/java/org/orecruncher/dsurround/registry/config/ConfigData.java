@@ -113,7 +113,7 @@ public final class ConfigData implements Iterable<ModConfiguration> {
 	// writer if the length of the trimmed string is > 0. Used to compress a lot of
 	// the whitespace that can be found in a hand edited Json file.
 	protected static void copy(@Nonnull final BufferedReader reader, @Nonnull final OutputStreamWriter out) {
-		String line = null;
+		String line;
 		try {
 			while ((line = reader.readLine()) != null) {
 				final String s = line.trim();
@@ -287,7 +287,7 @@ public final class ConfigData implements Iterable<ModConfiguration> {
 	protected static void dump(@Nonnull final byte[] demBytes) {
 
 		try {
-			String line = null;
+			String line;
 
 			try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
 					new GZIPInputStream(new FastByteArrayInputStream(demBytes)), StandardCharsets.UTF_8))) {

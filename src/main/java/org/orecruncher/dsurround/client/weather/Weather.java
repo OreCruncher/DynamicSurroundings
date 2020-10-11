@@ -69,14 +69,14 @@ public class Weather {
 		private final ResourceLocation snowTexture;
 		private final ResourceLocation dustTexture;
 
-		private Properties() {
+		Properties() {
 			this.level = -10.0F;
 			this.rainTexture = new ResourceLocation("textures/environment/rain.png");
 			this.snowTexture = new ResourceLocation("textures/environment/snow.png");
 			this.dustTexture = new ResourceLocation(ModInfo.RESOURCE_ID, "textures/environment/dust_calm.png");
 		}
 
-		private Properties(final float level, @Nonnull final String intensity) {
+		Properties(final float level, @Nonnull final String intensity) {
 			this.level = level;
 			this.rainTexture = new ResourceLocation(ModInfo.RESOURCE_ID,
 					String.format("textures/environment/rain_%s.png", intensity));
@@ -117,7 +117,7 @@ public class Weather {
 
 		public static Properties mapRainStrength(float str) {
 
-			Properties result = Properties.VANILLA;
+			Properties result;
 
 			// If the level is Vanilla it means that
 			// the rainfall in the dimension is to be
@@ -196,13 +196,8 @@ public class Weather {
 		return tracker.getCurrentStormSound();
 	}
 
-	@Nonnull
-	public static SoundEvent getCurrentDustSound() {
-		return tracker.getCurrentDustSound();
-	}
-
-	public static boolean doVanilla() {
-		return tracker.doVanilla();
+	public static boolean notDoVanilla() {
+		return !tracker.doVanilla();
 	}
 
 	public static void update() {

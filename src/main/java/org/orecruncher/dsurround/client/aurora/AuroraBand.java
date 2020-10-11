@@ -60,10 +60,6 @@ public class AuroraBand {
 		translate(0);
 	}
 
-	public AuroraBand(final Random random, final AuroraGeometry geo) {
-		this(random, geo, false, false);
-	}
-
 	protected AuroraBand(final Panel[] nodes, final AuroraBand band) {
 		this.random = band.random;
 		this.nodes = nodes;
@@ -132,8 +128,8 @@ public class AuroraBand {
 	}
 
 	protected void generateBands(final boolean noTaper, final boolean fixedHeight) {
-		this.nodes = populate(noTaper, fixedHeight);
-		final float factor = MathStuff.PI_F / (this.length / 4);
+		this.nodes = populate(fixedHeight);
+		final float factor = MathStuff.PI_F / (this.length / 4.0F);
 		final int lowerBound = this.length / 8 + 1;
 		final int upperBound = this.length * 7 / 8 - 1;
 
@@ -157,7 +153,7 @@ public class AuroraBand {
 	}
 
 	@Nonnull
-	protected Panel[] populate(final boolean noTaper, final boolean fixedHeight) {
+	protected Panel[] populate(final boolean fixedHeight) {
 		final Panel[] nodeList = new Panel[this.length];
 		final int bound = this.length / 2 - 1;
 

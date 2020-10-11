@@ -40,12 +40,12 @@ public interface IGuiOverlay {
 	/*
 	 * Override to provide post render logic
 	 */
-	default public void doRender(final RenderGameOverlayEvent.Post event) {
+	default void doRender(final RenderGameOverlayEvent.Post event) {
 	}
 
 	/*
 	 * Override if the overlay needs to be ticked during the client tick phase.
 	 */
-	default public void doTick(final int tickRef) {
+	default void doTick(final int tickRef) {
 	}
 }

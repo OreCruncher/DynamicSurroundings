@@ -57,6 +57,6 @@ public interface IAurora {
 	 * Render the aurora to the client screen. It is possible that other updates can
 	 * occur to the state, such as doing the transformations to animate.
 	 */
-	public void render(final float partialTick);
+	void render(final float partialTick);
 
 }

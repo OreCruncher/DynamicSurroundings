@@ -36,8 +36,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GeneratorQP extends Generator {
 
-	private static final int USE_FUNCTION = 2;
-
 	private int hoof = 0;
 	private float nextWalkDistanceMultiplier = 0.05f;
 
@@ -79,46 +77,18 @@ public class GeneratorQP extends Generator {
 		return distance * (1 - pond) * overallMultiplier;
 	}
 
-	protected float walkFunction1(final float distance) {
-		final float overallMultiplier = 1.4f;
-		final float ndm = 0.5f;
-
-		if (this.hoof == 1 || this.hoof == 3) {
-			return distance * (ndm + this.nextWalkDistanceMultiplier * ndm * 0.5f) * overallMultiplier;
-		}
-		return distance * (1 - ndm) * overallMultiplier;
-	}
-
-	protected float walkFunction0(final float distance) {
-		final float overallMultiplier = 1.5f;
-		final float ndm = 0.425f + this.nextWalkDistanceMultiplier * 0.15f;
-
-		if (this.hoof == 1 || this.hoof == 3) {
-			return distance * ndm * overallMultiplier;
-		}
-		return distance * (1 - ndm) * overallMultiplier;
-	}
-
 	@Override
-	protected float reevaluateDistance(@Nonnull final EventType event, @Nonnull final float distance) {
-		final float ret = distance;
+	protected float reevaluateDistance(@Nonnull final EventType event, final float distance) {
 		if (event == EventType.WALK)
-			switch (USE_FUNCTION) {
-			case 0:
-				return walkFunction0(distance);
-			case 1:
-				return walkFunction1(distance);
-			default:
-				return walkFunction2(distance);
-			}
+			return walkFunction2(distance);
 
 		if (event == EventType.RUN && this.hoof == 0)
-			return ret * 0.8f;
+			return distance * 0.8f;
 
 		if (event == EventType.RUN)
-			return ret * 0.3f;
+			return distance * 0.3f;
 
-		return ret;
+		return distance;
 	}
 
 }

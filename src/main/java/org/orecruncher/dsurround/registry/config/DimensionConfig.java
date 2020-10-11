@@ -64,15 +64,15 @@ public class DimensionConfig {
 		if (this.cloudHeight != null)
 			builder.append("cloudHeight: ").append(this.cloudHeight.intValue()).append(" ");
 		if (this.hasAurora != null)
-			builder.append("hasAurora: ").append(Boolean.toString(this.hasAurora.booleanValue())).append(" ");
+			builder.append("hasAurora: ").append(this.hasAurora.booleanValue()).append(" ");
 		if (this.hasHaze != null)
-			builder.append("hasHaze: ").append(Boolean.toString(this.hasHaze.booleanValue())).append(" ");
+			builder.append("hasHaze: ").append(this.hasHaze.booleanValue()).append(" ");
 		if (this.hasWeather != null)
-			builder.append("hasWeather: ").append(Boolean.toString(this.hasWeather.booleanValue())).append(" ");
+			builder.append("hasWeather: ").append(this.hasWeather.booleanValue()).append(" ");
 		if (this.hasFog != null)
-			builder.append("hasFog: ").append(Boolean.toString(this.hasFog.booleanValue())).append(" ");
+			builder.append("hasFog: ").append(this.hasFog.booleanValue()).append(" ");
 		if (this.alwaysOutside != null)
-			builder.append("alwaysOutside: ").append(Boolean.toString(this.alwaysOutside.booleanValue())).append(" ");
+			builder.append("alwaysOutside: ").append(this.alwaysOutside.booleanValue()).append(" ");
 		return builder.toString();
 	}
 

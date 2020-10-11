@@ -23,6 +23,7 @@
 package org.orecruncher.dsurround.client.footsteps.facade;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.client.footsteps.Generator;
 import org.orecruncher.lib.ReflectedField;
@@ -58,6 +59,7 @@ final class LittleTilesAccessor implements IFacadeAccessor {
 		BLOCK_CLASS = theClass;
 	}
 
+	@Nonnull
 	@Override
 	public String getName() {
 		return "LittleTilesAccessor";
@@ -75,7 +77,7 @@ final class LittleTilesAccessor implements IFacadeAccessor {
 
 	@Override
 	public IBlockState getBlockState(@Nonnull final EntityLivingBase entity, @Nonnull final IBlockState state,
-			@Nonnull final IBlockAccess world, @Nonnull final Vec3d pos, @Nonnull final EnumFacing side) {
+			@Nonnull final IBlockAccess world, @Nonnull final Vec3d pos, @Nullable final EnumFacing side) {
 		final BlockPos blockPos = new BlockPos(pos);
 		final TileEntity te = world.getTileEntity(blockPos);
 		if (te instanceof ILittleTileTE) {

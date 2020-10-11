@@ -89,12 +89,12 @@ public class EntitySwingEffect extends EntityEffect {
 			}
 
 			this.isSwinging = true;
-			this.swingProgress = entity.swingProgressInt;
 
 		} else {
 			this.isSwinging = false;
-			this.swingProgress = entity.swingProgressInt;
 		}
+
+		this.swingProgress = entity.swingProgressInt;
 	}
 
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = (@Nonnull final Entity e,

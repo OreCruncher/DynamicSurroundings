@@ -110,7 +110,7 @@ public class BadgeRenderLayer implements LayerRenderer<EntityLivingBase> {
 	public void doRenderLayer(@Nonnull EntityLivingBase entity, float limbSwing, float limbSwingAmount, float partialTicks,
 							  float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 
-		if (!this.displayCheck.showBadge() || !this.badgeProvider.show(entity))
+		if (this.displayCheck.showBadge() || !this.badgeProvider.show(entity))
 			return;
 
 		// Only render if in range

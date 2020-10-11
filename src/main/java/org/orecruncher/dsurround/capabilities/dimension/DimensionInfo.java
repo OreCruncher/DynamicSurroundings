@@ -61,8 +61,8 @@ public final class DimensionInfo implements IDimensionInfoEx {
 
 	// Attributes about the dimension. This is information is loaded from
 	// local configs.
-	protected int dimensionId;
-	protected String name;
+	protected final int dimensionId;
+	protected final String name;
 	protected int seaLevel;
 	protected int skyHeight;
 	protected int cloudHeight;
@@ -324,6 +324,6 @@ public final class DimensionInfo implements IDimensionInfoEx {
 		public final static String MIN_INTENSITY = "min";
 		public final static String MAX_INTENSITY = "max";
 		public final static String THUNDER_TIMER = "th";
-	};
+	}
 
 }

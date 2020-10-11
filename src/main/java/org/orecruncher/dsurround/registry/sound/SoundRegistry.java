@@ -188,8 +188,8 @@ public final class SoundRegistry extends Registry {
 	}
 
 	@Nullable
-	public SoundMetadata getSoundMetadata(@Nonnull final ResourceLocation resource) {
-		return this.soundMetadata.get(resource);
+	public SoundMetadata getSoundMetadata(@Nullable final ResourceLocation resource) {
+		return resource != null  ? this.soundMetadata.get(resource) : null;
 	}
 
 	private boolean isSoundCulledLogical(@Nonnull final ResourceLocation res) {

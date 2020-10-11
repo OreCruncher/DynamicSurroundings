@@ -24,6 +24,7 @@
 package org.orecruncher.dsurround.client.footsteps.facade;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import codechicken.microblock.BlockMicroMaterial;
 import codechicken.microblock.Microblock;
@@ -48,6 +49,7 @@ final class ForgeMultiPartCBE implements IFacadeAccessor {
 	public ForgeMultiPartCBE() {
 	}
 
+	@Nonnull
 	@Override
 	public String getName() {
 		return "ForgeMultiPartCBE";
@@ -65,15 +67,14 @@ final class ForgeMultiPartCBE implements IFacadeAccessor {
 
 	@Override
 	public IBlockState getBlockState(@Nonnull final EntityLivingBase entity, @Nonnull final IBlockState state,
-			@Nonnull final IBlockAccess world, @Nonnull final Vec3d vec, @Nonnull final EnumFacing side) {
+			@Nonnull final IBlockAccess world, @Nonnull final Vec3d vec, @Nullable final EnumFacing side) {
 		try {
 			final BlockPos pos = new BlockPos(vec);
 			final TileEntity te = world.getTileEntity(pos);
 			if (te instanceof TileMultipart) {
 				final TileMultipart tm = (TileMultipart) te;
-				final Vec3d start = vec;
 				final Vec3d end = vec.add(0, -1, 0);
-				final PartRayTraceResult result = tm.collisionRayTrace(start, end);
+				final PartRayTraceResult result = tm.collisionRayTrace(vec, end);
 				if (result != null && result.typeOfHit == Type.BLOCK) {
 					final Microblock micro = (Microblock) tm.partList().apply(result.partIndex());
 					if (micro != null) {
@@ -87,8 +88,7 @@ final class ForgeMultiPartCBE implements IFacadeAccessor {
 					}
 				}
 			}
-		} catch (@Nonnull final Throwable t) {
-
+		} catch (@Nonnull final Throwable ignore) {
 		}
 		return state;
 	}

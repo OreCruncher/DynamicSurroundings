@@ -516,10 +516,10 @@ public class Generator {
 	@Override
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
-		builder.append("didJump: ").append(Boolean.toString(this.didJump)).append(' ');
-		builder.append("onLadder: ").append(Boolean.toString(this.isOnLadder)).append(' ');
-		builder.append("flying: ").append(Boolean.toString(this.isFlying)).append(' ');
-		builder.append("immobile: ").append(Boolean.toString(this.isImmobile)).append(' ');
+		builder.append("didJump: ").append(this.didJump).append(' ');
+		builder.append("onLadder: ").append(this.isOnLadder).append(' ');
+		builder.append("flying: ").append(this.isFlying).append(' ');
+		builder.append("immobile: ").append(this.isImmobile).append(' ');
 		builder.append("steps: ").append(this.pedometer);
 		return builder.toString();
 	}

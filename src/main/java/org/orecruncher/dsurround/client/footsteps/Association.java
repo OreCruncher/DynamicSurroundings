@@ -50,43 +50,25 @@ public class Association {
 	private final ObjectArray<IAcoustic> data = new ObjectArray<>(8);
 	private final boolean isNotEmitter;
 
-	public Association() {
-		this(AcousticRegistry.EMPTY);
-	}
-
-	public Association(@Nonnull final IAcoustic[] association) {
-		this(null, null, association);
-	}
-
 	public Association(@Nonnull final EntityLivingBase entity, @Nonnull final IAcoustic[] association) {
 		final Vec3d vec = entity.getPositionVector();
 		this.state = null;
 		this.location = new FootStrikeLocation(entity, vec.x, vec.y + 1, vec.z);
-		;
-		this.data.addAll(association == null ? AcousticRegistry.EMPTY : association);
+		this.data.addAll(association);
 		this.isNotEmitter = association == AcousticRegistry.NOT_EMITTER;
-	}
-
-	public Association(@Nonnull final IBlockState state, @Nonnull final FootStrikeLocation pos) {
-		this(state, pos, AcousticRegistry.EMPTY);
 	}
 
 	public Association(@Nonnull final IBlockState state, @Nonnull final FootStrikeLocation pos,
 			@Nonnull final IAcoustic[] association) {
 		this.state = state;
 		this.location = pos;
-		this.data.addAll(association == null ? AcousticRegistry.EMPTY : association);
+		this.data.addAll(association);
 		this.isNotEmitter = association == AcousticRegistry.NOT_EMITTER;
 	}
 
 	@Nonnull
 	public IAcoustic[] getData() {
 		return this.data.toArray(new IAcoustic[0]);
-	}
-
-	@Nonnull
-	public boolean getNoAssociation() {
-		return this.data.size() == 0;
 	}
 
 	public boolean isLiquid() {

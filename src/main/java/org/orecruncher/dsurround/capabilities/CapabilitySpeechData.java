@@ -63,6 +63,7 @@ public final class CapabilitySpeechData {
 	}
 
 	@SideOnly(Side.CLIENT)
+	@Nullable
 	public static ISpeechData getCapability(@Nonnull final Entity entity) {
 		return CapabilityUtils.getCapability(entity, SPEECH_DATA, null);
 	}

@@ -25,6 +25,7 @@
 package org.orecruncher.dsurround.capabilities;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
@@ -57,6 +58,7 @@ public class CapabilitySeasonInfo {
 	}
 
 	@SideOnly(Side.CLIENT)
+	@Nullable
 	public static ISeasonInfo getCapability(@Nonnull final World world) {
 		return CapabilityUtils.getCapability(world, SEASON_INFO, null);
 	}

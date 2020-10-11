@@ -161,7 +161,7 @@ public class StormRenderer {
 				final double rainY = RAIN_Y_COORDS[idx];
 				this.mutable.setPos(gridX, 0, gridZ);
 
-				if (!RandomThings.shouldRain(world, this.mutable))
+				if (RandomThings.shouldRain(world, this.mutable))
 					continue;
 
 				final BiomeInfo biome = BiomeUtil.getBiomeData(ClientChunkCache.instance().getBiome(this.mutable));

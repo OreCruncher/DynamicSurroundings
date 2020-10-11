@@ -25,6 +25,7 @@
 package org.orecruncher.dsurround.capabilities;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModInfo;
@@ -59,6 +60,7 @@ public class CapabilityDimensionInfo {
 				DimensionInfo::new);
 	}
 
+	@Nullable
 	public static IDimensionInfo getCapability(@Nonnull final World world) {
 		return CapabilityUtils.getCapability(world, DIMENSION_INFO, null);
 	}

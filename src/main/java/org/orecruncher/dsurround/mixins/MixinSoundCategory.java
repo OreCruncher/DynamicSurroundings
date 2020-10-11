@@ -28,7 +28,6 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.spongepowered.asm.mixin.Mixin;
@@ -55,24 +54,24 @@ public abstract class MixinSoundCategory {
 
 			// Update the internal cached list
 			try {
-				final Field f = findField(SoundCategory.class, "SOUND_CATEGORIES", "field_187961_k");
+				final Field f = findField();
 				@SuppressWarnings("unchecked")
 				final Map<String, SoundCategory> theMap = (Map<String, SoundCategory>) f.get(null);
 				theMap.put(fs.getName(), fs);
 				theMap.put(b.getName(), b);
-			} catch (@Nonnull final Throwable t) {
+			} catch (@Nonnull final Throwable ignore) {
 			}
 		}
 	}
 	
     @Nonnull
-    private static Field findField(@Nonnull Class<?> clazz, @Nonnull String fieldName, @Nullable String fieldObfName) throws NoSuchFieldException, SecurityException
+    private static Field findField() throws NoSuchFieldException, SecurityException
     {
-        Preconditions.checkNotNull(clazz);
-        Preconditions.checkArgument(StringUtils.isNotEmpty(fieldName), "Field name cannot be empty");
+        Preconditions.checkNotNull((Class<?>) SoundCategory.class);
+        Preconditions.checkArgument(StringUtils.isNotEmpty("SOUND_CATEGORIES"), "Field name cannot be empty");
 
-        final String nameToFind = FMLLaunchHandler.isDeobfuscatedEnvironment() ? fieldName : MoreObjects.firstNonNull(fieldObfName, fieldName);
-        final Field f = clazz.getDeclaredField(nameToFind);
+        final String nameToFind = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "SOUND_CATEGORIES" : MoreObjects.firstNonNull("field_187961_k", "SOUND_CATEGORIES");
+        final Field f = SoundCategory.class.getDeclaredField(nameToFind);
         f.setAccessible(true);
         return f;
     }

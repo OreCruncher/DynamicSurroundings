@@ -62,7 +62,7 @@ public enum ModEnvironment {
 	protected final String modId;
 	protected boolean isLoaded;
 
-	private ModEnvironment(@Nonnull final String modId) {
+	ModEnvironment(@Nonnull final String modId) {
 		this.modId = modId;
 	}
 

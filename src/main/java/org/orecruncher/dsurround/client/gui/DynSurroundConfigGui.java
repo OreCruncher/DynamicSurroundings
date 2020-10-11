@@ -47,7 +47,6 @@ import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
-import net.minecraftforge.fml.client.config.IConfigElement;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -56,19 +55,18 @@ public class DynSurroundConfigGui extends GuiConfigBase {
 
 	private final Configuration config = ModBase.config();
 
-	private final ConfigElement soundElement;
 	private final ConfigCategory soundCategory;
 
 	public DynSurroundConfigGui(final GuiScreen parentScreen) {
-		super(parentScreen, new ArrayList<IConfigElement>(), ModInfo.MOD_ID, false, false, ModInfo.MOD_NAME);
+		super(parentScreen, new ArrayList<>(), ModInfo.MOD_ID, false, false, ModInfo.MOD_NAME);
 		this.titleLine2 = this.config.getConfigFile().getAbsolutePath();
 
 		// Synthetic options for handling sound blocking and volume
 		this.soundCategory = new ConfigCategory("Individual Sound Configuration")
 				.setLanguageKey("dsurround.cfg.individual");
-		this.soundElement = new ConfigElement(this.soundCategory);
+		ConfigElement soundElement = new ConfigElement(this.soundCategory);
 		generateSoundList(this.soundCategory);
-		this.configElements.add(this.soundElement);
+		this.configElements.add(soundElement);
 
 		// Tack on the rest of the categories for configuration
 		addConfigCategory(ModOptions.CATEGORY_GENERAL);
@@ -108,7 +106,7 @@ public class DynSurroundConfigGui extends GuiConfigBase {
 			soundVolumes.add(entry.getKey() + " " + parms);
 		}
 
-		final String[] results = soundVolumes.toArray(new String[soundVolumes.size()]);
+		final String[] results = soundVolumes.toArray(new String[0]);
 		this.config.getCategory(ModOptions.CATEGORY_SOUND).get(ModOptions.CONFIG_SOUND_SETTINGS).set(results);
 	}
 

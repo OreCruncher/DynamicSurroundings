@@ -50,7 +50,6 @@ public class SeasonInfo implements ISeasonInfo {
 	protected static final float BREATH_TEMP = 0.2F;
 	protected static final String noSeason = Localization.loadString("dsurround.season.noseason");
 
-	@Nullable
 	protected final World world;
 
 	public SeasonInfo() {
@@ -143,7 +142,7 @@ public class SeasonInfo implements ISeasonInfo {
 	}
 
 	protected boolean doDust(@Nonnull final BiomeInfo biome) {
-		return ModOptions.fog.allowDesertFog && !Weather.doVanilla() && biome.getHasDust();
+		return ModOptions.fog.allowDesertFog && Weather.notDoVanilla() && biome.getHasDust();
 	}
 
 	/**

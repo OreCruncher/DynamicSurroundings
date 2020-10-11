@@ -112,7 +112,7 @@ public abstract class MoteAnimatedBase extends MoteMotionBase {
 
 		super.update();
 
-		if (isAlive()) {
+		if (!isAlive()) {
 
 			if (this.age > this.maxAge / 2) {
 				this.alpha = (int) ((1.0F - ((float) this.age - (float) (this.maxAge / 2)) / this.maxAge) * 255);

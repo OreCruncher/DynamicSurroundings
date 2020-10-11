@@ -29,6 +29,7 @@ import javax.annotation.Nonnull;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.capabilities.CapabilityDimensionInfo;
+import org.orecruncher.dsurround.capabilities.dimension.IDimensionInfo;
 import org.orecruncher.dsurround.lib.compat.ModEnvironment;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -88,7 +89,8 @@ public final class AtmosphereService extends Service {
 
 	private WeatherGenerator createGenerator(@Nonnull final World world) {
 		WeatherGenerator result = null;
-		if (CapabilityDimensionInfo.getCapability(world).hasWeather()) {
+		IDimensionInfo info = CapabilityDimensionInfo.getCapability(world);
+		if (info != null && info.hasWeather()) {
 			final int dimId = world.provider.getDimension();
 			if (doVanillaRain()) {
 				if (dimId != -1) {

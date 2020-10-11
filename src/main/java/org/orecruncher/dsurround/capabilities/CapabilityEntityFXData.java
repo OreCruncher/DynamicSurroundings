@@ -25,6 +25,7 @@
 package org.orecruncher.dsurround.capabilities;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.capabilities.entityfx.EntityFXData;
@@ -59,6 +60,7 @@ public class CapabilityEntityFXData {
 	}
 
 	@SideOnly(Side.CLIENT)
+	@Nullable
 	public static IEntityFX getCapability(@Nonnull final Entity entity) {
 		return CapabilityUtils.getCapability(entity, FX_INFO, null);
 	}

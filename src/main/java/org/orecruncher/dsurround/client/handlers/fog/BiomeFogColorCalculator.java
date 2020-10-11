@@ -25,6 +25,7 @@ package org.orecruncher.dsurround.client.handlers.fog;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.potion.PotionEffect;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.weather.Weather;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
@@ -173,8 +174,9 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 
 		// EntityRenderer.updateFogColor() - If the player is blind need to
 		// darken it further
-		if (player.isPotionActive(MobEffects.BLINDNESS)) {
-			final int duration = player.getActivePotionEffect(MobEffects.BLINDNESS).getDuration();
+		PotionEffect potionEffect = player.getActivePotionEffect(MobEffects.BLINDNESS);
+		if (potionEffect != null) {
+			final int duration = potionEffect.getDuration();
 			darkScale *= (duration < 20) ? (1 - duration / 20f) : 0;
 		}
 
@@ -183,10 +185,11 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 			fogColor.scale(darkScale);
 		}
 
-		// EntityRenderer.updateFogColor() - If the player has nightvision going
+		// EntityRenderer.updateFogColor() - If the player has night vision going
 		// need to lighten it a bit
-		if (player.isPotionActive(MobEffects.NIGHT_VISION)) {
-			final int duration = player.getActivePotionEffect(MobEffects.NIGHT_VISION).getDuration();
+		potionEffect = player.getActivePotionEffect(MobEffects.NIGHT_VISION);
+		if (potionEffect != null) {
+			final int duration = potionEffect.getDuration();
 			final float brightness = (duration > 200) ? 1
 					: 0.7f + MathStuff.sin((duration - renderPartialTicks) * MathStuff.PI_F * 0.2f) * 0.3f;
 

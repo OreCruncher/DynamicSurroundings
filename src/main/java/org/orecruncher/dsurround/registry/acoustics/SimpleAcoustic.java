@@ -41,14 +41,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class SimpleAcoustic implements IAcoustic {
 
-	@Nullable
 	protected SoundEvent sound;
 	protected float volMin = 1f;
 	protected float volMax = 1f;
 	protected float pitchMin = 1f;
 	protected float pitchMax = 1f;
 
-	@Nullable
 	protected IOptions outputOptions;
 
 	public SimpleAcoustic() {

@@ -26,8 +26,8 @@ package org.orecruncher.dsurround.client.sound;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
+import net.minecraft.util.SoundEvent;
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
@@ -54,7 +54,6 @@ public abstract class Emitter {
 	protected static final Random RANDOM = XorShiftRandom.current();
 	protected static final RecordTitleEmitter.ITimeKeeper timer = EnvironState::getTickCounter;
 
-	@Nullable
 	protected final RecordTitleEmitter titleEmitter;
 	protected final SoundEffect effect;
 	protected SoundInstance activeSound;
@@ -66,7 +65,8 @@ public abstract class Emitter {
 		this.effect = sound;
 
 		if (StringUtils.isEmpty(sound.getSoundTitle())) {
-			final SoundMetadata data = RegistryManager.SOUND.getSoundMetadata(this.effect.getSound().getRegistryName());
+			final SoundEvent effect = this.effect.getSound();
+			final SoundMetadata data = effect != null ? RegistryManager.SOUND.getSoundMetadata(effect.getRegistryName()) : null;
 			if (data != null) {
 				if (!StringUtils.isEmpty(data.getTitle())) {
 					final StringBuilder builder = new StringBuilder();

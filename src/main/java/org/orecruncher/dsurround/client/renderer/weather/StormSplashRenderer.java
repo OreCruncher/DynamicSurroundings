@@ -90,7 +90,7 @@ public class StormSplashRenderer {
 		final float currentVolume = Weather.getCurrentVolume();
 		final float bounds = currentVolume * 0.25F;
 		final float adjust = MathHelper.clamp(
-				(float) (this.GENERATOR.getValue((world.getWorldTime() % 24000L) / 100, 1) / 5.0F), -bounds, bounds);
+				(float) (this.GENERATOR.getValue((world.getWorldTime() % 24000L) / 100.0D, 1) / 5.0F), -bounds, bounds);
 		return MathHelper.clamp(currentVolume + adjust, 0, 1F);
 	}
 
@@ -100,7 +100,6 @@ public class StormSplashRenderer {
 		EnumParticleTypes particleType = null;
 
 		if (dust || block == Blocks.SOUL_SAND) {
-			particleType = null;
 		} else if ((block == Blocks.NETHERRACK || block == Blocks.MAGMA) && ModOptions.rain.enableNetherrackMagmaSplashEffect && this.RANDOM.nextInt(20) == 0) {
 			particleType = EnumParticleTypes.LAVA;
 		} else if (state.getMaterial() == Material.LAVA) {
@@ -128,7 +127,7 @@ public class StormSplashRenderer {
 	}
 
 	protected boolean biomeHasDust(final Biome biome) {
-		return ModOptions.fog.allowDesertFog && !Weather.doVanilla() && BiomeUtil.getBiomeData(biome).getHasDust();
+		return ModOptions.fog.allowDesertFog && Weather.notDoVanilla() && BiomeUtil.getBiomeData(biome).getHasDust();
 	}
 
 	protected void playSplashSound(final ISeasonInfo season, final World world, final Entity player, double x, double y,
@@ -194,7 +193,7 @@ public class StormSplashRenderer {
 			final int locZ = playerZ + this.RANDOM.nextInt(RANGE) - this.RANDOM.nextInt(RANGE);
 			this.pos.setPos(locX, 0, locZ);
 
-			if (!RandomThings.shouldRain(world, this.pos))
+			if (RandomThings.shouldRain(world, this.pos))
 				continue;
 
 			final BlockPos precipHeight = getPrecipitationHeight(season, RANGE / 2, this.pos);

@@ -44,8 +44,7 @@ public abstract class MixinSoundManager {
 		if (!(current instanceof GuiErrorBase)) {
 			try {
 				ci.setReturnValue(SoundEngine.getClampedVolume(sound));
-			} catch (final Exception ex) {
-	
+			} catch (final Exception ignore) {
 			}
 		}
 	}

@@ -25,6 +25,7 @@
 package org.orecruncher.dsurround.capabilities;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.capabilities.entitydata.EntityData;
@@ -62,6 +63,7 @@ public final class CapabilityEntityData {
 		CapabilityManager.INSTANCE.register(IEntityData.class, new SimpleStorage<>(), EntityData::new);
 	}
 
+	@Nullable
 	public static IEntityData getCapability(@Nonnull final Entity entity) {
 		return CapabilityUtils.getCapability(entity, CapabilityEntityData.ENTITY_DATA, null);
 	}

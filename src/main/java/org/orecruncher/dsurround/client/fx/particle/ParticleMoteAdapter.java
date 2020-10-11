@@ -49,7 +49,7 @@ public final class ParticleMoteAdapter implements IParticleMote {
 
 	@Override
 	public boolean isAlive() {
-		return this.particle.isAlive();
+		return !this.particle.isAlive();
 	}
 
 	@Override

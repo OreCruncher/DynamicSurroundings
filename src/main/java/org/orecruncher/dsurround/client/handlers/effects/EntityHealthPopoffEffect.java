@@ -24,7 +24,6 @@
 package org.orecruncher.dsurround.client.handlers.effects;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.annotation.Nonnull;
 

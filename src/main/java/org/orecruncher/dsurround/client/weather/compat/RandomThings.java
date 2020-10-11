@@ -51,6 +51,6 @@ public final class RandomThings {
 	}
 
 	public static boolean shouldRain(final World world, final BlockPos pos) {
-		return !shouldRain.isAvailable() || shouldRain.invoke(null, world, pos);
+		return shouldRain.isAvailable() && !shouldRain.invoke(null, world, pos);
 	}
 }
