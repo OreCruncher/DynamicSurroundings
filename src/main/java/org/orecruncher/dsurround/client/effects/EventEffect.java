@@ -25,7 +25,6 @@ package org.orecruncher.dsurround.client.effects;
 
 import javax.annotation.Nonnull;
 
-import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -64,25 +63,6 @@ public abstract class EventEffect {
 	}
 
 	/**
-	 * Determines if the EntityEvent is valid in terms of a proper Entity being
-	 * configured and that the event is fired on Side.CLIENT.
-	 *
-	 * @param event The event to evaluate
-	 * @return true if valid, false otherwise
-	 */
-	protected boolean isClientValid(@Nonnull final EntityEvent event) {
-		if (event != null) {
-			if (event.getEntity() != null) {
-				if (event.getEntity().getEntityWorld() != null) {
-					return event.getEntity().getEntityWorld().isRemote;
-				}
-			}
-		}
-
-		return false;
-	}
-
-	/**
 	 * Determines if the PlayerEvent is valid in terms of a proper Entity being
 	 * configured and that the event is fired on Side.CLIENT.
 	 *
@@ -90,12 +70,8 @@ public abstract class EventEffect {
 	 * @return true if valid, false otherwise
 	 */
 	protected boolean isClientValid(@Nonnull final PlayerEvent event) {
-		if (event != null) {
-			if (event.player != null) {
-				if (event.player.getEntityWorld() != null) {
-					return event.player.getEntityWorld().isRemote;
-				}
-			}
+		if (event.player != null) {
+			return event.player.getEntityWorld().isRemote;
 		}
 
 		return false;

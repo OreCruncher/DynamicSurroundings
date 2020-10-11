@@ -24,6 +24,7 @@
 package org.orecruncher.dsurround.client.handlers.effects;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
@@ -56,15 +57,17 @@ public class BreathEffect extends EntityEffect {
 
 	private int seed;
 
+	@Nonnull
 	@Override
 	public String name() {
 		return "Breath";
 	}
 
 	@Override
-	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
-		super.intitialize(state);
-		this.seed = state.subject().getEntityId() * PRIME;
+	public void initialize(@Nonnull final IEntityEffectHandlerState state) {
+		super.initialize(state);
+		final Optional<Entity> entity = state.subject();
+		entity.ifPresent(value -> this.seed = value.getEntityId() * PRIME);
 	}
 
 	@Override
@@ -75,7 +78,7 @@ public class BreathEffect extends EntityEffect {
 		if (isBreathVisible(subject)) {
 			final int c = (int) ((getState().getWorldTime() + this.seed));
 			final IBlockState state = getHeadBlock(subject);
-			if (showWaterBubbles(subject, state)) {
+			if (showWaterBubbles(state)) {
 				final int air = subject.getAir();
 				if (air > 0) {
 					final int interval = c % 3;
@@ -113,7 +116,7 @@ public class BreathEffect extends EntityEffect {
 		return entity.getEntityWorld().getBlockState(blockpos);
 	}
 
-	protected boolean showWaterBubbles(final Entity entity, @Nonnull final IBlockState headBlock) {
+	protected boolean showWaterBubbles(@Nonnull final IBlockState headBlock) {
 		return headBlock.getMaterial().isLiquid();
 	}
 
@@ -131,8 +134,9 @@ public class BreathEffect extends EntityEffect {
 
 	public static class Factory implements IEntityEffectFactory {
 
+		@Nonnull
 		@Override
-		public List<EntityEffect> create(@Nonnull final Entity entity, @Nonnull final EntityEffectInfo eei) {
+		public List<EntityEffect> create(@Nonnull final Entity entity) {
 			return ImmutableList.of(new BreathEffect());
 		}
 	}

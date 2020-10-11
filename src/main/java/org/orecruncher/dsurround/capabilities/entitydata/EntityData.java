@@ -81,7 +81,6 @@ public final class EntityData implements IEntityDataSettable {
 		this.isFleeing = flag;
 	}
 
-	@Override
 	public boolean needsSync() {
 		return this.sync;
 	}

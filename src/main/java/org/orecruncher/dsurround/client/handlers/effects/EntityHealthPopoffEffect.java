@@ -24,6 +24,7 @@
 package org.orecruncher.dsurround.client.handlers.effects;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
@@ -73,12 +74,12 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 	}
 
 	@Override
-	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
-		super.intitialize(state);
-		final EntityLivingBase entity = (EntityLivingBase) getState().subject();
-		this.lastHealth = entity.getHealth();
+	public void initialize(@Nonnull final IEntityEffectHandlerState state) {
+		super.initialize(state);
+		getState().subject().ifPresent(e -> this.lastHealth = ((EntityLivingBase) e).getHealth());
 	}
 
+	@Nonnull
 	@Override
 	public String name() {
 		return "Health Tracker";
@@ -115,7 +116,7 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 
 				final World world = EnvironState.getWorld();
 
-				ParticleTextPopOff particle = null;
+				ParticleTextPopOff particle;
 				if (ModOptions.effects.showCritWords && adjustment < 0 && delta >= criticalAmount) {
 					particle = new ParticleTextPopOff(world, getPowerWord(), CRITICAL_TEXT_COLOR, posX, posY + 0.5D,
 							posZ);
@@ -134,8 +135,9 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 
 	public static class Factory implements IEntityEffectFactory {
 
+		@Nonnull
 		@Override
-		public List<EntityEffect> create(@Nonnull final Entity entity, @Nonnull final EntityEffectInfo eei) {
+		public List<EntityEffect> create(@Nonnull final Entity entity) {
 			return ImmutableList.of(new EntityHealthPopoffEffect());
 		}
 	}

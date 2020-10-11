@@ -149,7 +149,6 @@ public final class DimensionInfo implements IDimensionInfoEx {
 		return this.dimensionId;
 	}
 
-	@Override
 	@Nonnull
 	public String getName() {
 		return this.name;

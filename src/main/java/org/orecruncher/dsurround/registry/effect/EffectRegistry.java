@@ -23,7 +23,6 @@
  */
 package org.orecruncher.dsurround.registry.effect;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 

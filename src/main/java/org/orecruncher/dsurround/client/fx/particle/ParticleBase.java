@@ -76,6 +76,6 @@ public abstract class ParticleBase extends Particle {
 
 	protected boolean isThirdPersonView() {
 		final GameSettings settings = this.manager.options;
-		return settings == null ? false : settings.thirdPersonView == 2;
+		return settings != null && settings.thirdPersonView == 2;
 	}
 }

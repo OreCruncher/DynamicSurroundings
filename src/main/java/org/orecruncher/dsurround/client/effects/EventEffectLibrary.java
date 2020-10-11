@@ -81,7 +81,7 @@ public class EventEffectLibrary extends EffectStateBase implements IEventEffectL
 	@Override
 	public boolean isActivePlayer(@Nonnull final Entity player) {
 		final EntityPlayer ep = thePlayer();
-		return ep != null && ep.getEntityId() == player.getEntityId();
+		return ep.getEntityId() == player.getEntityId();
 	}
 
 	/**

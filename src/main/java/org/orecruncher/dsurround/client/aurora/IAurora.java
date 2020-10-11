@@ -34,11 +34,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public interface IAurora {
 
 	/*
-	 * Indicates if the aurora can be considered active
-	 */
-	boolean isAlive();
-
-	/*
 	 * Instructs the aurora to start the process of decay (i.e. start to fade)
 	 */
 	void setFading(final boolean flag);

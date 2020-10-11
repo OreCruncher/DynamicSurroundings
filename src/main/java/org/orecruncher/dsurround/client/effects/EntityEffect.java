@@ -62,7 +62,7 @@ public abstract class EntityEffect {
 	 *
 	 * @param state The state provided by the EntityEffectLibrary
 	 */
-	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
+	public void initialize(@Nonnull final IEntityEffectHandlerState state) {
 		this.state = state;
 	}
 
@@ -88,14 +88,6 @@ public abstract class EntityEffect {
 	 */
 	public boolean receiveLastCall() {
 		return false;
-	}
-
-	/**
-	 * Called when the EntityEffectHandler is cleaning up giving the EntityEffect a
-	 * chance to do some house cleaning, like unregistering events.
-	 */
-	public void die() {
-
 	}
 
 	/**

@@ -40,7 +40,6 @@ public class AuroraBand {
 	protected static final float ANGLE1 = MathStuff.PI_F / 16.0F;
 	protected static final float ANGLE2 = MathStuff.toRadians(90.0F / 7.0F);
 	protected static final float AURORA_SPEED = 0.75F;
-	protected static final int AURORA_WAVELENGTH = 8;
 	public static final float AURORA_AMPLITUDE = 18.0F;
 
 	protected final Random random;

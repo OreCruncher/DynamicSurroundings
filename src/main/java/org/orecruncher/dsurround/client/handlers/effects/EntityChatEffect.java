@@ -97,8 +97,7 @@ public class EntityChatEffect extends EntityEffect {
 				}
 			}
 
-		} catch (final Throwable t) {
-			;
+		} catch (final Throwable ignore) {
 		}
 
 	}
@@ -122,7 +121,10 @@ public class EntityChatEffect extends EntityEffect {
 		}
 
 		@Override
-		public boolean apply(@Nonnull final Entry<String, String> input) {
+		public boolean apply(@Nullable final Entry<String, String> input) {
+			if (input == null)
+				return true;
+
 			final Matcher matcher1 = this.TYPE_PATTERN.matcher(input.getKey());
 			if (matcher1.matches()) {
 				final String key = matcher1.group(1).toLowerCase();
@@ -161,7 +163,9 @@ public class EntityChatEffect extends EntityEffect {
 		private final Pattern WEIGHT_PATTERN = Pattern.compile("^([0-9]*),(.*)");
 
 		@Override
-		public String apply(@Nonnull final Entry<String, String> input) {
+		public String apply(@Nullable final Entry<String, String> input) {
+			if (input == null)
+				return "NOT SET";
 			final Matcher matcher = this.WEIGHT_PATTERN.matcher(input.getValue());
 			return matcher.matches() ? matcher.group(2) : input.getValue();
 		}
@@ -184,7 +188,7 @@ public class EntityChatEffect extends EntityEffect {
 		return !(entity instanceof EntityPlayer) && messages.get(EntityUtil.getClassName(entity.getClass())) != null;
 	}
 
-	private String getSpeechFormatted(@Nonnull final Entity entity, @Nonnull final String message) {
+	private String getSpeechFormatted(@Nonnull final String message) {
 		String xlated = xlate.loadString(message);
 		if (minecraftSplashText.size() > 0 && SPLASH_TOKEN.equals(xlated)) {
 			xlated = minecraftSplashText.get(random.nextInt(minecraftSplashText.size()));
@@ -208,6 +212,7 @@ public class EntityChatEffect extends EntityEffect {
 		this.nextChat = getWorldTicks(entity) + getNextChatTime();
 	}
 
+	@Nonnull
 	@Override
 	public String name() {
 		return "Entity Chat";
@@ -225,8 +230,9 @@ public class EntityChatEffect extends EntityEffect {
 		return e.getEntityWorld().getTotalWorldTime();
 	}
 
-	protected String getChatMessage(@Nonnull final Entity entity) {
-		return xlate.loadString(getSpeechFormatted(entity, this.data.table.next()));
+	protected String getChatMessage() {
+		String txt = this.data.table.next();
+		return txt != null ? xlate.loadString(getSpeechFormatted(txt)) : "NO TEXT";
 	}
 
 	protected int getNextChatTime() {
@@ -244,7 +250,7 @@ public class EntityChatEffect extends EntityEffect {
 			final ISpeechData data = CapabilitySpeechData.getCapability(subject);
 			if (data != null) {
 				final int expiry = (int) (ModOptions.speechbubbles.speechBubbleDuration * 20F);
-				data.addMessage(getChatMessage(subject), expiry);
+				data.addMessage(getChatMessage(), expiry);
 			}
 			genNextChatTime();
 		}
@@ -252,7 +258,7 @@ public class EntityChatEffect extends EntityEffect {
 	}
 
 	public void genNextChatTime() {
-		this.nextChat = getWorldTicks(getState().subject()) + getNextChatTime();
+		getState().subject().ifPresent(e -> this.nextChat = getWorldTicks(e) + getNextChatTime());
 	}
 
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = (@Nonnull final Entity e,
@@ -261,8 +267,9 @@ public class EntityChatEffect extends EntityEffect {
 
 	public static class Factory implements IEntityEffectFactory {
 
+		@Nonnull
 		@Override
-		public List<EntityEffect> create(@Nonnull final Entity entity, @Nonnull final EntityEffectInfo eei) {
+		public List<EntityEffect> create(@Nonnull final Entity entity) {
 			return ImmutableList.of(new EntityChatEffect(entity));
 		}
 	}

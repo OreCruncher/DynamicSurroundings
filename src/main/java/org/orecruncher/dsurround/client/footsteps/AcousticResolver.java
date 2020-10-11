@@ -53,8 +53,6 @@ public class AcousticResolver {
 	protected final FootStrikeLocation loc;
 	protected final double distanceToCenter;
 
-	protected final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
-
 	public AcousticResolver(@Nonnull final IBlockAccess world, @Nonnull final BlockMap map,
 			@Nonnull final FootStrikeLocation loc, final double distanceToCenter) {
 		this.world = world;

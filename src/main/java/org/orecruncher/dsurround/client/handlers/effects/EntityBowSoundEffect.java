@@ -51,6 +51,7 @@ public class EntityBowSoundEffect extends EntityEffect {
 
 	protected ItemStack lastActiveStack;
 
+	@Nonnull
 	@Override
 	public String name() {
 		return "Bow Sound";
@@ -62,7 +63,7 @@ public class EntityBowSoundEffect extends EntityEffect {
 		final ItemStack currentStack = entity.getActiveItemStack();
 		if (ItemStackUtil.isValidItemStack(currentStack)) {
 
-			if (this.lastActiveStack == null || !ItemStack.areItemStacksEqual(currentStack, this.lastActiveStack)) {
+			if (!ItemStack.areItemStacksEqual(currentStack, this.lastActiveStack)) {
 				final IItemData data = ItemUtils.getItemData(currentStack.getItem());
 				final ItemClass itemClass = data.getItemClass();
 				if (itemClass == ItemClass.BOW || itemClass == ItemClass.SHIELD) {
@@ -86,8 +87,9 @@ public class EntityBowSoundEffect extends EntityEffect {
 
 	public static class Factory implements IEntityEffectFactory {
 
+		@Nonnull
 		@Override
-		public List<EntityEffect> create(@Nonnull final Entity entity, @Nonnull final EntityEffectInfo eei) {
+		public List<EntityEffect> create(@Nonnull final Entity entity) {
 			return ImmutableList.of(new EntityBowSoundEffect());
 		}
 	}

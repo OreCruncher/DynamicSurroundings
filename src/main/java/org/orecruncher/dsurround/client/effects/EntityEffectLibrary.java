@@ -87,7 +87,7 @@ public class EntityEffectLibrary {
 		final EntityEffectInfo eei = RegistryManager.EFFECTS.getEffects(entity);
 		for (int i = 0; i < this.filters.size(); i++)
 			if (this.filters.get(i).applies(entity, eei)) {
-				final List<EntityEffect> r = this.factories.get(i).create(entity, eei);
+				final List<EntityEffect> r = this.factories.get(i).create(entity);
 				effectToApply.addAll(r);
 			}
 

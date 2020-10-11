@@ -40,11 +40,4 @@ public interface IEntityEffectHandlerState extends IEntityEffectState {
 	 */
 	boolean isAlive();
 
-	/**
-	 * Provides the distance, squared, to the player entity behind the keyboard.
-	 *
-	 * @return Range to client player, squared.
-	 */
-	double rangeToPlayerSq();
-
 }

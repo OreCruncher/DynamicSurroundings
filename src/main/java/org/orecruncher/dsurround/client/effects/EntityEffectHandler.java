@@ -50,7 +50,7 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 	 */
 	public static class Dummy extends EntityEffectHandler {
 		public Dummy(@Nonnull final Entity entity) {
-			super(entity, null, null);
+			super(entity);
 		}
 
 		@Override
@@ -58,24 +58,26 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 		}
 
 		@Override
-		public void die() {
-			this.isAlive = false;
-		}
-
-		@Override
 		public boolean isDummy() {
 			return true;
 		}
 
+		@Nonnull
 		@Override
 		public List<String> getAttachedEffects() {
 			return ImmutableList.of("Dummy EffectHandler");
 		}
-	};
+	}
 
 	protected final ObjectArray<EntityEffect> activeEffects;
 	protected boolean isAlive = true;
 	protected double rangeToPlayer;
+
+	protected EntityEffectHandler(@Nonnull final Entity entity)
+	{
+		super(entity);
+		this.activeEffects = null;
+	}
 
 	public EntityEffectHandler(@Nonnull final Entity entity, @Nonnull final IParticleHelper ph,
 			@Nonnull final ISoundHelper sh) {
@@ -88,7 +90,7 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 		super(entity, ph, sh);
 		this.activeEffects = effects;
 		for (final EntityEffect ee : this.activeEffects)
-			ee.intitialize(this);
+			ee.initialize(this);
 	}
 
 	/**
@@ -100,27 +102,20 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 			return;
 
 		this.isAlive = isSubjectAlive();
-		final Entity entity = this.subject.get();
-		if (entity != null) {
-			final EntityPlayer player = Minecraft.getMinecraft().player;
-			this.rangeToPlayer = entity.getDistanceSq(player);
 
-			for (int i = 0; i < this.activeEffects.size(); i++) {
-				final EntityEffect e = this.activeEffects.get(i);
-				if (this.isAlive || e.receiveLastCall())
-					e.update(entity);
+		if (this.activeEffects != null) {
+			final Entity entity = this.subject.get();
+			if (entity != null) {
+				final EntityPlayer player = Minecraft.getMinecraft().player;
+				this.rangeToPlayer = entity.getDistanceSq(player);
+
+				for (int i = 0; i < this.activeEffects.size(); i++) {
+					final EntityEffect e = this.activeEffects.get(i);
+					if (this.isAlive || e.receiveLastCall())
+						e.update(entity);
+				}
 			}
 		}
-	}
-
-	/**
-	 * Instructs the EntityEffectHandler that it should cleanup state because it is
-	 * about to die.
-	 */
-	public void die() {
-		this.isAlive = false;
-		for (final EntityEffect e : this.activeEffects)
-			e.die();
 	}
 
 	/**
@@ -162,16 +157,6 @@ public class EntityEffectHandler extends EntityEffectStateBase implements IEntit
 	@Override
 	public boolean isAlive() {
 		return this.isAlive;
-	}
-
-	/**
-	 * Provides the distance, squared, to the player entity behind the keyboard.
-	 *
-	 * @return Range to client player, squared.
-	 */
-	@Override
-	public double rangeToPlayerSq() {
-		return this.rangeToPlayer;
 	}
 
 }

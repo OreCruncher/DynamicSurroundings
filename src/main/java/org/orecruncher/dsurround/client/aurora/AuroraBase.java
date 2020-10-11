@@ -73,8 +73,7 @@ public abstract class AuroraBase implements IAurora {
 		this.dimInfo = EnvironState.getDimensionInfo();
 	}
 
-	@Override
-	public boolean isAlive() {
+	private boolean isAlive() {
 		return this.tracker.isAlive();
 	}
 

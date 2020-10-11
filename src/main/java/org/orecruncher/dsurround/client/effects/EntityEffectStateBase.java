@@ -23,18 +23,24 @@
  */
 package org.orecruncher.dsurround.client.effects;
 
-import java.lang.ref.WeakReference;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
+import java.lang.ref.WeakReference;
+import java.util.Optional;
 
 @SideOnly(Side.CLIENT)
 public class EntityEffectStateBase extends EffectStateBase implements IEntityEffectState {
 
 	protected final WeakReference<Entity> subject;
+
+	protected EntityEffectStateBase(@Nonnull Entity entity)
+	{
+		super();
+		this.subject = new WeakReference<>(entity);
+	}
 
 	public EntityEffectStateBase(@Nonnull final Entity entity, @Nonnull final IParticleHelper ph,
 			@Nonnull final ISoundHelper sh) {
@@ -50,9 +56,9 @@ public class EntityEffectStateBase extends EffectStateBase implements IEntityEff
 	 * @return Reference to the subject Entity, if any.
 	 */
 	@Override
-	@Nullable
-	public Entity subject() {
-		return this.subject.get();
+	@Nonnull
+	public Optional<Entity> subject() {
+		return Optional.ofNullable(this.subject.get());
 	}
 
 	/**
@@ -72,8 +78,7 @@ public class EntityEffectStateBase extends EffectStateBase implements IEntityEff
 	 * @param entity The Entity to which the distance is measured.
 	 * @return The distance between the two Entities in blocks, squared.
 	 */
-	@Override
-	public double distanceSq(final Entity entity) {
+	public double distanceSq(@Nonnull final Entity entity) {
 		final Entity e = this.subject.get();
 		if (e == null)
 			return Double.MAX_VALUE;

@@ -147,10 +147,7 @@ public class EffectManager {
 
 		final EntityPlayer player = getPlayer();
 
-		if (player == null || player.getEntityWorld() == null)
-			return false;
-
-		return true;
+		return player != null && player.getEntityWorld() != null;
 	}
 
 	public void onTick(@Nonnull final TickEvent.ClientTickEvent event) {

@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.effects.EntityEffect;
@@ -51,27 +52,31 @@ public class EntityFootprintEffect extends EntityEffect {
 
 	protected static final Random RANDOM = XorShiftRandom.current();
 
+	@Nullable
 	protected Generator generator;
 
+	@Nonnull
 	@Override
 	public String name() {
 		return "Footstep/Prints";
 	}
 
 	@Override
-	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
-		super.intitialize(state);
-		final EntityLivingBase entity = (EntityLivingBase) getState().subject();
-		this.generator = RegistryManager.FOOTSTEPS.createGenerator(entity);
+	public void initialize(@Nonnull final IEntityEffectHandlerState state) {
+		super.initialize(state);
+		getState().subject().ifPresent(e -> this.generator = RegistryManager.FOOTSTEPS.createGenerator((EntityLivingBase) e));
 	}
 
 	@Override
 	public void update(@Nonnull final Entity subject) {
-		this.generator.generateFootsteps((EntityLivingBase) subject);
+		if (this.generator != null)
+			this.generator.generateFootsteps((EntityLivingBase) subject);
 	}
 
 	@Override
 	public String toString() {
+		if (this.generator == null)
+			return "NULL GENERATOR";
 		return super.toString() + ": " + this.generator.getPedometer();
 	}
 
@@ -80,8 +85,9 @@ public class EntityFootprintEffect extends EntityEffect {
 
 	public static class Factory implements IEntityEffectFactory {
 
+		@Nonnull
 		@Override
-		public List<EntityEffect> create(@Nonnull final Entity entity, @Nonnull final EntityEffectInfo eei) {
+		public List<EntityEffect> create(@Nonnull final Entity entity) {
 			return ImmutableList
 					.of(entity instanceof EntityPlayer ? new PlayerFootprintEffect() : new EntityFootprintEffect());
 		}
@@ -92,14 +98,15 @@ public class EntityFootprintEffect extends EntityEffect {
 
 		protected int lastStyle;
 
+		@Nonnull
 		@Override
 		public String name() {
 			return "Player Footstep/Prints";
 		}
 
 		@Override
-		public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
-			super.intitialize(state);
+		public void initialize(@Nonnull final IEntityEffectHandlerState state) {
+			super.initialize(state);
 			this.lastStyle = ModOptions.effects.footprintStyle;
 		}
 
