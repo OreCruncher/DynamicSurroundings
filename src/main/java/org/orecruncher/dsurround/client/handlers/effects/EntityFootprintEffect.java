@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.effects.EntityEffect;
@@ -52,7 +51,6 @@ public class EntityFootprintEffect extends EntityEffect {
 
 	protected static final Random RANDOM = XorShiftRandom.current();
 
-	@Nullable
 	protected Generator generator;
 
 	@Nonnull

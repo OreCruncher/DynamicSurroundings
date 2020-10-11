@@ -26,6 +26,7 @@ package org.orecruncher.dsurround.client.handlers.effects;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.client.effects.EntityEffect;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactory;
@@ -49,7 +50,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EntityBowSoundEffect extends EntityEffect {
 
-	protected ItemStack lastActiveStack;
+	private ItemStack lastActiveStack = ItemStack.EMPTY;
 
 	@Nonnull
 	@Override
@@ -62,7 +63,6 @@ public class EntityBowSoundEffect extends EntityEffect {
 		final EntityLivingBase entity = (EntityLivingBase) subject;
 		final ItemStack currentStack = entity.getActiveItemStack();
 		if (ItemStackUtil.isValidItemStack(currentStack)) {
-
 			if (!ItemStack.areItemStacksEqual(currentStack, this.lastActiveStack)) {
 				final IItemData data = ItemUtils.getItemData(currentStack.getItem());
 				final ItemClass itemClass = data.getItemClass();
@@ -78,7 +78,7 @@ public class EntityBowSoundEffect extends EntityEffect {
 			}
 
 		} else {
-			this.lastActiveStack = null;
+			this.lastActiveStack = ItemStack.EMPTY;
 		}
 	}
 
