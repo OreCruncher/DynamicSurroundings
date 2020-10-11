@@ -41,7 +41,6 @@ public final class ModInfo {
 	public static final String DEPENDENCIES =
 		"required-after:forge@[14.23.5.2779,);" +
 		"required-after:orelib@[3.6.0.1,);" +
-		//"required-after:mixinbootstrap;" +
 		"after:sereneseasons@[1.2.18,);" +
 		"after:animania@[2.0.0,);" +
 		"after:galacticraftcore;" +
