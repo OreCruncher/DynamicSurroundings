@@ -76,8 +76,7 @@ public class RandomBlockEffectScanner extends RandomScanner {
 		final BlockStateData profile = BlockStateUtil.getStateData(state);
 		final BlockEffect[] effects = profile.getEffects();
 		if (effects != BlockStateData.NO_EFFECTS)
-			for (int i = 0; i < effects.length; i++) {
-				final BlockEffect be = effects[i];
+			for (final BlockEffect be : effects) {
 				if (be.canTrigger(provider, state, pos, rand))
 					be.doEffect(provider, state, pos, rand);
 			}

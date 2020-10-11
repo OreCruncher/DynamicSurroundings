@@ -162,11 +162,11 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	}
 
 	public boolean playSound(@Nonnull final SoundInstance sound) {
-		return sound != null && sound.canSoundBeHeard() ? SoundEngine.instance().playSound(sound) : false;
+		return sound.canSoundBeHeard() && SoundEngine.instance().playSound(sound);
 	}
 
-	public boolean playSoundAtPlayer(@Nonnull final EntityPlayer player, @Nonnull final SoundEffect sound) {
-		return playSound(sound.createSoundNear(player));
+	public void playSoundAtPlayer(@Nonnull final EntityPlayer player, @Nonnull final SoundEffect sound) {
+		playSound(sound.createSoundNear(player));
 	}
 
 	public boolean playSoundAt(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound, final int tickDelay) {

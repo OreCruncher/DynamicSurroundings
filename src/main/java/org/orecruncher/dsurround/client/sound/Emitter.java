@@ -52,7 +52,7 @@ public abstract class Emitter {
 	protected static final int ERROR_DELAY = 10;
 	protected static final int ERROR_DELAY_RANDOM = 6;
 	protected static final Random RANDOM = XorShiftRandom.current();
-	protected static final RecordTitleEmitter.ITimeKeeper timer = () -> EnvironState.getTickCounter();
+	protected static final RecordTitleEmitter.ITimeKeeper timer = EnvironState::getTickCounter;
 
 	@Nullable
 	protected final RecordTitleEmitter titleEmitter;

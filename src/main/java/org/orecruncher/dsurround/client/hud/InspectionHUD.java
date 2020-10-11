@@ -107,9 +107,7 @@ public class InspectionHUD extends Gui implements IGuiOverlay {
 			text.add("Material: " + MCHelper.getMaterialName(state.getMaterial()));
 			final SoundType st = state.getBlock().getSoundType(state, EnvironState.getWorld(), pos,
 					EnvironState.getPlayer());
-			if (st != null) {
-				text.add("Step Sound: " + st.getStepSound().getSoundName().toString());
-			}
+			text.add("Step Sound: " + st.getStepSound().getSoundName().toString());
 
 			if (RegistryManager.FOOTSTEPS.hasFootprint(state))
 				text.add("Footprints Generated");
@@ -120,9 +118,9 @@ public class InspectionHUD extends Gui implements IGuiOverlay {
 			text.add(nbt.toString());
 
 			final BlockMap bm = RegistryManager.FOOTSTEPS.getBlockMap();
-			if (bm != null) {
+			{
 				final List<String> data = new ArrayList<>();
-				bm.collectData(EnvironState.getWorld(), state, pos, data);
+				bm.collectData(state, data);
 				if (data.size() > 0) {
 					text.add(TEXT_FOOTSTEP_ACOUSTICS);
 					for (final String s : data)
@@ -220,17 +218,13 @@ public class InspectionHUD extends Gui implements IGuiOverlay {
 					if (current.entityHit != null) {
 						gatherEntityText(current.entityHit, data);
 					} else {
-						if (current != null) {
-							current.getBlockPos();
-						}
+						current.getBlockPos();
 						final BlockPos targetBlock = current.getBlockPos();
 						final IBlockState state = WorldUtils.getBlockState(EnvironState.getWorld(), targetBlock);
 
 						if (!WorldUtils.isAirBlock(state)) {
-							final ItemStack stack = state != null
-									? state.getBlock().getPickBlock(state, current, EnvironState.getWorld(),
-											targetBlock, EnvironState.getPlayer())
-									: null;
+							final ItemStack stack = state.getBlock().getPickBlock(state, current, EnvironState.getWorld(),
+									targetBlock, EnvironState.getPlayer());
 
 							gatherBlockText(stack, data, state, targetBlock);
 						}

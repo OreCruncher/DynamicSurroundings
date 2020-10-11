@@ -24,6 +24,7 @@
 
 package org.orecruncher.dsurround.registry.blockstate;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -74,12 +75,12 @@ public final class BlockStateRegistry extends Registry {
 
 	@Override
 	protected void init(@Nonnull final ModConfiguration cfg) {
-		cfg.blocks.forEach(b -> register(b));
+		cfg.blocks.forEach(this::register);
 	}
 
 	@Override
 	protected void postInit() {
-		this.blockStates = (int) getBlockStates().map(s -> get(s)).count();
+		this.blockStates = (int) getBlockStates().map(this::get).count();
 	}
 
 	@Override
@@ -93,7 +94,7 @@ public final class BlockStateRegistry extends Registry {
 		//@formatter:off
 		return StreamSupport.stream(ForgeRegistries.BLOCKS.spliterator(), false)
 			.map(block -> block.getBlockState().getValidStates())
-			.flatMap(l -> l.stream());
+			.flatMap(Collection::stream);
 		//@formatter:on
 	}
 
@@ -149,13 +150,13 @@ public final class BlockStateRegistry extends Registry {
 			}
 
 			// Reset of a block clears all registry
-			if (entry.soundReset != null && entry.soundReset.booleanValue())
+			if (entry.soundReset != null && entry.soundReset)
 				blockData.clearSounds();
-			if (entry.effectReset != null && entry.effectReset.booleanValue())
+			if (entry.effectReset != null && entry.effectReset)
 				blockData.clearEffects();
 
 			if (entry.chance != null)
-				blockData.setChance(entry.chance.intValue());
+				blockData.setChance(entry.chance);
 
 			for (final SoundConfig sr : entry.sounds) {
 				if (sr.sound != null && !soundRegistry.isSoundBlocked(new ResourceLocation(sr.sound))) {
@@ -176,7 +177,7 @@ public final class BlockStateRegistry extends Registry {
 				if (type == BlockEffectType.UNKNOWN) {
 					ModBase.log().warn("Unknown block effect type in configuration: [%s]", e.effect);
 				} else if (type.isEnabled()) {
-					final int chance = e.chance != null ? e.chance.intValue() : 100;
+					final int chance = e.chance != null ? e.chance : 100;
 					final BlockEffect blockEffect = type.getInstance(chance);
 					if (blockEffect != null) {
 						if (e.conditions != null)

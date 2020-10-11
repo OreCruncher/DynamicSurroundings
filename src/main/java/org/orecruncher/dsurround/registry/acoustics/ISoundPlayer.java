@@ -39,11 +39,11 @@ public interface ISoundPlayer {
 	/**
 	 * Plays a sound.
 	 */
-	public void playSound(@Nonnull final Vec3d location, @Nonnull final SoundEvent sound, final float volume,
+	void playSound(@Nonnull final Vec3d location, @Nonnull final SoundEvent sound, final float volume,
 			final float pitch, @Nullable final IOptions options);
 
 	/**
 	 * Returns a RANDOM number generator.
 	 */
-	public Random getRNG();
+	Random getRNG();
 }

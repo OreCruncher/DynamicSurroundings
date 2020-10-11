@@ -26,6 +26,7 @@ package org.orecruncher.dsurround.client.sound;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.ModInfo;
@@ -279,10 +280,6 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 			this(new ResourceLocation(ModInfo.RESOURCE_ID, sound), cat);
 		}
 
-		public Builder(@Nonnull final SoundEvent event, @Nonnull final SoundCategory cat) {
-			this(event.getSoundName(), cat);
-		}
-
 		public Builder(@Nonnull final ResourceLocation resource, @Nonnull final SoundCategory cat) {
 			this.effect = new SoundEffect(resource, cat);
 		}
@@ -292,12 +289,12 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 			this.effect = new SoundEffect(resource, null);
 
 			setConditions(StringUtils.isEmpty(record.conditions) ? StringUtils.EMPTY : record.conditions.intern());
-			setVolume(record.volume == null ? 1.0F : record.volume.floatValue());
-			setPitch(record.pitch == null ? 1.0F : record.pitch.floatValue());
-			setWeight(record.weight == null ? 10 : record.weight.intValue());
-			setVariablePitch(record.variable != null && record.variable.booleanValue());
-			setRepeatDelay(record.repeatDelay == null ? 0 : record.repeatDelay.intValue());
-			setRepeatDelayRandom(record.repeatDelayRandom == null ? 0 : record.repeatDelayRandom.intValue());
+			setVolume(record.volume == null ? 1.0F : record.volume);
+			setPitch(record.pitch == null ? 1.0F : record.pitch);
+			setWeight(record.weight == null ? 10 : record.weight);
+			setVariablePitch(record.variable != null && record.variable);
+			setRepeatDelay(record.repeatDelay == null ? 0 : record.repeatDelay);
+			setRepeatDelayRandom(record.repeatDelayRandom == null ? 0 : record.repeatDelayRandom);
 			setSoundTitle(record.title != null ? record.title : StringUtils.EMPTY);
 
 			SoundType t = null;
@@ -305,9 +302,9 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 				t = SoundType.getType(record.soundType);
 
 			if (t == null) {
-				if (record.repeatDelay != null && record.repeatDelay.intValue() > 0)
+				if (record.repeatDelay != null && record.repeatDelay > 0)
 					t = SoundType.PERIODIC;
-				else if (record.spotSound != null && record.spotSound.booleanValue())
+				else if (record.spotSound != null && record.spotSound)
 					t = SoundType.SPOT;
 				else
 					t = SoundType.BACKGROUND;
@@ -359,7 +356,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 			return this;
 		}
 
-		public Builder setConditions(@Nonnull final String cond) {
+		public Builder setConditions(@Nullable final String cond) {
 			this.effect.setConditions(cond == null ? "" : cond);
 			return this;
 		}

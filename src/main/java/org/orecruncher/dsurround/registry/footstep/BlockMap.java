@@ -48,8 +48,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -66,12 +64,12 @@ public class BlockMap {
 		public final String substrate;
 		public final String value;
 
-		public MacroEntry(@Nonnull final String substrate, @Nonnull final String value) {
+		public MacroEntry(@Nullable final String substrate, @Nonnull final String value) {
 			this(null, null, substrate, value);
 		}
 
 		public MacroEntry(@Nullable final String propertyName, @Nullable final String propertyValue,
-				@Nonnull final String substrate, @Nonnull final String value) {
+				@Nullable final String substrate, @Nonnull final String value) {
 			this.propertyName = propertyName;
 			this.propertyValue = propertyValue;
 			this.substrate = substrate;
@@ -199,10 +197,10 @@ public class BlockMap {
 		return this.metaMap.getBlockAcoustics(state);
 	}
 
-	private void put(@Nonnull final BlockStateMatcher info, @Nonnull final String substrate,
+	private void put(@Nonnull final BlockStateMatcher info, @Nullable final String substrate,
 			@Nonnull final String value) {
 
-		final Substrate s = Substrate.get(substrate);
+		final Substrate s = substrate != null ? Substrate.get(substrate) : null;
 		final IAcoustic[] acoustics = this.acousticsManager.compileAcoustics(value);
 
 		if (s == null) {
@@ -224,8 +222,12 @@ public class BlockMap {
 				ModBase.log().debug("Unable to locate block for blockMap '%s'", blockName);
 			} else {
 				final BlockStateMatcher matcher = BlockStateMatcher.create(name);
-				final String substrate = name.getExtras();
-				put(matcher, substrate, value);
+				if (matcher != null) {
+					final String substrate = name.getExtras();
+					put(matcher, substrate, value);
+				} else {
+					ModBase.log().warn("Unable to create matcher: key '%s', value '%s'", key, value);
+				}
 			}
 		} else {
 			ModBase.log().warn("Malformed key in blockMap '%s'", key);
@@ -254,8 +256,7 @@ public class BlockMap {
 		return Arrays.stream(acoustics).map(IAcoustic::getName).collect(Collectors.joining(","));
 	}
 
-	public void collectData(@Nonnull final World world, @Nonnull final IBlockState state, @Nonnull final BlockPos pos,
-			@Nonnull final List<String> data) {
+	public void collectData(@Nonnull final IBlockState state, @Nonnull final List<String> data) {
 
 		final IAcoustic[] temp = getBlockAcoustics(state);
 		if (temp != AcousticRegistry.EMPTY)

@@ -94,13 +94,11 @@ public final class BiomeUtil {
 	@Nonnull
 	public static BiomeInfo getBiomeData(@Nonnull final Biome biome) {
 		final IDataAccessor<BiomeInfo> accessor = (IDataAccessor<BiomeInfo>) biome;
-		BiomeInfo result = null;
-		if (biome != null) {
+		BiomeInfo result;
+		result = accessor.getData();
+		if (result == null) {
+			RegistryManager.BIOME.reload();
 			result = accessor.getData();
-			if (result == null) {
-				RegistryManager.BIOME.reload();
-				result = accessor.getData();
-			}
 		}
 
 		if (result == null) {
@@ -160,7 +158,7 @@ public final class BiomeUtil {
 		return new Color(BiomeColorHelper.getWaterColorAtPos(world, pos));
 	}
 
-	@Nullable
+	@Nonnull
 	public static Color getColorForLiquid(@Nonnull final World world, @Nonnull final BlockPos pos) {
 		return getColorForLiquid(world, WorldUtils.getBlockState(world, pos), pos);
 	}

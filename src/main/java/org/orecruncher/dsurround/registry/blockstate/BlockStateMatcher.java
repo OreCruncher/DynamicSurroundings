@@ -87,7 +87,7 @@ public final class BlockStateMatcher {
 	public List<IBlockState> asBlockStates() {
 		//@formatter:off
 		return this.block.getBlockState().getValidStates().stream()
-			.filter(bs -> matchProps(bs))
+			.filter(this::matchProps)
 			.collect(Collectors.toList());
 		//@formatter:on
 	}
@@ -148,9 +148,7 @@ public final class BlockStateMatcher {
 
 		for (final IProperty<?> prop : state.getPropertyKeys()) {
 			final Object o = state.getValue(prop);
-			if (o != null) {
-				result.put(prop, o);
-			}
+			result.put(prop, o);
 		}
 
 		return result.size() == 0 ? EMPTY : result;
@@ -172,7 +170,7 @@ public final class BlockStateMatcher {
 	}
 
 	@Nullable
-	public static BlockStateMatcher create(@Nonnull final NameResult result) {
+	public static BlockStateMatcher create(@Nullable final NameResult result) {
 		if (result != null) {
 			final Block block = result.getBlock();
 			if (block != null) {
@@ -262,7 +260,7 @@ public final class BlockStateMatcher {
 		for (final T v : prop.getAllowedValues()) {
 			result.add(prop.getName(v));
 		}
-		return result.stream().collect(Collectors.joining(","));
+		return String.join(",", result);
 	}
 
 }

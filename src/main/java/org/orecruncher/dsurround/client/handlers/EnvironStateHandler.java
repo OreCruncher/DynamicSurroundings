@@ -92,7 +92,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 		public MinecraftClock clock = new MinecraftClock();
 		public BattleScanner battle = new BattleScanner();
-	};
+	}
 	
 	public final static class EnvironState {
 		
@@ -204,10 +204,6 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 		public static boolean isPlayerInWater() {
 			return getPlayer().isInWater();
-		}
-
-		public static boolean isPlayerRiding() {
-			return getPlayer().isRiding();
 		}
 
 		public static boolean isPlayerMoving() {

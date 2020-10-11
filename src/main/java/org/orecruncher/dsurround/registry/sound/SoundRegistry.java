@@ -182,7 +182,8 @@ public final class SoundRegistry extends Registry {
 	}
 
 	public float getVolumeScale(@Nonnull final ISound sound) {
-		return (sound.getSoundLocation() == null || sound instanceof ConfigSoundInstance) ? 1F
+		sound.getSoundLocation();
+		return sound instanceof ConfigSoundInstance ? 1F
 				: this.volumeControl.getFloat(sound.getSoundLocation());
 	}
 
@@ -209,7 +210,7 @@ public final class SoundRegistry extends Registry {
 	}
 
 	private boolean blockSoundProcess(@Nonnull final ResourceLocation res) {
-		return res == null || isSoundBlocked(res) || isSoundCulledLogical(res);
+		return isSoundBlocked(res) || isSoundCulledLogical(res);
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGH)

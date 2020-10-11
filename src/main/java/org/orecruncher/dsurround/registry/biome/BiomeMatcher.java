@@ -86,8 +86,9 @@ public abstract class BiomeMatcher {
 				return ConditionsImpl.this.current.isBiomeType(this.type);
 			}
 
+			@Nonnull
 			@Override
-			public Variant add(IVariant term) {
+			public Variant add(@Nonnull IVariant term) {
 				return new BooleanValue(asBoolean() || term.asBoolean());
 			}
 		}
@@ -102,7 +103,7 @@ public abstract class BiomeMatcher {
 			this.exp.addVariable(new Variant("biome.name") {
 
 				@Override
-				public int compareTo(IVariant o) {
+				public int compareTo(@Nonnull IVariant o) {
 					return asString().compareTo(o.asString());
 				}
 
@@ -121,8 +122,9 @@ public abstract class BiomeMatcher {
 					return false;
 				}
 
+				@Nonnull
 				@Override
-				public IVariant add(IVariant term) {
+				public IVariant add(@Nonnull IVariant term) {
 					return new StringValue(asString().concat(term.asString()));
 				}
 
@@ -131,7 +133,7 @@ public abstract class BiomeMatcher {
 			this.exp.addVariable(new Variant("biome.id") {
 
 				@Override
-				public int compareTo(IVariant o) {
+				public int compareTo(@Nonnull IVariant o) {
 					return asString().compareTo(o.asString());
 				}
 
@@ -150,8 +152,9 @@ public abstract class BiomeMatcher {
 					return false;
 				}
 
+				@Nonnull
 				@Override
-				public IVariant add(IVariant term) {
+				public IVariant add(@Nonnull IVariant term) {
 					return new StringValue(asString().concat(term.asString()));
 				}
 
@@ -160,7 +163,7 @@ public abstract class BiomeMatcher {
 			this.exp.addVariable(new Variant("biome.modid") {
 
 				@Override
-				public int compareTo(IVariant o) {
+				public int compareTo(@Nonnull IVariant o) {
 					return asString().compareTo(o.asString());
 				}
 
@@ -179,8 +182,9 @@ public abstract class BiomeMatcher {
 					return false;
 				}
 
+				@Nonnull
 				@Override
-				public IVariant add(IVariant term) {
+				public IVariant add(@Nonnull IVariant term) {
 					return new StringValue(asString().concat(term.asString()));
 				}
 
@@ -188,7 +192,7 @@ public abstract class BiomeMatcher {
 
 			this.exp.addVariable(new Variant("biome.rainfall") {
 				@Override
-				public int compareTo(IVariant o) {
+				public int compareTo(@Nonnull IVariant o) {
 					return Float.compare(asNumber(), o.asNumber());
 				}
 
@@ -207,8 +211,9 @@ public abstract class BiomeMatcher {
 					return asNumber() != 0F;
 				}
 
+				@Nonnull
 				@Override
-				public IVariant add(IVariant term) {
+				public IVariant add(@Nonnull IVariant term) {
 					return new NumberValue(asNumber() + term.asNumber());
 				}
 
@@ -218,7 +223,7 @@ public abstract class BiomeMatcher {
 			this.exp.addVariable(new Variant("biome.isFake") {
 
 				@Override
-				public int compareTo(IVariant o) {
+				public int compareTo(@Nonnull IVariant o) {
 					return asString().compareTo(o.asString());
 				}
 
@@ -237,8 +242,9 @@ public abstract class BiomeMatcher {
 					return ConditionsImpl.this.current.isFake();
 				}
 
+				@Nonnull
 				@Override
-				public IVariant add(IVariant term) {
+				public IVariant add(@Nonnull IVariant term) {
 					return new BooleanValue(asBoolean() || term.asBoolean());
 				}
 

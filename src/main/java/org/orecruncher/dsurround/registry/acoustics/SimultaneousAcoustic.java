@@ -40,7 +40,7 @@ public class SimultaneousAcoustic implements IAcoustic {
 	protected final IAcoustic[] acoustics;
 
 	public SimultaneousAcoustic(@Nonnull final Collection<IAcoustic> acoustics) {
-		this.acoustics = acoustics.toArray(new IAcoustic[acoustics.size()]);
+		this.acoustics = acoustics.toArray(new IAcoustic[0]);
 	}
 
 	@Override
@@ -51,9 +51,8 @@ public class SimultaneousAcoustic implements IAcoustic {
 
 	@Override
 	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Vec3d location,
-			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
-		for (int i = 0; i < this.acoustics.length; i++)
-			this.acoustics[i].playSound(player, location, event, inputOptions);
+			@Nullable final EventType event, @Nullable final IOptions inputOptions) {
+		for (IAcoustic acoustic : this.acoustics) acoustic.playSound(player, location, event, inputOptions);
 	}
 
 	@Override

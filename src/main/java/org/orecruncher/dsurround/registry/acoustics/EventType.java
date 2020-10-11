@@ -25,6 +25,7 @@
 package org.orecruncher.dsurround.registry.acoustics;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -49,7 +50,7 @@ public enum EventType {
 	private final EventType destination;
 	private final String jsonName;
 
-	EventType(@Nonnull final EventType dest) {
+	EventType(@Nullable final EventType dest) {
 		this.destination = dest;
 		this.jsonName = name().toLowerCase();
 	}

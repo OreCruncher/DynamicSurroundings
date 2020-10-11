@@ -30,7 +30,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -188,7 +187,7 @@ public class AcousticRegistry extends Registry {
 	 * @param state BlockState for which the acoustic profile is being generated
 	 * @return Acoustic profile for the BlockState, if any
 	 */
-	@Nullable
+	@Nonnull
 	public IAcoustic[] resolvePrimitive(@Nonnull final IBlockState state) {
 
 		if (state == Blocks.AIR.getDefaultState())
@@ -233,15 +232,13 @@ public class AcousticRegistry extends Registry {
 		return MoreObjects.firstNonNull(acoustics, EMPTY);
 	}
 
-	@Nullable
+	@Nonnull
 	private IAcoustic[] getPrimitive(@Nonnull final String primitive) {
 		IAcoustic[] result = this.compiled.get(primitive);
 		if (result == null) {
 			final IAcoustic a = generateAcoustic(primitive);
-			if (a != null) {
-				this.compiled.put(primitive, result = new IAcoustic[] { a });
-				this.primitives++;
-			}
+			this.compiled.put(primitive, result = new IAcoustic[] { a });
+			this.primitives++;
 		}
 		return result;
 	}
@@ -268,15 +265,9 @@ public class AcousticRegistry extends Registry {
 	public IAcoustic[] compileAcoustics(@Nonnull final String acousticName) {
 		IAcoustic[] result = this.compiled.get(acousticName);
 		if (result == null) {
-			result = Arrays.stream(acousticName.split(",")).map(fragment -> {
-				// See if we have an acoustic for this fragment
-				final IAcoustic a = generateAcoustic(fragment);
-				if (a == null)
-					ModBase.log().warn("Acoustic '%s' not found!", fragment);
-				return a;
-			}).filter(Objects::nonNull).toArray(IAcoustic[]::new);
-
-			if (result == null || result.length == 0)
+			// See if we have an acoustic for this fragment
+			result = Arrays.stream(acousticName.split(",")).map(this::generateAcoustic).toArray(IAcoustic[]::new);
+			if (result.length == 0)
 				result = EMPTY;
 			this.compiled.put(acousticName, result);
 		} else {
@@ -286,15 +277,14 @@ public class AcousticRegistry extends Registry {
 		return result;
 	}
 
-	@Nullable
+	@Nonnull
 	private IAcoustic generateAcoustic(@Nonnull final String name) {
 		IAcoustic a = this.acoustics.get(name);
 		if (a == null) {
 			// Nope. Doesn't exist yet. It could be a sound name based on location.
 			final ResourceLocation loc = new ResourceLocation(name);
 			final SoundEvent evt = RegistryManager.SOUND.getSound(loc);
-			if (evt != null)
-				a = generateAcoustic(evt);
+			a = generateAcoustic(evt);
 		}
 		return a;
 	}
@@ -347,51 +337,53 @@ public class AcousticRegistry extends Registry {
 			ret = a;
 		} else {
 			final String type = unsolved.get("type").getAsString();
-			if (type.equals("simultaneous")) {
-				final List<IAcoustic> acoustics = new ArrayList<>();
-				final JsonArray sim = unsolved.getAsJsonArray("array");
-				final Iterator<JsonElement> iter = sim.iterator();
-				while (iter.hasNext()) {
-					final JsonElement subElement = iter.next();
-					acoustics.add(solveAcoustic(subElement));
+			switch (type) {
+				case "simultaneous": {
+					final List<IAcoustic> acoustics = new ArrayList<>();
+					final JsonArray sim = unsolved.getAsJsonArray("array");
+					for (JsonElement subElement : sim) {
+						acoustics.add(solveAcoustic(subElement));
+					}
+
+					ret = new SimultaneousAcoustic(acoustics);
+					break;
 				}
+				case "delayed": {
+					final DelayedAcoustic a = new DelayedAcoustic();
+					prepareDefaults(a);
+					setupClassics(a, unsolved);
 
-				final SimultaneousAcoustic a = new SimultaneousAcoustic(acoustics);
-				ret = a;
-			} else if (type.equals("delayed")) {
-				final DelayedAcoustic a = new DelayedAcoustic();
-				prepareDefaults(a);
-				setupClassics(a, unsolved);
+					if (unsolved.has("delay")) {
+						a.setDelayMin(unsolved.get("delay").getAsInt());
+						a.setDelayMax(unsolved.get("delay").getAsInt());
+					} else {
+						a.setDelayMin(unsolved.get("delay_min").getAsInt());
+						a.setDelayMax(unsolved.get("delay_max").getAsInt());
+					}
 
-				if (unsolved.has("delay")) {
-					a.setDelayMin(unsolved.get("delay").getAsInt());
-					a.setDelayMax(unsolved.get("delay").getAsInt());
-				} else {
-					a.setDelayMin(unsolved.get("delay_min").getAsInt());
-					a.setDelayMax(unsolved.get("delay_max").getAsInt());
+					ret = a;
+					break;
 				}
+				case "probability": {
+					final List<Integer> weights = new ArrayList<>();
+					final List<IAcoustic> acoustics = new ArrayList<>();
 
-				ret = a;
-			} else if (type.equals("probability")) {
-				final List<Integer> weights = new ArrayList<>();
-				final List<IAcoustic> acoustics = new ArrayList<>();
+					final JsonArray sim = unsolved.getAsJsonArray("array");
+					final Iterator<JsonElement> iter = sim.iterator();
+					while (iter.hasNext()) {
+						JsonElement subElement = iter.next();
+						weights.add(subElement.getAsInt());
 
-				final JsonArray sim = unsolved.getAsJsonArray("array");
-				final Iterator<JsonElement> iter = sim.iterator();
-				while (iter.hasNext()) {
-					JsonElement subElement = iter.next();
-					weights.add(subElement.getAsInt());
+						if (!iter.hasNext())
+							throw new IllegalStateException("Probability has odd number of children!");
 
-					if (!iter.hasNext())
-						throw new IllegalStateException("Probability has odd number of children!");
+						subElement = iter.next();
+						acoustics.add(solveAcoustic(subElement));
+					}
 
-					subElement = iter.next();
-					acoustics.add(solveAcoustic(subElement));
+					ret = new ProbabilityWeightsAcoustic(acoustics, weights);
+					break;
 				}
-
-				final ProbabilityWeightsAcoustic a = new ProbabilityWeightsAcoustic(acoustics, weights);
-
-				ret = a;
 			}
 		}
 

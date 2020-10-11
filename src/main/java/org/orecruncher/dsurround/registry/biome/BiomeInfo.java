@@ -273,13 +273,12 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 
 	@Nonnull
 	public Collection<SoundEffect> findSoundMatches() {
-		return findSoundMatches(new ObjectArray<SoundEffect>(8));
+		return findSoundMatches(new ObjectArray<>(8));
 	}
 
 	@Nonnull
 	public Collection<SoundEffect> findSoundMatches(@Nonnull final Collection<SoundEffect> results) {
-		for (int i = 0; i < this.sounds.length; i++) {
-			final SoundEffect sound = this.sounds[i];
+		for (final SoundEffect sound : this.sounds) {
 			if (sound.matches())
 				results.add(sound);
 		}
@@ -310,15 +309,15 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 	public void update(@Nonnull final BiomeConfig entry) {
 		addComment(entry.comment);
 		if (entry.hasPrecipitation != null)
-			setHasPrecipitation(entry.hasPrecipitation.booleanValue());
+			setHasPrecipitation(entry.hasPrecipitation);
 		if (entry.hasAurora != null)
-			setHasAurora(entry.hasAurora.booleanValue());
+			setHasAurora(entry.hasAurora);
 		if (entry.hasDust != null)
-			setHasDust(entry.hasDust.booleanValue());
+			setHasDust(entry.hasDust);
 		if (entry.hasFog != null)
-			setHasFog(entry.hasFog.booleanValue());
+			setHasFog(entry.hasFog);
 		if (entry.fogDensity != null)
-			setFogDensity(entry.fogDensity.floatValue());
+			setFogDensity(entry.fogDensity);
 		if (entry.fogColor != null) {
 			final int[] rgb = MyUtils.splitToInts(entry.fogColor, ',');
 			if (rgb.length == 3)
@@ -329,13 +328,13 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 			if (rgb.length == 3)
 				setDustColor(new Color(rgb[0], rgb[1], rgb[2]));
 		}
-		if (entry.soundReset != null && entry.soundReset.booleanValue()) {
+		if (entry.soundReset != null && entry.soundReset) {
 			addComment("> Sound Reset");
 			resetSounds();
 		}
 
 		if (entry.spotSoundChance != null)
-			setSpotSoundChance(entry.spotSoundChance.intValue());
+			setSpotSoundChance(entry.spotSoundChance);
 
 		for (final SoundConfig sr : entry.sounds) {
 			if (RegistryManager.SOUND.isSoundBlocked(new ResourceLocation(sr.sound)))

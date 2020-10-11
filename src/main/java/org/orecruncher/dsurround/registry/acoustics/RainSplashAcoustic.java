@@ -42,19 +42,19 @@ public class RainSplashAcoustic implements IAcoustic {
 		this.acoustics = acoustics;
 	}
 
-	@Override
+	@Nonnull
+    @Override
 	public String getName() {
 		return "RainSplash";
 	}
 
 	@Override
 	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Vec3d location,
-			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
+			@Nullable final EventType event, @Nullable final IOptions inputOptions) {
 		final ConfigOptions ops = new ConfigOptions();
 		ops.setVolumeScale(Weather.getIntensityLevel() * 0.8F);
 		ops.setPitchScale(1.75F);
-		for (int i = 0; i < this.acoustics.length; i++)
-			this.acoustics[i].playSound(player, location, event, ops);
+		for (IAcoustic acoustic : this.acoustics) acoustic.playSound(player, location, event, ops);
 	}
 
 	@Override
