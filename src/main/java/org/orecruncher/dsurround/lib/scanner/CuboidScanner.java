@@ -54,16 +54,6 @@ public abstract class CuboidScanner extends Scanner {
 		super(locus, name, range, blocksPerTick);
 	}
 
-	protected CuboidScanner(@Nonnull final ScanLocus locus, @Nonnull final String name, final int xRange,
-			final int yRange, final int zRange) {
-		super(locus, name, xRange, yRange, zRange);
-	}
-
-	protected CuboidScanner(@Nonnull final ScanLocus locus, @Nonnull final String name, final int xSize,
-			final int ySize, final int zSize, final int blocksPerTick) {
-		super(locus, name, xSize, ySize, zSize, blocksPerTick);
-	}
-
 	public boolean isScanFinished() {
 		return this.scanFinished;
 	}
@@ -132,7 +122,7 @@ public abstract class CuboidScanner extends Scanner {
 					if (this.scanFinished) {
 						this.lastPos = playerPos;
 						this.activeCuboid = newVolume;
-						updateScan(newVolume, oldVolume, intersect);
+						updateScan(newVolume, intersect);
 					} else {
 						// The existing scan hasn't completed but now we
 						// have a delta set. Finish out scanning the
@@ -146,37 +136,9 @@ public abstract class CuboidScanner extends Scanner {
 		}
 	}
 
-	/**
-	 * Override to have unscan notifications invoked when processing a block.
-	 */
-	public boolean doBlockUnscan() {
-		return false;
-	}
-
-	/**
-	 * This is the hook that gets called when a block goes out of scope because the
-	 * player moved or something.
-	 */
-	public void blockUnscan(final IBlockState state, final BlockPos pos, final Random rand) {
-
-	}
-
-	protected void updateScan(@Nonnull final Cuboid newVolume, @Nonnull final Cuboid oldVolume,
-			@Nonnull final Cuboid intersect) {
+	protected void updateScan(@Nonnull final Cuboid newVolume, @Nonnull final Cuboid intersect) {
 
 		final IBlockAccessEx provider = this.locus.getWorld();
-
-		if (doBlockUnscan()) {
-			final ComplementsPointIterator newOutOfRange = new ComplementsPointIterator(oldVolume, intersect);
-			// Notify on the blocks going out of range
-			for (BlockPos point = newOutOfRange.next(); point != null; point = newOutOfRange.next()) {
-				if (point.getY() > 0) {
-					final IBlockState state = provider.getBlockState(point);
-					if (interestingBlock(state))
-						blockUnscan(state, point, this.random);
-				}
-			}
-		}
 
 		// Notify on blocks coming into range
 		final ComplementsPointIterator newInRange = new ComplementsPointIterator(newVolume, intersect);
@@ -202,7 +164,7 @@ public abstract class CuboidScanner extends Scanner {
 
 		int checked = 0;
 
-		BlockPos point = null;
+		BlockPos point;
 		while ((point = this.fullRange.peek()) != null) {
 
 			// Chunk not loaded we need to skip this tick
@@ -241,7 +203,7 @@ public abstract class CuboidScanner extends Scanner {
 		return this.locus.getWorld().isAvailable(event.pos);
 	}
 
-	@SubscribeEvent(receiveCanceled = false)
+	@SubscribeEvent()
 	public void onBlockUpdate(@Nonnull final BlockUpdateEvent event) {
 		try {
 			if (isInteresting(event)) {

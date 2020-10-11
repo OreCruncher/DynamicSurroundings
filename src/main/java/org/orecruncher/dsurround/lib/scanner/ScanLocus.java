@@ -23,6 +23,7 @@
 
 package org.orecruncher.dsurround.lib.scanner;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.orecruncher.lib.chunk.IBlockAccessEx;
@@ -35,6 +36,7 @@ public abstract class ScanLocus {
 
 	}
 
+	@Nonnull
 	public abstract IBlockAccessEx getWorld();
 
 	public abstract BlockPos getCenter();
@@ -47,8 +49,11 @@ public abstract class ScanLocus {
 	public boolean equals(@Nullable final Object o) {
 		if (this == o)
 			return true;
-		final ScanLocus sl = (ScanLocus) o;
-		return getWorld().getWorld() == sl.getWorld().getWorld() && getCenter().equals(sl.getCenter());
+		if (o instanceof ScanLocus) {
+			final ScanLocus sl = (ScanLocus) o;
+			return getWorld().getWorld() == sl.getWorld().getWorld() && getCenter().equals(sl.getCenter());
+		}
+		return false;
 	}
 
 }

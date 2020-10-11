@@ -39,9 +39,9 @@ import net.minecraft.util.math.BlockPos;
  */
 public class ComplementsPointIterator implements IPointIterator {
 
-	protected CuboidPointIterator[] segments = new CuboidPointIterator[3];
+	protected final CuboidPointIterator[] segments = new CuboidPointIterator[3];
 	protected int activeSegment = 0;
-	protected BlockPos peeked = null;
+	protected BlockPos peeked;
 
 	public ComplementsPointIterator(@Nonnull final Cuboid volume, @Nonnull final Cuboid intersect) {
 		// This function makes some important assumptions about volume and
