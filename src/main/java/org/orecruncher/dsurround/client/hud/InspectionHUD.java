@@ -218,7 +218,6 @@ public class InspectionHUD extends Gui implements IGuiOverlay {
 					if (current.entityHit != null) {
 						gatherEntityText(current.entityHit, data);
 					} else {
-						current.getBlockPos();
 						final BlockPos targetBlock = current.getBlockPos();
 						final IBlockState state = WorldUtils.getBlockState(EnvironState.getWorld(), targetBlock);
 
