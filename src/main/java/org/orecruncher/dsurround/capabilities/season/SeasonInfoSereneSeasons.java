@@ -103,7 +103,8 @@ public class SeasonInfoSereneSeasons extends SeasonInfo {
 		return BiomeHooks.getFloatTemperature(this.world, biome, pos);
 	}
 
-	@Override
+	@Nonnull
+    @Override
 	public PrecipitationType getPrecipitationType(@Nonnull final BlockPos pos, @Nullable BiomeInfo biome) {
 
 		if (this.world == null)

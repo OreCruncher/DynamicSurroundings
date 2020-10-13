@@ -155,6 +155,7 @@ public class SeasonInfo implements ISeasonInfo {
 	 * @return The precipitation type to render when raining
 	 */
 	@Override
+	@Nonnull
 	public PrecipitationType getPrecipitationType(@Nonnull final BlockPos pos, @Nullable BiomeInfo biome) {
 
 		if (biome == null)
@@ -170,24 +171,25 @@ public class SeasonInfo implements ISeasonInfo {
 				: PrecipitationType.RAIN;
 	}
 
+	@Nonnull
 	public static SeasonInfo factory(@Nonnull final World world) {
 
 		final String dimName = world.provider.getDimensionType().getName();
 
 		if (world.provider.getDimension() == -1) {
-			ModBase.log().info("Creating Nether SeasonInfo for dimension %s", dimName);
+			ModBase.log().debug("Creating Nether SeasonInfo for dimension %s", dimName);
 			return new SeasonInfoNether(world);
 		}
 
 		if (ModEnvironment.SereneSeasons.isLoaded()) {
 			if (SeasonInfoSereneSeasons.isWorldWhitelisted(world)) {
-				ModBase.log().info("Creating Serene Seasons SeasonInfo for dimension %s", dimName);
+				ModBase.log().debug("Creating Serene Seasons SeasonInfo for dimension %s", dimName);
 				return new SeasonInfoSereneSeasons(world);
 			}
-			ModBase.log().info("Serene Seasons is installed but the dimension %s is not whitelisted", dimName);
+			ModBase.log().debug("Serene Seasons is installed but the dimension %s is not whitelisted", dimName);
 		}
 
-		ModBase.log().info("Creating default SeasonInfo for dimension %s", dimName);
+		ModBase.log().debug("Creating default SeasonInfo for dimension %s", dimName);
 		return new SeasonInfo(world);
 	}
 

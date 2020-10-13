@@ -67,5 +67,6 @@ public interface ISeasonInfo {
 
 	boolean showFrostBreath(@Nonnull final BlockPos pos);
 
+	@Nonnull
 	PrecipitationType getPrecipitationType(@Nonnull final BlockPos pos, @Nullable BiomeInfo biome);
 }
