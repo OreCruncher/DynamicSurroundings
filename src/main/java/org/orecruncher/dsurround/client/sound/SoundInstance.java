@@ -171,6 +171,7 @@ public class SoundInstance extends PositionedSound implements ISoundInstance {
 		return getState().isTerminal();
 	}
 
+	@Override
 	public boolean canSoundBeHeard() {
 		return this.volume > 0
 				&& (getAttenuationType() == AttenuationType.NONE || SoundSystemConfig.getMasterGain() > 0);

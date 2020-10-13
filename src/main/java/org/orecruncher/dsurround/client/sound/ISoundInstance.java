@@ -40,4 +40,8 @@ public interface ISoundInstance extends ISound {
 
 	boolean getQueue();
 
+	default boolean canSoundBeHeard() {
+		return true;
+	}
+
 }
