@@ -52,10 +52,8 @@ public class FootstepAccents {
 		providers.add(new RainSplashAccent());
 	}
 
-	@Nonnull
-	public static ObjectArray<IAcoustic> provide(@Nonnull final EntityLivingBase entity, @Nullable final BlockPos pos,
+	public static void provide(@Nonnull final EntityLivingBase entity, @Nullable final BlockPos pos,
 			@Nonnull final ObjectArray<IAcoustic> in) {
 		providers.forEach(provider -> provider.provide(entity, pos, in));
-		return in;
 	}
 }

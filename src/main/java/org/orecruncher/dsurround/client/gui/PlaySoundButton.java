@@ -25,6 +25,7 @@
 package org.orecruncher.dsurround.client.gui;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.client.sound.ConfigSoundInstance;
 import org.orecruncher.dsurround.client.sound.MusicFader;
@@ -71,7 +72,7 @@ public class PlaySoundButton extends GuiButtonExt {
 		MusicFader.playConfigSound(sound);
 	}
 
-	public void playSound(@Nonnull final Minecraft mc, final float volume) {
+	public void playSound(@Nullable final Minecraft mc, final float volume) {
 		if (this.playingSound != null) {
 			MusicFader.stopConfigSound(this.playingSound);
 			this.playingSound = null;

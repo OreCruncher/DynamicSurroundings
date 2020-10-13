@@ -56,10 +56,6 @@ public class SoundPlayer implements ISoundPlayer {
 	protected final ObjectArray<PendingSound> pending = new ObjectArray<>();
 	protected final float scale;
 
-	public SoundPlayer() {
-		this(1F);
-	}
-
 	public SoundPlayer(final float volumeScale) {
 		this.scale = volumeScale;
 	}
@@ -76,12 +72,11 @@ public class SoundPlayer implements ISoundPlayer {
 		}
 	}
 
-	public void playAcoustic(@Nonnull final Vec3d location, @Nonnull final IAcoustic[] acoustics,
+	public void playAcoustic(@Nonnull final Vec3d location, @Nullable final IAcoustic[] acoustics,
 			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
 		if (acoustics != null && acoustics.length > 0) {
 			logAcousticPlay(acoustics, event);
-			for (int i = 0; i < acoustics.length; i++)
-				acoustics[i].playSound(this, location, event, inputOptions);
+			for (IAcoustic acoustic : acoustics) acoustic.playSound(this, location, event, inputOptions);
 		}
 	}
 

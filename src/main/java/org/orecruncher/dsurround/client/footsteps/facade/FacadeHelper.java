@@ -24,7 +24,6 @@
 package org.orecruncher.dsurround.client.footsteps.facade;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -80,11 +79,8 @@ public final class FacadeHelper {
 
 		// Iterate through the block list filling out our cracker list.
 		if (accessors.size() > 0) {
-			final Iterator<Block> itr = Block.REGISTRY.iterator();
-			while (itr.hasNext()) {
-				final Block b = itr.next();
-				for (int i = 0; i < accessors.size(); i++) {
-					final IFacadeAccessor accessor = accessors.get(i);
+			for (Block b : Block.REGISTRY) {
+				for (final IFacadeAccessor accessor : accessors) {
 					if (accessor.instanceOf(b)) {
 						crackers.put(b, accessor);
 						break;

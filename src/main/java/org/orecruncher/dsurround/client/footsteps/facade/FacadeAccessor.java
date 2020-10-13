@@ -48,10 +48,7 @@ class FacadeAccessor implements IFacadeAccessor {
 	public FacadeAccessor(@Nonnull final String clazz, @Nonnull final String method) {
 		try {
 			this.IFacadeClass = Class.forName(clazz);
-			if (this.IFacadeClass != null)
-				this.accessor = getMethod(method);
-			else
-				this.accessor = null;
+			this.accessor = getMethod(method);
 		} catch (@Nonnull final Throwable t) {
 			this.IFacadeClass = null;
 			this.accessor = null;

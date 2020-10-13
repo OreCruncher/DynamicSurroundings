@@ -55,8 +55,7 @@ public class RainSplashAccent implements IFootstepAccentProvider {
 	}
 
 	@Override
-	@Nonnull
-	public ObjectArray<IAcoustic> provide(@Nonnull final EntityLivingBase entity, @Nullable final BlockPos blockPos,
+	public void provide(@Nonnull final EntityLivingBase entity, @Nullable final BlockPos blockPos,
 			@Nonnull final ObjectArray<IAcoustic> in) {
 		if (ModOptions.sound.enablePuddleSound && RegistryManager.FOOTSTEPS.SPLASH != null && Weather.isRaining()
 				&& EnvironState.isPlayer(entity)) {
@@ -76,7 +75,6 @@ public class RainSplashAccent implements IFootstepAccentProvider {
 				}
 			}
 		}
-		return in;
 	}
 
 }

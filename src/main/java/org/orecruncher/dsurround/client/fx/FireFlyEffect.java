@@ -28,6 +28,7 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.world.World;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
 
 import net.minecraft.block.state.IBlockState;
@@ -53,10 +54,13 @@ public class FireFlyEffect extends BlockEffect {
 	@Override
 	public void doEffect(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
-		final AxisAlignedBB box = state.getBoundingBox(provider.getWorld(), pos);
-		final Vec3d loc = box.getCenter();
-		ParticleCollections.addFireFly(provider.getWorld(), pos.getX() + loc.x, pos.getY() + box.maxY,
-				pos.getZ() + loc.z);
+		final World world = provider.getWorld();
+		if (world != null) {
+			final AxisAlignedBB box = state.getBoundingBox(world, pos);
+			final Vec3d loc = box.getCenter();
+			ParticleCollections.addFireFly(world, pos.getX() + loc.x, pos.getY() + box.maxY,
+					pos.getZ() + loc.z);
+		}
 	}
 
 }

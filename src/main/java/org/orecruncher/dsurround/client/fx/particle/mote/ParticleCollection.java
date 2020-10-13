@@ -79,13 +79,10 @@ public class ParticleCollection extends ParticleBase {
 		return this.myParticles.size() < MAX_PARTICLES;
 	}
 
-	public boolean addParticle(@Nonnull final IParticleMote mote) {
-
+	public void addParticle(@Nonnull final IParticleMote mote) {
 		if (canFit()) {
 			this.myParticles.add(mote);
-			return true;
 		}
-		return false;
 	}
 
 	public ObjectArray<IParticleMote> getParticles() {
