@@ -23,7 +23,6 @@
  */
 package org.orecruncher.dsurround.registry.effect;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -105,10 +104,7 @@ public class EffectRegistry extends Registry {
 			if (clazz != null) {
 				if (!this.effects.containsKey(clazz)) {
 					// Not found. Scan our list looking for those that can be assigned
-					final Iterator<Entry<Class<? extends Entity>, EntityEffectInfo>> itr = this.effects.entrySet()
-							.iterator();
-					while (itr.hasNext()) {
-						final Entry<Class<? extends Entity>, EntityEffectInfo> e = itr.next();
+					for (Entry<Class<? extends Entity>, EntityEffectInfo> e : this.effects.entrySet()) {
 						if (e.getKey().isAssignableFrom(clazz)) {
 							this.effects.put(clazz, e.getValue());
 							break;

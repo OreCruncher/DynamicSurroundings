@@ -40,7 +40,8 @@ class NullAcoustic implements IAcoustic {
 		this.name = name;
 	}
 
-	@Override
+	@Nonnull
+    @Override
 	public String getName() {
 		return this.name;
 	}

@@ -92,7 +92,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 		public MinecraftClock clock = new MinecraftClock();
 		public BattleScanner battle = new BattleScanner();
-	};
+	}
 	
 	public final static class EnvironState {
 		
@@ -143,8 +143,7 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 
 		public static World getWorld() {
-			final Minecraft mc = Minecraft.getMinecraft();
-			return mc != null ? mc.world : null;
+			return Minecraft.getMinecraft().world;
 		}
 
 		public static BlockPos getPlayerPosition() {
@@ -152,7 +151,12 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		}
 
 		public static boolean isPlayer(final Entity entity) {
-			return entity.getPersistentID().equals(getPlayer().getPersistentID());
+			if (entity == null)
+				return false;
+			EntityPlayer player = getPlayer();
+			if (player == null)
+				return false;
+			return entity.getPersistentID().equals(player.getPersistentID());
 		}
 
 		public static boolean isPlayerHurt() {
@@ -200,10 +204,6 @@ public class EnvironStateHandler extends EffectHandlerBase {
 
 		public static boolean isPlayerInWater() {
 			return getPlayer().isInWater();
-		}
-
-		public static boolean isPlayerRiding() {
-			return getPlayer().isRiding();
 		}
 
 		public static boolean isPlayerMoving() {
@@ -303,8 +303,15 @@ public class EnvironStateHandler extends EffectHandlerBase {
 		data.inside = this.ceiling.isReallyInside();
 
 		data.truePlayerBiome = biomes.getPlayerBiome(player, true);
-		data.playerTemperature = season.getPlayerTemperature();
-		data.biomeTemperature = season.getBiomeTemperature(data.playerPosition);
+
+		// Seen in the wild where the capability was not attached for some reason
+		if (season != null) {
+			data.playerTemperature = season.getPlayerTemperature();
+			data.biomeTemperature = season.getBiomeTemperature(data.playerPosition);
+		} else {
+			data.playerTemperature = TemperatureRating.MILD;
+			data.biomeTemperature = TemperatureRating.MILD;
+		}
 
 		data.armorStack = ItemClass.effectiveArmorStack(player);
 		data.footArmorStack = ItemClass.footArmorStack(player);

@@ -50,6 +50,12 @@ public class HazeFogRangeCalculator extends VanillaFogRangeCalculator {
 	public HazeFogRangeCalculator() {
 
 	}
+	
+	@Override
+	@Nonnull
+	public String getName() {
+		return "HazeFogRangeCalculator";
+	}
 
 	@Override
 	@Nonnull
@@ -62,7 +68,7 @@ public class HazeFogRangeCalculator extends VanillaFogRangeCalculator {
 			// Calculate the players Y. If it's in the band range calculate the fog
 			// parameters
 			final Vec3d eyes = EnvironState.getPlayer().getPositionEyes((float) event.getRenderPartialTicks());
-			if (eyes.y >= lowY && eyes.y <= highY) {
+			if (eyes.y > lowY && eyes.y < highY) {
 				final float coreLowY = lowY + BAND_OFFSETS;
 				final float coreHighY = coreLowY + BAND_CORE_SIZE;
 

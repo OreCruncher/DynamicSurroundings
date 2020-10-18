@@ -2516,7 +2516,7 @@
 		"minecraft:jungle_fence": "#fence",
 		"minecraft:spruce_fence": "#fence",
 		"minecraft:pumpkin": "organic_dry",
-		"minecraft:netherrack": "grass,quicksand",
+		"minecraft:netherrack": "gravel,sand",
 		"minecraft:magma": "sandstone",
 		"minecraft:soul_sand": "quicksand",
 		"minecraft:glowstone": "glowstone",

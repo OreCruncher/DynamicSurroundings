@@ -150,7 +150,7 @@ public final class FootStrikeLocation {
 			@Nonnull final IBlockState state, @Nonnull final BlockPos pos) {
 		final AxisAlignedBB bounding = state.getBoundingBox(world, pos);
 		final AxisAlignedBB collision = state.getCollisionBoundingBox(world, pos);
-		final double boundingY = bounding == null ? baseY : bounding.maxY;
+		final double boundingY = bounding.maxY;
 		final double collisionY = collision == null ? baseY : collision.maxY;
 		if (boundingY == collisionY)
 			return baseY;

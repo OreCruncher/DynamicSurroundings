@@ -172,8 +172,7 @@ public class AuroraShaderBand extends AuroraBase {
 			try {
 				if (this.program != null)
 					this.program.unUse();
-			} catch (final Throwable t) {
-				;
+			} catch (final Throwable ignore) {
 			}
 		}
 
@@ -183,8 +182,6 @@ public class AuroraShaderBand extends AuroraBase {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("<SHADER> ").append(super.toString());
-		return builder.toString();
+		return "<SHADER> " + super.toString();
 	}
 }

@@ -54,7 +54,7 @@ public class ParticleCollection extends ParticleBase {
 	 */
 	private static final Predicate<IParticleMote> UPDATE_REMOVE = mote -> {
 		mote.onUpdate();
-		return !mote.isAlive();
+		return mote.isAlive();
 	};
 
 	protected static final int MAX_PARTICLES = 4000;
@@ -79,13 +79,10 @@ public class ParticleCollection extends ParticleBase {
 		return this.myParticles.size() < MAX_PARTICLES;
 	}
 
-	public boolean addParticle(@Nonnull final IParticleMote mote) {
-
+	public void addParticle(@Nonnull final IParticleMote mote) {
 		if (canFit()) {
 			this.myParticles.add(mote);
-			return true;
 		}
-		return false;
 	}
 
 	public ObjectArray<IParticleMote> getParticles() {
@@ -122,8 +119,8 @@ public class ParticleCollection extends ParticleBase {
 	}
 
 	@Override
-	public void renderParticle(final BufferBuilder buffer, final Entity entityIn, final float partialTicks,
-			final float rotX, final float rotZ, final float rotYZ, final float rotXY, final float rotXZ) {
+	public void renderParticle(@Nonnull final BufferBuilder buffer, @Nonnull final Entity entityIn, final float partialTicks,
+							   final float rotX, final float rotZ, final float rotYZ, final float rotXY, final float rotXZ) {
 
 		if (this.myParticles.size() == 0)
 			return;
@@ -165,12 +162,10 @@ public class ParticleCollection extends ParticleBase {
 	 * Factory interface for creating particle collection instances. Used by the
 	 * ParticleCollections manager.
 	 */
-	public static interface ICollectionFactory {
+	public interface ICollectionFactory {
 		ParticleCollection create(@Nonnull final World world, @Nonnull final ResourceLocation texture);
 	}
 
-	public static final ICollectionFactory FACTORY = (world, texture) -> {
-		return new ParticleCollection(world, texture);
-	};
+	public static final ICollectionFactory FACTORY = ParticleCollection::new;
 
 }

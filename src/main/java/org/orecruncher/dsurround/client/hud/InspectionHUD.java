@@ -88,8 +88,8 @@ public class InspectionHUD extends Gui implements IGuiOverlay {
 		return result;
 	}
 
-	private List<String> gatherBlockText(final ItemStack stack, final List<String> text, final IBlockState state,
-			final BlockPos pos) {
+	private void gatherBlockText(final ItemStack stack, final List<String> text, final IBlockState state,
+								 final BlockPos pos) {
 
 		if (ItemStackUtil.isValidItemStack(stack)) {
 			text.add(TextFormatting.RED + stack.getDisplayName());
@@ -107,9 +107,7 @@ public class InspectionHUD extends Gui implements IGuiOverlay {
 			text.add("Material: " + MCHelper.getMaterialName(state.getMaterial()));
 			final SoundType st = state.getBlock().getSoundType(state, EnvironState.getWorld(), pos,
 					EnvironState.getPlayer());
-			if (st != null) {
-				text.add("Step Sound: " + st.getStepSound().getSoundName().toString());
-			}
+			text.add("Step Sound: " + st.getStepSound().getSoundName().toString());
 
 			if (RegistryManager.FOOTSTEPS.hasFootprint(state))
 				text.add("Footprints Generated");
@@ -120,9 +118,9 @@ public class InspectionHUD extends Gui implements IGuiOverlay {
 			text.add(nbt.toString());
 
 			final BlockMap bm = RegistryManager.FOOTSTEPS.getBlockMap();
-			if (bm != null) {
+			{
 				final List<String> data = new ArrayList<>();
-				bm.collectData(EnvironState.getWorld(), state, pos, data);
+				bm.collectData(state, data);
 				if (data.size() > 0) {
 					text.add(TEXT_FOOTSTEP_ACOUSTICS);
 					for (final String s : data)
@@ -163,10 +161,9 @@ public class InspectionHUD extends Gui implements IGuiOverlay {
 				text.add(TextFormatting.GOLD + ore);
 		}
 
-		return text;
 	}
 
-	private List<String> gatherEntityText(@Nonnull final Entity entity, @Nonnull final List<String> text) {
+	private void gatherEntityText(@Nonnull final Entity entity, @Nonnull final List<String> text) {
 		try {
 			final ResourceLocation key = EntityList.getKey(entity);
 			final String keyName;
@@ -179,7 +176,7 @@ public class InspectionHUD extends Gui implements IGuiOverlay {
 			text.add(entity.getClass().getName());
 
 			final Set<String> tags = entity.getTags();
-			if (tags != null && tags.size() > 0) {
+			if (tags.size() > 0) {
 				text.add(TextFormatting.GOLD + "Entity Tags");
 				text.addAll(tags);
 			}
@@ -194,7 +191,6 @@ public class InspectionHUD extends Gui implements IGuiOverlay {
 		} catch (@Nonnull final Exception ex) {
 			text.add(TextFormatting.RED + "!! ERROR !!");
 		}
-		return text;
 	}
 
 	private static boolean isHolding() {
@@ -222,16 +218,12 @@ public class InspectionHUD extends Gui implements IGuiOverlay {
 					if (current.entityHit != null) {
 						gatherEntityText(current.entityHit, data);
 					} else {
-						final BlockPos targetBlock = (current == null || current.getBlockPos() == null)
-								? BlockPos.ORIGIN
-								: current.getBlockPos();
+						final BlockPos targetBlock = current.getBlockPos();
 						final IBlockState state = WorldUtils.getBlockState(EnvironState.getWorld(), targetBlock);
 
 						if (!WorldUtils.isAirBlock(state)) {
-							final ItemStack stack = state != null
-									? state.getBlock().getPickBlock(state, current, EnvironState.getWorld(),
-											targetBlock, EnvironState.getPlayer())
-									: null;
+							final ItemStack stack = state.getBlock().getPickBlock(state, current, EnvironState.getWorld(),
+									targetBlock, EnvironState.getPlayer());
 
 							gatherBlockText(stack, data, state, targetBlock);
 						}

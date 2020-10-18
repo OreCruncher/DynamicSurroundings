@@ -147,10 +147,7 @@ public class EffectManager {
 
 		final EntityPlayer player = getPlayer();
 
-		if (player == null || player.getEntityWorld() == null)
-			return false;
-
-		return true;
+		return player != null && player.getEntityWorld() != null;
 	}
 
 	public void onTick(@Nonnull final TickEvent.ClientTickEvent event) {
@@ -160,8 +157,10 @@ public class EffectManager {
 
 		final long start = System.nanoTime();
 
+		final EntityPlayer player = getPlayer();
+
 		if (ModOptions.player.suppressPotionParticles)
-			getPlayer().getDataManager().set(EntityLivingBaseUtil.getHideParticles(), true);
+			player.getDataManager().set(EntityLivingBaseUtil.getHideParticles(), true);
 
 		final int tick = EnvironState.getTickCounter();
 
@@ -169,7 +168,7 @@ public class EffectManager {
 			final EffectHandlerBase handler = this.effectHandlers.get(i);
 			final long mark = System.nanoTime();
 			if (handler.doTick(tick))
-				handler.process(getPlayer());
+				handler.process(player);
 			handler.updateTimer(System.nanoTime() - mark);
 		}
 

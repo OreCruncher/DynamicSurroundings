@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModInfo;
@@ -70,7 +69,7 @@ public final class ResourcePacks {
 				try (final InputStream stream = getInputStream(MANIFEST_RESOURCE)) {
 					if (stream != null)
 						this.manifest = JsonUtils.load(stream, Manifest.class);
-				} catch (final Throwable t) {
+				} catch (final Throwable ignore) {
 				}
 			}
 
@@ -83,13 +82,8 @@ public final class ResourcePacks {
 			return this.modName;
 		}
 
-		@Nullable
-		public Manifest getManifest() {
-			return this.manifest;
-		}
-
 		@Override
-		public InputStream getInputStream(@Nonnull final ResourceLocation loc) throws IOException {
+		public InputStream getInputStream(@Nonnull final ResourceLocation loc) {
 			final StringBuilder builder = new StringBuilder();
 			builder.append(this.packPath);
 			builder.append(loc.getNamespace()).append('/').append(loc.getPath());
@@ -100,8 +94,7 @@ public final class ResourcePacks {
 		public boolean resourceExists(@Nonnull final ResourceLocation loc) {
 			try (final InputStream stream = getInputStream(loc)) {
 				return stream != null;
-			} catch (@Nonnull final Throwable t) {
-
+			} catch (@Nonnull final Throwable ignore) {
 			}
 			return false;
 		}
@@ -141,7 +134,7 @@ public final class ResourcePacks {
 				try (final InputStream stream = getInputStream(MANIFEST_RESOURCE)) {
 					if (stream != null)
 						this.manifest = JsonUtils.load(stream, Manifest.class);
-				} catch (final Throwable t) {
+				} catch (final Throwable ignore) {
 				}
 			}
 

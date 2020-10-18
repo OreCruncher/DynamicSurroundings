@@ -124,15 +124,13 @@ public enum BlockEffectType {
 	protected final String name;
 	protected Constructor<?> factory;
 
-	private BlockEffectType(@Nonnull final String name, @Nullable final Class<?> clazz) {
+	BlockEffectType(@Nonnull final String name, @Nullable final Class<?> clazz) {
 		this.name = name;
 
 		try {
-
-			this.factory = clazz.getConstructor(int.class);
-
-		} catch (@Nonnull final Throwable t) {
-			;
+			if (clazz != null)
+				this.factory = clazz.getConstructor(int.class);
+		} catch (@Nonnull final Throwable ignore) {
 		}
 	}
 
@@ -148,8 +146,7 @@ public enum BlockEffectType {
 		if (this.factory != null) {
 			try {
 				return (BlockEffect) this.factory.newInstance(chance);
-			} catch (final Throwable t) {
-				;
+			} catch (final Throwable ignore) {
 			}
 		}
 

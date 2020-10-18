@@ -23,11 +23,12 @@
 package org.orecruncher.dsurround.client.footsteps.facade;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.client.footsteps.Generator;
+import org.orecruncher.lib.ReflectedField;
 
 import com.creativemd.littletiles.common.api.te.ILittleTileTE;
-import com.creativemd.littletiles.common.block.BlockTile;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -45,7 +46,20 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 final class LittleTilesAccessor implements IFacadeAccessor {
 
 	private static final float RANGE = 0.25F / 2F;
+	
+	private static final Class<?> BLOCK_CLASS;
+	
+	static {
+		
+		Class<?> theClass = ReflectedField.resolveClass("com.creativemd.littletiles.common.blocks.BlockTile");
+		if (theClass == null) {
+			theClass = ReflectedField.resolveClass("com.creativemd.littletiles.common.block.BlockTile");
+		}
+		
+		BLOCK_CLASS = theClass;
+	}
 
+	@Nonnull
 	@Override
 	public String getName() {
 		return "LittleTilesAccessor";
@@ -53,17 +67,17 @@ final class LittleTilesAccessor implements IFacadeAccessor {
 
 	@Override
 	public boolean instanceOf(@Nonnull final Block block) {
-		return isValid() && block instanceof BlockTile;
+		return isValid() && BLOCK_CLASS.isInstance(block);
 	}
 
 	@Override
 	public boolean isValid() {
-		return true;
+		return BLOCK_CLASS != null;
 	}
 
 	@Override
 	public IBlockState getBlockState(@Nonnull final EntityLivingBase entity, @Nonnull final IBlockState state,
-			@Nonnull final IBlockAccess world, @Nonnull final Vec3d pos, @Nonnull final EnumFacing side) {
+			@Nonnull final IBlockAccess world, @Nonnull final Vec3d pos, @Nullable final EnumFacing side) {
 		final BlockPos blockPos = new BlockPos(pos);
 		final TileEntity te = world.getTileEntity(blockPos);
 		if (te instanceof ILittleTileTE) {

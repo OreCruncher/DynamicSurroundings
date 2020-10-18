@@ -33,9 +33,9 @@ import net.minecraft.util.ResourceLocation;
 
 public interface IMyResourcePack {
 
-	public String getModName();
+	String getModName();
 
-	public boolean hasManifest();
+	boolean hasManifest();
 
 	boolean resourceExists(@Nonnull final ResourceLocation loc);
 

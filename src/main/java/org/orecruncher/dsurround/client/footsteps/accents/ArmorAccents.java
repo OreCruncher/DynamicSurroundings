@@ -69,12 +69,11 @@ public class ArmorAccents implements IFootstepAccentProvider {
 	}
 
 	@Override
-	@Nonnull
-	public ObjectArray<IAcoustic> provide(@Nonnull final EntityLivingBase entity, @Nullable final BlockPos pos,
+	public void provide(@Nonnull final EntityLivingBase entity, @Nullable final BlockPos pos,
 			@Nonnull final ObjectArray<IAcoustic> in) {
 
 		if (!ModOptions.sound.enableArmorSounds)
-			return in;
+			return;
 
 		final ItemStack armor;
 		final ItemStack foot;
@@ -98,8 +97,6 @@ public class ArmorAccents implements IFootstepAccentProvider {
 
 		if (footAddon != null)
 			in.add(footAddon);
-
-		return in;
 	}
 
 }

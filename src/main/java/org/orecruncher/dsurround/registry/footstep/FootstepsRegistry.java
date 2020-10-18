@@ -24,11 +24,7 @@
 
 package org.orecruncher.dsurround.registry.footstep;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -153,7 +149,7 @@ public final class FootstepsRegistry extends Registry {
 
 		//@formatter:off
 		cfg.footsteps.forEach((k, v) -> registerBlocks(v, k));
-		cfg.footprints.forEach(f -> registerFootprint(f));
+		cfg.footprints.forEach(this::registerFootprint);
 		this.variators.putAll(
 			cfg.variators.entrySet().stream()
 				.collect(
@@ -182,7 +178,7 @@ public final class FootstepsRegistry extends Registry {
 		final Set<IBlockState> blockStates =
 			StreamSupport.stream(ForgeRegistries.BLOCKS.spliterator(), false)
 				.map(block -> block.getBlockState().getValidStates())
-				.flatMap(l -> l.stream())
+				.flatMap(Collection::stream)
 				.collect(Collectors.toSet());
 		//@formatter:on
 
@@ -206,13 +202,9 @@ public final class FootstepsRegistry extends Registry {
 				final SoundType sound = MCHelper.getSoundType(bs);
 				if (sound != null) {
 					final SoundEvent event = sound.getStepSound();
-					if (event != null) {
-						final ResourceLocation resource = event.getSoundName();
-						if (resource != null) {
-							final String soundName = resource.toString();
-							return FOOTPRINT_SOUND_PROFILE.contains(soundName);
-						}
-					}
+					final ResourceLocation resource = event.getSoundName();
+					final String soundName = resource.toString();
+					return FOOTPRINT_SOUND_PROFILE.contains(soundName);
 				}
 				return false;
 			})
@@ -237,9 +229,7 @@ public final class FootstepsRegistry extends Registry {
 		// Iterate through the blockmap looking for known pattern types.
 		// Though they probably should all be registered with Forge
 		// dictionary it's not a requirement.
-		final Iterator<Block> itr = Block.REGISTRY.iterator();
-		while (itr.hasNext()) {
-			final Block block = itr.next();
+		for (Block block : Block.REGISTRY) {
 			final String blockName = MCHelper.nameOf(block);
 			if (blockName != null) {
 				if (block instanceof BlockCrops) {
@@ -288,7 +278,7 @@ public final class FootstepsRegistry extends Registry {
 	public Generator createGenerator(@Nonnull final EntityLivingBase entity) {
 		final EntityEffectInfo info = RegistryManager.EFFECTS.getEffects(entity);
 		
-		Variator var = null;
+		Variator var;
 		if (entity.isChild()) {
 			var = this.childVariator;
 		} else if (entity instanceof EntityPlayer) {
@@ -347,11 +337,15 @@ public final class FootstepsRegistry extends Registry {
 			}
 
 			final BlockStateMatcher bi = BlockStateMatcher.create(b);
-			if (materialMatch) {
-				final IBlockState state = bi.getBlock().getDefaultState();
-				this.FOOTPRINT_MATERIAL.add(state.getMaterial());
+			if (bi != null) {
+				if (materialMatch) {
+					final IBlockState state = bi.getBlock().getDefaultState();
+					this.FOOTPRINT_MATERIAL.add(state.getMaterial());
+				} else {
+					this.FOOTPRINT_STATES.addAll(bi.asBlockStates());
+				}
 			} else {
-				this.FOOTPRINT_STATES.addAll(bi.asBlockStates());
+				ModBase.log().warn("Unable to create matcher for '%s'", b);
 			}
 		}
 	}

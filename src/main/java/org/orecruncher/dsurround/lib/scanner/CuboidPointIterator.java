@@ -60,10 +60,6 @@ public class CuboidPointIterator implements IPointIterator {
 		this.itr = null;
 	}
 
-	public CuboidPointIterator(@Nonnull final Cuboid other) {
-		this(other.minimum(), other.maximum());
-	}
-
 	public CuboidPointIterator(@Nonnull final BlockPos[] points) {
 		this(points[0], points[1]);
 	}

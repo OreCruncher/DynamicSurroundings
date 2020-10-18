@@ -49,14 +49,14 @@ public class BadgeRenderLayer implements LayerRenderer<EntityLivingBase> {
 	 * intended to provide a hook for things like configuration or keybind. Per
 	 * entity suppression should be handled using the IEntityBadgeProvider.
 	 */
-	public static interface IBadgeDisplayCheck {
+	public interface IBadgeDisplayCheck {
 		boolean showBadge();
 	}
 
 	/**
 	 * Methods for determining when and how to render a badge for an entity.
 	 */
-	public static interface IEntityBadgeProvider {
+	public interface IEntityBadgeProvider {
 		/**
 		 * Get the ItemStack to render as a badge
 		 *
@@ -107,15 +107,16 @@ public class BadgeRenderLayer implements LayerRenderer<EntityLivingBase> {
 	}
 
 	@Override
-	public void doRenderLayer(EntityLivingBase entity, float limbSwing, float limbSwingAmount, float partialTicks,
-			float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+	public void doRenderLayer(@Nonnull EntityLivingBase entity, float limbSwing, float limbSwingAmount, float partialTicks,
+							  float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 
-		if (!this.displayCheck.showBadge() || !this.badgeProvider.show(entity))
+		if (this.displayCheck.showBadge() || !this.badgeProvider.show(entity))
 			return;
 
 		// Only render if in range
-		final double distSq = ModOptions.effects.specialEffectRange * ModOptions.effects.specialEffectRange;
-		if (entity.getDistanceSq(EnvironState.getPlayer()) > distSq)
+		final double rangeSq = ModOptions.effects.specialEffectRange * ModOptions.effects.specialEffectRange;
+		final double distSq = entity.getDistanceSq(EnvironState.getPlayer());
+		if (distSq > rangeSq)
 			return;
 
 		// Only render if there is a stack to display

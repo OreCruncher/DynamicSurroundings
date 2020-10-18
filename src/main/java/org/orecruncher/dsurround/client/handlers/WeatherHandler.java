@@ -65,7 +65,7 @@ public class WeatherHandler extends EffectHandlerBase {
 		player.getEntityWorld().setLastLightningBolt(2);
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onThunderEvent(@Nonnull final ThunderEvent event) {
 		if (!ModOptions.rain.allowBackgroundThunder || EnvironState.getDimensionId() != event.dimId)
 			return;

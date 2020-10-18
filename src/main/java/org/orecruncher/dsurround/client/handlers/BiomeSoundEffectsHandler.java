@@ -65,7 +65,7 @@ public class BiomeSoundEffectsHandler extends EffectHandlerBase {
 	private void getBiomeSounds(@Nonnull final Object2FloatOpenHashMap<SoundEffect> result) {
 		// Need to collect sounds from all the applicable biomes
 		// along with their weights.
-		this.biomes.getBiomes().reference2FloatEntrySet().stream()
+		this.biomes.getBiomes().reference2FloatEntrySet()
 				.forEach(e -> e.getKey().findSoundMatches().forEach(fx -> result.addTo(fx, e.getFloatValue())));
 
 		// Scale the volumes in the resulting list based on the weights

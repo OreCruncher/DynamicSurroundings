@@ -41,14 +41,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class SimpleAcoustic implements IAcoustic {
 
-	@Nullable
 	protected SoundEvent sound;
 	protected float volMin = 1f;
 	protected float volMax = 1f;
 	protected float pitchMin = 1f;
 	protected float pitchMax = 1f;
 
-	@Nullable
 	protected IOptions outputOptions;
 
 	public SimpleAcoustic() {
@@ -67,7 +65,7 @@ public class SimpleAcoustic implements IAcoustic {
 
 	@Override
 	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Vec3d location,
-			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
+			@Nullable final EventType event, @Nullable final IOptions inputOptions) {
 		// Special case for intentionally empty sounds (as opposed to fall back
 		// sounds)
 		if (this.sound == null)

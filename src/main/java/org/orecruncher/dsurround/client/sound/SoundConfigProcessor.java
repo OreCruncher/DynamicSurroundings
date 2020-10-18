@@ -43,7 +43,7 @@ import net.minecraft.util.ResourceLocation;
  */
 public final class SoundConfigProcessor implements AutoCloseable {
 
-	public static interface ICallback {
+	public interface ICallback {
 		void onEntry(@Nonnull final String soundName, @Nonnull final SoundMetadataConfig cfg);
 	}
 
@@ -74,8 +74,7 @@ public final class SoundConfigProcessor implements AutoCloseable {
 	}
 
 	public void forEach(@Nonnull final ICallback callback) {
-		@SuppressWarnings("unchecked")
-		final Map<String, SoundMetadataConfig> sounds = (Map<String, SoundMetadataConfig>) new Gson()
+		final Map<String, SoundMetadataConfig> sounds = new Gson()
 				.fromJson(new InputStreamReader(this.stream), TYPE);
 		for (final Entry<String, SoundMetadataConfig> e : sounds.entrySet())
 			callback.onEntry(e.getKey(), e.getValue());

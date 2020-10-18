@@ -1,3 +1,42 @@
+### DynamicSurroundings-1.12.2-3.6.2.0
+**Requirements**
+* Forge 2779+
+* OreLib-1.12.2-3.6.0.1+; **Do not use the deobf version of OreLib**; it's provided to developers for mod development
+* **MixinBootstrap is now required!**.  If it is not in the mod folder the client will fail to start.
+
+**What's New**
+* Mixin is no longer embedded in the JAR.  Dynamic Surroundings now as a dependency on MixinBootstrap.
+
+**Fixes**
+* Added a bit of defensive code to protect Dynamic Surroundings from a misbehaving modpacks.
+* Fix feature for disabling potion effect display in container GUI dialogs.
+
+**Changes**
+* Support Animania 2.0, prior versions unsupported.
+* Hide World capability attachment logging behind a config option.  Eliminate spam for mods that like creating and throwing away temporary worlds without thinking mods will attach capabilities.
+* Hide invalid fog range message behind a config option.
+* Cleaned up Deep Forest cricket biome sound (removed the hiss)
+* Cleaned up Desert Wind biome sound (applied high pass filter) 
+* Changed netherrack footstep sound (again); trying out gravel/sand acoustic
+
+### DynamicSurroundings-1.12.2-3.6.1.0
+**Requirements**
+* Forge 2779+
+* OreLib-1.12.2-3.6.0.1+; **Do not use the deobf version of OreLib**; it's provided to developers for mod development
+* If upgrading from version 3.4.x or earlier:
+     * Delete your dsurround.cfg and let it regenerate
+     * Check your mods/1.12.2 folder and ensure there are no Dynamic Surroundings files within
+
+**Fixes**
+* Updated embedded Mixin library to 0.8 (the latest STABLE version of Mixin as of this publish).  Should fix compatibility with a other mods that rely on Mixin.
+* Speculative fix for rare fog "white out".
+* Speculative fix for client crash when using wrong Forge version but client is not able to give appropriate error info to user.
+
+**Changes**
+* Compatibility update for the latest versions of Little Tiles.
+* Updated Russian translations (thanks Smollet777!)
+* Update Roots compatibility
+
 ### DynamicSurroundings-1.12.2-3.6.0.2
 **Requirements**
 * Forge 2779+

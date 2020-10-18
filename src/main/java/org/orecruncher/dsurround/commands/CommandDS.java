@@ -36,13 +36,14 @@ import org.orecruncher.lib.Localization;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
+import javax.annotation.Nonnull;
 
 public final class CommandDS extends CommandBase {
 
@@ -77,8 +78,8 @@ public final class CommandDS extends CommandBase {
 		final StringBuilder builder = new StringBuilder();
 		final float minutes = (world.getWorldInfo().getRainTime() / 20.0F) / 60.0F;
 		builder.append(data.toString());
-		builder.append("; isRaining: ").append(Boolean.toString(world.isRaining()));
-		builder.append("; isSurface: ").append(Boolean.toString(world.provider.isSurfaceWorld()));
+		builder.append("; isRaining: ").append(world.isRaining());
+		builder.append("; isSurface: ").append(world.provider.isSurfaceWorld());
 		builder.append("; strength: ").append(FORMATTER.format(world.getRainStrength(1.0F) * 100));
 		builder.append("; timer: ").append(FORMATTER.format(minutes)).append(" minutes");
 		return builder.toString();
@@ -88,14 +89,14 @@ public final class CommandDS extends CommandBase {
 		final StringBuilder builder = new StringBuilder();
 		final float minutes = (world.getWorldInfo().getThunderTime() / 20.0F) / 60.0F;
 		builder.append("dim ").append(data.getId());
-		builder.append("; isThundering: ").append(Boolean.toString(world.isThundering()));
-		builder.append("; isSurface: ").append(Boolean.toString(world.provider.isSurfaceWorld()));
+		builder.append("; isThundering: ").append(world.isThundering());
+		builder.append("; isSurface: ").append(world.provider.isSurfaceWorld());
 		builder.append("; strength: ").append(FORMATTER.format(world.getThunderStrength(1.0F) * 100));
 		builder.append("; timer: ").append(FORMATTER.format(minutes)).append(" minutes");
 		return builder.toString();
 	}
 
-	public static String config(final World world, final IDimensionInfoEx data) {
+	public static String config(final IDimensionInfoEx data) {
 		return data.configString();
 	}
 
@@ -104,24 +105,26 @@ public final class CommandDS extends CommandBase {
 		return 2;
 	}
 
+	@Nonnull
 	@Override
 	public String getName() {
 		return COMMAND;
 	}
 
+	@Nonnull
 	@Override
 	public List<String> getAliases() {
 		return ALIAS;
 	}
 
 	@Override
-	public String getUsage(final ICommandSender sender) {
+	public String getUsage(@Nonnull final ICommandSender sender) {
 		return TextFormatting.GOLD + "/" + COMMAND + " help" + TextFormatting.BLUE
 				+ " -- Help for Dynamic Surroundings";
 	}
 
 	@Override
-	public void execute(MinecraftServer server, ICommandSender sender, String[] parms) throws CommandException {
+	public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] parms) {
 
 		try {
 			final EntityPlayerMP player = getCommandSenderAsPlayer(sender);
@@ -140,14 +143,17 @@ public final class CommandDS extends CommandBase {
 				RegistryManager.doReload();
 				feedback = new TextComponentString(Localization.format("dsurround.msg.BiomeReload"));
 			} else if (COMMAND_OPTION_CONFIG.compareToIgnoreCase(parms[0]) == 0) {
-				feedback = new TextComponentString(config(world, data));
+				if (data != null)
+					feedback = new TextComponentString(config(data));
 			} else if (COMMAND_OPTION_STATUS.compareToIgnoreCase(parms[0]) == 0) {
 				if (parms.length < 2) {
 					showHelp = true;
 				} else if (COMMAND_OPTION_RAIN.compareToIgnoreCase(parms[1]) == 0) {
-					feedback = new TextComponentString(rainStatusOutput(world, data));
+					if (data != null)
+						feedback = new TextComponentString(rainStatusOutput(world, data));
 				} else if (COMMAND_OPTION_THUNDER.compareToIgnoreCase(parms[1]) == 0) {
-					feedback = new TextComponentString(thunderStatusOutput(world, data));
+					if (data != null)
+						feedback = new TextComponentString(thunderStatusOutput(world, data));
 				}
 			} else if (COMMAND_OPTION_SETTIME.compareToIgnoreCase(parms[0]) == 0) {
 				if (parms.length < 3) {
@@ -172,9 +178,11 @@ public final class CommandDS extends CommandBase {
 				} else {
 					final double d = parseDouble(parms[2], 0.0D, 100.0D) / 100.0D;
 					if (COMMAND_OPTION_RAIN.compareToIgnoreCase(parms[1]) == 0) {
-						data.setRainIntensity((float) d);
-						feedback = new TextComponentString(Localization.format("dsurround.msg.RainIntensitySet",
-								FORMATTER.format(data.getRainIntensity() * 100)));
+						if (data != null) {
+							data.setRainIntensity((float) d);
+							feedback = new TextComponentString(Localization.format("dsurround.msg.RainIntensitySet",
+									FORMATTER.format(data.getRainIntensity() * 100)));
+						}
 					} else {
 						showHelp = true;
 					}
@@ -185,9 +193,11 @@ public final class CommandDS extends CommandBase {
 				} else {
 					final double d = parseDouble(parms[2], 0.0D, 100.0D) / 100.0D;
 					if (COMMAND_OPTION_RAIN.compareToIgnoreCase(parms[1]) == 0) {
-						data.setMinRainIntensity((float) d);
-						feedback = new TextComponentString(Localization.format("dsurround.msg.MinRainIntensitySet",
-								FORMATTER.format(data.getMinRainIntensity() * 100)));
+						if (data != null) {
+							data.setMinRainIntensity((float) d);
+							feedback = new TextComponentString(Localization.format("dsurround.msg.MinRainIntensitySet",
+									FORMATTER.format(data.getMinRainIntensity() * 100)));
+						}
 					} else {
 						showHelp = true;
 					}
@@ -199,9 +209,11 @@ public final class CommandDS extends CommandBase {
 				} else {
 					final double d = parseDouble(parms[2], 0.0D, 100.0D) / 100.0D;
 					if (COMMAND_OPTION_RAIN.compareToIgnoreCase(parms[1]) == 0) {
-						data.setMaxRainIntensity((float) d);
-						feedback = new TextComponentString(Localization.format("dsurround.msg.MaxRainIntensitySet",
-								FORMATTER.format(data.getMaxRainIntensity() * 100)));
+						if (data != null) {
+							data.setMaxRainIntensity((float) d);
+							feedback = new TextComponentString(Localization.format("dsurround.msg.MaxRainIntensitySet",
+									FORMATTER.format(data.getMaxRainIntensity() * 100)));
+						}
 					} else {
 						showHelp = true;
 					}

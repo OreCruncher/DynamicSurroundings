@@ -51,7 +51,7 @@ public final class DimensionRegistry extends Registry {
 
 	@Override
 	protected void init(@Nonnull final ModConfiguration cfg) {
-		cfg.dimensions.forEach(dim -> register(dim));
+		cfg.dimensions.forEach(this::register);
 	}
 
 	@Override

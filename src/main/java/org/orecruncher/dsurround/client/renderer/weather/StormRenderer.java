@@ -25,12 +25,14 @@
 package org.orecruncher.dsurround.client.renderer.weather;
 
 import java.util.Random;
+import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 
 import org.lwjgl.opengl.GL11;
 import org.orecruncher.dsurround.capabilities.CapabilityDimensionInfo;
 import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
+import org.orecruncher.dsurround.capabilities.dimension.IDimensionInfo;
 import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
 import org.orecruncher.dsurround.capabilities.season.PrecipitationType;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
@@ -118,9 +120,15 @@ public class StormRenderer {
 		// Don't use EnvironState - may not have been initialized when rendering
 		// starts.
 		final Minecraft mc = Minecraft.getMinecraft();
+		final Entity entity = mc.getRenderViewEntity();
+
+		if (entity == null)
+			return;
+
 		final World world = mc.world;
 
-		if (!CapabilityDimensionInfo.getCapability(world).hasWeather())
+		IDimensionInfo info = CapabilityDimensionInfo.getCapability(world);
+		if (info != null && !info.hasWeather())
 			return;
 
 		final float rainStrength = Weather.getIntensityLevel();
@@ -147,7 +155,6 @@ public class StormRenderer {
 
 		final ISeasonInfo season = CapabilitySeasonInfo.getCapability(world);
 		final Weather.Properties props = Weather.getWeatherProperties();
-		final Entity entity = mc.getRenderViewEntity();
 
 		final BlockPos playerPos = EnvironState.getPlayerPosition();
 		final int playerX = playerPos.getX();
@@ -161,7 +168,7 @@ public class StormRenderer {
 				final double rainY = RAIN_Y_COORDS[idx];
 				this.mutable.setPos(gridX, 0, gridZ);
 
-				if (!RandomThings.shouldRain(world, this.mutable))
+				if (RandomThings.shouldRain(world, this.mutable))
 					continue;
 
 				final BiomeInfo biome = BiomeUtil.getBiomeData(ClientChunkCache.instance().getBiome(this.mutable));

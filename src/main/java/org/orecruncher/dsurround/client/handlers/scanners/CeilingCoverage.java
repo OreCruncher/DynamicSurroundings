@@ -72,22 +72,20 @@ public final class CeilingCoverage implements ITickable {
 		TOTAL_POINTS = totalPoints;
 	}
 
-	private float ceilingCoverageRatio = 0.0F;
 	private boolean reallyInside = false;
 
 	@Override
 	public void update() {
 		if (EnvironState.getTickCounter() % SURVEY_INTERVAL == 0) {
+			float ceilingCoverageRatio;
 			if (EnvironState.getDimensionId() == -1 || EnvironState.getDimensionInfo().alwaysOutside()) {
-				this.ceilingCoverageRatio = 0F;
 				this.reallyInside = false;
 			} else {
 				final BlockPos pos = EnvironState.getPlayerPosition();
 				float score = 0.0F;
-				for (int i = 0; i < cells.length; i++)
-					score += cells[i].score(pos);
-				this.ceilingCoverageRatio = 1.0F - (score / TOTAL_POINTS);
-				this.reallyInside = this.ceilingCoverageRatio > INSIDE_THRESHOLD;
+				for (Cell cell : cells) score += cell.score(pos);
+				ceilingCoverageRatio = 1.0F - (score / TOTAL_POINTS);
+				this.reallyInside = ceilingCoverageRatio > INSIDE_THRESHOLD;
 			}
 		}
 	}

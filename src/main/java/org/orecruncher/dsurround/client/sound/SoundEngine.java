@@ -32,6 +32,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL;
@@ -45,7 +46,6 @@ import org.orecruncher.dsurround.ModOptions.Trace;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.lib.ReflectedField.BooleanField;
-import org.orecruncher.lib.ReflectedField.FloatField;
 import org.orecruncher.lib.ReflectedField.ObjectField;
 import org.orecruncher.lib.ThreadGuard;
 import org.orecruncher.lib.ThreadGuard.Action;
@@ -95,12 +95,6 @@ public final class SoundEngine {
 				"removed",
 				null
 			);
-	private static final FloatField<Object> soundPhysicsGlobalVolume =
-		new FloatField<>(
-			"com.sonicether.soundphysics.SoundPhysics",
-			"globalVolumeMultiplier",
-			null
-		);
 	//@formatter:on
 
 	private static final float MUTE_VOLUME = 0.00001F;
@@ -109,7 +103,7 @@ public final class SoundEngine {
 
 	// Maximum number of sound channels configured in the sound system
 	private static int maxSounds = 0;
-	private static SoundEngine instance_ = new SoundEngine();
+	private static final SoundEngine instance_ = new SoundEngine();
 
 	public static SoundEngine instance() {
 		return instance_;
@@ -276,11 +270,11 @@ public final class SoundEngine {
 						cleanupSource(src);
 						return e.getKey();
 					}).collect(Collectors.toList());
-			remove.forEach(id -> sndSystem.removeSource(id));
+			remove.forEach(sndSystem::removeSource);
 		}
 	}
 
-	private static void cleanupSource(final Source source) {
+	private static void cleanupSource(@Nonnull final Source source) {
 		if (source.toStream) {
 			removed.set(source, true);
 		} else {
@@ -353,8 +347,7 @@ public final class SoundEngine {
 	public boolean isMuted() {
 		try {
 			return getSoundSystem().getMasterVolume() == MUTE_VOLUME;
-		} catch (final Throwable t) {
-			;
+		} catch (final Throwable ignore) {
 		}
 		return false;
 	}
@@ -374,10 +367,9 @@ public final class SoundEngine {
 				if (options != null)
 					getSoundSystem().setMasterVolume(options.getSoundLevel(SoundCategory.MASTER));
 			}
-		} catch (final Throwable t) {
+		} catch (final Throwable ignore) {
 			// Silent - at some point the thread will come back and can be
 			// issued a mute.
-			;
 		}
 	}
 
@@ -411,7 +403,7 @@ public final class SoundEngine {
 				.map(s -> s.getSound().getSoundLocation())
 				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
 				.entrySet().stream()
-				.map(e -> TextFormatting.GOLD + e.getKey().toString() + ": " + String.valueOf(e.getValue()))
+				.map(e -> TextFormatting.GOLD + e.getKey().toString() + ": " + e.getValue())
 				.sorted()
 				.collect(Collectors.toList());
 		//@formatter:on
@@ -419,7 +411,7 @@ public final class SoundEngine {
 		event.output.addAll(results);
 	}
 
-	public static float getVolume(@Nonnull final SoundCategory category) {
+	public static float getVolume(@Nullable final SoundCategory category) {
 		if (category == null || category == SoundCategory.MASTER)
 			return 1F;
 		final GameSettings settings = Minecraft.getMinecraft().gameSettings;
@@ -434,12 +426,13 @@ public final class SoundEngine {
 	// SOUND may not be initialized if Forge did not initialized Minecraft fully.
 	// That can happen if the environment does not meet it's dependency
 	// requirements.
-	private static float getVolumeScale(@Nonnull final ISound sound) {
+	private static float getVolumeScale(@Nullable final ISound sound) {
+		if (sound == null)
+			return 1F;
 		try {
 			final float fade = fadeMusic(sound) ? MusicFader.getMusicScaling() : 1.0F;
 			return RegistryManager.SOUND.getVolumeScale(sound) * fade;
-		} catch (final Throwable t) {
-			;
+		} catch (final Throwable ignore) {
 		}
 		return 1F;
 	}
@@ -454,15 +447,7 @@ public final class SoundEngine {
 	public static float getClampedVolume(@Nonnull final ISound sound) {
 		final float volumeScale = getVolumeScale(sound);
 		final float volume = sound.getVolume() * getVolume(sound.getCategory()) * volumeScale;
-		final float result = MathStuff.clamp(volume, 0.0F, 1.0F);
-
-		try {
-			if (soundPhysicsGlobalVolume.isAvailable())
-				return result * soundPhysicsGlobalVolume.get(null);
-		} catch (final Exception ex) {
-			;
-		}
-		return result;
+		return MathStuff.clamp(volume, 0.0F, 1.0F);
 	}
 
 	private static void alErrorCheck() {
@@ -477,7 +462,7 @@ public final class SoundEngine {
 	 * @param event Event that has been raised
 	 */
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public static void configureSound(@Nonnull final SoundSetupEvent event) {
+	public static void configureSound(@Nullable final SoundSetupEvent event) {
 		int totalChannels = -1;
 
 		try {

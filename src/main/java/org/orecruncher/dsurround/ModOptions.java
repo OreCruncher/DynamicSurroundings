@@ -53,7 +53,8 @@ public final class ModOptions {
 	public static class Trace {
 		public static final int SOUND_PLAY = 0x1;
 		public static final int FOOTSTEP_ACOUSTIC = 0x2;
-	};
+		public static final int WORLD_CAPABILITIES = 0x4;
+	}
 
 	public static final String CATEGORY_ASM = "asm";
 
@@ -146,7 +147,7 @@ public final class ModOptions {
 		@DefaultValue("false")
 		@LangKey(rain.PREFIX + ".UseVanillaSound")
 		@Comment("Use the Vanilla rain sound rather than the modified one")
-		@RestartRequired(server = true, world = true)
+		@RestartRequired(server = true)
 		public static boolean useVanillaRainSound = false;
 
 		@Option("Style of rain water ripple")
@@ -302,7 +303,7 @@ public final class ModOptions {
 		@DefaultValue("true")
 		@LangKey(aurora.PREFIX + ".EnableShader")
 		@Comment("Use shader when rendering aurora")
-		@RestartRequired(world = true)
+		@RestartRequired()
 		public static boolean auroraUseShader = true;
 
 		@Option("Maximum Bands")
@@ -536,7 +537,7 @@ public final class ModOptions {
 		@DefaultValue("false")
 		@LangKey(sound.PREFIX + ".SwordEquipAsTool")
 		@Comment("Enable Sword Equip sound as Tool")
-		@RestartRequired(world = true, server = true)
+		@RestartRequired(server = true)
 		public static boolean swordEquipAsTool = false;
 
 		@Option("Crafting Sound")
@@ -674,7 +675,7 @@ public final class ModOptions {
 		@DefaultValue("true")
 		@LangKey(speechbubbles.PREFIX + ".AnimaniaBadges")
 		@Comment("Enable/disable display of food/water badges over Animania mobs")
-		@RestartRequired(world = true, server = true)
+		@RestartRequired(server = true)
 		public static boolean enableAnimaniaBadges = true;
 	}
 
@@ -683,7 +684,7 @@ public final class ModOptions {
 	@Category(CATEGORY_COMMANDS)
 	@LangKey(commands.PREFIX)
 	@Comment("Options for configuring commands")
-	@RestartRequired(server = true, world = true)
+	@RestartRequired(server = true)
 	public static class commands {
 
 		protected static final String PREFIX = ModOptions.PREFIX + ".commands";

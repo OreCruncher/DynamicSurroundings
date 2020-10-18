@@ -118,7 +118,7 @@ public class BattleScanner {
 		}
 
 		final World world = player.getEntityWorld();
-		final BlockPos playerPos = new BlockPos(player.posX, player.getEntityBoundingBox().minY, player.posZ);;
+		final BlockPos playerPos = new BlockPos(player.posX, player.getEntityBoundingBox().minY, player.posZ);
 
 		boolean inBattle = false;
 		boolean isBoss = false;

@@ -25,7 +25,6 @@
 package org.orecruncher.dsurround.registry.item;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.registry.IDataAccessor;
@@ -39,7 +38,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public final class ItemUtils {
 
 	@SuppressWarnings("unchecked")
-	@Nullable
+	@Nonnull
 	public static IItemData getItemData(@Nonnull final Item item) {
 		final IDataAccessor<IItemData> accessor = (IDataAccessor<IItemData>) item;
 		IItemData result = accessor.getData();

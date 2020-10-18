@@ -25,6 +25,7 @@
 package org.orecruncher.dsurround.capabilities;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.capabilities.entitydata.EntityData;
@@ -59,9 +60,10 @@ public final class CapabilityEntityData {
 	public static final ResourceLocation CAPABILITY_ID = new ResourceLocation(ModInfo.MOD_ID, "data");
 
 	public static void register() {
-		CapabilityManager.INSTANCE.register(IEntityData.class, new SimpleStorage<IEntityData>(), EntityData::new);
+		CapabilityManager.INSTANCE.register(IEntityData.class, new SimpleStorage<>(), EntityData::new);
 	}
 
+	@Nullable
 	public static IEntityData getCapability(@Nonnull final Entity entity) {
 		return CapabilityUtils.getCapability(entity, CapabilityEntityData.ENTITY_DATA, null);
 	}
@@ -102,7 +104,7 @@ public final class CapabilityEntityData {
 		/*
 		 * Called when an entity is being updated. Need to evaluate new states.
 		 */
-		@SubscribeEvent(receiveCanceled = false)
+		@SubscribeEvent()
 		public static void livingUpdate(@Nonnull final LivingUpdateEvent event) {
 			final Entity entity = event.getEntity();
 			final World world = entity.getEntityWorld();

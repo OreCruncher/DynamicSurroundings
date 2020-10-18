@@ -76,10 +76,12 @@ public class ParticleFireJet extends ParticleJet {
 		final double speedY = this.isLava ? 0 : this.jetStrength / 10.0D;
 		final Particle particle = this.factory.createParticle(this.particleId, this.world, this.posX, this.posY,
 				this.posZ, 0D, speedY, 0D);
-		if (!this.isLava) {
-			final ParticleFlame flame = (ParticleFlame) particle;
-			flameScale.set(flame, flameScale.get(flame) * this.jetStrength);
+		if (particle != null) {
+			if (!this.isLava) {
+				final ParticleFlame flame = (ParticleFlame) particle;
+				flameScale.set(flame, flameScale.get(flame) * this.jetStrength);
+			}
+			addParticle(particle);
 		}
-		addParticle(particle);
 	}
 }

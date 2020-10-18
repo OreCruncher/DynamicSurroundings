@@ -105,7 +105,7 @@ public final class BiomeRegistry extends Registry {
 			}
 		}
 
-		ForgeRegistries.BIOMES.getValuesCollection().forEach(biome -> register(biome));
+		ForgeRegistries.BIOMES.getValuesCollection().forEach(this::register);
 
 		// Add our fake biomes
 		register(UNDERWATER);
@@ -139,7 +139,7 @@ public final class BiomeRegistry extends Registry {
 	@Override
 	protected void init(@Nonnull final ModConfiguration cfg) {
 
-		cfg.biomeAlias.forEach((alias, biome) -> registerBiomeAlias(alias, biome));
+		cfg.biomeAlias.forEach(this::registerBiomeAlias);
 		final List<BiomeInfo> infoList = getCombinedStream();
 
 		for (final BiomeConfig c : cfg.biomes) {
@@ -153,8 +153,12 @@ public final class BiomeRegistry extends Registry {
 		// Make sure the default PLAINS biome is set. OTG can do some squirrelly things
 		final ResourceLocation plainsLoc = new ResourceLocation("plains");
 		final Biome plains = ForgeRegistries.BIOMES.getValue(plainsLoc);
-		final BiomeInfo info = BiomeUtil.getBiomeData(plains);
-		BiomeUtil.setBiomeData(Biomes.PLAINS, info);
+		if (plains != null) {
+			final BiomeInfo info = BiomeUtil.getBiomeData(plains);
+			BiomeUtil.setBiomeData(Biomes.PLAINS, info);
+		} else {
+			ModBase.log().warn("Biome PLAINS cannot be found in Forge registry!");
+		}
 	}
 
 	@Override
@@ -231,9 +235,7 @@ public final class BiomeRegistry extends Registry {
 
 		for (final Biome b : ForgeRegistries.BIOMES.getValuesCollection()) {
 			final BiomeInfo info = BiomeUtil.getBiomeData(b);
-			if (info != null) {
-				infos.add(info);
-			}
+			infos.add(info);
 		}
 
 		for (final FakeBiome b : this.theFakes) {

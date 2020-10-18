@@ -23,6 +23,7 @@
 package org.orecruncher.dsurround.client.footsteps.facade;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -38,13 +39,14 @@ import team.chisel.ctm.api.IFacade;
 @SideOnly(Side.CLIENT)
 final class ConnectedTexturesAccessor implements IFacadeAccessor {
 
+	@Nonnull
 	@Override
 	public String getName() {
 		return "ConnectedTexturesAccessor";
 	}
 
 	@Override
-	public boolean instanceOf(Block block) {
+	public boolean instanceOf(@Nonnull Block block) {
 		return isValid() && block instanceof IFacade;
 	}
 
@@ -56,13 +58,11 @@ final class ConnectedTexturesAccessor implements IFacadeAccessor {
 	@Override
 	@Nonnull
 	public IBlockState getBlockState(@Nonnull final EntityLivingBase entity, @Nonnull final IBlockState state,
-			@Nonnull final IBlockAccess world, @Nonnull final Vec3d pos, @Nonnull final EnumFacing side) {
+			@Nonnull final IBlockAccess world, @Nonnull final Vec3d pos, @Nullable final EnumFacing side) {
 		if (state.getBlock() instanceof IFacade) {
 			final IFacade facade = (IFacade) state.getBlock();
 			final BlockPos blockPos = new BlockPos(pos);
-			final IBlockState result = facade.getFacade(entity.getEntityWorld(), blockPos, side, blockPos);
-			if (result != null)
-				return result;
+			return facade.getFacade(entity.getEntityWorld(), blockPos, side, blockPos);
 		}
 		return state;
 	}

@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.common.collect.ImmutableMap;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.lib.BlockNameUtil;
 import org.orecruncher.lib.BlockNameUtil.NameResult;
@@ -87,7 +88,7 @@ public final class BlockStateMatcher {
 	public List<IBlockState> asBlockStates() {
 		//@formatter:off
 		return this.block.getBlockState().getValidStates().stream()
-			.filter(bs -> matchProps(bs))
+			.filter(this::matchProps)
 			.collect(Collectors.toList());
 		//@formatter:on
 	}
@@ -148,9 +149,7 @@ public final class BlockStateMatcher {
 
 		for (final IProperty<?> prop : state.getPropertyKeys()) {
 			final Object o = state.getValue(prop);
-			if (o != null) {
-				result.put(prop, o);
-			}
+			result.put(prop, o);
 		}
 
 		return result.size() == 0 ? EMPTY : result;
@@ -172,7 +171,7 @@ public final class BlockStateMatcher {
 	}
 
 	@Nullable
-	public static BlockStateMatcher create(@Nonnull final NameResult result) {
+	public static BlockStateMatcher create(@Nullable final NameResult result) {
 		if (result != null) {
 			final Block block = result.getBlock();
 			if (block != null) {
@@ -189,7 +188,10 @@ public final class BlockStateMatcher {
 					return new BlockStateMatcher(block);
 				}
 
-				final Map<String, String> properties = result.getProperties();
+				Map<String, String> properties = result.getProperties();
+				if (properties == null)
+					properties = ImmutableMap.of();
+
 				final Reference2ObjectOpenHashMap<IProperty<?>, Object> props = new Reference2ObjectOpenHashMap<>(
 						properties.size());
 
@@ -251,7 +253,7 @@ public final class BlockStateMatcher {
 			@Nonnull final String propName, @Nonnull final Object val) {
 		final BlockStateContainer container = block.getBlockState();
 		final IProperty<T> prop = (IProperty<T>) container.getProperty(propName);
-		return prop.getName((T) val);
+		return prop != null ? prop.getName((T) val) : null;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -259,10 +261,12 @@ public final class BlockStateMatcher {
 		final BlockStateContainer container = block.getBlockState();
 		final IProperty<T> prop = (IProperty<T>) container.getProperty(propName);
 		final List<String> result = new ArrayList<>();
-		for (final T v : prop.getAllowedValues()) {
-			result.add(prop.getName(v));
+		if (prop != null) {
+			for (final T v : prop.getAllowedValues()) {
+				result.add(prop.getName(v));
+			}
 		}
-		return result.stream().collect(Collectors.joining(","));
+		return String.join(",", result);
 	}
 
 }

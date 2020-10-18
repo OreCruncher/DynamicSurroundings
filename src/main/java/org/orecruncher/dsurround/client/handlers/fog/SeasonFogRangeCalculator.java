@@ -61,6 +61,12 @@ public class SeasonFogRangeCalculator extends MorningFogRangeCalculator {
 	}
 
 	@Override
+	@Nonnull
+	public String getName() {
+		return "SeasonFogRangeCalculator";
+	}
+
+	@Override
 	public FogType getFogType() {
 		final World world = EnvironState.getWorld();
 		final ISeasonInfo cap = CapabilitySeasonInfo.getCapability(world);

@@ -59,10 +59,11 @@ public final class CapabilitySpeechData {
 
 	@SideOnly(Side.CLIENT)
 	public static void register() {
-		CapabilityManager.INSTANCE.register(ISpeechData.class, new NullStorage<ISpeechData>(), SpeechData::new);
+		CapabilityManager.INSTANCE.register(ISpeechData.class, new NullStorage<>(), SpeechData::new);
 	}
 
 	@SideOnly(Side.CLIENT)
+	@Nullable
 	public static ISpeechData getCapability(@Nonnull final Entity entity) {
 		return CapabilityUtils.getCapability(entity, SPEECH_DATA, null);
 	}
@@ -105,7 +106,7 @@ public final class CapabilitySpeechData {
 		 * Called when an entity is being updated. Need to update the state of the
 		 * speech data.
 		 */
-		@SubscribeEvent(receiveCanceled = false)
+		@SubscribeEvent()
 		public static void livingUpdate(@Nonnull final LivingUpdateEvent event) {
 			final Entity entity = event.getEntity();
 			final World world = entity.getEntityWorld();

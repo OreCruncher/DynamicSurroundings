@@ -348,7 +348,7 @@ public class Generator {
 		final long current = TimeUtils.currentTimeMillis();
 		if (current >= this.brushesTime) {
 			this.brushesTime = current + BRUSH_INTERVAL;
-			if (proceedWithStep(entity) && (entity.motionX != 0d || entity.motionZ != 0d)) {
+			if (proceedWithStep() && (entity.motionX != 0d || entity.motionZ != 0d)) {
 				final int yy = MathStuff
 						.floor(entity.posY - PROBE_DEPTH - entity.getYOffset() - (entity.onGround ? 0d : 0.25d));
 				final BlockPos pos = new BlockPos(entity.posX, yy, entity.posZ);
@@ -362,13 +362,13 @@ public class Generator {
 		}
 	}
 
-	protected boolean proceedWithStep(@Nonnull final EntityLivingBase entity) {
+	protected boolean proceedWithStep() {
 		return !this.isSneaking;
 	}
 
 	protected void playSinglefoot(@Nonnull final EntityLivingBase entity, final double verticalOffsetAsMinus,
 			@Nonnull final EventType eventType, final boolean foot) {
-		if (proceedWithStep(entity)) {
+		if (proceedWithStep()) {
 			final Association assos = findAssociation(entity, verticalOffsetAsMinus, foot);
 			playAssociation(assos, eventType);
 		}
@@ -377,7 +377,7 @@ public class Generator {
 	protected void playMultifoot(@Nonnull final EntityLivingBase entity, final double verticalOffsetAsMinus,
 			final EventType eventType) {
 
-		if (proceedWithStep(entity)) {
+		if (proceedWithStep()) {
 			// STILL JUMP
 			final Association leftFoot = findAssociation(entity, verticalOffsetAsMinus, false);
 			final Association rightFoot = findAssociation(entity, verticalOffsetAsMinus, true);
@@ -449,7 +449,7 @@ public class Generator {
 	 */
 	protected boolean playSpecialStoppingConditions(@Nonnull final EntityLivingBase entity) {
 		if (entity.isInWater()) {
-			if (proceedWithStep(entity)) {
+			if (proceedWithStep()) {
 				final float volume = (float) MathStuff.sqrt(entity.motionX * entity.motionX
 						+ entity.motionY * entity.motionY + entity.motionZ * entity.motionZ) * 1.25F;
 				final ConfigOptions options = new ConfigOptions();
@@ -482,7 +482,7 @@ public class Generator {
 			IAcoustic[] acoustics = this.blockMap.getBlockAcoustics(above, Substrate.MESSY);
 			if (acoustics == AcousticRegistry.MESSY_GROUND) {
 				acoustics = this.blockMap.getBlockAcoustics(above, Substrate.FOLIAGE);
-				if (acoustics != null && acoustics != AcousticRegistry.NOT_EMITTER) {
+				if (acoustics != AcousticRegistry.NOT_EMITTER) {
 					result = new Association(entity, acoustics);
 				}
 
@@ -516,10 +516,10 @@ public class Generator {
 	@Override
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
-		builder.append("didJump: ").append(Boolean.toString(this.didJump)).append(' ');
-		builder.append("onLadder: ").append(Boolean.toString(this.isOnLadder)).append(' ');
-		builder.append("flying: ").append(Boolean.toString(this.isFlying)).append(' ');
-		builder.append("immobile: ").append(Boolean.toString(this.isImmobile)).append(' ');
+		builder.append("didJump: ").append(this.didJump).append(' ');
+		builder.append("onLadder: ").append(this.isOnLadder).append(' ');
+		builder.append("flying: ").append(this.isFlying).append(' ');
+		builder.append("immobile: ").append(this.isImmobile).append(' ');
 		builder.append("steps: ").append(this.pedometer);
 		return builder.toString();
 	}

@@ -94,8 +94,8 @@ public class ParticleTextPopOff extends ParticleBase {
 	}
 
 	@Override
-	public void renderParticle(BufferBuilder worldRendererIn, Entity entityIn, float partialTicks, float rotationX,
-			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+	public void renderParticle(@Nonnull BufferBuilder worldRendererIn, @Nonnull Entity entityIn, float partialTicks, float rotationX,
+							   float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 
 		final float pitch = this.manager.playerViewX * (isThirdPersonView() ? -1 : 1);
 		final float yaw = -this.manager.playerViewY;

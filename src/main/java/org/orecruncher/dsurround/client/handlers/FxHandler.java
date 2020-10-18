@@ -47,7 +47,6 @@ import org.orecruncher.dsurround.client.handlers.effects.EntitySwingEffect;
 import org.orecruncher.dsurround.client.handlers.effects.PlayerToolBarSoundEffect;
 import org.orecruncher.dsurround.client.handlers.effects.VillagerChatEffect;
 import org.orecruncher.dsurround.client.sound.ISoundInstance;
-import org.orecruncher.dsurround.client.sound.SoundInstance;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.lib.OutOfBandTimerEMA;
 import org.orecruncher.dsurround.registry.RegistryDataEvent;
@@ -72,16 +71,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class FxHandler extends EffectHandlerBase {
 
-	private static final IParticleHelper PARTICLE_HELPER = (p) -> ParticleHelper.addParticle(p);
+	private static final IParticleHelper PARTICLE_HELPER = ParticleHelper::addParticle;
 	private static final ISoundHelper SOUND_HELPER = new ISoundHelper() {
 		@Override
 		public boolean playSound(@Nonnull final ISoundInstance sound) {
-			return SoundEffectHandler.INSTANCE.playSound((SoundInstance) sound);
+			return SoundEffectHandler.INSTANCE.playSound(sound);
 		}
 
 		@Override
 		public void stopSound(@Nonnull final ISoundInstance sound) {
-			SoundEffectHandler.INSTANCE.stopSound((SoundInstance) sound);
+			SoundEffectHandler.INSTANCE.stopSound(sound);
 		}
 	};
 
@@ -149,7 +148,7 @@ public class FxHandler extends EffectHandlerBase {
 			if (handler != null && !inRange) {
 				cap.clear();
 			} else if (handler == null && inRange && entity.isEntityAlive()) {
-				cap.set(library.create(entity).get());
+				library.create(entity).ifPresent(cap::set);
 			} else if (handler != null) {
 				handler.update();
 			}
@@ -161,9 +160,9 @@ public class FxHandler extends EffectHandlerBase {
 	protected void clearHandlers() {
 		//@formatter:off
 		EnvironState.getWorld().getLoadedEntityList().stream()
-			.map(e -> CapabilityEntityFXData.getCapability(e))
+			.map(CapabilityEntityFXData::getCapability)
 			.filter(Objects::nonNull)
-			.forEach(c -> c.clear());
+			.forEach(IEntityFX::clear);
 		//@formatter:on
 	}
 

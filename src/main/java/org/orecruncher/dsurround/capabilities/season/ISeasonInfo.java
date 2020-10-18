@@ -38,7 +38,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public interface ISeasonInfo {
 
-	@Nonnull
+	@Nullable
 	World getWorld();
 
 	@Nonnull
@@ -67,5 +67,6 @@ public interface ISeasonInfo {
 
 	boolean showFrostBreath(@Nonnull final BlockPos pos);
 
+	@Nonnull
 	PrecipitationType getPrecipitationType(@Nonnull final BlockPos pos, @Nullable BiomeInfo biome);
 }

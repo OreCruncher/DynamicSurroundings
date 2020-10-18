@@ -31,6 +31,7 @@ import org.orecruncher.dsurround.registry.sound.SoundMetadata;
 
 import com.google.common.base.MoreObjects;
 
+import net.minecraft.client.audio.ISound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.relauncher.Side;
@@ -52,7 +53,7 @@ public class ConfigSoundInstance extends SoundInstance {
 		this.xPosF = this.yPosF = this.zPosF = 0F;
 		this.repeat = false;
 		this.repeatDelay = 0;
-		this.attenuationType = SoundInstance.noAttenuation();
+		this.attenuationType = ISound.AttenuationType.NONE;
 
 		final SoundMetadata data = RegistryManager.SOUND.getSoundMetadata(this.positionedSoundLocation);
 		if (data != null)

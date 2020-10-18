@@ -24,11 +24,12 @@
 package org.orecruncher.dsurround.client.effects;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Optional;
 
 @SideOnly(Side.CLIENT)
 public interface IEntityEffectState extends IEffectState {
@@ -39,8 +40,8 @@ public interface IEntityEffectState extends IEffectState {
 	 *
 	 * @return Reference to the subject Entity, if any.
 	 */
-	@Nullable
-	Entity subject();
+	@Nonnull
+	Optional<Entity> subject();
 
 	/**
 	 * Indicates if the subject is alive.
@@ -48,14 +49,6 @@ public interface IEntityEffectState extends IEffectState {
 	 * @return true if the subject is alive, false otherwise
 	 */
 	boolean isSubjectAlive();
-
-	/**
-	 * Determines the distance between the Entity subject and the specified Entity.
-	 *
-	 * @param entity The Entity to which the distance is measured.
-	 * @return The distance between the two Entities in blocks, squared.
-	 */
-	double distanceSq(@Nonnull final Entity entity);
 
 	/**
 	 * Returns the total world time, in ticks, the entity belongs to.

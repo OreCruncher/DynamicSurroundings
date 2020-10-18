@@ -36,6 +36,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
+
 @SideOnly(Side.CLIENT)
 public class ParticleDust extends ParticleBlockDust {
 
@@ -92,8 +94,8 @@ public class ParticleDust extends ParticleBlockDust {
 	}
 
 	@Override
-	public void renderParticle(BufferBuilder worldRendererIn, Entity entityIn, float partialTicks, float rotationX,
-			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+	public void renderParticle(BufferBuilder worldRendererIn, @Nonnull Entity entityIn, float partialTicks, float rotationX,
+							   float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		final float f5 = (float) (this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpPosX);
 		final float f6 = (float) (this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpPosY);
 		final float f7 = (float) (this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpPosZ);

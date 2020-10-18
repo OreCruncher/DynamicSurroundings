@@ -40,7 +40,6 @@ public class AuroraBand {
 	protected static final float ANGLE1 = MathStuff.PI_F / 16.0F;
 	protected static final float ANGLE2 = MathStuff.toRadians(90.0F / 7.0F);
 	protected static final float AURORA_SPEED = 0.75F;
-	protected static final int AURORA_WAVELENGTH = 8;
 	public static final float AURORA_AMPLITUDE = 18.0F;
 
 	protected final Random random;
@@ -59,10 +58,6 @@ public class AuroraBand {
 		preset(geo);
 		generateBands(noTaper, fixedHeight);
 		translate(0);
-	}
-
-	public AuroraBand(final Random random, final AuroraGeometry geo) {
-		this(random, geo, false, false);
 	}
 
 	protected AuroraBand(final Panel[] nodes, final AuroraBand band) {
@@ -133,8 +128,8 @@ public class AuroraBand {
 	}
 
 	protected void generateBands(final boolean noTaper, final boolean fixedHeight) {
-		this.nodes = populate(noTaper, fixedHeight);
-		final float factor = MathStuff.PI_F / (this.length / 4);
+		this.nodes = populate(fixedHeight);
+		final float factor = MathStuff.PI_F / (this.length / 4.0F);
 		final int lowerBound = this.length / 8 + 1;
 		final int upperBound = this.length * 7 / 8 - 1;
 
@@ -158,7 +153,7 @@ public class AuroraBand {
 	}
 
 	@Nonnull
-	protected Panel[] populate(final boolean noTaper, final boolean fixedHeight) {
+	protected Panel[] populate(final boolean fixedHeight) {
 		final Panel[] nodeList = new Panel[this.length];
 		final int bound = this.length / 2 - 1;
 

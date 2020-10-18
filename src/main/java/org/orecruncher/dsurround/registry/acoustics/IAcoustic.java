@@ -37,10 +37,6 @@ public interface IAcoustic {
 	@Nonnull
 	String getName();
 
-	default void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Vec3d location) {
-		playSound(player, location, null, null);
-	}
-
 	void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Vec3d location, @Nullable final EventType event,
 			@Nullable final IOptions inputOptions);
 

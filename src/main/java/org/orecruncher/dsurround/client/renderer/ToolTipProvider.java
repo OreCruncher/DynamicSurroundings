@@ -44,12 +44,10 @@ public class ToolTipProvider {
 	public static void tooltipEvent(@Nonnull final ItemTooltipEvent event) {
 		if (ModOptions.logging.enableDebugLogging) {
 			final ItemStack stack = event.getItemStack();
-			if (stack != null) {
-				final String itemName = ItemStackUtil.getItemName(stack);
-				if (itemName != null) {
-					event.getToolTip().add(TextFormatting.GOLD + itemName);
-					event.getToolTip().add(TextFormatting.GOLD + stack.getItem().getClass().getName());
-				}
+			final String itemName = ItemStackUtil.getItemName(stack);
+			if (itemName != null) {
+				event.getToolTip().add(TextFormatting.GOLD + itemName);
+				event.getToolTip().add(TextFormatting.GOLD + stack.getItem().getClass().getName());
 			}
 		}
 	}

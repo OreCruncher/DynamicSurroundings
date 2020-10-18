@@ -36,7 +36,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class MoteWaterSpray extends MoteMotionBase {
 
-	protected float scale;
+	protected final float scale;
 
 	protected final float texU1, texU2;
 	protected final float texV1, texV2;

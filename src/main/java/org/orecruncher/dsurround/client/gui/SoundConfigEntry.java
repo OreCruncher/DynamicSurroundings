@@ -113,8 +113,7 @@ public class SoundConfigEntry extends NumberSliderEntry {
 			if (credits != null && credits.size() > 0) {
 				if (!spaceAdded)
 					text.add("");
-				for (final String s : credits)
-					text.add(s);
+				text.addAll(credits);
 			}
 		}
 

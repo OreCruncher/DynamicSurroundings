@@ -50,7 +50,7 @@ public final class BlockAcousticMap {
 	 * sound and needs external assistance to back fill. The results are added to
 	 * the cache for future lookups.
 	 */
-	public static interface IAcousticResolver {
+	public interface IAcousticResolver {
 		@Nullable
 		IAcoustic[] resolve(@Nonnull final IBlockState state);
 	}

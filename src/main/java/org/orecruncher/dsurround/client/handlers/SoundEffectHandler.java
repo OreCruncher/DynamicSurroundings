@@ -28,13 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
-import org.orecruncher.dsurround.client.sound.Emitter;
-import org.orecruncher.dsurround.client.sound.EntityEmitter;
-import org.orecruncher.dsurround.client.sound.SoundEffect;
-import org.orecruncher.dsurround.client.sound.SoundEngine;
-import org.orecruncher.dsurround.client.sound.SoundInstance;
-import org.orecruncher.dsurround.client.sound.SoundState;
-import org.orecruncher.dsurround.client.sound.Sounds;
+import org.orecruncher.dsurround.client.sound.*;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.registry.RegistryDataEvent;
 import org.orecruncher.dsurround.registry.sound.SoundRegistry;
@@ -71,9 +65,9 @@ public class SoundEffectHandler extends EffectHandlerBase {
 	private final static class PendingSound {
 
 		private final int timeMark;
-		private final SoundInstance sound;
+		private final ISoundInstance sound;
 
-		public PendingSound(@Nonnull final SoundInstance sound, final int delay) {
+		public PendingSound(@Nonnull final ISoundInstance sound, final int delay) {
 			this.timeMark = EnvironState.getTickCounter() + delay;
 			this.sound = sound;
 		}
@@ -82,7 +76,8 @@ public class SoundEffectHandler extends EffectHandlerBase {
 			return EnvironState.getTickCounter() - this.timeMark;
 		}
 
-		public SoundInstance getSound() {
+		@Nonnull
+		public ISoundInstance getSound() {
 			return this.sound;
 		}
 	}
@@ -157,16 +152,16 @@ public class SoundEffectHandler extends EffectHandlerBase {
 		//@formatter:on
 	}
 
-	public void stopSound(@Nonnull final SoundInstance sound) {
+	public void stopSound(@Nonnull final ISoundInstance sound) {
 		SoundEngine.instance().stopSound(sound);
 	}
 
-	public boolean playSound(@Nonnull final SoundInstance sound) {
-		return sound != null && sound.canSoundBeHeard() ? SoundEngine.instance().playSound(sound) : false;
+	public boolean playSound(@Nonnull final ISoundInstance sound) {
+		return sound.canSoundBeHeard() && SoundEngine.instance().playSound(sound);
 	}
 
-	public boolean playSoundAtPlayer(@Nonnull final EntityPlayer player, @Nonnull final SoundEffect sound) {
-		return playSound(sound.createSoundNear(player));
+	public void playSoundAtPlayer(@Nonnull final EntityPlayer player, @Nonnull final SoundEffect sound) {
+		playSound(sound.createSoundNear(player));
 	}
 
 	public boolean playSoundAt(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound, final int tickDelay) {
@@ -189,7 +184,7 @@ public class SoundEffectHandler extends EffectHandlerBase {
 
 	@SubscribeEvent
 	public void playerJoinWorldEvent(@Nonnull final EntityJoinWorldEvent event) {
-		if (event.getEntity().getEntityWorld().isRemote && EnvironState.isPlayer(event.getEntity())
+		if (getPlayer() != null && event.getEntity().getEntityWorld().isRemote && EnvironState.isPlayer(event.getEntity())
 				&& !event.getEntity().isDead)
 			clearSounds();
 	}

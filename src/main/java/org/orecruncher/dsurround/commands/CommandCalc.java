@@ -33,13 +33,14 @@ import org.orecruncher.lib.expression.IVariant;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
 
 @SideOnly(Side.CLIENT)
 public class CommandCalc extends CommandBase {
@@ -59,6 +60,7 @@ public class CommandCalc extends CommandBase {
 			.add(TextFormatting.YELLOW + "/" + COMMAND + " funcs").add(TextFormatting.YELLOW + "/" + COMMAND + " vars")
 			.add(TextFormatting.YELLOW + "/" + COMMAND + " ops").build();
 
+	@Nonnull
 	@Override
 	public String getName() {
 		return COMMAND;
@@ -69,19 +71,20 @@ public class CommandCalc extends CommandBase {
 		return 0;
 	}
 
+	@Nonnull
 	@Override
 	public List<String> getAliases() {
 		return ALIAS;
 	}
 
+	@Nonnull
 	@Override
-	public String getUsage(final ICommandSender sender) {
+	public String getUsage(@Nonnull final ICommandSender sender) {
 		return TextFormatting.GOLD + "/" + COMMAND + " help" + TextFormatting.BLUE + " -- Help for Calculator";
 	}
 
 	@Override
-	public void execute(final MinecraftServer server, final ICommandSender sender, final String[] parms)
-			throws CommandException {
+	public void execute(@Nonnull final MinecraftServer server, @Nonnull final ICommandSender sender, @Nonnull final String[] parms) {
 		try {
 			boolean showHelp = false;
 

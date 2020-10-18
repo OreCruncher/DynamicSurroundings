@@ -54,16 +54,14 @@ public final class EnvironmentService extends Service {
 			final VillageCollection villageCollection = player.getEntityWorld().getVillageCollection();
 			boolean inVillage = false;
 
-			if (villageCollection != null) {
-				final List<Village> villages = villageCollection.getVillageList();
-				if (villages != null && villages.size() > 0) {
-					final BlockPos pos = player.getPosition();
-					for (final Village v : villages)
-						if (v.isBlockPosWithinSqVillageRadius(pos)) {
-							inVillage = true;
-							break;
-						}
-				}
+			final List<Village> villages = villageCollection.getVillageList();
+			if (villages.size() > 0) {
+				final BlockPos pos = player.getPosition();
+				for (final Village v : villages)
+					if (v.isBlockPosWithinSqVillageRadius(pos)) {
+						inVillage = true;
+						break;
+					}
 			}
 
 			final PacketEnvironment packet = new PacketEnvironment(inVillage);

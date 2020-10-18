@@ -52,7 +52,6 @@ import org.orecruncher.lib.math.TimerEMA;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -98,11 +97,9 @@ public class FogHandler extends EffectHandlerBase {
 			final Material material = event.getState().getMaterial();
 			if (material != Material.LAVA && material != Material.WATER) {
 				final Color color = this.fogColor.calculate(event);
-				if (color != null) {
-					event.setRed(color.red);
-					event.setGreen(color.green);
-					event.setBlue(color.blue);
-				}
+				event.setRed(color.red);
+				event.setGreen(color.green);
+				event.setBlue(color.blue);
 			}
 			this.nanos += System.nanoTime() - start;
 		}
@@ -115,10 +112,8 @@ public class FogHandler extends EffectHandlerBase {
 			final Material material = event.getState().getMaterial();
 			if (material != Material.LAVA && material != Material.WATER) {
 				final FogResult result = this.fogRange.calculate(event);
-				if (result != null) {
-					GlStateManager.setFogStart(result.getStart());
-					GlStateManager.setFogEnd(result.getEnd());
-				}
+				GlStateManager.setFogStart(result.getStart());
+				GlStateManager.setFogEnd(result.getEnd());
 			}
 			this.nanos += System.nanoTime() - start;
 		}
@@ -139,22 +134,22 @@ public class FogHandler extends EffectHandlerBase {
 		((DiagnosticHandler) EffectManager.instance().lookupService(DiagnosticHandler.class)).addTimer(this.timer);
 	}
 
-	@SubscribeEvent(receiveCanceled = false, priority = EventPriority.LOWEST)
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onWorldLoad(@Nonnull final WorldEvent.Load event) {
 		// Only want client side world things
 		if (!event.getWorld().isRemote)
 			return;
 
-		setupTheme(event.getWorld(), RegistryManager.EFFECTS);
+		setupTheme(RegistryManager.EFFECTS);
 	}
 
 	@SubscribeEvent
 	public void onConfigurationChanged(@Nonnull final RegistryDataEvent.Reload event) {
 		if (event.reg instanceof EffectRegistry)
-			setupTheme(EnvironState.getWorld(), (EffectRegistry) event.reg);
+			setupTheme((EffectRegistry) event.reg);
 	}
 
-	protected void setupTheme(@Nonnull final World world, @Nonnull final EffectRegistry reg) {
+	protected void setupTheme(@Nonnull final EffectRegistry reg) {
 
 		this.theme = reg.setTheme(EffectRegistry.DEFAULT_THEME);
 		// this.theme = ClientRegistry.EFFECTS.setTheme(new
@@ -162,7 +157,7 @@ public class FogHandler extends EffectHandlerBase {
 
 		this.fogColor = new HolisticFogColorCalculator();
 		this.fogRange = new HolisticFogRangeCalculator();
-
+		
 		if (this.theme.doBiomeFog()) {
 			this.fogColor.add(new BiomeFogColorCalculator());
 			this.fogRange.add(new BiomeFogRangeCalculator());

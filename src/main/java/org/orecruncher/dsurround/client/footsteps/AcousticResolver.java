@@ -53,8 +53,6 @@ public class AcousticResolver {
 	protected final FootStrikeLocation loc;
 	protected final double distanceToCenter;
 
-	protected final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
-
 	public AcousticResolver(@Nonnull final IBlockAccess world, @Nonnull final BlockMap map,
 			@Nonnull final FootStrikeLocation loc, final double distanceToCenter) {
 		this.world = world;
@@ -150,7 +148,7 @@ public class AcousticResolver {
 
 	@Nullable
 	protected Association resolve(@Nonnull Vec3d vec) {
-		IBlockState in = null;
+		IBlockState in;
 		IAcoustic[] acoustics = AcousticRegistry.EMPTY;
 
 		Vec3d tPos = vec.add(0, 1, 0);
@@ -187,7 +185,7 @@ public class AcousticResolver {
 
 				if (above != this.airState) {
 					final IAcoustic[] foliage = this.blockMap.getBlockAcoustics(above, Substrate.FOLIAGE);
-					if (foliage != null && foliage != AcousticRegistry.NOT_EMITTER) {
+					if (foliage != AcousticRegistry.NOT_EMITTER) {
 						acoustics = MyUtils.concatenate(acoustics, foliage);
 					}
 				}

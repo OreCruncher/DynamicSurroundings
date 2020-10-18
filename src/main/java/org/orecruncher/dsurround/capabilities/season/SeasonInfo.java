@@ -61,7 +61,7 @@ public class SeasonInfo implements ISeasonInfo {
 	}
 
 	@Override
-	@Nonnull
+	@Nullable
 	public World getWorld() {
 		return this.world;
 	}
@@ -142,7 +142,7 @@ public class SeasonInfo implements ISeasonInfo {
 	}
 
 	protected boolean doDust(@Nonnull final BiomeInfo biome) {
-		return ModOptions.fog.allowDesertFog && !Weather.doVanilla() && biome.getHasDust();
+		return ModOptions.fog.allowDesertFog && Weather.notDoVanilla() && biome.getHasDust();
 	}
 
 	/**
@@ -150,12 +150,12 @@ public class SeasonInfo implements ISeasonInfo {
 	 * location/biome. The type is based on the heights block that precipitation can
 	 * hit in the block column defined by the BlockPos.
 	 *
-	 * @param world The current client world
 	 * @param pos   Position in the world for which the determination is being made
 	 * @param biome BiomeInfo reference for the biome in question
 	 * @return The precipitation type to render when raining
 	 */
 	@Override
+	@Nonnull
 	public PrecipitationType getPrecipitationType(@Nonnull final BlockPos pos, @Nullable BiomeInfo biome) {
 
 		if (biome == null)
@@ -171,24 +171,25 @@ public class SeasonInfo implements ISeasonInfo {
 				: PrecipitationType.RAIN;
 	}
 
+	@Nonnull
 	public static SeasonInfo factory(@Nonnull final World world) {
 
 		final String dimName = world.provider.getDimensionType().getName();
 
 		if (world.provider.getDimension() == -1) {
-			ModBase.log().info("Creating Nether SeasonInfo for dimension %s", dimName);
+			ModBase.log().debug("Creating Nether SeasonInfo for dimension %s", dimName);
 			return new SeasonInfoNether(world);
 		}
 
 		if (ModEnvironment.SereneSeasons.isLoaded()) {
 			if (SeasonInfoSereneSeasons.isWorldWhitelisted(world)) {
-				ModBase.log().info("Creating Serene Seasons SeasonInfo for dimension %s", dimName);
+				ModBase.log().debug("Creating Serene Seasons SeasonInfo for dimension %s", dimName);
 				return new SeasonInfoSereneSeasons(world);
 			}
-			ModBase.log().info("Serene Seasons is installed but the dimension %s is not whitelisted", dimName);
+			ModBase.log().debug("Serene Seasons is installed but the dimension %s is not whitelisted", dimName);
 		}
 
-		ModBase.log().info("Creating default SeasonInfo for dimension %s", dimName);
+		ModBase.log().debug("Creating default SeasonInfo for dimension %s", dimName);
 		return new SeasonInfo(world);
 	}
 

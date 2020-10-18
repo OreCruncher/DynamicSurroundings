@@ -1,10 +1,7 @@
 {
 	"items": {
-		"AXE": [
-			"teamroots.roots.item.ItemHammer"
-		],
 		"SWORD": [
-			"teamroots.roots.item.ItemKnife"
+			"epicsquid.mysticallib.item.ItemKnifeBase"
 		]
 	},
 	"footsteps": {

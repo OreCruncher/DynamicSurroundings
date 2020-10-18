@@ -26,6 +26,8 @@ package org.orecruncher.dsurround.registry.effect.theme;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
+
 @SideOnly(Side.CLIENT)
 public class GloamwoodTheme extends ThemeInfo {
 
@@ -37,6 +39,7 @@ public class GloamwoodTheme extends ThemeInfo {
 		// this.maxLightLevel = 8;
 	}
 
+	@Nonnull
 	@Override
 	public String name() {
 		return "Gloamwood";

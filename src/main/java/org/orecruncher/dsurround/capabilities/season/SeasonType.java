@@ -40,7 +40,7 @@ public enum SeasonType {
 	WINTER("winter");
 	//@formatter:on
 
-	public static enum SubType {
+	public enum SubType {
 
 		//@formatter:off
 		NONE("nosubtype"),

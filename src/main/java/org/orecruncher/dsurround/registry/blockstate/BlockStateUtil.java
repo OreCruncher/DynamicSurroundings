@@ -41,7 +41,7 @@ import net.minecraft.block.state.IBlockState;
 public final class BlockStateUtil {
 
 	@SuppressWarnings("unchecked")
-	@Nullable
+	@Nonnull
 	public static <T extends BlockStateData> T getStateData(@Nonnull final IBlockState state) {
 		final IDataAccessor<T> accessor = (IDataAccessor<T>) state;
 		T result = accessor.getData();
@@ -65,7 +65,7 @@ public final class BlockStateUtil {
 
 	@SuppressWarnings("unchecked")
 	public static <T extends BlockStateData> void setStateData(@Nonnull final IBlockState state,
-			@Nonnull final T data) {
+			@Nullable final T data) {
 		((IDataAccessor<T>) state).setData(data);
 	}
 }

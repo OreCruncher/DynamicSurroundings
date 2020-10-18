@@ -41,7 +41,7 @@ public class MorningFogRangeCalculator extends VanillaFogRangeCalculator {
 	protected static final float END = 0.830F;
 	protected static final float RESERVE = 10F;
 
-	public static enum FogType {
+	public enum FogType {
 		//@formatter:off
 		NONE(0F, 0F, 0F),
 		NORMAL(START, END, RESERVE),
@@ -54,7 +54,7 @@ public class MorningFogRangeCalculator extends VanillaFogRangeCalculator {
 		private final float end;
 		private final float reserve;
 
-		private FogType(final float start, final float end, final float reserve) {
+		FogType(final float start, final float end, final float reserve) {
 			this.start = start;
 			this.end = end;
 			this.reserve = reserve;
@@ -78,6 +78,12 @@ public class MorningFogRangeCalculator extends VanillaFogRangeCalculator {
 	protected FogType type = FogType.NORMAL;
 
 	protected final FogResult cache = new FogResult();
+
+	@Override
+	@Nonnull
+	public String getName() {
+		return "MorningFogRangeCalculator";
+	}
 
 	@Override
 	@Nonnull

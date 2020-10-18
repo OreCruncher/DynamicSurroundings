@@ -38,8 +38,29 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EffectStateBase implements IEffectState {
 
+	protected static final IParticleHelper NULL_PARTICLE_HELPER = particle -> {
+
+	};
+
+	protected static final ISoundHelper NULL_SOUND_HELPER = new ISoundHelper() {
+		@Override
+		public boolean playSound(@Nonnull ISoundInstance sound) {
+			return false;
+		}
+
+		@Override
+		public void stopSound(@Nonnull ISoundInstance sound) {
+
+		}
+	};
+
 	protected final IParticleHelper particleHelper;
 	protected final ISoundHelper soundHelper;
+
+	protected EffectStateBase()
+	{
+		this(NULL_PARTICLE_HELPER, NULL_SOUND_HELPER);
+	}
 
 	public EffectStateBase(@Nonnull final IParticleHelper ph, @Nonnull final ISoundHelper sh) {
 		this.particleHelper = ph;
@@ -52,14 +73,14 @@ public class EffectStateBase implements IEffectState {
 	 * @param particle The Particle instance to add to the particle system.
 	 */
 	@Override
-	public void addParticle(final Particle particle) {
+	public void addParticle(@Nonnull final Particle particle) {
 		this.particleHelper.addParticle(particle);
 	}
 
 	/**
 	 * Used by an EntityEffect to play a sound.
 	 *
-	 * @param The sound to play
+	 * @param sound The sound to play
 	 */
 	@Override
 	public boolean playSound(@Nonnull final ISoundInstance sound) {
@@ -69,9 +90,8 @@ public class EffectStateBase implements IEffectState {
 	/**
 	 * Stops the specified sound in the sound system from playing.
 	 *
-	 * @param soundId
+	 * @param sound The sound to stop playing
 	 */
-	@Override
 	public void stopSound(@Nonnull final ISoundInstance sound) {
 		this.soundHelper.stopSound(sound);
 	}
@@ -97,10 +117,9 @@ public class EffectStateBase implements IEffectState {
 	 * @param player The Entity to evaluate
 	 * @return true if the Entity is the current player, false otherwise
 	 */
-	@Override
 	public boolean isActivePlayer(@Nonnull final Entity player) {
 		final EntityPlayer ep = thePlayer();
-		return ep != null && ep.getEntityId() == player.getEntityId();
+		return ep.getEntityId() == player.getEntityId();
 	}
 
 	/**

@@ -25,6 +25,7 @@
 package org.orecruncher.dsurround.client.sound;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModInfo;
@@ -101,9 +102,9 @@ public final class MusicFader {
 	 * to play a sound sample. The system will automagically put things back the way
 	 * they were before the interruption.
 	 *
-	 * @param sound
+	 * @param sound The sound to play
 	 */
-	public static void playConfigSound(@Nonnull final ConfigSoundInstance sound) {
+	public static void playConfigSound(@Nullable final ConfigSoundInstance sound) {
 		if (sound != null) {
 			SoundEngine.instance().stopAllSounds();
 			currentScale = MIN_VOLUME_SCALE;
@@ -116,7 +117,7 @@ public final class MusicFader {
 	 * Used by the configuration system to stop playing a configure sound. Sounds
 	 * that were muted prior will fade back in.
 	 *
-	 * @param sound
+	 * @param sound  The sound to stop
 	 */
 	public static void stopConfigSound(@Nonnull final ConfigSoundInstance sound) {
 		if (playingConfigSound != null) {

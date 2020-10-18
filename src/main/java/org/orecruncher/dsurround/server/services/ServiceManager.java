@@ -110,7 +110,7 @@ public final class ServiceManager extends Service {
 	 * Collect tick performance data for the loaded dimensions and broadcast to
 	 * attached players.
 	 *
-	 * @param event
+	 * @param event Event that was triggered
 	 */
 	@SubscribeEvent
 	public void tickEvent(@Nonnull final TickEvent.ServerTickEvent event) {

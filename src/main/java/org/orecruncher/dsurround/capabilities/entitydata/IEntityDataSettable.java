@@ -34,7 +34,5 @@ public interface IEntityDataSettable extends IEntityData {
 
 	void setFleeing(final boolean flag);
 
-	boolean needsSync();
-
 	void sync();
 }

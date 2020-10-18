@@ -65,15 +65,15 @@ public enum ItemClass {
 	private final SoundEffect equip;
 	private final boolean isArmor;
 
-	private ItemClass(@Nullable final SoundEffect sound) {
+	ItemClass(@Nullable final SoundEffect sound) {
 		this(sound, sound, sound, false);
 	}
 
-	private ItemClass(@Nullable final SoundEffect sound, final boolean isArmor) {
+	ItemClass(@Nullable final SoundEffect sound, final boolean isArmor) {
 		this(sound, sound, sound, isArmor);
 	}
 
-	private ItemClass(@Nullable final SoundEffect swing, @Nullable final SoundEffect use,
+	ItemClass(@Nullable final SoundEffect swing, @Nullable final SoundEffect use,
 			@Nullable final SoundEffect equip, final boolean isArmor) {
 		this.swing = swing;
 		this.use = use;
@@ -109,7 +109,7 @@ public enum ItemClass {
 			final CAStacksBase slots = CosArmorAPI.getCAStacksClient(e.getPersistentID());
 			if (slots != null) {
 				final ItemStack stack = slots.getStackInSlot(slot.getIndex());
-				if (stack != null && !stack.isEmpty())
+				if (!stack.isEmpty())
 					return stack;
 			}
 		}

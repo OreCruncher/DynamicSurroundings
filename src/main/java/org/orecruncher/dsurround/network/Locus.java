@@ -62,10 +62,6 @@ public class Locus extends TargetPoint {
 		this.entityId = locus.entityId;
 	}
 
-	public boolean isAssociatedEntity(@Nonnull final Entity entity) {
-		return this.entityId != -1 && entity != null && this.entityId == entity.getEntityId();
-	}
-
 	@Nonnull
 	public Vec3d getCoords() {
 		return new Vec3d(this.x, this.y, this.z);

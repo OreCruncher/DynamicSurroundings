@@ -31,8 +31,6 @@ public interface IDimensionInfo extends INBTSerializable<NBTTagCompound> {
 
 	int getId();
 
-	String getName();
-
 	int getSeaLevel();
 
 	int getSkyHeight();

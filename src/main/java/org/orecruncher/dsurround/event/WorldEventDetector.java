@@ -78,55 +78,55 @@ public class WorldEventDetector implements IWorldEventListener {
 	}
 
 	@Override
-	public void playSoundToAllNearExcept(EntityPlayer player, SoundEvent soundIn, SoundCategory category, double x,
-			double y, double z, float volume, float pitch) {
+	public void playSoundToAllNearExcept(EntityPlayer player, @Nonnull SoundEvent soundIn, @Nonnull SoundCategory category, double x,
+										 double y, double z, float volume, float pitch) {
 
 	}
 
 	@Override
-	public void playRecord(SoundEvent soundIn, BlockPos pos) {
+	public void playRecord(@Nonnull SoundEvent soundIn, @Nonnull BlockPos pos) {
 
 	}
 
 	@Override
 	public void spawnParticle(int particleID, boolean ignoreRange, double x, double y, double z, double xSpeed,
-			double ySpeed, double zSpeed, int... parameters) {
+							  double ySpeed, double zSpeed, @Nonnull int... parameters) {
 
 	}
 
 	@Override
-	public void onEntityAdded(Entity entityIn) {
+	public void onEntityAdded(@Nonnull Entity entityIn) {
 
 	}
 
 	@Override
-	public void onEntityRemoved(Entity entityIn) {
+	public void onEntityRemoved(@Nonnull Entity entityIn) {
 
 	}
 
 	@Override
-	public void broadcastSound(int soundID, BlockPos pos, int data) {
+	public void broadcastSound(int soundID, @Nonnull BlockPos pos, int data) {
 
 	}
 
 	@Override
-	public void playEvent(EntityPlayer player, int type, BlockPos blockPosIn, int data) {
+	public void playEvent(@Nonnull EntityPlayer player, int type, @Nonnull BlockPos blockPosIn, int data) {
 
 	}
 
 	@Override
-	public void sendBlockBreakProgress(int breakerId, BlockPos pos, int progress) {
+	public void sendBlockBreakProgress(int breakerId, @Nonnull BlockPos pos, int progress) {
 
 	}
 
 	@Override
 	public void spawnParticle(int p_190570_1_, boolean p_190570_2_, boolean p_190570_3_, double p_190570_4_,
-			double p_190570_6_, double p_190570_8_, double p_190570_10_, double p_190570_12_, double p_190570_14_,
-			int... p_190570_16_) {
+							  double p_190570_6_, double p_190570_8_, double p_190570_10_, double p_190570_12_, double p_190570_14_,
+							  @Nonnull int... p_190570_16_) {
 
 	}
 
-	@SubscribeEvent(receiveCanceled = false)
+	@SubscribeEvent()
 	public static void onWorldLoad(final WorldEvent.Load event) {
 		// Only want client side world things
 		if (!event.getWorld().isRemote)

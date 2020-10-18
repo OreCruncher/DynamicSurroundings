@@ -110,7 +110,7 @@ public class ParticleDripOverride extends ParticleDrip {
 		// Did we hit the ground?
 		if (this.onGround) {
 			this.pos.setPos(this.posX, this.posY, this.posZ);
-			boolean doSteam = false;
+			boolean doSteam;
 			IBlockState state = ClientChunkCache.instance().getBlockState(this.pos);
 			if (state.getBlock() == Blocks.LAVA) {
 				doSteam = true;
@@ -196,16 +196,16 @@ public class ParticleDripOverride extends ParticleDrip {
 
 	public static class LavaFactory implements IParticleFactory {
 		@Override
-		public Particle createParticle(int particleID, World worldIn, double xCoordIn, double yCoordIn, double zCoordIn,
-				double xSpeedIn, double ySpeedIn, double zSpeedIn, int... p_178902_15_) {
+		public Particle createParticle(int particleID, @Nonnull World worldIn, double xCoordIn, double yCoordIn, double zCoordIn,
+									   double xSpeedIn, double ySpeedIn, double zSpeedIn, @Nonnull int... p_178902_15_) {
 			return new ParticleDripOverride(worldIn, xCoordIn, yCoordIn, zCoordIn, Material.LAVA);
 		}
 	}
 
 	public static class WaterFactory implements IParticleFactory {
 		@Override
-		public Particle createParticle(int particleID, World worldIn, double xCoordIn, double yCoordIn, double zCoordIn,
-				double xSpeedIn, double ySpeedIn, double zSpeedIn, int... p_178902_15_) {
+		public Particle createParticle(int particleID, @Nonnull World worldIn, double xCoordIn, double yCoordIn, double zCoordIn,
+									   double xSpeedIn, double ySpeedIn, double zSpeedIn, @Nonnull int... p_178902_15_) {
 			return new ParticleDripOverride(worldIn, xCoordIn, yCoordIn, zCoordIn, Material.WATER);
 		}
 	}

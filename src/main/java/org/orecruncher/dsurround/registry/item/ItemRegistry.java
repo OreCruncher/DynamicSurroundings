@@ -26,7 +26,6 @@ package org.orecruncher.dsurround.registry.item;
 
 import java.util.EnumMap;
 import java.util.IdentityHashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -102,9 +101,7 @@ public final class ItemRegistry extends Registry {
 		// Iterate through the list of registered Items to see
 		// if we know about them, or can infer based on class
 		// matching.
-		final Iterator<Item> iterator = Item.REGISTRY.iterator();
-		while (iterator.hasNext()) {
-			final Item item = iterator.next();
+		for (Item item : Item.REGISTRY) {
 			if (!this.items.containsKey(item)) {
 				final ItemClass ic = resolveClass(item);
 				if (ic != ItemClass.NONE) {
@@ -114,7 +111,7 @@ public final class ItemRegistry extends Registry {
 		}
 
 		// Set the cached field on the Item object with the data
-		this.items.entrySet().forEach(entry -> ItemUtils.setItemData(entry.getKey(), entry.getValue()));
+		this.items.forEach(ItemUtils::setItemData);
 
 		// Free up resources that are no longer needed
 		this.items = null;
@@ -153,10 +150,6 @@ public final class ItemRegistry extends Registry {
 			return;
 
 		final ItemClass ic = ItemClass.valueOf(itemClass);
-		if (ic == null) {
-			ModBase.log().warn("Unknown ItemClass %s", itemClass);
-			return;
-		}
 
 		final Set<Class<?>> theList = this.classMap.get(ic);
 

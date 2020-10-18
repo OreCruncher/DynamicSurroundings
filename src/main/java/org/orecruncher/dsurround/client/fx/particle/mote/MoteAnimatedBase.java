@@ -39,13 +39,13 @@ public abstract class MoteAnimatedBase extends MoteMotionBase {
 	 * The base texture index. The texture index starts at this + (numAgingFrames -
 	 * 1), and works its way down to this number as the particle decays.
 	 */
-	protected int textureIdx;
+	protected final int textureIdx;
 	/**
 	 * How many different textures there are to progress through as the particle
 	 * decays
 	 */
 	protected final int numAgingFrames;
-	protected float baseAirFriction = 0.91F;
+	protected final float baseAirFriction = 0.91F;
 	/** The red value to drift toward */
 	protected float fadeTargetRed;
 	/** The green value to drift toward */
@@ -112,7 +112,7 @@ public abstract class MoteAnimatedBase extends MoteMotionBase {
 
 		super.update();
 
-		if (isAlive()) {
+		if (!isAlive()) {
 
 			if (this.age > this.maxAge / 2) {
 				this.alpha = (int) ((1.0F - ((float) this.age - (float) (this.maxAge / 2)) / this.maxAge) * 255);

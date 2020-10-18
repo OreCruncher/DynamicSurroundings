@@ -153,7 +153,7 @@ public class ProxyClient extends Proxy implements IProxy, ISelectiveResourceRelo
 		((IReloadableResourceManager) resourceManager).registerReloadListener(this);
 
 		if (ModEnvironment.Animania.isLoaded())
-			AnimaniaBadge.intitialize();
+			AnimaniaBadge.initialize();
 
 		int r = Math.max(32, ModOptions.effects.specialEffectRange);
 		r += 2;

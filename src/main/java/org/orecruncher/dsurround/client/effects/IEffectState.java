@@ -56,13 +56,6 @@ public interface IEffectState {
 	boolean playSound(@Nonnull final ISoundInstance sound);
 
 	/**
-	 * Stops the specified sound in the sound system from playing.
-	 *
-	 * @param sound The sound to stop playing
-	 */
-	void stopSound(@Nonnull final ISoundInstance sound);
-
-	/**
 	 * Creates a SoundInstance<> object for the specified SoundEffect centered at
 	 * the Entity. If the Entity is the current active player the sound will be
 	 * non-attenuated.
@@ -73,14 +66,6 @@ public interface IEffectState {
 	 */
 	@Nonnull
 	ISoundInstance createSound(@Nonnull final SoundEffect se, @Nonnull final Entity player);
-
-	/**
-	 * Indicates if the specified player is the one sitting behind the screen.
-	 *
-	 * @param player The EntityPlayer to check
-	 * @return true if it is the local player, false otherwise
-	 */
-	boolean isActivePlayer(@Nonnull final Entity player);
 
 	/**
 	 * Obtain a reference to the client's player

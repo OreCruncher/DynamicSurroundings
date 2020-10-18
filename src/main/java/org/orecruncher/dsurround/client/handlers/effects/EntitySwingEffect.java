@@ -55,6 +55,7 @@ public class EntitySwingEffect extends EntityEffect {
 	protected int swingProgress = 0;
 	protected boolean isSwinging = false;
 
+	@Nonnull
 	@Override
 	public String name() {
 		return "Item Swing";
@@ -88,12 +89,12 @@ public class EntitySwingEffect extends EntityEffect {
 			}
 
 			this.isSwinging = true;
-			this.swingProgress = entity.swingProgressInt;
 
 		} else {
 			this.isSwinging = false;
-			this.swingProgress = entity.swingProgressInt;
 		}
+
+		this.swingProgress = entity.swingProgressInt;
 	}
 
 	public static final IEntityEffectFactoryFilter DEFAULT_FILTER = (@Nonnull final Entity e,
@@ -101,8 +102,9 @@ public class EntitySwingEffect extends EntityEffect {
 
 	public static class Factory implements IEntityEffectFactory {
 
+		@Nonnull
 		@Override
-		public List<EntityEffect> create(@Nonnull final Entity entity, @Nonnull final EntityEffectInfo eei) {
+		public List<EntityEffect> create(@Nonnull final Entity entity) {
 			return ImmutableList.of(new EntitySwingEffect());
 		}
 	}

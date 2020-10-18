@@ -71,16 +71,17 @@ public class VillagerChatEffect extends EntityEffect {
 		this.fleeChat = new EntityChatEffect(entity, "villager.flee");
 	}
 
+	@Nonnull
 	@Override
 	public String name() {
 		return "Villager Chat";
 	}
 
 	@Override
-	public void intitialize(@Nonnull final IEntityEffectHandlerState state) {
-		super.intitialize(state);
-		this.normalChat.intitialize(state);
-		this.fleeChat.intitialize(state);
+	public void initialize(@Nonnull final IEntityEffectHandlerState state) {
+		super.initialize(state);
+		this.normalChat.initialize(state);
+		this.fleeChat.initialize(state);
 	}
 
 	@Override
@@ -137,8 +138,9 @@ public class VillagerChatEffect extends EntityEffect {
 
 	public static class Factory implements IEntityEffectFactory {
 
+		@Nonnull
 		@Override
-		public List<EntityEffect> create(@Nonnull final Entity entity, @Nonnull final EntityEffectInfo eei) {
+		public List<EntityEffect> create(@Nonnull final Entity entity) {
 			return ImmutableList.of(new VillagerChatEffect(entity));
 		}
 	}

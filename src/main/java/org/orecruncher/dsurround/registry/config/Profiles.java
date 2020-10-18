@@ -52,8 +52,7 @@ public class Profiles {
 		final String index = PROFILE_PATH + "_index.json";
 		try {
 			profiles = JsonUtils.loadFromJar(Profiles.class, index);
-		} catch (@Nonnull final Throwable t) {
-			;
+		} catch (@Nonnull final Throwable ignore) {
 		}
 	}
 
@@ -72,7 +71,7 @@ public class Profiles {
 		//@formatter:off
 		return profiles != null ? profiles.entries.stream()
 			.filter(ProfileEntry::isEnabled)
-			.map(e -> new ProfileScript(e))
+			.map(ProfileScript::new)
 			.collect(Collectors.toList()) : ImmutableList.of();
 		//@formatter:on
 	}

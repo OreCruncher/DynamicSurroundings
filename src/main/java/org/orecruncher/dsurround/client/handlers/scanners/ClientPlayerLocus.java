@@ -33,10 +33,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
+
 @SideOnly(Side.CLIENT)
 public class ClientPlayerLocus extends ScanLocus {
 
-	@Override
+	@Nonnull
+    @Override
 	public IBlockAccessEx getWorld() {
 		return ClientChunkCache.instance();
 	}

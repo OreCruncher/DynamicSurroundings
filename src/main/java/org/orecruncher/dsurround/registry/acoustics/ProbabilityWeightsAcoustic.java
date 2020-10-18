@@ -41,12 +41,12 @@ public class ProbabilityWeightsAcoustic implements IAcoustic {
 	protected final int totalWeight;
 
 	public ProbabilityWeightsAcoustic(@Nonnull final List<IAcoustic> acoustics, @Nonnull final List<Integer> weights) {
-		this.acoustics = acoustics.toArray(new IAcoustic[acoustics.size()]);
+		this.acoustics = acoustics.toArray(new IAcoustic[0]);
 		this.weights = new int[weights.size()];
 
 		int tWeight = 0;
 		for (int i = 0; i < weights.size(); i++) {
-			this.weights[i] = weights.get(i).intValue();
+			this.weights[i] = weights.get(i);
 			tWeight += this.weights[i];
 		}
 
@@ -61,13 +61,13 @@ public class ProbabilityWeightsAcoustic implements IAcoustic {
 
 	@Override
 	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Vec3d location,
-			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
+			@Nullable final EventType event, @Nullable final IOptions inputOptions) {
 		if (this.totalWeight <= 0)
 			return;
 
 		int targetWeight = player.getRNG().nextInt(this.totalWeight);
 
-		int i = 0;
+		int i;
 		for (i = this.weights.length; (targetWeight -= this.weights[i - 1]) >= 0; i--)
 			;
 

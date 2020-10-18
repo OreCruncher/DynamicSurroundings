@@ -40,11 +40,10 @@ public enum RippleStyle {
 	PIXELATED("textures/particles/pixel_ripples.png") {
 		private final int FRAMES = 7;
 		private final float DELTA = 1F / this.FRAMES;
-		private final int MAX_AGE = this.FRAMES * 2;
 
 		@Override
 		public float getU1(final int age) {
-			return (age / 2) * this.DELTA;
+			return (age / 2.0F) * this.DELTA;
 		}
 
 		@Override
@@ -59,14 +58,14 @@ public enum RippleStyle {
 
 		@Override
 		public int getMaxAge() {
-			return this.MAX_AGE;
+			return this.FRAMES * 2;
 		}
 	};
 	//@formatter:on
 
 	private final ResourceLocation resource;
 
-	private RippleStyle(@Nonnull final String texture) {
+	RippleStyle(@Nonnull final String texture) {
 		this.resource = new ResourceLocation(ModInfo.RESOURCE_ID, texture);
 	}
 

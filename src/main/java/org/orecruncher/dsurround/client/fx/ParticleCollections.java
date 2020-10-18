@@ -118,14 +118,11 @@ public final class ParticleCollections {
 		return mote;
 	}
 
-	@Nullable
-	public static IParticleMote addFireFly(@Nonnull final World world, final double x, final double y, final double z) {
-		IParticleMote mote = null;
+	public static void addFireFly(@Nonnull final World world, final double x, final double y, final double z) {
 		if (theFireFlies.get().canFit()) {
-			mote = new MoteFireFly(world, x, y, z);
+			IParticleMote mote = new MoteFireFly(world, x, y, z);
 			theFireFlies.get().addParticle(mote);
 		}
-		return mote;
 	}
 
 	@SubscribeEvent

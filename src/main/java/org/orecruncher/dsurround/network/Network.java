@@ -160,12 +160,6 @@ public final class Network {
 		Scheduler.schedule(side, () -> MinecraftForge.EVENT_BUS.post(event));
 	}
 
-	// Package level helper method to fire server side events based on incoming
-	// packets
-	static void postEventServer(@Nonnull final Event event) {
-		postEvent(Side.SERVER, event);
-	}
-
 	private static void sendToList(@Nonnull final List<EntityPlayerMP> players, @Nonnull final IMessage msg) {
 		synchronized (NETWORK) {
 			players.forEach(p -> NETWORK.sendTo(msg, p));

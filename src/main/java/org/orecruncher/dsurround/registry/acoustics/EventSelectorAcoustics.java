@@ -44,6 +44,7 @@ public class EventSelectorAcoustics implements IAcoustic {
 		this.name = acousticName;
 	}
 
+	@Nonnull
 	@Override
 	public String getName() {
 		return this.name;
@@ -51,11 +52,11 @@ public class EventSelectorAcoustics implements IAcoustic {
 
 	@Override
 	public void playSound(@Nonnull final ISoundPlayer player, @Nonnull final Vec3d location,
-			@Nonnull final EventType event, @Nullable final IOptions inputOptions) {
+			@Nullable final EventType event, @Nullable final IOptions inputOptions) {
 		final IAcoustic acoustic = this.pairs.get(event);
 		if (acoustic != null)
 			acoustic.playSound(player, location, event, inputOptions);
-		else if (event.canTransition())
+		else if (event != null && event.canTransition())
 			playSound(player, location, event.getTransitionDestination(), inputOptions);
 	}
 

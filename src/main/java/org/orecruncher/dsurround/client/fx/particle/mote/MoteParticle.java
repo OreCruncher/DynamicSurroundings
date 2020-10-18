@@ -83,7 +83,7 @@ public abstract class MoteParticle implements IParticleMote {
 
 	@Override
 	public boolean isAlive() {
-		return this.isAlive;
+		return !this.isAlive;
 	}
 
 	@Override
@@ -93,13 +93,13 @@ public abstract class MoteParticle implements IParticleMote {
 
 	@Override
 	public void onUpdate() {
-		if (!isAlive())
+		if (isAlive())
 			return;
 
 		update();
 
 		// The update() may have killed the mote
-		if (isAlive()) {
+		if (!isAlive()) {
 			setPosition(this.posX, this.posY, this.posZ);
 			updateBrightness();
 		}

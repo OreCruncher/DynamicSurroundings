@@ -46,7 +46,7 @@ public interface IDimensionInfoEx extends IDimensionInfo {
 
 	void setThunderTimer(final int time);
 
-	public void randomizeRain();
+	void randomizeRain();
 
 	String configString();
 

@@ -121,7 +121,7 @@ public final class RegistryManager {
 		if (ModBase.proxy().isRunningAsServer()) {
 			load();
 		} else {
-			Scheduler.schedule(Side.CLIENT, () -> load());
+			Scheduler.schedule(Side.CLIENT, RegistryManager::load);
 		}
 	}
 
@@ -129,7 +129,7 @@ public final class RegistryManager {
 	 * The mod configuration file may have changed. If it did then we need to reload
 	 * the registries.
 	 *
-	 * @param event
+	 * @param event Event to handle
 	 */
 	@SubscribeEvent
 	public static void onReload(@Nonnull final OnConfigChangedEvent event) {

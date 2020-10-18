@@ -39,6 +39,12 @@ public class VanillaFogRangeCalculator implements IFogRangeCalculator {
 	public VanillaFogRangeCalculator() {
 
 	}
+	
+	@Override
+	@Nonnull
+	public String getName() {
+		return "VanillaFogRangeCalculator";
+	}
 
 	@Override
 	@Nonnull

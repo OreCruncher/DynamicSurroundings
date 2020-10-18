@@ -48,6 +48,12 @@ public class BedrockFogRangeCalculator extends VanillaFogRangeCalculator {
 
 	@Override
 	@Nonnull
+	public String getName() {
+		return "BedrockFogRangeCalculator";
+	}
+
+	@Override
+	@Nonnull
 	public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
 
 		this.cached.set(event);

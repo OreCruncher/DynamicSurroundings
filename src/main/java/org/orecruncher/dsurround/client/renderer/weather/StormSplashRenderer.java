@@ -29,6 +29,7 @@ import java.util.Random;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.capabilities.CapabilityDimensionInfo;
 import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
+import org.orecruncher.dsurround.capabilities.dimension.IDimensionInfo;
 import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
 import org.orecruncher.dsurround.capabilities.season.PrecipitationType;
 import org.orecruncher.dsurround.client.fx.ParticleCollections;
@@ -37,7 +38,6 @@ import org.orecruncher.dsurround.client.sound.SoundBuilder;
 import org.orecruncher.dsurround.client.sound.SoundInstance;
 import org.orecruncher.dsurround.client.weather.Weather;
 import org.orecruncher.dsurround.client.weather.compat.RandomThings;
-import org.orecruncher.dsurround.registry.biome.BiomeUtil;
 import org.orecruncher.lib.WorldUtils;
 import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.gfx.ParticleHelper;
@@ -58,7 +58,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.NoiseGeneratorSimplex;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -90,7 +89,7 @@ public class StormSplashRenderer {
 		final float currentVolume = Weather.getCurrentVolume();
 		final float bounds = currentVolume * 0.25F;
 		final float adjust = MathHelper.clamp(
-				(float) (this.GENERATOR.getValue((world.getWorldTime() % 24000L) / 100, 1) / 5.0F), -bounds, bounds);
+				(float) (this.GENERATOR.getValue((world.getWorldTime() % 24000L) / 100.0D, 1) / 5.0F), -bounds, bounds);
 		return MathHelper.clamp(currentVolume + adjust, 0, 1F);
 	}
 
@@ -100,7 +99,7 @@ public class StormSplashRenderer {
 		EnumParticleTypes particleType = null;
 
 		if (dust || block == Blocks.SOUL_SAND) {
-			particleType = null;
+			return;
 		} else if ((block == Blocks.NETHERRACK || block == Blocks.MAGMA) && ModOptions.rain.enableNetherrackMagmaSplashEffect && this.RANDOM.nextInt(20) == 0) {
 			particleType = EnumParticleTypes.LAVA;
 		} else if (state.getMaterial() == Material.LAVA) {
@@ -125,10 +124,6 @@ public class StormSplashRenderer {
 
 	protected BlockPos getPrecipitationHeight(final ISeasonInfo season, final int range, final BlockPos pos) {
 		return season.getPrecipitationHeight(pos);
-	}
-
-	protected boolean biomeHasDust(final Biome biome) {
-		return ModOptions.fog.allowDesertFog && !Weather.doVanilla() && BiomeUtil.getBiomeData(biome).getHasDust();
 	}
 
 	protected void playSplashSound(final ISeasonInfo season, final World world, final Entity player, double x, double y,
@@ -159,8 +154,13 @@ public class StormSplashRenderer {
 		if (mc.gameSettings.particleSetting == 2)
 			return;
 
+		final Entity entity = mc.getRenderViewEntity();
+		if (entity == null)
+			return;
+
 		final World world = mc.world;
-		if (!CapabilityDimensionInfo.getCapability(world).hasWeather())
+		IDimensionInfo info = CapabilityDimensionInfo.getCapability(world);
+		if (info != null && !info.hasWeather())
 			return;
 
 		float rainStrengthFactor = Weather.getIntensityLevel();
@@ -171,7 +171,6 @@ public class StormSplashRenderer {
 			return;
 
 		this.RANDOM.setSeed(RenderWeather.getRendererUpdateCount() * 312987231L);
-		final Entity entity = mc.getRenderViewEntity();
 		final int playerX = MathHelper.floor(entity.posX);
 		final int playerY = MathHelper.floor(entity.posY);
 		final int playerZ = MathHelper.floor(entity.posZ);
@@ -194,7 +193,7 @@ public class StormSplashRenderer {
 			final int locZ = playerZ + this.RANDOM.nextInt(RANGE) - this.RANDOM.nextInt(RANGE);
 			this.pos.setPos(locX, 0, locZ);
 
-			if (!RandomThings.shouldRain(world, this.pos))
+			if (RandomThings.shouldRain(world, this.pos))
 				continue;
 
 			final BlockPos precipHeight = getPrecipitationHeight(season, RANGE / 2, this.pos);

@@ -38,7 +38,6 @@ public interface IEventEffectLibraryState extends IEffectState {
 	 * @param player The EntityPlayer to check
 	 * @return true if it is the local player, false otherwise
 	 */
-	@Override
 	boolean isActivePlayer(@Nonnull final Entity player);
 
 }

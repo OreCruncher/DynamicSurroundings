@@ -113,7 +113,7 @@ public final class ConfigData implements Iterable<ModConfiguration> {
 	// writer if the length of the trimmed string is > 0. Used to compress a lot of
 	// the whitespace that can be found in a hand edited Json file.
 	protected static void copy(@Nonnull final BufferedReader reader, @Nonnull final OutputStreamWriter out) {
-		String line = null;
+		String line;
 		try {
 			while ((line = reader.readLine()) != null) {
 				final String s = line.trim();
@@ -235,14 +235,15 @@ public final class ConfigData implements Iterable<ModConfiguration> {
 			for (final String cfg : ModOptions.general.externalScriptFiles) {
 				final File file = getFileReference(cfg);
 				if (file.exists()) {
+					ModBase.log().info("Loading external configuration script '%s'", cfg);
 					try (final InputStream stream = new FileInputStream(file)) {
 						try (final InputStreamReader input = new InputStreamReader(stream)) {
 							prependComma = copy(input, output, cfg, prependComma);
 						} catch (final Throwable t) {
-							ModBase.log().error("Really??", t);
+							ModBase.log().error(String.format("Unable to load configuration script '%s'", cfg), t);
 						}
 					} catch (final Throwable t) {
-						ModBase.log().error("Really??", t);
+						ModBase.log().error(String.format("Unable to load configuration script '%s'", cfg), t);
 					}
 				}
 			}
@@ -286,7 +287,7 @@ public final class ConfigData implements Iterable<ModConfiguration> {
 	protected static void dump(@Nonnull final byte[] demBytes) {
 
 		try {
-			String line = null;
+			String line;
 
 			try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
 					new GZIPInputStream(new FastByteArrayInputStream(demBytes)), StandardCharsets.UTF_8))) {
