@@ -87,6 +87,7 @@ dependencies {
 	compile "craftstudio-api:CraftStudioAPI-universal-1.0.1.95:mc1.12:alpha"
     compile "com.animania:animania-${project.mcVersion}-base:${project.animaniaBaseVersion}"
     compile "com.animania:animania-${project.mcVersion}-farm:${project.animaniaFarmVersion}"
+    compile "com.animania:animania-${project.mcVersion}-extra:${project.animaniaExtraVersion}"
 	compile "serene-seasons:SereneSeasons-${project.mcVersion}:${project.ssVersion}:universal"
 	compile "codechicken-lib-1-8:CodeChickenLib-1.12.2:3.2.3.358:universal"
 	compile "forge-multipart-cbe:ForgeMultipart-1.12.2:2.6.2.83:universal"
@@ -95,17 +96,17 @@ dependencies {
 	compile "littletiles:LittleTiles_v1.5.0:pre169_mc1.12.2"
 	compile "iron-chests:ironchest:1.12.2:7.0.72.847"
     compile "biomes-o-plenty:BiomesOPlenty-1.12.2:7.0.1.2441:universal"
-    compile "org.spongepowered:mixin:0.8.1-SNAPSHOT"
-    //compile "mixinbootstrap:MixinBootstrap:${project.mbVersion}"
-
-	if (fileTree(dir: 'libs').filter { it.name.startsWith('OreLib') }.getFiles().size() == 0)
-        compile "orelib:OreLib:1.12.2:3.6.0.1"
+    compile "org.spongepowered:mixin:0.8.2"
+    compile 'mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.28-17'
 
 	//compile "creativecore:CreativeCore_v1.9.35_mc1.12.2"
-	
+
     deobfCompile "mezz.jei:jei_${project.mcVersion}:${project.jeiVersion}:api"
     runtime "mezz.jei:jei_${project.mcVersion}:${project.jeiVersion}"
     deobfCompile "team.chisel:Chisel:MC${project.mcVersion}-${project.chiselVersion}"
+
+    if (fileTree(dir: 'libs').filter { it.name.startsWith('OreLib') }.getFiles().size() == 0)
+        compile "orelib:OreLib:1.12.2:3.6.0.1"
 }
 
 processResources

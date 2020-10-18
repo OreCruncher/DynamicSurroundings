@@ -7,13 +7,14 @@ def modDesignator= ""
 def forgeVersion = "14.23.5.2847"
 def snapshot     = "stable_39"
 
-project.ext.jeiVersion    	    = "4.16.1.302"
-project.ext.chiselVersion 	    = "1.0.2.45"
-project.ext.ctmVersion    	    = "1.0.2.31"
-project.ext.ssVersion     	    = "1.2.18"
-project.ext.animaniaBaseVersion	= "2.0.0.24"
-project.ext.animaniaFarmVersion	= "1.0.0.24"
-project.ext.mbVersion           = "1.0.4"
+project.ext.jeiVersion    	        = "4.16.1.302"
+project.ext.chiselVersion 	        = "1.0.2.45"
+project.ext.ctmVersion    	        = "1.0.2.31"
+project.ext.ssVersion     	        = "1.2.18"
+project.ext.animaniaBaseVersion	    = "2.0.0.24"
+project.ext.animaniaFarmVersion	    = "1.0.0.24"
+project.ext.animaniaExtraVersion	= "1.0.0.24"
+project.ext.mbVersion               = "1.0.4"
 
 // General Mod version stuff
 project.ext.mcVersion    = mcVersion
