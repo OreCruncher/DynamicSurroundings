@@ -32,10 +32,9 @@ import org.spongepowered.asm.mixin.Mixins;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 @IFMLLoadingPlugin.MCVersion("1.12.2")
-@IFMLLoadingPlugin.SortingIndex(-5000)
 public class TransformLoader implements IFMLLoadingPlugin {
 
-	public TransformLoader() {
+	static {
 		MixinBootstrap.init();
 		Mixins.addConfiguration("mixins.dsurround.json");
 	}
