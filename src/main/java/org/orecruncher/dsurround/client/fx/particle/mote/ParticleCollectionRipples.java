@@ -55,8 +55,6 @@ public class ParticleCollectionRipples extends ParticleCollection {
 		GlStateManager.depthMask(false);
 	}
 
-	public static final ICollectionFactory FACTORY = (world, texture) -> {
-		return new ParticleCollectionRipples(world, texture);
-	};
+	public static final ICollectionFactory FACTORY = ParticleCollectionRipples::new;
 
 }

@@ -54,6 +54,14 @@ public class HolisticFogColorCalculator implements IFogColorCalculator {
 				result = result.mix(color);
 
 		}
+
+		// Possible if there are no calculators defined (the user disabled fog options without turning off
+		// the master switch).
+		if (result == null)
+		{
+			result = new Color(event.getRed(), event.getGreen(), event.getBlue());
+		}
+
 		return this.cached = result;
 	}
 

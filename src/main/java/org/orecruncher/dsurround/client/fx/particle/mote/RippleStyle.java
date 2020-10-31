@@ -43,7 +43,8 @@ public enum RippleStyle {
 
 		@Override
 		public float getU1(final int age) {
-			return (age / 2.0F) * this.DELTA;
+			int t = age / 2;
+			return t * this.DELTA;
 		}
 
 		@Override
