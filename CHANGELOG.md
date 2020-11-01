@@ -1,8 +1,18 @@
+### DynamicSurroundings-1.12.2-3.6.2.1
+**Requirements**
+* Forge 2779+
+* OreLib-1.12.2-3.6.0.1+; **Do not use the deobf version of OreLib**; it's provided to developers for mod development
+* Mixin is no longer embedded in Dynamic Surroundings.  Mixin support will need to be provided by another mod, or install MixinBootstrap as well.
+
+**Fixes**
+* Potential NPE when performing fog color calculations
+* Pixelated water ripple effect will now render properly
+
 ### DynamicSurroundings-1.12.2-3.6.2.0
 **Requirements**
 * Forge 2779+
 * OreLib-1.12.2-3.6.0.1+; **Do not use the deobf version of OreLib**; it's provided to developers for mod development
-* **MixinBootstrap is now required!**.  If it is not in the mod folder the client will fail to start.
+* Mixin is no longer embedded in Dynamic Surroundings.  Mixin support will need to be provided by another mod, or install MixinBootstrap as well.
 
 **What's New**
 * Mixin is no longer embedded in the JAR.  Dynamic Surroundings now as a dependency on MixinBootstrap.

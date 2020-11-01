@@ -72,11 +72,6 @@ minecraft {
     mappings = project.ext.snapshot
 }
 
-configurations {
-    embed
-    implementation.extendsFrom(embed)
-}
-
 sourceSets {
     main {
         ext.refMap = "mixins.dsurround.refmap.json"
@@ -130,10 +125,6 @@ processResources
 }
 
 jar {
-    from(configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }) {
-        exclude "LICENSE.txt", "META-INF/MANIFSET.MF", "META-INF/maven/**", "META-INF/*.RSA", "META-INF/*.SF"
-    }
-    
     // Add CREDITS.md
     into('/') {
         from('CREDITS.md')
@@ -143,7 +134,6 @@ jar {
         "FMLCorePluginContainsFMLMod": "true",
         "ForceLoadAsMod": "true",
 	    "TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
-	    "TweakOrder": 0,
         "MixinConfigs": "mixins.dsurround.json",
         "FMLCorePlugin": "org.orecruncher.dsurround.mixins.TransformLoader"
     )
