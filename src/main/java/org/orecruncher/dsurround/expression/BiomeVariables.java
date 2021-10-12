@@ -31,7 +31,7 @@ public class BiomeVariables extends DynamicVariantList {
 	public BiomeVariables() {
 		add(new Dynamic.DynamicString("biome.name", () -> EnvironState.getBiomeName()));
 		add(new Dynamic.DynamicString("biome.id", () -> EnvironState.getPlayerBiome().getKey().toString()));
-		add(new Dynamic.DynamicString("biome.modid", () -> EnvironState.getPlayerBiome().getKey().getNamespace()));
+		add(new Dynamic.DynamicString("biome.modid", () -> EnvironState.getPlayerBiome().getKey().getResourceDomain()));
 		add(new Dynamic.DynamicString("biome.temperature", () -> EnvironState.getBiomeTemperature().getValue()));
 		add(new Dynamic.DynamicNumber("biome.rainfall", () -> EnvironState.getPlayerBiome().getRainfall()));
 		add(new Dynamic.DynamicNumber("biome.temperatureValue", () -> EnvironState.getPlayerBiome().getTemperature()));

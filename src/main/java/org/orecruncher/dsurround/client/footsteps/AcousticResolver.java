@@ -151,7 +151,7 @@ public class AcousticResolver {
 		IBlockState in;
 		IAcoustic[] acoustics = AcousticRegistry.EMPTY;
 
-		Vec3d tPos = vec.add(0, 1, 0);
+		Vec3d tPos = vec.addVector(0, 1, 0);
 		final IBlockState above = getBlockState(tPos);
 
 		if (above != this.airState)
@@ -164,7 +164,7 @@ public class AcousticResolver {
 
 			in = getBlockStateFacade(vec);
 			if (in == this.airState) {
-				tPos = vec.add(0, -1, 0);
+				tPos = vec.addVector(0, -1, 0);
 				final IBlockState below = getBlockState(tPos);
 				acoustics = this.blockMap.getBlockAcoustics(below, Substrate.FENCE);
 				if (acoustics != AcousticRegistry.EMPTY) {

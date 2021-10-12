@@ -26,6 +26,7 @@ package org.orecruncher.dsurround.client.footsteps.facade;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/*
 import codechicken.microblock.BlockMicroMaterial;
 import codechicken.microblock.Microblock;
 import codechicken.multipart.BlockMultipart;
@@ -73,7 +74,7 @@ final class ForgeMultiPartCBE implements IFacadeAccessor {
 			final TileEntity te = world.getTileEntity(pos);
 			if (te instanceof TileMultipart) {
 				final TileMultipart tm = (TileMultipart) te;
-				final Vec3d end = vec.add(0, -1, 0);
+				final Vec3d end = vec.addVector(0, -1, 0);
 				final PartRayTraceResult result = tm.collisionRayTrace(vec, end);
 				if (result != null && result.typeOfHit == Type.BLOCK) {
 					final Microblock micro = (Microblock) tm.partList().apply(result.partIndex());
@@ -94,3 +95,4 @@ final class ForgeMultiPartCBE implements IFacadeAccessor {
 	}
 
 }
+*/

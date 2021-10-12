@@ -1,156 +1,197 @@
-// Credit for getting Mixins to work:
-// https://github.com/Darkhax-Minecraft/Nautilus/blob/master/build.gradle
-
 buildscript {
     repositories {
-        jcenter()
         maven {
-        	name = "Forge"
-        	url 'http://files.minecraftforge.net/maven'
+            url "http://files.minecraftforge.net/maven"
         }
-    	maven {
-		    url 'http://repo.spongepowered.org/maven'
-	    }
         maven {
-        	url 'https://plugins.gradle.org/m2/'
+            url "https://repo.spongepowered.org/repository/maven-public/"
         }
+        gradlePluginPortal()
+        //jcenter()
+        mavenCentral()
     }
     dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-		classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
-        classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.4.0'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
 
-apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
-apply plugin: 'com.matthewprenger.cursegradle'
-apply plugin: 'maven-publish' 
+apply plugin: 'maven-publish'
 
-apply from: 'configuration.gradle'
+//apply from: 'configuration.gradle'
+
+version = mod_version
+group = mod_group
+archivesBaseName = mod_id
 
 if (file('secrets.properties').exists()) {
-	println "Loading parameters from secrets.properties"
-	ext.secrets = new Properties()
-	file('secrets.properties').withReader {ext.secrets.load(it)}
+    println "Loading parameters from secrets.properties"
+    ext.secrets = new Properties()
+    file('secrets.properties').withReader {ext.secrets.load(it)}
 }
 
 repositories {
-    maven { url "http://chickenbones.net/maven/" }
-    maven { url "http://dvs1.progwml6.com/files/maven" }
-    maven { url "http://maven.tterrag.com" }
-    maven { url "https://repo.elytradev.com/" }
-    maven { url 'http://repo.spongepowered.org/maven' }
-    maven { url 'https://maven.mcmoddev.com' }
-    maven { url "https://maven.blamejared.com/" }
-    maven {
-        name = "CurseForge"
-        url = "https://minecraft.curseforge.com/api/maven/"
-    }
+    maven { url = "https://dvs1.progwml6.com/files/maven" }
+    maven { url = "https://maven.tterrag.com" }
+    maven { url = "https://repo.elytradev.com/" }
+    maven { url = 'https://repo.spongepowered.org/maven' }
+    maven { url = 'https://maven.mcmoddev.com' }
+    maven { url = "https://maven.blamejared.com/" }
+    maven { url = "https://maven.covers1624.net/" }
+    maven { url = "https://cursemaven.com" }
 }
 
-sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-	if (project.ext.has('secrets')) {
-		if (project.ext.secrets.uuid != null)
-    		clientRunArgs.AddAll(["--uuid ${project.ext.secrets.uuid}"])
-    	if (project.ext.secrets.username != null)
-    		clientRunArgs.AddAll(["--username ${project.ext.secrets.username}"])
-    	if (project.ext.secrets.password != null)
-    		clientRunArgs.AddAll(["--password ${project.ext.secrets.password}"])
-    	if (project.ext.secrets.jvmArgs != null) {
-    		clientJvmArgs.AddAll(project.ext.secrets.jvmArgs)
-    		serverJvmArgs.AddAll(project.ext.secrets.jvmArgs)
-    	}
-    }
+    // The mappings can be changed at any time, and must be in the following format.
+    // snapshot_YYYYMMDD   Snapshot are built nightly.
+    // stable_#            Stables are built at the discretion of the MCP team.
+    // Use non-default mappings at your own risk. they may not always work.
+    // Simply re-run your setup task after changing the mappings to update your workspace.
+    //mappings channel: 'snapshot', version: '20171003-1.12'
+    mappings channel: 'snapshot', version: '20171003-1.12'
+    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
-    runDir = "run"
-    replace '@VERSION@', project.ext.modVersion
-    replace '@FINGERPRINT@', project.ext.fingerprint
-    replace '@UPDATEURL@', project.ext.updateurl
-    mappings = project.ext.snapshot
+    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
+    // Default run configurations.
+    // These can be tweaked, removed, or duplicated as needed.
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            property 'fml.coreMods.load', mod_core_plugin.replace('${mod_group}', mod_group).replace('${mod_id}', mod_id)
+
+            if (project.ext.has('secrets')) {
+                if (secrets.uuid != null)
+                    args '--uuid', "${secrets.uuid}"
+                if (secrets.username != null)
+                    args '--username', "${secrets.username}"
+                if (secrets.password != null)
+                    args '--password', "${secrets.password}"
+            }
+        }
+
+        server {
+            property 'fml.coreMods.load', mod_core_plugin.replace('${mod_group}', mod_group).replace('${mod_id}', mod_id)
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+        }
+    }
 }
 
-sourceSets {
-    main {
-        ext.refMap = "mixins.dsurround.refmap.json"
-    }
+configurations {
+    embed
+    compile.extendsFrom(embed)
+}
+
+mixin {
+    add sourceSets.main, "mixins.dsurround.refmap.json"
 }
 
 dependencies {
-	compile "craftstudio-api:CraftStudioAPI-universal-1.0.1.95:mc1.12:alpha"
-    compile "com.animania:animania-${project.mcVersion}-base:${project.animaniaBaseVersion}"
-    compile "com.animania:animania-${project.mcVersion}-farm:${project.animaniaFarmVersion}"
-    compile "com.animania:animania-${project.mcVersion}-extra:${project.animaniaExtraVersion}"
-	compile "serene-seasons:SereneSeasons-${project.mcVersion}:${project.ssVersion}:universal"
-	compile "codechicken-lib-1-8:CodeChickenLib-1.12.2:3.2.3.358:universal"
-	compile "forge-multipart-cbe:ForgeMultipart-1.12.2:2.6.2.83:universal"
-	compile "ctm:CTM:MC1.12.2:${project.ctmVersion}"
-	compile "cosmetic-armor-reworked:CosmeticArmorReworked:1.12.2:v3"
-	compile "littletiles:LittleTiles_v1.5.0:pre169_mc1.12.2"
-	compile "iron-chests:ironchest:1.12.2:7.0.72.847"
-    compile "biomes-o-plenty:BiomesOPlenty-1.12.2:7.0.1.2441:universal"
-    compile "org.spongepowered:mixin:0.8.2"
-    compile 'mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.28-17'
+    // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
+    // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
+    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
+    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2855'
 
-	//compile "creativecore:CreativeCore_v1.9.35_mc1.12.2"
-
-    deobfCompile "mezz.jei:jei_${project.mcVersion}:${project.jeiVersion}:api"
-    runtime "mezz.jei:jei_${project.mcVersion}:${project.jeiVersion}"
-    deobfCompile "team.chisel:Chisel:MC${project.mcVersion}-${project.chiselVersion}"
+    compile "curse.maven:CraftStudioAPI-268704:2661859"
+    compile "com.animania:animania-${minecraft_version}-base:2.0.3.28"
+    compile "com.animania:animania-${minecraft_version}-farm:1.0.2.28"
+    compile "com.animania:animania-${minecraft_version}-extra:1.0.2.28"
+    compileOnly "curse.maven:CosmeticArmorReworked-237307:2660068"
+    compileOnly "curse.maven:IronChest-228756:2747935"
+    compileOnly "curse.maven:TheOneProbe-245211:2667280"
+    compileOnly "mezz.jei:jei_${minecraft_version}:4.16.1.301"
 
     if (fileTree(dir: 'libs').filter { it.name.startsWith('OreLib') }.getFiles().size() == 0)
-        compile "orelib:OreLib:1.12.2:3.6.0.1"
+        compile "curse.maven:OreLib-307806:2820815"
+
+    compileOnly "team.chisel:Chisel:MC${minecraft_version}-1.0.2.45"
+    compileOnly "curse.maven:BiomesOPlenty-220318:2715506"
+    compileOnly "curse.maven:CreativeCore-257814:3467576"
+    compileOnly "curse.maven:LittleTiles-257818:3483878"
+    compileOnly "curse.maven:SereneSeasons-291874:2799213"
+    compileOnly "curse.maven:CTM-267602:2915363"
+
+    embed("org.spongepowered:mixin:0.8") {
+        exclude module: "asm-commons"
+        exclude module: "asm-tree"
+        exclude module: "launchwrapper"
+        exclude module: "guava"
+        exclude module: "log4j-core"
+        exclude module: "gson"
+        exclude module: "commons-io"
+    }
 }
 
-processResources
-{
-    // this will ensure that this task is redone when the versions change.
+processResources {
     inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+    inputs.property "mcversion", minecraft_version
 
-    // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+
+        expand 'mod_id': mod_id, 'mod_name': mod_name, 'version': project.version,
+                'mcversion': minecraft_version, 'mod_description': mod_description,
+                'mod_author': mod_author, 'update_url': update_url
     }
-        
-    // copy everything else that's not the mcmod.info
+
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
 }
 
+// Example for how to get properties into the manifest for reading by the runtime..
 jar {
+    from {
+        configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
+    } {
+        exclude "LICENSE.txt", "META-INF/MANIFSET.MF", "META-INF/maven/**", "META-INF/*.RSA", "META-INF/*.SF"
+    }
+
     // Add CREDITS.md
     into('/') {
         from('CREDITS.md')
     }
-    
-    manifest.attributes(
-        "FMLCorePluginContainsFMLMod": "true",
-        "ForceLoadAsMod": "true",
-	    "TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
-        "MixinConfigs": "mixins.dsurround.json",
-        "FMLCorePlugin": "org.orecruncher.dsurround.mixins.TransformLoader"
-    )
-}
 
-// https://gist.github.com/matthewprenger/9b2da059b89433a01c1c
-task signJar(type: SignJar) {
-    onlyIf { // Skip the task if our secret data isn't available
-        project.hasProperty('keyStore')
+    manifest {
+        attributes([
+                "FMLCorePlugin": mod_core_plugin.replace('${mod_group}', mod_group).replace('${mod_id}', mod_id),
+                "FMLCorePluginContainsFMLMod": "false",
+                "ForceLoadAsMod": "true",
+                "TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
+                "MixinConfigs": mod_mixin_configs.replace('${mod_id}', mod_id),
+                "Specification-Title": "${mod_id}",
+                "Specification-Vendor": "OreCruncher",
+                "Specification-Version": "1", // We are version 1 of ourselves
+                "Implementation-Title": project.name,
+                "Implementation-Version": "${minecraft_version}-${mod_version}",
+                "Implementation-Vendor" :"OreCruncher",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
     }
-
-    keyStore = project.keyStore // This needs to be a path to the keystore file
-    alias = project.keyStoreAlias
-    storePass = project.keyStorePass
-    keyPass = project.keyStoreKeyPass
-    inputFile = jar.archivePath
-    outputFile = jar.archivePath
 }
 
-build.dependsOn signJar
+// Example configuration to allow publishing using the maven-publish task
+// This is the preferred method to reobfuscate your jar file
+jar.finalizedBy('reobfJar')
+// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
+//publish.dependsOn('reobfJar')
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+            url "file:///${project.projectDir}/mcmodsrepo"
+        }
+    }
+}

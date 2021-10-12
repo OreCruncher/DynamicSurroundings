@@ -39,7 +39,7 @@ public class MixinGuiConfig {
 	//@formatter:off
 	@Redirect(
 		method = "*",
-		at = @At(value = "NEW", target = "(Lnet/minecraftforge/fml/client/config/GuiConfig;Lnet/minecraft/client/Minecraft;)Lnet/minecraftforge/fml/client/config/GuiConfigEntries;")
+		at = @At(value = "NEW", target = "Lnet/minecraftforge/fml/client/config/GuiConfigEntries;<init>(Lnet/minecraftforge/fml/client/config/GuiConfig;Lnet/minecraft/client/Minecraft;)V")
 	)
 	//@formatter:on
 	public GuiConfigEntries constructEntries(GuiConfig parent, Minecraft mc) {

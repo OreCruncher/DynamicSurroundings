@@ -82,8 +82,8 @@ final class LittleTilesAccessor implements IFacadeAccessor {
 		final TileEntity te = world.getTileEntity(blockPos);
 		if (te instanceof ILittleTileTE) {
 			final ILittleTileTE ltte = (ILittleTileTE) te;
-			final Vec3d anchor1 = pos.add(-RANGE, Generator.PROBE_DEPTH, -RANGE);
-			final Vec3d anchor2 = pos.add(RANGE, Generator.PROBE_DEPTH + 0.125D, RANGE);
+			final Vec3d anchor1 = pos.addVector(-RANGE, Generator.PROBE_DEPTH, -RANGE);
+			final Vec3d anchor2 = pos.addVector(RANGE, Generator.PROBE_DEPTH + 0.125D, RANGE);
 			final AxisAlignedBB box = new AxisAlignedBB(anchor1, anchor2);
 			final IBlockState result = ltte.getState(box, false);
 			if (result != null)

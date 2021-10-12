@@ -68,8 +68,7 @@ public final class SoundConfigProcessor implements AutoCloseable {
 
 	// ResourceLocation in the form of "dsurround:sounds.json"
 	public SoundConfigProcessor(@Nonnull final ResourceLocation soundConfig) {
-		final String asset = String.format("/assets/%s/%s", soundConfig.getNamespace(), soundConfig.getPath()); // .replace('.',
-																												// '/'));
+		final String asset = String.format("/assets/%s/%s", soundConfig.getResourceDomain(), soundConfig.getResourcePath());
 		this.stream = SoundConfigProcessor.class.getResourceAsStream(asset);
 	}
 

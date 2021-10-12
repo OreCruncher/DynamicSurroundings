@@ -86,7 +86,7 @@ public final class ResourcePacks {
 		public InputStream getInputStream(@Nonnull final ResourceLocation loc) {
 			final StringBuilder builder = new StringBuilder();
 			builder.append(this.packPath);
-			builder.append(loc.getNamespace()).append('/').append(loc.getPath());
+			builder.append(loc.getResourceDomain()).append('/').append(loc.getResourcePath());
 			return ModBase.class.getResourceAsStream(builder.toString());
 		}
 

@@ -117,8 +117,8 @@ public final class FootStrikeLocation {
 	@Nonnull
 	public Vec3d offset(@Nonnull final EnumFacing facing, final float n) {
 		return n == 0 ? this.strike
-				: new Vec3d(this.strike.x + facing.getXOffset() * n, this.strike.y + facing.getYOffset() * n,
-						this.strike.z + facing.getZOffset() * n);
+				: new Vec3d(this.strike.x + facing.getFrontOffsetX() * n, this.strike.y + facing.getFrontOffsetY() * n,
+						this.strike.z + facing.getFrontOffsetZ() * n);
 	}
 
 	/**

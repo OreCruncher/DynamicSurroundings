@@ -36,6 +36,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import sereneseasons.api.season.BiomeHooks;
 import sereneseasons.api.season.Season;
 import sereneseasons.api.season.SeasonHelper;

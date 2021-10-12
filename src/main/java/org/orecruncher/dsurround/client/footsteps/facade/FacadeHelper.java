@@ -66,8 +66,8 @@ public final class FacadeHelper {
 		// use a mod specific interface before general ones.
 		if (ModEnvironment.LittleTiles.isLoaded())
 			addAccessor(accessors, new LittleTilesAccessor());
-		if (ModEnvironment.ForgeMultipartCBE.isLoaded())
-			addAccessor(accessors, new ForgeMultiPartCBE());
+		//if (ModEnvironment.ForgeMultipartCBE.isLoaded())
+		//	addAccessor(accessors, new ForgeMultiPartCBE());
 		if (ModEnvironment.ConnectedTextures.isLoaded())
 			addAccessor(accessors, new ConnectedTexturesAccessor());
 

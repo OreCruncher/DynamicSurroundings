@@ -49,7 +49,7 @@ public class ConstructArmoryItemData extends SimpleArmorItemData {
 		final NBTTagCompound nbt = stack.getTagCompound();
 		if (nbt != null && nbt.hasKey("Modifiers")) {
 			final NBTTagList modifiers = nbt.getTagList("Modifiers", 10);
-			if (modifiers != null && !modifiers.isEmpty()) {
+			if (modifiers != null && !modifiers.hasNoTags()) {
 				final NBTTagCompound piece = modifiers.getCompoundTagAt(0);
 				if (piece != null && piece.hasKey("identifier")) {
 					final String id = piece.getString("identifier");

@@ -1,22 +1,23 @@
 //  Basics defined up here to make life easier
 //  Tweak the defs, not the others!
 def mcVersion    = "1.12.2"
-def modVersion   = "3.6.2.1"
-def modDesignator= ""
+def modVersion   = "3.6.3.0"
+def modDesignator= "BETA"
 //def forgeVersion = "14.23.5.2779"
-def forgeVersion = "14.23.5.2847"
-def snapshot     = "stable_39"
+def forgeVersion = "14.23.5.2855"
+def snapshot     = "20171003-1.12"
 
-project.ext.jeiVersion    	        = "4.16.1.302"
+project.ext.jeiVersion    	        = "4.16.1.301"
 project.ext.chiselVersion 	        = "1.0.2.45"
 project.ext.ctmVersion    	        = "1.0.2.31"
 project.ext.ssVersion     	        = "1.2.18"
-project.ext.animaniaBaseVersion	    = "2.0.0.24"
-project.ext.animaniaFarmVersion	    = "1.0.0.24"
-project.ext.animaniaExtraVersion	= "1.0.0.24"
+project.ext.animaniaBaseVersion	    = "2.0.3.28"
+project.ext.animaniaFarmVersion	    = "1.0.2.28"
+project.ext.animaniaExtraVersion	= "1.0.2.28"
 project.ext.mbVersion               = "1.0.4"
 
 // General Mod version stuff
+project.ext.modId = "dsurround"
 project.ext.mcVersion    = mcVersion
 project.ext.modVersion   = modVersion
 project.ext.modDesignator= modDesignator
@@ -27,14 +28,14 @@ project.ext.fingerprint  = "7a2128d395ad96ceb9d9030fbd41d035b435753a"
 project.ext.updateurl    = "https://raw.githubusercontent.com/OreCruncher/DynamicSurroundings/master/version.json"
 
 // JAR tagging
-project.minecraft.version = "${mcVersion}-${forgeVersion}"
+//project.minecraft.version = "${mcVersion}-${forgeVersion}"
 
 // Build Stuff
 project.ext.snapshot = snapshot
 
 // Output to the log for posterity
 println "******************************************"
-println "JAR tag     : " + project.minecraft.version + project.ext.modDesignator
+//println "JAR tag     : " + project.minecraft.version + project.ext.modDesignator
 println "Archive     : " + project.archivesBaseName
 println "Mod Version : " + project.ext.modVersion
 println "Forge       : " + forgeVersion + " (" + project.ext.snapshot + ")"
