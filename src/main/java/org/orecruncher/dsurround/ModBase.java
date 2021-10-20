@@ -69,9 +69,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 	version = ModInfo.VERSION,
 	acceptedMinecraftVersions = ModInfo.MINECRAFT_VERSIONS,
 	acceptableRemoteVersions = ModInfo.REMOTE_VERSIONS,
-	guiFactory = ModInfo.GUI_FACTORY,
-	updateJSON = ModInfo.UPDATE_URL,
-	certificateFingerprint = ModInfo.FINGERPRINT
+	guiFactory = ModInfo.GUI_FACTORY
 )
 //@formatter:on
 public class ModBase {
