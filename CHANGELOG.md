@@ -1,4 +1,12 @@
-### DynamicSurroundings-1.12.2-3.6.2.1
+> ### DynamicSurroundings-1.12.2-3.6.3
+**Requirements**
+* Forge 2855+ *(You should update to the latest if possible)*
+* OreLib-1.12.2-3.6.0.1+; **Do not use the deobf version of OreLib**; it's provided to developers for mod development
+
+**What's New**
+* Embedded Mixin (again), but in a different way.  Should improve compatibility.  Would no longer need MixinBoostrap.
+
+> ### DynamicSurroundings-1.12.2-3.6.2.1
 **Requirements**
 * Forge 2779+
 * OreLib-1.12.2-3.6.0.1+; **Do not use the deobf version of OreLib**; it's provided to developers for mod development
@@ -8,7 +16,7 @@
 * Potential NPE when performing fog color calculations
 * Pixelated water ripple effect will now render properly
 
-### DynamicSurroundings-1.12.2-3.6.2.0
+> ### DynamicSurroundings-1.12.2-3.6.2.0
 **Requirements**
 * Forge 2779+
 * OreLib-1.12.2-3.6.0.1+; **Do not use the deobf version of OreLib**; it's provided to developers for mod development
@@ -29,7 +37,7 @@
 * Cleaned up Desert Wind biome sound (applied high pass filter) 
 * Changed netherrack footstep sound (again); trying out gravel/sand acoustic
 
-### DynamicSurroundings-1.12.2-3.6.1.0
+> ### DynamicSurroundings-1.12.2-3.6.1.0
 **Requirements**
 * Forge 2779+
 * OreLib-1.12.2-3.6.0.1+; **Do not use the deobf version of OreLib**; it's provided to developers for mod development
@@ -47,7 +55,7 @@
 * Updated Russian translations (thanks Smollet777!)
 * Update Roots compatibility
 
-### DynamicSurroundings-1.12.2-3.6.0.2
+> ### DynamicSurroundings-1.12.2-3.6.0.2
 **Requirements**
 * Forge 2779+
 * OreLib-1.12.2-3.6.0.1+; **Do not use the deobf version of OreLib**; it's provided to developers for mod development
@@ -67,7 +75,7 @@
 * Fixed waterfall cutoff so it can be set to > 10 to disable waterfall sound effect
 * Fixed SoundEngine crash when missing mods or outdated dependencies are present
 
-### DynamicSurroundings-1.12.2-3.6.0.1
+> ### DynamicSurroundings-1.12.2-3.6.0.1
 **Requirements**
 * Forge 2779+
 * OreLib-1.12.2-3.6.0.0+; **Do not use the deobf version of OreLib**; it's provided to developers for mod development
@@ -104,9 +112,9 @@
      * I have a GTX 980 and I can drive a 3 band aurora at 120FPS.
 * Updates for biome sounds to clean up some high frequency noise (thanks TechnoMysterio!)
      * Savanna Day, Forest, Bog, and Wind
-* Adusted footstep volume scaling for non-EntityPlayer mobs so they are not as loud
+* Adjusted footstep volume scaling for non-EntityPlayer mobs so they are not as loud
 
-### DynamicSurroundings-1.12.2-3.6.0.0
+> ### DynamicSurroundings-1.12.2-3.6.0.0
 **Requirements**
 * Forge 2779+
 * OreLib-1.12.2-3.6.0.0+; **Do not use the deobf version of OreLib**; it's provided to developers for mod development
@@ -144,7 +152,7 @@
      * Savanna Day, Forest, Bog, and Wind
 * Adusted footstep volume scaling for non-EntityPlayer mobs so they are not as loud
 
-### DynamicSurroundings-1.12.2-3.5.5.0
+> ### DynamicSurroundings-1.12.2-3.5.5.0
 **Requirements**
 * Forge 2779+
 * OreLib-1.12.2-3.5.2.3+
@@ -164,7 +172,7 @@
 * Update to support Animania 1.12.2-1.7.2.  If you use Animania you must update otherwise Dynamic Surroundings will not start!
 * Player jump sound is disabled by default.
 
-### DynamicSurroundings-1.12.2-3.5.4.3
+> ### DynamicSurroundings-1.12.2-3.5.4.3
 **Requirements**
 * Forge 2768+
 * OreLib-1.12.2-3.5.2.1+
@@ -175,7 +183,7 @@
 **Fixes**
 * Fix block state matching RE: BoP overgrown blocks
 
-### DynamicSurroundings-1.12.2-3.5.4.2
+> ### DynamicSurroundings-1.12.2-3.5.4.2
 **Requirements**
 * Forge 2768+
 * OreLib-1.12.2-3.5.2.1+
@@ -190,7 +198,7 @@
     * If you use Serene Seasons it must be at least version 1.2.13
     * Information comes from local config
 
-### DynamicSurroundings-1.12.2-3.5.4.1
+> ### DynamicSurroundings-1.12.2-3.5.4.1
 **What's New**
 * Bottle slosh sound when equipping a potion (or anything derived from ItemPotion).
 
@@ -208,7 +216,7 @@
     * On my i7/GTX 980 rig near a large fall generating 4000 particles and 200+ sounds I had 110 - 120FPS
 * Other internal changes to squeeze out more performance per tick (improved map indexing, etc.)
 
-### DynamicSurroundings-1.12.2-3.5.4.0
+> ### DynamicSurroundings-1.12.2-3.5.4.0
 **Requires OreLib-1.12.2-3.5.1.3!**
 
 **What's New**
@@ -221,11 +229,11 @@
     * Potion
     * Light Level
 
-### DynamicSurroundings-1.12.2-3.5.3.1
+> ### DynamicSurroundings-1.12.2-3.5.3.1
 **Fixes**
 * Reapply sorting index to FML ASM transformer.  Depending on modmix the names may not have been deobsfuscated to a point where it could be understood by Dynamic Surroundings.
 
-### DynamicSurroundings-1.12.2-3.5.3.0
+> ### DynamicSurroundings-1.12.2-3.5.3.0
 **Fixes**
 * Fixed compatibility with Vivecraft
 * Fixed occasional waterfall sound errors
@@ -235,7 +243,7 @@
 * Reworked some of the internal sound handling.
 * Change the default sound system buffer size from 128K (system default) to 16K.  Need to reset manually in your dsurround.cfg if the file already exists.  Not overly important to do so.
 
-### DynamicSurroundings-1.12.2-3.5.2.0
+> ### DynamicSurroundings-1.12.2-3.5.2.0
 **What's New**
 * Added "alwaysOutside" dimension config attribute.  This tells Dynamic Surroundings to always consider the player outside while in that dimension.  Affects biome sound selection.
 * Improved Erebus support.  Biome sounds while in the Erebus.  (See first bullet.)
@@ -253,7 +261,7 @@
 * Updated ru_ru translations.  (Thanks VoltoREv!)
 * Default rain ripple is the pixelated version
 
-### DynamicSurroundings-1.12.2-3.5.1.1
+> ### DynamicSurroundings-1.12.2-3.5.1.1
 **What's New**
 * ElectroBlob's Wizardry config support
 * Books now have page flip sounds when equipped, etc.
@@ -269,7 +277,7 @@
 * Reworked built-in profiles a bit.  You will need to reconfigure if you used them prior.
 * Added "Auroras in all Biomes" built-in profile.
 
-### DynamicSurroundings-1.12.2-3.5.1.0
+> ### DynamicSurroundings-1.12.2-3.5.1.0
 **What's New**
 * Added script variable diurnal.celestialAngle
 * [WIP] Added pixelated water ripple rain effect.  You will need to set the config to see it.  (Thank you Forstride for the textures!)
@@ -284,10 +292,10 @@
 * Recolor rain/splash textures to use vanilla rain pixel colors
 * Rework drip effect to generate steam when hitting hot blocks, like magma.
 
-### DynamicSurroundings-1.12.2-3.5.0.5
+> ### DynamicSurroundings-1.12.2-3.5.0.5
 * Quick hotfix to address mock EntityItems.
 
-### DynamicSurroundings-1.12.2-3.5.0.4
+> ### DynamicSurroundings-1.12.2-3.5.0.4
 **Fixes**
 * Yet another OTG related NPE fix for when a player randomly teleports.
 * Entity chat was staying around too long.
@@ -295,7 +303,7 @@
 **Changes**
 * Improve season processing related to temperature
 
-### DynamicSurroundings-1.12.2-3.5.0.3
+> ### DynamicSurroundings-1.12.2-3.5.0.3
 **Fixes**
 * NPE when encountering an OTG Biome
 * Compatibility with Serene Seasons 1.2.12+.  Dependency enforcement is in place and you will get a Forge notification if you are using an older version of Serene Seasons.
@@ -303,7 +311,7 @@
 **Changes**
 * Stained hardened clay now has the same step sound as regular hardened clay (sandstone)
 
-### DynamicSurroundings-1.12.2-3.5.0.2
+> ### DynamicSurroundings-1.12.2-3.5.0.2
 **What's New**
 * Added weather.canWaterFreeze script variable
 * The various Forest and Plains background biome sound track will not play if water is capable of freezing.  For example, with Serene Seasons installed and it being in the middle of winter things will be fairly quiet in Forests and Plains.
@@ -316,14 +324,14 @@
 **Changes**
 * Cap hurt threshold percentage at 50% of max health 
 
-### DynamicSurroundings-1.12.2-3.5.0.1
+> ### DynamicSurroundings-1.12.2-3.5.0.1
 **Fixes**
 * Fixed NPE processing blockstate bounding box
 * Fixed compatbility issue with World Downloader mod that caused it to crash
 * Fixed NPE getting data from BlockStateRegistry 
 * Compatibility with latest Serene Seasons.  If you use Serene Seasons it must be at least version 1.2.10!
 
-### DynamicSurroundings-1.12.2-3.5.0.0
+> ### DynamicSurroundings-1.12.2-3.5.0.0
 This release is a major update to Dynamic Surroundings.  Make sure you make backups of your Minecraft
 instance.  You will need to reset your Dynamic Surroundings config file and re-apply your changes.
 
