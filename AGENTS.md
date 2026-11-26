@@ -82,7 +82,9 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
 - `rain.particleWeather` (off by default): rain and snow as single drops and flakes, ported from the 26.x line
   (`client/weather/particle`: `PrecipitationField`, `PrecipitationColumns`, `PackedDrops`, `Snowflakes`, `Wind`, with
   their tests). Run from `RenderWeather`: ticked by the first frame of each client tick, drawn every frame; the dust is
-  still the sheets of `StormRenderer` (`dustOnly`). Off under an OptiFine shader pack.
+  still the sheets of `StormRenderer` (`dustOnly`). Off under an OptiFine shader pack. The `Wind` ticks with the storm
+  (harder in thunder and dust, its direction from the day), as the 26.x line's wind service does; its line is on the
+  diagnostics overlay.
 - Drawn by `GpuDrops` (`rain.particleWeatherOnGpu`, on): the drops uploaded to a vertex buffer once a tick, four vertices
   a drop, and `shaders/drops.vert` making each frame's quads (OpenGL 2.1: the 26.x line's texel buffers need 3.1), or
   without shaders by `DropRenderer` on the CPU, whose math the shader follows: change both. Vanilla turns particles

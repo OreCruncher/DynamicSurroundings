@@ -102,6 +102,7 @@ public class ProxyClient extends Proxy implements IProxy, ISelectiveResourceRelo
 		register(KeyHandler.class);
 		register(BackgroundMute.class);
 		register(RenderWeather.class);
+		register(ParticleWeather.class);
 		register(Weather.class);
 		register(WorldEventDetector.class);
 		register(ParticleCollections.class);
