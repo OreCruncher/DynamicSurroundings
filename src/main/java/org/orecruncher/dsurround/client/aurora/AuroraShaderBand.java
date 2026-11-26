@@ -25,6 +25,7 @@
 package org.orecruncher.dsurround.client.aurora;
 
 import org.lwjgl.opengl.GL11;
+import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.shader.Shaders;
 import org.orecruncher.lib.gfx.OpenGlState;
 import org.orecruncher.lib.gfx.OpenGlUtil;
@@ -50,8 +51,15 @@ public class AuroraShaderBand extends AuroraBase {
 	
 	protected static final VertexUploader uploader = new VertexUploader();
 	
+	// Set once the shader fails while drawing, so later auroras are classic ones
+	private static boolean shaderBroken;
+
 	protected ShaderProgram program;
 	protected IShaderUseCallback callback;
+
+	private final long seed;
+	// Takes over when the shader can't draw, so the aurora doesn't just vanish
+	private IAurora fallback;
 	protected final float auroraWidth;
 	protected final float panelTexWidth;
 	
@@ -60,6 +68,7 @@ public class AuroraShaderBand extends AuroraBase {
 	public AuroraShaderBand(final long seed) {
 		super(seed, true);
 
+		this.seed = seed;
 		this.program = Shaders.AURORA;
 
 		this.callback = shader -> {
@@ -75,6 +84,46 @@ public class AuroraShaderBand extends AuroraBase {
 		this.panelTexWidth = this.band.getNodeWidth() / this.auroraWidth;
 
 		this.buffer = createList();
+	}
+
+	/**
+	 * True if auroras can be drawn by the shader: it built, and hasn't failed while drawing.
+	 */
+	public static boolean isShaderUsable() {
+		return Shaders.AURORA != null && !shaderBroken;
+	}
+
+	private void fallBack() {
+		if (this.fallback == null) {
+			this.fallback = new AuroraClassic(this.seed);
+			if (super.isDying())
+				this.fallback.setFading(true);
+		}
+	}
+
+	@Override
+	public void setFading(final boolean flag) {
+		super.setFading(flag);
+		if (this.fallback != null)
+			this.fallback.setFading(flag);
+	}
+
+	@Override
+	public boolean isDying() {
+		return this.fallback != null ? this.fallback.isDying() : super.isDying();
+	}
+
+	@Override
+	public void update() {
+		if (this.fallback != null)
+			this.fallback.update();
+		else
+			super.update();
+	}
+
+	@Override
+	public boolean isComplete() {
+		return this.fallback != null ? this.fallback.isComplete() : super.isComplete();
 	}
 
 	@Override
@@ -140,7 +189,11 @@ public class AuroraShaderBand extends AuroraBase {
 	public void render(final float partialTick) {
 
 		if (this.program == null)
+			fallBack();
+		if (this.fallback != null) {
+			this.fallback.render(partialTick);
 			return;
+		}
 
 		this.band.translate(partialTick);
 
@@ -151,11 +204,14 @@ public class AuroraShaderBand extends AuroraBase {
 		final OpenGlState glState = OpenGlState.push();
 		GlStateManager.disableLighting();
 		OpenGlUtil.setAuroraBlend();
+		// No depth writes, as the classic aurora: overlapping bands would cut each other off
+		GlStateManager.depthMask(false);
 		GL11.glFrontFace(GL11.GL_CW);
 
+		final ShaderProgram program = this.program;
 		try {
 
-			this.program.use(this.callback);
+			program.use(this.callback);
 
 			for (int b = 0; b < this.bandCount; b++) {
 				GlStateManager.pushMatrix();
@@ -166,12 +222,13 @@ public class AuroraShaderBand extends AuroraBase {
 			}
 
 		} catch (final Exception ex) {
-			ex.printStackTrace();
+			ModBase.log().error("Aurora shader failed; drawing classic auroras instead", ex);
+			shaderBroken = true;
 			this.program = null;
 		} finally {
+			// Always, so a failure doesn't leave the program bound for whatever draws next
 			try {
-				if (this.program != null)
-					this.program.unUse();
+				program.unUse();
 			} catch (final Throwable ignore) {
 			}
 		}

@@ -41,7 +41,8 @@ public final class AuroraFactory {
 
 	@Nonnull
 	public static IAurora produce(final long seed) {
-		if (ModOptions.aurora.auroraUseShader && Shaders.areShadersSupported())
+		// The shader may have failed to build, or failed while drawing an earlier aurora
+		if (ModOptions.aurora.auroraUseShader && Shaders.areShadersSupported() && AuroraShaderBand.isShaderUsable())
 			return new AuroraShaderBand(seed);
 		else
 			return new AuroraClassic(seed);
