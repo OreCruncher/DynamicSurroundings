@@ -21,7 +21,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.weather.particle;
+package org.orecruncher.dsurround.client.weather.wind;
 
 /**
  * Lets tests set a wind. Ported from the 26.x line's tests.

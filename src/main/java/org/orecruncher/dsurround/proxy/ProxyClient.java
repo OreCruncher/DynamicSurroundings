@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.function.Predicate;
 
 import org.orecruncher.dsurround.client.weather.particle.ParticleWeather;
+import org.orecruncher.dsurround.client.weather.wind.WindService;
 
 import javax.annotation.Nonnull;
 
@@ -103,6 +104,7 @@ public class ProxyClient extends Proxy implements IProxy, ISelectiveResourceRelo
 		register(BackgroundMute.class);
 		register(RenderWeather.class);
 		register(ParticleWeather.class);
+		register(WindService.class);
 		register(Weather.class);
 		register(WorldEventDetector.class);
 		register(ParticleCollections.class);

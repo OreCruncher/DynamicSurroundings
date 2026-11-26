@@ -24,6 +24,7 @@
 
 package org.orecruncher.dsurround.client.fx.particle.system;
 
+import org.orecruncher.dsurround.client.weather.wind.IWindBlown;
 import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
 import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.lib.ReflectedField.FloatField;
@@ -80,6 +81,8 @@ public class ParticleFireJet extends ParticleJet {
 			if (!this.isLava) {
 				final ParticleFlame flame = (ParticleFlame) particle;
 				flameScale.set(flame, flameScale.get(flame) * this.jetStrength);
+				// Flames lean with the wind; lava, heavy, falls as it would
+				IWindBlown.blow(flame, this.world, this.posX, this.posY, this.posZ);
 			}
 			addParticle(particle);
 		}

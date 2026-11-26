@@ -23,6 +23,8 @@
 
 package org.orecruncher.dsurround.client.weather.particle;
 
+import org.orecruncher.dsurround.client.weather.wind.Wind;
+import org.orecruncher.dsurround.client.weather.wind.WindAccess;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

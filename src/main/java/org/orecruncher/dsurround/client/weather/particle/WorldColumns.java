@@ -84,14 +84,6 @@ public final class WorldColumns implements IColumnSource {
 		return PrecipitationKind.NONE;
 	}
 
-	/**
-	 * Whether the storm raises dust at the position, as the storm renderer draws it
-	 */
-	public boolean isDusty(final int x, final int y, final int z) {
-		final BiomeInfo biome = BiomeUtil.getBiomeData(ClientChunkCache.instance().getBiome(this.pos.setPos(x, y, z)));
-		return this.season.getPrecipitationType(this.pos, biome) == PrecipitationType.DUST;
-	}
-
 	@Override
 	public boolean isOpen(final int x, final int y, final int z) {
 		final IBlockAccessEx blocks = ClientChunkCache.instance();

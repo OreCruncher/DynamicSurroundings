@@ -23,6 +23,7 @@
 
 package org.orecruncher.dsurround.client.weather.particle;
 
+import org.orecruncher.dsurround.client.weather.wind.Wind;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;

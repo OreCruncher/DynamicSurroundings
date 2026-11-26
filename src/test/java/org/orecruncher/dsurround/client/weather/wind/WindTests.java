@@ -21,8 +21,9 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.weather.particle;
+package org.orecruncher.dsurround.client.weather.wind;
 
+import org.orecruncher.dsurround.client.weather.particle.PrecipitationField;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;

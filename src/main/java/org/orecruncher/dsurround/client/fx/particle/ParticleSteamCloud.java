@@ -26,6 +26,7 @@ package org.orecruncher.dsurround.client.fx.particle;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.client.weather.wind.IWindBlown;
 import org.orecruncher.lib.random.XorShiftRandom;
 
 import net.minecraft.block.material.Material;
@@ -46,6 +47,7 @@ public class ParticleSteamCloud extends ParticleCloud {
 	public ParticleSteamCloud(final World world, final double x, final double y, final double z, final double dY) {
 		super(world, x, y, z, XorShiftRandom.current().nextGaussian() * 0.02D, dY,
 				XorShiftRandom.current().nextGaussian() * 0.02D);
+		IWindBlown.blow(this, world, x, y, z);
 	}
 
 	@Override

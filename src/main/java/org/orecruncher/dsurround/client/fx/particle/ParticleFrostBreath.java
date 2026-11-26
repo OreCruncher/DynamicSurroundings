@@ -26,6 +26,7 @@ package org.orecruncher.dsurround.client.fx.particle;
 
 import java.util.Random;
 
+import org.orecruncher.dsurround.client.weather.wind.IWindBlown;
 import org.orecruncher.lib.ReflectedField.FloatField;
 import org.orecruncher.lib.random.XorShiftRandom;
 
@@ -76,6 +77,7 @@ public class ParticleFrostBreath extends ParticleCloud {
 		this.particleScale *= isChild ? 0.125F : 0.25F;
 
 		sizeField.set(this, this.particleScale);
+		IWindBlown.blow(this, this.world, this.posX, this.posY, this.posZ);
 	}
 
 	/*

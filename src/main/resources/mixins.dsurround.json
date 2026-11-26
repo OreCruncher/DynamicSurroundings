@@ -13,6 +13,8 @@
 		"MixinItem",
 		"MixinSoundCategory",
 		"MixinEntityRenderer",
+		"MixinParticle",
+		"MixinParticleManager",
 		"MixinSoundManager",
 		"MixinEntityArrow",
 		"MixinGuiScreenOptionsSounds",

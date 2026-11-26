@@ -21,7 +21,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.dsurround.client.weather.particle;
+package org.orecruncher.dsurround.client.weather.wind;
 
 import java.util.Arrays;
 import java.util.Collections;

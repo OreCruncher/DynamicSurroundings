@@ -23,6 +23,7 @@
 
 package org.orecruncher.dsurround.client.weather.particle;
 
+import org.orecruncher.dsurround.client.weather.wind.WindService;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Locale;
@@ -43,7 +44,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;
@@ -53,7 +53,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Particle weather: rain and snow drawn as single drops and flakes around the player, in place of vanilla's sheets,
- * ported from the 26.x line ({@link PrecipitationField} and {@link DropRenderer}), blown by its {@link Wind}. No
+ * ported from the 26.x line ({@link PrecipitationField} and {@link DropRenderer}), blown by the scene's wind
+ * ({@link WindService}). No
  * landings of its own (the splashes are still the storm splash renderer's). Dust is still
  * drawn as sheets. Off under an OptiFine shader pack, which draws the weather its own way.
  * <p>
@@ -78,8 +79,6 @@ public final class ParticleWeather {
 	private final DropRenderer.Quads rain = new DropRenderer.Quads();
 	private final DropRenderer.Quads snow = new DropRenderer.Quads();
 	private final GpuDrops gpu = new GpuDrops();
-	// Blows with the storm, a breeze between storms; ticked whether or not anything falls
-	private final Wind wind = new Wind();
 	// The drops changed since they were last uploaded for the GPU
 	private boolean uploadDue;
 	private final Random random = new XorShiftRandom();
@@ -129,33 +128,13 @@ public final class ParticleWeather {
 		if (tick != this.lastTick + 1)
 			this.field.idle();
 		this.lastTick = tick;
-		tickWind(world, camera, rainLevel);
 		if (this.field.isIdle(rainLevel)) {
 			this.field.idle();
 			return;
 		}
 		this.field.tick(this.columns, camera.posX, camera.posY + camera.getEyeHeight(), camera.posZ, rainLevel,
-				density(Minecraft.getMinecraft().gameSettings.particleSetting), this.wind, this.random);
+				density(Minecraft.getMinecraft().gameSettings.particleSetting), WindService.wind(), this.random);
 		this.uploadDue = true;
-	}
-
-	/**
-	 * Moves the wind on a tick, as the 26.x line's wind service does: with the storm's strength, harder in a
-	 * thunderstorm and where the storm raises dust, its direction starting from the day's
-	 */
-	private void tickWind(@Nonnull final World world, @Nonnull final Entity camera, final float rainLevel) {
-		final boolean dusty = rainLevel > 0F && this.columns.isDusty(MathHelper.floor(camera.posX),
-				MathHelper.floor(camera.posY + camera.getEyeHeight()), MathHelper.floor(camera.posZ));
-		this.wind.setReach(this.field.radius());
-		this.wind.tick(rainLevel, world.isThundering(), dusty, world.getWorldTime() / 24000L, this.random);
-	}
-
-	/**
-	 * The wind's line for the diagnostics overlay: its speed, the way it blows, and whether a gust is passing
-	 */
-	static String diagnosticText(@Nonnull final Wind wind) {
-		return String.format(Locale.ROOT, "Wind: %.2f toward %s (%.0f)%s", wind.speed(),
-				Wind.compassPoint(wind.bearing()), wind.bearing(), wind.isGusting() ? " gusting" : "");
 	}
 
 	/**
@@ -174,7 +153,6 @@ public final class ParticleWeather {
 	public static void diagnostics(@Nonnull final DiagnosticEvent.Gather event) {
 		if (!isActive() || INSTANCE.world == null)
 			return;
-		event.output.add(TextFormatting.AQUA + diagnosticText(INSTANCE.wind));
 		event.output.add(TextFormatting.AQUA + String.format(Locale.ROOT, "Particle weather: %d drops",
 				INSTANCE.field.count()));
 	}

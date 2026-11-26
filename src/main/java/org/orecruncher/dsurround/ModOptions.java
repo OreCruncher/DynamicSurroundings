@@ -376,6 +376,12 @@ public final class ModOptions {
 		@Comment("Block radius/range around player for special effect application")
 		public static int specialEffectRange = 24;
 
+		@Option("Wind Blows Particles")
+		@DefaultValue("true")
+		@LangKey(effects.PREFIX + ".WindBlowsParticles")
+		@Comment("Smoke, steam, breath and flames drift with the wind, as far as they are out in the weather")
+		public static boolean windBlowsParticles = true;
+
 		@Option("Disable Water Suspend Particles")
 		@DefaultValue("false")
 		@LangKey(effects.PREFIX + ".Suspend")
