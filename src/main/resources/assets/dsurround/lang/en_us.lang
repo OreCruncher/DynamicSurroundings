@@ -134,8 +134,10 @@ dsurround.cfg.aurora=Aurora Options
 dsurround.cfg.aurora.tooltip=Options that control Aurora behavior and rendering
 dsurround.cfg.aurora.EnableAurora=Auroras
 dsurround.cfg.aurora.EnableAurora.tooltip=Enable/disable Aurora processing on server/client
-dsurround.cfg.aurora.EnableShader=Use Shaders
-dsurround.cfg.aurora.EnableShader.tooltip=Use shader when rendering aurora
+dsurround.cfg.aurora.Style=Style
+dsurround.cfg.aurora.Style.tooltip=How auroras look: classic (curtains, next to no cost) or cinematic (sweeping ribbons across the sky, real GPU work). Takes effect with the next aurora
+dsurround.cfg.aurora.CinematicQuality=Cinematic Quality
+dsurround.cfg.aurora.CinematicQuality.tooltip=How finely the cinematic aurora is drawn: fast (half the screen's size each way) or fancy (full size, about four times the GPU's work)
 dsurround.cfg.aurora.MaxBands=Maximum Bands
 dsurround.cfg.aurora.MaxBands.tooltip=Cap the maximum bands that will be rendered
 

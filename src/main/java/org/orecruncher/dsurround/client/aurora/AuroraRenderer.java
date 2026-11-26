@@ -113,7 +113,7 @@ public final class AuroraRenderer {
 			GlStateManager.shadeModel(GL11.GL_SMOOTH);
 			GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
 			GlStateManager.enableTexture2D();
-			GlStateManager.bindTexture(noise().getGlTextureId());
+			GlStateManager.bindTexture(noiseTexture().getGlTextureId());
 
 			final float strength = Math.max(0F, Math.min(1F, alpha * aurora.brightness));
 			final AuroraPalette palette = aurora.palette;
@@ -192,7 +192,7 @@ public final class AuroraRenderer {
 	 * reads smooth value noise from it with a single read
 	 */
 	@Nonnull
-	private static DynamicTexture noise() {
+	static DynamicTexture noiseTexture() {
 		if (noise == null) {
 			noise = new DynamicTexture(NOISE_SIZE, NOISE_SIZE);
 			final int[] pixels = noise.getTextureData();

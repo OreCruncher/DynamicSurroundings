@@ -32,11 +32,17 @@ import net.minecraft.util.ResourceLocation;
 public final class Shaders {
 
 	public static final ShaderProgram AURORA;
+	public static final ShaderProgram AURORA_CINEMATIC;
+	public static final ShaderProgram AURORA_COMPOSITE;
 
 	static {
 
 		AURORA = register("Aurora", new ResourceLocation(ModInfo.MOD_ID, "shaders/aurora_classic.vert"),
 				new ResourceLocation(ModInfo.MOD_ID, "shaders/aurora_classic.frag"));
+		AURORA_CINEMATIC = register("Cinematic Aurora", new ResourceLocation(ModInfo.MOD_ID, "shaders/aurora_cinematic.vert"),
+				new ResourceLocation(ModInfo.MOD_ID, "shaders/aurora_cinematic.frag"));
+		AURORA_COMPOSITE = register("Aurora Composite", new ResourceLocation(ModInfo.MOD_ID, "shaders/aurora_composite.vert"),
+				new ResourceLocation(ModInfo.MOD_ID, "shaders/aurora_composite.frag"));
 	}
 
 	public static boolean areShadersSupported() {

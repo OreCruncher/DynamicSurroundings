@@ -1,0 +1,26 @@
+// The cinematic aurora over snowy tundra at midnight, looking up at it, at Fast (half size) and Fancy (full size).
+// The style is read as an aurora appears, which is as the player arrives in the tundra with it set; the quality is
+// read every frame. Compare with aurora.json (the classic aurora, same scene)
+{
+  "world": "bench",
+  "seed": 20261126,
+  "setup": ["gamerule doDaylightCycle false", "gamerule doWeatherCycle false", "gamerule doMobSpawning false"],
+  "warmup": 30,
+  "record": 60,
+  "repeats": 2,
+  "video": {"width": 1920, "height": 1080, "vsync": false, "maxFps": 260},
+  "scenes": {
+    "tundra": {
+      "biome": "minecraft:ice_flats",
+      "pitch": -45,
+      "commands": ["time set 18000", "weather clear 999999"],
+      "profile": "aurora"
+    }
+  },
+  "runs": [
+    {"label": "cinematic-fast", "scene": "tundra",
+     "settings": {"aurora.auroraStyle": "cinematic", "aurora.cinematicQuality": "fast"}},
+    {"label": "cinematic-fancy", "scene": "tundra",
+     "settings": {"aurora.auroraStyle": "cinematic", "aurora.cinematicQuality": "fancy"}}
+  ]
+}

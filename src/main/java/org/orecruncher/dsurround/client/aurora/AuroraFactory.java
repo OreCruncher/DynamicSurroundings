@@ -25,12 +25,14 @@ package org.orecruncher.dsurround.client.aurora;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.ModOptions;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * Makes the aurora for a night. There is one style, the classic aurora (ported from the 26.x line); it needs shaders,
- * and without them it draws nothing (see {@link AuroraRenderer#isAvailable}).
+ * Makes the aurora for a night, in the style the options say (read as each aurora appears): classic or cinematic, both
+ * ported from the 26.x line. Both need shaders; a cinematic aurora whose shaders can't draw is drawn classic.
  */
 @SideOnly(Side.CLIENT)
 public final class AuroraFactory {
@@ -40,6 +42,8 @@ public final class AuroraFactory {
 
 	@Nonnull
 	public static IAurora produce(final long seed) {
+		if ("cinematic".equalsIgnoreCase(ModOptions.aurora.auroraStyle) && CinematicAuroraRenderer.isAvailable())
+			return new AuroraCinematic(seed);
 		return new AuroraClassic(seed);
 	}
 }

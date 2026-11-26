@@ -299,12 +299,17 @@ public final class ModOptions {
 		@Comment("Enable/disable aurora processing and rendering")
 		public static boolean auroraEnable = true;
 
-		@Option("Use Shaders")
-		@DefaultValue("true")
-		@LangKey(aurora.PREFIX + ".EnableShader")
-		@Comment("Use shader when rendering aurora")
-		@RestartRequired()
-		public static boolean auroraUseShader = true;
+		@Option("Style")
+		@DefaultValue("classic")
+		@LangKey(aurora.PREFIX + ".Style")
+		@Comment("How auroras look: classic (curtains, next to no cost) or cinematic (sweeping ribbons across the sky, a pass over the screen: real GPU work)")
+		public static String auroraStyle = "classic";
+
+		@Option("Cinematic Quality")
+		@DefaultValue("fast")
+		@LangKey(aurora.PREFIX + ".CinematicQuality")
+		@Comment("How finely the cinematic aurora is drawn: fast (half the screen's size each way) or fancy (full size, about four times the GPU's work)")
+		public static String cinematicQuality = "fast";
 
 		@Option("Maximum Bands")
 		@DefaultValue("3")
@@ -742,6 +747,10 @@ public final class ModOptions {
 		ConfigProcessor.process(config, ModOptions.class);
 		if (ModBase.config() != null)
 			Profiles.tickle();
+
+		// The aurora's choices, cycled through in the config screen rather than typed
+		config.getCategory(CATEGORY_AURORA).get("Style").setValidValues(new String[] { "classic", "cinematic" });
+		config.getCategory(CATEGORY_AURORA).get("Cinematic Quality").setValidValues(new String[] { "fast", "fancy" });
 
 		// Iterate through the config list looking for properties without
 		// comments. These will be scrubbed.
