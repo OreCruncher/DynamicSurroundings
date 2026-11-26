@@ -76,12 +76,14 @@ public class BreathEffect extends EntityEffect {
 			return;
 
 		if (isBreathVisible(subject)) {
-			final int c = (int) ((getState().getWorldTime() + this.seed));
+			// Kept a long and wrapped with floorMod: past 2^31 ticks an int went negative, and
+			// frost breath showed every tick
+			final long c = getState().getWorldTime() + this.seed;
 			final IBlockState state = getHeadBlock(subject);
 			if (showWaterBubbles(state)) {
 				final int air = subject.getAir();
 				if (air > 0) {
-					final int interval = c % 3;
+					final long interval = Math.floorMod(c, 3L);
 					if (interval == 0) {
 						final Particle particle = new ParticleBubbleBreath(subject);
 						getState().addParticle(particle);
@@ -94,7 +96,7 @@ public class BreathEffect extends EntityEffect {
 					}
 				}
 			} else {
-				final int interval = (c / 10) % 8;
+				final long interval = Math.floorMod(c / 10, 8L);
 				if (interval < 3 && showFrostBreath(subject, state)) {
 					getState().addParticle(new ParticleFrostBreath(subject));
 				}

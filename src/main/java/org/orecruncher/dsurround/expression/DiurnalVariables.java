@@ -35,8 +35,9 @@ public class DiurnalVariables extends DynamicVariantList {
 		add(new Dynamic.DynamicBoolean("diurnal.isNight", () -> EnvironState.getDayCycle() == DayCycle.NIGHTTIME));
 		add(new Dynamic.DynamicBoolean("diurnal.isSunrise", () -> EnvironState.getDayCycle() == DayCycle.SUNRISE));
 		add(new Dynamic.DynamicBoolean("diurnal.isSunset", () -> EnvironState.getDayCycle() == DayCycle.SUNSET));
-		add(new Dynamic.DynamicBoolean("diurnal.isAuroraVisible", () -> EnvironState.getDayCycle() == DayCycle.SUNRISE
-				|| EnvironState.getDayCycle() == DayCycle.DAYTIME));
+		// Auroras show from sunset to sunrise (DiurnalUtils.isAuroraVisible)
+		add(new Dynamic.DynamicBoolean("diurnal.isAuroraVisible", () -> EnvironState.getDayCycle() != DayCycle.SUNRISE
+				&& EnvironState.getDayCycle() != DayCycle.DAYTIME));
 		add(new Dynamic.DynamicNumber("diurnal.moonPhaseFactor",
 				() -> DiurnalUtils.getMoonPhaseFactor(EnvironState.getWorld())));
 		add(new Dynamic.DynamicNumber("diurnal.celestialAngle", () -> EnvironState.getWorld().getCelestialAngle(0)));

@@ -98,6 +98,10 @@ public final class DimensionRegistry extends Registry {
 				data.seaLevel = entry.seaLevel;
 			if (entry.skyHeight != null)
 				data.skyHeight = entry.skyHeight;
+			if (entry.hasFog != null)
+				data.hasFog = entry.hasFog;
+			if (entry.alwaysOutside != null)
+				data.alwaysOutside = entry.alwaysOutside;
 		}
 	}
 

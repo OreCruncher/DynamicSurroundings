@@ -57,7 +57,7 @@ public class HolisticFogRangeCalculator implements IFogRangeCalculator {
 	public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
 		
 		if (event.getFarPlaneDistance() < 0) {
-			ModBase.log().warn("Far plane distance in RenderFogEvent is negative: %d", event.getFarPlaneDistance());
+			ModBase.log().warn("Far plane distance in RenderFogEvent is negative: %f", event.getFarPlaneDistance());
 		}
 		
 		this.cached.set(event);

@@ -58,7 +58,7 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 	private static final Color DAMAGE_TEXT_COLOR = Color.MC_RED;
 
 	private static final Translations xlate = new Translations();
-	private static final int CRITWORD_COUNT = 85;
+	private static final int CRITWORD_COUNT = 84;
 	private static final String CRITWORD_PREFIX = "critword.";
 
 	static {

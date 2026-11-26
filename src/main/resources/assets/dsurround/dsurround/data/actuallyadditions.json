@@ -66,7 +66,7 @@
 		"actuallyadditions:block_crystal_empowered": "composite",
 		"actuallyadditions:block_crystal_oil": "NOT_EMITTER",
 		"actuallyadditions:block_directional_breaker": "stonemachine",
-		"actuallyadditions:block_display_stand": "",
+		"actuallyadditions:block_display_stand": "stonemachine",
 		"actuallyadditions:block_dropper": "stonemachine",
 		"actuallyadditions:block_empowered_oil": "NOT_EMITTER",
 		"actuallyadditions:block_empowerer": "stonemachine",
