@@ -100,6 +100,8 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 					|| !ModOptions.aurora.auroraEnable) {
 				this.current = null;
 			} else {
+				// The style changed in the options: the same night's aurora in the other style, where it is
+				this.current = AuroraFactory.restyle(this.current);
 				this.current.update();
 				final boolean isDying = this.current.isDying();
 				final boolean canStay = canAuroraStay();

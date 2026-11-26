@@ -54,10 +54,33 @@ public final class AuroraCinematic implements IAurora {
 	private AuroraClassic fallback;
 
 	public AuroraCinematic(final long seed) {
+		this(seed, new AuroraLifeTracker(AuroraUtils.AURORA_PEAK_AGE, AuroraUtils.AURORA_AGE_RATE));
+	}
+
+	/**
+	 * With another aurora's fade, taking over from it when the style changes
+	 */
+	AuroraCinematic(final long seed, @Nonnull final AuroraLifeTracker tracker) {
 		this.seed = seed;
 		this.aurora = CinematicAurora.create(seed);
 		this.night = AuroraNight.of(seed, STORM_CHANCE);
-		this.tracker = new AuroraLifeTracker(AuroraUtils.AURORA_PEAK_AGE, AuroraUtils.AURORA_AGE_RATE);
+		this.tracker = tracker;
+	}
+
+	@Override
+	public long getSeed() {
+		return this.seed;
+	}
+
+	@Override
+	public boolean isCinematic() {
+		return true;
+	}
+
+	@Override
+	@Nonnull
+	public AuroraLifeTracker getTracker() {
+		return this.tracker;
 	}
 
 	@Override

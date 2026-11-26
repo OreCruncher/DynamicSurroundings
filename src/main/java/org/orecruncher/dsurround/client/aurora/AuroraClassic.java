@@ -38,6 +38,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public final class AuroraClassic implements IAurora {
 
+	private final long seed;
 	private final Aurora aurora;
 	private final AuroraLifeTracker tracker;
 
@@ -46,11 +47,29 @@ public final class AuroraClassic implements IAurora {
 	}
 
 	/**
-	 * With another aurora's fade: drawn in its place, as a cinematic aurora's is when its shaders can't draw
+	 * With another aurora's fade: drawn in its place, as a cinematic aurora's is when its shaders can't draw, or
+	 * taking over when the style changes
 	 */
 	AuroraClassic(final long seed, @Nonnull final AuroraLifeTracker tracker) {
+		this.seed = seed;
 		this.aurora = Aurora.create(seed, ModOptions.aurora.maxBands);
 		this.tracker = tracker;
+	}
+
+	@Override
+	public long getSeed() {
+		return this.seed;
+	}
+
+	@Override
+	public boolean isCinematic() {
+		return false;
+	}
+
+	@Override
+	@Nonnull
+	public AuroraLifeTracker getTracker() {
+		return this.tracker;
 	}
 
 	@Override

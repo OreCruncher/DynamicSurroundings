@@ -59,4 +59,19 @@ public interface IAurora {
 	 */
 	void render(final float partialTick);
 
+	/*
+	 * The night's seed it was made from
+	 */
+	long getSeed();
+
+	/*
+	 * Whether it is the cinematic style (drawn classic or not)
+	 */
+	boolean isCinematic();
+
+	/*
+	 * Its fade, which an aurora of the other style takes over when the option changes
+	 */
+	AuroraLifeTracker getTracker();
+
 }
