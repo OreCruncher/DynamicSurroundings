@@ -45,7 +45,6 @@ import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.ModOptions.Trace;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.registry.RegistryManager;
-import org.orecruncher.lib.ReflectedField.BooleanField;
 import org.orecruncher.lib.ReflectedField.ObjectField;
 import org.orecruncher.lib.ThreadGuard;
 import org.orecruncher.lib.ThreadGuard.Action;
@@ -88,12 +87,6 @@ public final class SoundEngine {
 				SoundManager.class,
 				"sndSystem",
 				"field_148620_e"
-			);
-	private static final BooleanField<Source> removed =
-			new BooleanField<>(
-				Source.class,
-				"removed",
-				null
 			);
 	//@formatter:on
 
@@ -257,6 +250,7 @@ public final class SoundEngine {
 
 	// Wipe out any orphans. Not sure exactly how this happens but it wouldn't
 	// surprise me if there is a gap in thread processing in the sound engine.
+	// SoundSystem.removeSource cleans each source up, streamed ones included.
 	private void clearOrphans() {
 		final Map<String, ISound> playingSounds = getPlayingSounds();
 		final SoundSystem sndSystem = getSoundSystem();
@@ -267,18 +261,9 @@ public final class SoundEngine {
 						final Source src = e.getValue();
 						ModBase.log().debug("Killing orphaned sound [%s]",
 								src.filenameURL != null ? src.filenameURL.getFilename() : "UNKNOWN");
-						cleanupSource(src);
 						return e.getKey();
 					}).collect(Collectors.toList());
 			remove.forEach(sndSystem::removeSource);
-		}
-	}
-
-	private static void cleanupSource(@Nonnull final Source source) {
-		if (source.toStream) {
-			removed.set(source, true);
-		} else {
-			source.cleanup();
 		}
 	}
 
