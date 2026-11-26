@@ -80,10 +80,87 @@ public class StormRenderer {
 	private final Random random = new XorShiftRandom();
 	private final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
+	/**
+	 * What falls in each column around the player, and where, looked up once a tick rather than every frame: the
+	 * precipitation height, biome, type and light only change with the world, which changes on the tick. Looking them
+	 * up every frame made about 12 MB of BlockPos a second in a storm (the chunk cache's precipitation height).
+	 */
+	private static final class Columns {
+		static final int MAX_RANGE = 10;
+		static final int SIDE = MAX_RANGE * 2 + 1;
+
+		final PrecipitationType[] type = new PrecipitationType[SIDE * SIDE];
+		final BiomeInfo[] biome = new BiomeInfo[SIDE * SIDE];
+		final int[] bottom = new int[SIDE * SIDE];
+		final int[] top = new int[SIDE * SIDE];
+		final int[] light = new int[SIDE * SIDE];
+
+		// What the columns were looked up for: the tick, the world, where the player and camera were, the range
+		int tick = Integer.MIN_VALUE;
+		World world;
+		int playerX, playerY, playerZ, cameraY, range;
+
+		boolean isFor(final int tick, final World world, final BlockPos player, final int cameraY, final int range) {
+			return this.tick == tick && this.world == world && this.playerX == player.getX()
+					&& this.playerY == player.getY() && this.playerZ == player.getZ() && this.cameraY == cameraY
+					&& this.range == range;
+		}
+
+		static int index(final int dx, final int dz) {
+			return (dz + MAX_RANGE) * SIDE + dx + MAX_RANGE;
+		}
+	}
+
+	private final Columns columns = new Columns();
+
+	private void lookUpColumns(@Nonnull final World world, @Nonnull final ISeasonInfo season, final int tick,
+			@Nonnull final BlockPos player, final int cameraY, final int range) {
+		final Columns c = this.columns;
+		c.tick = tick;
+		c.world = world;
+		c.playerX = player.getX();
+		c.playerY = player.getY();
+		c.playerZ = player.getZ();
+		c.cameraY = cameraY;
+		c.range = range;
+		for (int dz = -range; dz <= range; ++dz) {
+			for (int dx = -range; dx <= range; ++dx) {
+				final int i = Columns.index(dx, dz);
+				final int gridX = c.playerX + dx;
+				final int gridZ = c.playerZ + dz;
+				c.type[i] = PrecipitationType.NONE;
+				c.biome[i] = null;
+				this.mutable.setPos(gridX, 0, gridZ);
+
+				if (RandomThings.shouldRain(world, this.mutable))
+					continue;
+
+				final BiomeInfo biome = BiomeUtil.getBiomeData(ClientChunkCache.instance().getBiome(this.mutable));
+
+				final int precipHeight = season.getPrecipitationHeight(this.mutable).getY();
+				final int k2 = Math.max(c.playerY - range, precipHeight);
+				final int l2 = Math.max(c.playerY + range, precipHeight);
+				if (k2 == l2)
+					continue;
+
+				this.mutable.setPos(gridX, k2, gridZ);
+				final PrecipitationType pt = season.getPrecipitationType(this.mutable, biome);
+				if (pt == PrecipitationType.NONE)
+					continue;
+
+				this.mutable.setPos(gridX, Math.max(precipHeight, cameraY), gridZ);
+				c.type[i] = pt;
+				c.biome[i] = biome;
+				c.bottom[i] = k2;
+				c.top[i] = l2;
+				c.light[i] = ClientChunkCache.instance().getCombinedLight(this.mutable, 0);
+			}
+		}
+	}
+
 	private static ResourceLocation effectTexture = null;
 	private static boolean isDrawing = false;
 	private static BufferBuilder worldrenderer = null;
-	private static int locY;
 
 	private static void setupForRender(@Nonnull final ResourceLocation r) {
 		if (effectTexture != r) {
@@ -91,7 +168,6 @@ public class StormRenderer {
 				worldrenderer = Tessellator.getInstance().getBuffer();
 				final RenderManager manager = Minecraft.getMinecraft().getRenderManager();
 				worldrenderer.setTranslation(-manager.viewerPosX, -manager.viewerPosY, -manager.viewerPosZ);
-				locY = MathHelper.floor(manager.viewerPosY);
 			}
 			if (isDrawing)
 				Tessellator.getInstance().draw();
@@ -158,43 +234,33 @@ public class StormRenderer {
 
 		final BlockPos playerPos = EnvironState.getPlayerPosition();
 		final int playerX = playerPos.getX();
-		final int playerY = playerPos.getY();
 		final int playerZ = playerPos.getZ();
+		final int cameraY = MathHelper.floor(mc.getRenderManager().viewerPosY);
+		if (!this.columns.isFor(renderCount, world, playerPos, cameraY, range))
+			lookUpColumns(world, season, renderCount, playerPos, cameraY, range);
 
 		for (int gridZ = playerZ - range; gridZ <= playerZ + range; ++gridZ) {
 			for (int gridX = playerX - range; gridX <= playerX + range; ++gridX) {
-				final int idx = (gridZ - playerZ + 16) * 32 + gridX - playerX + 16;
-				final double rainX = RAIN_X_COORDS[idx];
-				final double rainY = RAIN_Y_COORDS[idx];
-				this.mutable.setPos(gridX, 0, gridZ);
-
-				if (RandomThings.shouldRain(world, this.mutable))
-					continue;
-
-				final BiomeInfo biome = BiomeUtil.getBiomeData(ClientChunkCache.instance().getBiome(this.mutable));
-
-				final int precipHeight = season.getPrecipitationHeight(this.mutable).getY();
-				final int k2 = Math.max(playerY - range, precipHeight);
-				final int l2 = Math.max(playerY + range, precipHeight);
-				if (k2 == l2)
-					continue;
-
-				this.mutable.setPos(gridX, k2, gridZ);
-
-				final PrecipitationType pt = season.getPrecipitationType(this.mutable, biome);
+				final int column = Columns.index(gridX - playerX, gridZ - playerZ);
+				final PrecipitationType pt = this.columns.type[column];
 				if (pt == PrecipitationType.NONE)
 					continue;
 
+				final int idx = (gridZ - playerZ + 16) * 32 + gridX - playerX + 16;
+				final double rainX = RAIN_X_COORDS[idx];
+				final double rainY = RAIN_Y_COORDS[idx];
+				final BiomeInfo biome = this.columns.biome[column];
+				final int k2 = this.columns.bottom[column];
+				final int l2 = this.columns.top[column];
+
 				final int seed = (gridZ << 16) ^ gridX;
 				this.random.setSeed(seed);
-				final int i3 = Math.max(precipHeight, locY);
 
 				final double d6 = gridX + 0.5F - entity.posX;
 				final double d7 = gridZ + 0.5F - entity.posZ;
 				final float f3 = MathHelper.sqrt(d6 * d6 + d7 * d7) / range;
-				this.mutable.setPos(gridX, i3, gridZ);
 
-				final int combinedLight = ClientChunkCache.instance().getCombinedLight(this.mutable, 0);
+				final int combinedLight = this.columns.light[column];
 
 				if (pt == PrecipitationType.RAIN) {
 
