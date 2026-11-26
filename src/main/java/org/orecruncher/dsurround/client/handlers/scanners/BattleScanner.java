@@ -34,7 +34,6 @@ import org.orecruncher.dsurround.capabilities.entitydata.IEntityData;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.monster.EntityGolem;
@@ -168,10 +167,9 @@ public class BattleScanner {
 				// Use entity data to determine if the mob is attacking
 				final IEntityData data = e.getCapability(CapabilityEntityData.ENTITY_DATA, null);
 				if (data != null && data.isAttacking()) {
-					// Only in battle if the entity sees the player, or the
-					// player sees the entity
-					final EntityLiving living = (EntityLiving) e;
-					if (living.getEntitySenses().canSee(player) || player.canEntityBeSeen(living)) {
+					// Only in battle if the entity and the player can see each other
+					// (not getEntitySenses(): the client never clears its cache)
+					if (player.canEntityBeSeen(e)) {
 						inBattle = true;
 						hostileCount++;
 					}

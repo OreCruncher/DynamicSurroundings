@@ -65,8 +65,10 @@ public class VillagerChatEffect extends EntityEffect {
 
 	public VillagerChatEffect(@Nonnull final Entity entity) {
 		final EntityVillager villager = (EntityVillager) entity;
+		// Not getEntitySenses(): its cache is only cleared by the AI, which doesn't run on
+		// the client, so its first answer would stand
 		this.pred = EntitySelectors.CAN_AI_TARGET
-				.and(input -> input.isEntityAlive() && villager.getEntitySenses().canSee(input));
+				.and(input -> input.isEntityAlive() && villager.canEntityBeSeen(input));
 		this.normalChat = new EntityChatEffect(entity);
 		this.fleeChat = new EntityChatEffect(entity, "villager.flee");
 	}
