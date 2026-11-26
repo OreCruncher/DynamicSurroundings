@@ -1,8 +1,9 @@
 {
 	"package": "org.orecruncher.dsurround.mixins",
+	"required": true,
 	"refmap": "mixins.dsurround.refmap.json",
 	"target": "@env(DEFAULT)",
-	"minVersion": "0.7",
+	"minVersion": "0.8",
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [
 	],

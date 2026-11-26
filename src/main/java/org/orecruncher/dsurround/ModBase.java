@@ -43,7 +43,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -175,11 +174,6 @@ public class ModBase {
 	public void loadCompleted(@Nonnull final FMLLoadCompleteEvent event) {
 		proxy.loadCompleted(event);
 		isInitialized = true;
-	}
-
-	@EventHandler
-	public void onFingerprintViolation(@Nonnull final FMLFingerprintViolationEvent event) {
-		log().warn("Invalid fingerprint detected!");
 	}
 
 	////////////////////////
