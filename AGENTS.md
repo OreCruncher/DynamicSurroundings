@@ -12,6 +12,8 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
 - Jar: `build/libs/dynamicsurroundings-forge-1.12.2-<version>.jar` (the `-dev` jar is not for players).
 - `runClient`: dev client (`run/`). `runObfClient`: the release jar from `run/obfuscated/mods`, beside MixinBooter, as a
   player installs it; use it to check anything about the jar or its manifest.
+- Tests: `./gradlew test` (JUnit 5, `src/test`), plain unit tests with no game running (`ScanJobTests` checks the
+  sphere scanner's jobs visit each block once). Minecraft's classes are on the class path, but nothing is bootstrapped.
 - MCP mappings `snapshot` `20171003` (RFG adds `-1.12`): the names the code was written in. Forge is RFG's
   14.23.5.2847; `strip-latest-forge-requirements` lets dev runs load mods asking for a newer one.
 - `ModInfo.VERSION` comes from `Tags.VERSION`, generated from `mod_version` in `gradle.properties` (`injectTags`).

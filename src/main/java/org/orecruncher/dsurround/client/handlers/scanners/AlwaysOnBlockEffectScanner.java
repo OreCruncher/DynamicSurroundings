@@ -30,8 +30,8 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.fx.BlockEffect;
-import org.orecruncher.dsurround.lib.scanner.CuboidScanner;
 import org.orecruncher.dsurround.lib.scanner.ScanLocus;
+import org.orecruncher.dsurround.lib.scanner.SphereScanner;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateUtil;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
 
@@ -44,15 +44,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * This guy scans a large area around the player looking for blocks to spawn
  * "always on" effects such as waterfall splash and steam jets.
  *
- * The CuboidScanner tries to only scan new blocks that come into range as the
- * player moves. Once all the blocks are scanned in the region (cuboid) it will
- * stop. It will start again once the player moves location.
+ * The SphereScanner only scans blocks as they come into range: as the player
+ * moves, as chunks load, and as blocks change.
  */
 @SideOnly(Side.CLIENT)
-public class AlwaysOnBlockEffectScanner extends CuboidScanner {
+public class AlwaysOnBlockEffectScanner extends SphereScanner {
 
 	public AlwaysOnBlockEffectScanner(@Nonnull final ScanLocus locus, final int range) {
-		super(locus, "AlwaysOnBlockEffectScanner", range, 0);
+		super(locus, "AlwaysOnBlockEffectScanner", range);
 		setLogger(ModBase.log());
 	}
 

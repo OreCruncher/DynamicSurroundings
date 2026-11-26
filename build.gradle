@@ -78,6 +78,7 @@ repositories {
         name = 'BlameJared'
         url = 'https://maven.blamejared.com'
     }
+    mavenCentral()
 }
 
 // The OreLib jar to build and run against when it doesn't come from CurseForge (see dependencies), or null
@@ -137,6 +138,14 @@ dependencies {
     compileOnly rfg.deobf("curse.maven:littletiles-257818:${propertyString('littletiles_file')}")
     compileOnly rfg.deobf("curse.maven:serene-seasons-291874:${propertyString('sereneseasons_file')}")
     compileOnly rfg.deobf("curse.maven:ctm-267602:${propertyString('ctm_file')}")
+
+    // Plain unit tests (src/test), no game running
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+    useJUnitPlatform()
 }
 
 processResources {
