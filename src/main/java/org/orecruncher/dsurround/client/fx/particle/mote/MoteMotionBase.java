@@ -27,7 +27,9 @@ package org.orecruncher.dsurround.client.fx.particle.mote;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.lib.chunk.ClientChunkCache;
+import org.orecruncher.lib.chunk.IBlockAccessEx;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -75,7 +77,13 @@ public abstract class MoteMotionBase extends MoteAgeable {
 	}
 
 	protected boolean hasCollided() {
-		return ClientChunkCache.instance().getBlockState(this.position).getMaterial().isSolid();
+		final IBlockAccessEx provider = ClientChunkCache.instance();
+		final IBlockState state = provider.getBlockState(this.position);
+		if (!state.getMaterial().isSolid())
+			return false;
+		// Only below the block's top, as vanilla's rain drops do: a slab or path fills part of its space,
+		// and a splash made on top of one would otherwise be gone on its first tick
+		return this.posY < this.position.getY() + state.getBoundingBox(provider, this.position).maxY;
 	}
 
 	protected void handleCollision() {
