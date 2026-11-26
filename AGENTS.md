@@ -18,8 +18,11 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
 - Optional mods are `compileOnly` (deobfuscated with `rfg.deobf`); OreLib, required, is on the runtime class path.
   CurseMaven ids are in `gradle.properties`.
 - OreLib (https://github.com/OreCruncher/OreLib, the author's own library; clone in `C:\repos\OreLib`, its own
-  `AGENTS.md`): `-Porelib_jar=<path to an OreLib release jar>` builds and runs against a local build instead of the
-  CurseMaven one. `runClient` only: `runObfClient` doesn't copy a local jar into its mods folder.
+  `AGENTS.md`): DS 4.0.0 requires 3.6.0.2 (`orelib_version`), which isn't on CurseForge yet, so with `orelib_file`
+  empty the build uses the jar built in the checkout beside this one (`../OreLib/build/libs`; build it there first)
+  and fails saying so if it's missing. `-Porelib_jar=<path to an OreLib release jar>` picks another jar. Once 3.6.0.2
+  is released, set `orelib_file` to its CurseForge file id. `runObfClient` gets a local jar copied into its mods
+  folder (`copyOrelibToObfMods`).
 - Quitting a client from a script: `CloseMainWindow` doesn't reach the LWJGL 2 window; stop the process you launched.
 
 ## Mixin
@@ -33,5 +36,4 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
 
 ## Known noise in a dev run's log
 - FML's missing signature data and Maven library folder errors, fernflower's "Unable to simplify switch" (the mixin
-  debug export). Neither mod checks a certificate fingerprint any more (dropped in DS 4.0.0 and OreLib 3.6.0.2); the
-  released OreLib 3.6.0.1 still logs "Invalid fingerprint detected!".
+  debug export). Neither mod checks a certificate fingerprint any more (dropped in DS 4.0.0 and OreLib 3.6.0.2).

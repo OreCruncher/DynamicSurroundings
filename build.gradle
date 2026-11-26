@@ -80,6 +80,28 @@ repositories {
     }
 }
 
+// The OreLib jar to build and run against when it doesn't come from CurseForge (see dependencies), or null
+File localOrelibJar() {
+    def given = project.findProperty('orelib_jar')
+    if (given)
+        return file(given)
+    if (propertyString('orelib_file'))
+        return null
+    def sibling = file("../OreLib/build/libs/orelib-forge-${propertyString('minecraft_version')}-${propertyString('orelib_version')}.jar")
+    if (!sibling.exists())
+        throw new GradleException("OreLib ${propertyString('orelib_version')} isn't on CurseForge yet: build it in ../OreLib " +
+                "(./gradlew build), pass -Porelib_jar=<jar>, or set orelib_file once it is released")
+    return sibling
+}
+
+// runClient puts the OreLib jar on the class path, but runObfClient only loads its mods folder
+def copyOrelibToObfMods = tasks.register('copyOrelibToObfMods', Copy) {
+    onlyIf { localOrelibJar() != null }
+    from { localOrelibJar() }
+    into file('run/obfuscated/mods')
+}
+tasks.matching { it.name == 'runObfClient' }.configureEach { dependsOn copyOrelibToObfMods }
+
 dependencies {
     // Dev runs only: lets mods that ask for a newer Forge than RFG's 14.23.5.2847 load, as Forge's own
     // requirement checks would otherwise stop them
@@ -93,10 +115,13 @@ dependencies {
     }
     annotationProcessor mixin
 
-    // Required. -Porelib_jar=<path to an OreLib release jar> builds and runs against a local OreLib instead
-    def orelibJar = project.findProperty('orelib_jar')
-    implementation rfg.deobf(orelibJar ? files(orelibJar)
-            : "curse.maven:orelib-307806:${propertyString('orelib_file')}")
+    // Required. From CurseForge once orelib_file names a file of orelib_version there; until then the jar built in
+    // an OreLib checkout beside this one. -Porelib_jar=<path to an OreLib release jar> picks another.
+    if (localOrelibJar() != null) {
+        implementation rfg.deobf(files(localOrelibJar()))
+    } else {
+        implementation rfg.deobf("curse.maven:orelib-307806:${propertyString('orelib_file')}")
+    }
 
     // Optional integrations, compiled against only
     compileOnly rfg.deobf("mezz.jei:jei_1.12.2:${propertyString('jei_version')}")
