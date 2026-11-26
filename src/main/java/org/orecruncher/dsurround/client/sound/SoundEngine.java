@@ -183,10 +183,25 @@ public final class SoundEngine {
 	 * @param sound The sound to stop
 	 */
 	public void stopSound(@Nonnull final ISoundInstance sound) {
-		if (sound.getState() == SoundState.QUEUED)
+		switch (sound.getState()) {
+		case QUEUED:
 			sound.setState(SoundState.DONE);
-		else
+			break;
+		case DELAYED:
+			// Waiting out its repeat delay: the SoundManager's stopSound only looks at
+			// playing sounds, so it would start again when the delay ran out
+			getDelayedSounds().remove(sound);
+			sound.setState(SoundState.DONE);
+			break;
+		case PLAYING:
 			getSoundManager().stopSound(sound);
+			// Done now, so a repeating sound isn't put back in the delayed queue
+			sound.setState(SoundState.DONE);
+			break;
+		default:
+			getSoundManager().stopSound(sound);
+			break;
+		}
 	}
 
 	/**
@@ -226,6 +241,10 @@ public final class SoundEngine {
 				if (this.playedSoundId != null) {
 					this.queuedSounds.add(sound);
 					sound.setState(SoundState.PLAYING);
+				} else if (sound.getState() == SoundState.QUEUED) {
+					// The SoundManager turned it down (its category muted, say): ending it,
+					// or it would be tried again every tick and never leave the queue
+					sound.setState(SoundState.DONE);
 				}
 			} catch (@Nonnull final Throwable t) {
 				final String txt = String.format("Unable to play sound [%s]", sound);

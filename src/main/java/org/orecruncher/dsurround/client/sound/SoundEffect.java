@@ -178,7 +178,9 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 	protected int getRepeat(final Random rand) {
 		if (this.repeatDelayRandom <= 0)
 			return Math.max(this.repeatDelay, 0);
-		return this.repeatDelay + rand.nextInt(this.repeatDelayRandom);
+		// At least 1: the SoundManager loops a repeating sound whose delay reads 0 as it
+		// starts, and this is drawn again each time it is asked
+		return Math.max(this.repeatDelay + rand.nextInt(this.repeatDelayRandom), 1);
 	}
 
 	protected boolean isRepeatable() {
