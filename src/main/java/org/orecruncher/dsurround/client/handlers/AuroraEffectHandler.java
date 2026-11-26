@@ -26,6 +26,8 @@ package org.orecruncher.dsurround.client.handlers;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.profiling.RenderTimers;
+import org.orecruncher.dsurround.lib.profiling.RenderTimer;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.aurora.AuroraFactory;
@@ -124,11 +126,18 @@ public final class AuroraEffectHandler extends EffectHandlerBase {
 		this.nanos = 0;
 	}
 
+	private static final RenderTimer RENDER_TIMER = RenderTimers.add(new RenderTimer("Aurora"));
+
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void doRender(@Nonnull final RenderWorldLastEvent event) {
 		if (this.current != null) {
 			final long start = System.nanoTime();
-			this.current.render(event.getPartialTicks());
+			RENDER_TIMER.begin();
+			try {
+				this.current.render(event.getPartialTicks());
+			} finally {
+				RENDER_TIMER.end();
+			}
 			this.nanos += System.nanoTime() - start;
 		}
 	}

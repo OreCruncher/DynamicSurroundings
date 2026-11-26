@@ -36,6 +36,24 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
 - `run/logs/mixinbooter.log` lists each mixin applied (`APPLY mixins.dsurround.json:...`). 13 apply by the main menu;
   `MixinGuiScreenOptionsSounds` waits for the sound options screen.
 
+## Profiling (/dsprofile)
+- `/dsprofile [general|aurora|weather] [10-600 seconds]` (client command, two minutes by default) records the game with
+  Java Flight Recorder into `config/dsurround/profiles/dsurround-<scene>-<time>.zip` (the `.jfr` and a short summary,
+  which is also copied to the clipboard and logged; the newest 10 are kept). Ported from the 26.x line, whose
+  `scripts/jfr-summary.py` reads these recordings: the events keep 26.x's names and fields (`dsurround.Environment`,
+  `Mod`, `HandlerTick`, `RenderTimer`, `Frames`). The aurora and weather scenes send `/time`, `/weather` and
+  `/gamerule` (and `/ds setstr`) in single player.
+- Needs Java 8u262 or newer (OpenJDK's `jdk.jfr`): the dev toolchain has it; the Minecraft launcher's own Java 8u51
+  doesn't, and the command then says so. Nothing touches `jdk.jfr` until `JfrSupport.isAvailable()` says it is there.
+- `lib/profiling` is the generic part, with nothing from the mod in it (the recorder `FlightRecording`, `Redaction`,
+  `ProfileFiles`, `RenderTimer` with `ARB_timer_query` GPU timestamps); `profiling` is the mod's (events, `Profiler`,
+  `ProfileSources`, `ProfileSummary`, scenes). Privacy: only `FlightRecording.ALLOWED` and the mod's events are
+  recorded; Java 8 can't write a recording again without some events, so one that holds any other (another recording
+  running at the same time) is deleted, not kept; then the player's folders are redacted.
+- Render timers: `RenderTimers.add(new RenderTimer(name))` beside what it times, `begin()`/`end()` around the drawing
+  (the aurora, weather, speech bubbles, each particle collection; rain splashes per tick, CPU only). Handler ticks come
+  from `EffectManager`'s loop, frames from Forge's render tick (`FrameTimes`).
+
 ## Known noise in a dev run's log
 - FML's missing signature data and Maven library folder errors, fernflower's "Unable to simplify switch" (the mixin
   debug export). Neither mod checks a certificate fingerprint any more (dropped in DS 4.0.0 and OreLib 3.6.0.2).

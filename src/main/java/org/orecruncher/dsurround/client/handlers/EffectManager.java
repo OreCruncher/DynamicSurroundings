@@ -28,6 +28,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.profiling.HandlerTicks;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
@@ -167,9 +168,13 @@ public class EffectManager {
 		for (int i = 0; i < this.effectHandlers.size(); i++) {
 			final EffectHandlerBase handler = this.effectHandlers.get(i);
 			final long mark = System.nanoTime();
-			if (handler.doTick(tick))
+			final boolean ran = handler.doTick(tick);
+			if (ran)
 				handler.process(player);
-			handler.updateTimer(System.nanoTime() - mark);
+			final long nanos = System.nanoTime() - mark;
+			handler.updateTimer(nanos);
+			// For a /dsprofile recording, if one is being made
+			HandlerTicks.ticked(tick, handler.getHandlerName(), nanos, ran);
 		}
 
 		this.computeTime.update(System.nanoTime() - start);

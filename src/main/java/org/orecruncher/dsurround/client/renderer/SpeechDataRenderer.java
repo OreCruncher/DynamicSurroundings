@@ -27,6 +27,8 @@ package org.orecruncher.dsurround.client.renderer;
 import javax.annotation.Nonnull;
 
 import org.lwjgl.opengl.GL11;
+import org.orecruncher.dsurround.profiling.RenderTimers;
+import org.orecruncher.dsurround.lib.profiling.RenderTimer;
 import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.capabilities.CapabilitySpeechData;
 import org.orecruncher.dsurround.capabilities.speech.ISpeechData;
@@ -159,15 +161,25 @@ public class SpeechDataRenderer {
 	public static void onRenderWorldLast(@Nonnull final RenderWorldLastEvent event) {
 		final EntityPlayer player = EnvironState.getPlayer();
 		if (player != null) {
-			// 16 block range
-			final int range = 16 * 16;
-			final ObjectArray<Entity> entities = WorldUtils.gatherEntitiesInView(player, range,
-					event.getPartialTicks());
-			for (final Entity e : entities) {
-				final ISpeechData data = CapabilitySpeechData.getCapability(e);
-				if (data != null && canBeSeen(player, e)) {
-					doRender(e, data, event.getPartialTicks());
-				}
+			RENDER_TIMER.begin();
+			try {
+				renderBubbles(player, event.getPartialTicks());
+			} finally {
+				RENDER_TIMER.end();
+			}
+		}
+	}
+
+	private static final RenderTimer RENDER_TIMER = RenderTimers.add(new RenderTimer("Speech Bubbles"));
+
+	private static void renderBubbles(@Nonnull final EntityPlayer player, final float partialTicks) {
+		// 16 block range
+		final int range = 16 * 16;
+		final ObjectArray<Entity> entities = WorldUtils.gatherEntitiesInView(player, range, partialTicks);
+		for (final Entity e : entities) {
+			final ISpeechData data = CapabilitySpeechData.getCapability(e);
+			if (data != null && canBeSeen(player, e)) {
+				doRender(e, data, partialTicks);
 			}
 		}
 	}

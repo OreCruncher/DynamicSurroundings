@@ -29,6 +29,10 @@ import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 
 import org.lwjgl.opengl.GL11;
+import java.util.HashMap;
+import java.util.Map;
+import org.orecruncher.dsurround.profiling.RenderTimers;
+import org.orecruncher.dsurround.lib.profiling.RenderTimer;
 import org.orecruncher.dsurround.client.fx.particle.ParticleBase;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.lib.compat.ModEnvironment;
@@ -125,15 +129,34 @@ public class ParticleCollection extends ParticleBase {
 		if (this.myParticles.size() == 0)
 			return;
 
-		bindTexture(this.texture);
-		preRender();
+		final RenderTimer timer = timerFor(this.texture);
+		timer.begin();
+		try {
+			bindTexture(this.texture);
+			preRender();
 
-		buffer.begin(GL11.GL_QUADS, getVertexFormat());
-		for (int i = 0; i < this.myParticles.size(); i++)
-			this.myParticles.get(i).renderParticle(buffer, entityIn, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
-		Tessellator.getInstance().draw();
+			buffer.begin(GL11.GL_QUADS, getVertexFormat());
+			for (int i = 0; i < this.myParticles.size(); i++)
+				this.myParticles.get(i).renderParticle(buffer, entityIn, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
+			Tessellator.getInstance().draw();
 
-		postRender();
+			postRender();
+		} finally {
+			timer.end();
+		}
+	}
+
+	// A render timer for each kind of collection (by its texture: rain splashes, ripples, footprints...), for
+	// /dsprofile recordings. The render thread only
+	private static final Map<ResourceLocation, RenderTimer> TIMERS = new HashMap<>();
+
+	@Nonnull
+	private static RenderTimer timerFor(@Nonnull final ResourceLocation texture) {
+		return TIMERS.computeIfAbsent(texture, t -> {
+			String name = t.getResourcePath();
+			name = name.substring(name.lastIndexOf('/') + 1).replace(".png", "");
+			return RenderTimers.add(new RenderTimer("Particles: " + name));
+		});
 	}
 
 	protected boolean enableLighting() {

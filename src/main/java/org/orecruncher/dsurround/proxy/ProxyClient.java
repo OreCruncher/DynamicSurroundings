@@ -30,6 +30,10 @@ import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
+import org.orecruncher.dsurround.lib.profiling.ProfileFiles;
+import org.orecruncher.dsurround.profiling.Profiler;
+import org.orecruncher.dsurround.profiling.FrameTimes;
+import org.orecruncher.dsurround.commands.CommandDSProfile;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
@@ -126,6 +130,9 @@ public class ProxyClient extends Proxy implements IProxy, ISelectiveResourceRelo
 		ParticleDripOverride.register();
 
 		ClientCommandHandler.instance.registerCommand(new CommandCalc());
+		ClientCommandHandler.instance.registerCommand(new CommandDSProfile());
+		FrameTimes.register();
+		ProfileFiles.prune(Profiler.folder(), Profiler.FILE_PREFIX, ProfileFiles.KEPT, ModBase.log());
 
 		if (ModOptions.effects.disableWaterSuspendParticle)
 			Minecraft.getMinecraft().effectRenderer.registerParticle(EnumParticleTypes.SUSPENDED.getParticleID(), null);

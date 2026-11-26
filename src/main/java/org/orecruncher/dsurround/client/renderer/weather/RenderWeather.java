@@ -26,6 +26,8 @@ package org.orecruncher.dsurround.client.renderer.weather;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.profiling.RenderTimers;
+import org.orecruncher.dsurround.lib.profiling.RenderTimer;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
@@ -57,6 +59,10 @@ public final class RenderWeather extends IRenderHandler {
 		return rendererUpdateCount.get(Minecraft.getMinecraft().entityRenderer);
 	}
 		
+	private static final RenderTimer RENDER_TIMER = RenderTimers.add(new RenderTimer("Weather"));
+	// Rain splashes and their sounds are made on the tick, and only fill the particle manager
+	private static final RenderTimer SPLASH_TIMER = RenderTimers.add(new RenderTimer("Rain Splashes", true, false));
+
 	private final StormRenderer stormRenderer;
 
 	protected RenderWeather() {
@@ -70,7 +76,12 @@ public final class RenderWeather extends IRenderHandler {
 	public static boolean addRainParticles(@Nonnull final EntityRenderer theThis) {
 		final World world = EnvironState.getWorld();
 		if (world != null && world.provider.getWeatherRenderer() instanceof RenderWeather) {
-			StormSplashRenderer.renderStormSplashes(EnvironState.getDimensionId(), theThis);
+			SPLASH_TIMER.begin();
+			try {
+				StormSplashRenderer.renderStormSplashes(EnvironState.getDimensionId(), theThis);
+			} finally {
+				SPLASH_TIMER.end();
+			}
 			return true;
 		}
 		return false;
@@ -78,7 +89,12 @@ public final class RenderWeather extends IRenderHandler {
 
 	@Override
 	public void render(final float partialTicks, @Nonnull final WorldClient world, @Nonnull final Minecraft mc) {
-		this.stormRenderer.render(mc.entityRenderer, partialTicks);
+		RENDER_TIMER.begin();
+		try {
+			this.stormRenderer.render(mc.entityRenderer, partialTicks);
+		} finally {
+			RENDER_TIMER.end();
+		}
 	}
 
 	/**

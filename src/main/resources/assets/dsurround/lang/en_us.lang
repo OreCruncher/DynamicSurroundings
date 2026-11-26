@@ -270,3 +270,21 @@ dsurround.season.winter=Winter
 dsurround.season.early=Early
 dsurround.season.mid=Mid
 dsurround.season.late=Late
+
+# /dsprofile
+dsurround.command.dsprofile.started=Profile (%1$s): %2$s. Recording starts in %3$ss and runs %4$ss: %5$s.
+dsurround.command.dsprofile.sent=Sent %1$s for it.
+dsurround.command.dsprofile.notsent=Not in single player, so the time and weather it needs (%1$s) weren't set.
+dsurround.command.dsprofile.busy=A profile is already being recorded.
+dsurround.command.dsprofile.unavailable=Profiling isn't available: this Java (%1$s) has no Flight Recorder. It needs Java 8u262 or newer.
+dsurround.command.dsprofile.recording=Recording for %1$ss...
+dsurround.command.dsprofile.failed=The profile couldn't be recorded: %1$s
+dsurround.command.dsprofile.done=Profile recorded: %1$s (%2$s FPS). Click it to open; it is in the dsurround config folder, under profiles, zipped to attach to an issue on GitHub.
+dsurround.command.dsprofile.headline=%1$s FPS. Costliest effect: %2$s, %3$s of the GPU's time drawing a frame and %4$s of the CPU's.
+dsurround.command.dsprofile.copied=A short summary of it has been copied to the clipboard, to paste into an issue or a Discord message.
+dsurround.profile.scene.general.what=the game as it is
+dsurround.profile.scene.general.tip=play as usual, or show what seems slow
+dsurround.profile.scene.aurora.what=an aurora at night with clear skies
+dsurround.profile.scene.aurora.tip=stand in a cold biome, look up at the aurora and keep still
+dsurround.profile.scene.weather.what=a thunderstorm at full strength
+dsurround.profile.scene.weather.tip=look around, out in the open, and keep still
