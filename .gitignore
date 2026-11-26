@@ -34,6 +34,7 @@
 /screenshots/
 /scripts/*
 !/scripts/bench/
+!/scripts/*.py
 /minetweaker.log
 /forge-1.10.2-12.18.2.2179-changelog.txt
 /Paulscode IBXM Library License.txt

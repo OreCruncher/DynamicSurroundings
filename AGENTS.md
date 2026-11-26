@@ -68,6 +68,16 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   cheats on), so `/ds` works; others through a sender that keeps their messages.
 - Turn the display's timeout off for a bench and back on after (it runs minutes with no input).
 
+## Auroras
+- Two styles (`aurora.auroraStyle`): classic (`client/aurora/Aurora`, `AuroraRenderer`, `shaders/aurora_classic.*`:
+  curtains as quads, 0.012 ms of GPU at 1920x1080) and cinematic (`CinematicAurora*`, `AuroraNight`,
+  `shaders/aurora_cinematic.*` and `aurora_composite.*`: a pass over the screen, 2.2 ms fast, 6.6 ms fancy), both ported
+  from the 26.x line. Both are drawn after the world on the far plane, tested less-or-equal against the depth buffer,
+  so they show only where the sky is.
+- `aurora_cinematic.frag` is made from the 26.x line's shader by `scripts/port-cinematic-shader.py` (GLSL 1.20,
+  uniforms for its block; the near point at z -1, as 26.x has reverse-Z): change the script, not the shader, and run it
+  again when 26.x's shader changes. Bench: `scripts/bench/aurora.json` (classic), `aurora-cinematic.json`.
+
 ## Known noise in a dev run's log
 - FML's missing signature data and Maven library folder errors, fernflower's "Unable to simplify switch" (the mixin
   debug export). Neither mod checks a certificate fingerprint any more (dropped in DS 4.0.0 and OreLib 3.6.0.2).
