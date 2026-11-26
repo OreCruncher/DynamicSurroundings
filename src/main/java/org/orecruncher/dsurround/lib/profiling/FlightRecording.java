@@ -206,6 +206,7 @@ public final class FlightRecording {
 				recording.setToDisk(true);
 				enable(recording, sources);
 				recording.start();
+				newStringEpoch();
 				for (final Source source : sources)
 					source.start.run();
 				onStart.run();
@@ -234,6 +235,20 @@ public final class FlightRecording {
 				if (source.write != null)
 					FlightRecorder.removePeriodicEvent(source.write);
 			Files.deleteIfExists(unfinished);
+		}
+	}
+
+	/**
+	 * Moves the recorder on to a new chunk, so this recording writes every string it uses. Java 8's recorder caches
+	 * strings of 16 to 128 characters with a one-bit epoch that flips at each chunk: two flips between recordings (one
+	 * stopping, the next starting) left the cache looking current, and the second recording referred to names it never
+	 * wrote (a bench run's second recording lost a handler's and a timer's names). A snapshot of a running on-disk
+	 * recording starts a new chunk; the cache is then out of date and starts over.
+	 */
+	private static void newStringEpoch() {
+		try (Recording snapshot = FlightRecorder.getFlightRecorder().takeSnapshot()) {
+			// Only for the chunk it starts
+			snapshot.getSize();
 		}
 	}
 

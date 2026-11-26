@@ -105,11 +105,11 @@ final class ProfileSummary {
 					event.getDouble("gpu"), event.getDouble("cpu"));
 			break;
 		case "dsurround.RenderTimer":
-			timer(event.getString("effect"), event.getDouble("gpuAverage"), event.getDouble("cpuAverage"),
+			timer(named(event.getString("effect")), event.getDouble("gpuAverage"), event.getDouble("cpuAverage"),
 					event.getBoolean("perTick"));
 			break;
 		case "dsurround.HandlerTick":
-			handlerTick(event.getLong("tick"), event.getString("handler"), event.getLong("time"));
+			handlerTick(event.getLong("tick"), named(event.getString("handler")), event.getLong("time"));
 			break;
 		case "jdk.GCPhasePause":
 			pause(event.getDuration().toNanos() / 1_000_000D);
@@ -117,6 +117,12 @@ final class ProfileSummary {
 		default:
 			break;
 		}
+	}
+
+	// A name the recording lost (see FlightRecording.newStringEpoch) as "?", rather than failing the summary
+	@Nonnull
+	private static String named(@Nullable final String name) {
+		return name == null ? "?" : name;
 	}
 
 	void environment(@Nonnull final String field, @Nonnull final Object value) {
