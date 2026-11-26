@@ -171,8 +171,8 @@ public abstract class CuboidScanner extends Scanner {
 			if (!provider.isAvailable(point))
 				return null;
 
-			// Consume the point
-			this.fullRange.next();
+			// Consume the point (next() hands out a copy; the peeked one moves on)
+			point = this.fullRange.next();
 
 			// Has to be in valid space for it to
 			// be returned.

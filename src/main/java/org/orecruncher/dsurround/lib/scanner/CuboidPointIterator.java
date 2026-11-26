@@ -55,6 +55,9 @@ public class CuboidPointIterator implements IPointIterator {
 
 	protected final Iterator<MutableBlockPos> itr;
 	protected BlockPos peeked;
+	// What next() hands out: the box iterator moves one mutable along, so handing out
+	// peeked would give the point after it once the iterator advanced
+	protected final MutableBlockPos current = new MutableBlockPos();
 
 	private CuboidPointIterator() {
 		this.itr = null;
@@ -74,9 +77,11 @@ public class CuboidPointIterator implements IPointIterator {
 	@Override
 	@Nullable
 	public BlockPos next() {
-		final BlockPos result = this.peeked;
+		if (this.peeked == null)
+			return null;
+		this.current.setPos(this.peeked);
 		this.peeked = this.itr.hasNext() ? this.itr.next() : null;
-		return result;
+		return this.current;
 	}
 
 	@Override

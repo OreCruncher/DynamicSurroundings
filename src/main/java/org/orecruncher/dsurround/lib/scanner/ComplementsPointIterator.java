@@ -27,6 +27,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 
 /**
  * For 2 Cuboid objects of equal dimensions displaced in space (c1,c2) that
@@ -42,6 +43,7 @@ public class ComplementsPointIterator implements IPointIterator {
 	protected final CuboidPointIterator[] segments = new CuboidPointIterator[3];
 	protected int activeSegment = 0;
 	protected BlockPos peeked;
+	protected final MutableBlockPos current = new MutableBlockPos();
 
 	public ComplementsPointIterator(@Nonnull final Cuboid volume, @Nonnull final Cuboid intersect) {
 		// This function makes some important assumptions about volume and
@@ -122,9 +124,12 @@ public class ComplementsPointIterator implements IPointIterator {
 	@Override
 	@Nullable
 	public BlockPos next() {
-		final BlockPos result = this.peeked;
+		if (this.peeked == null)
+			return null;
+		// The segments hand out a mutable they reuse, so copy before advancing
+		this.current.setPos(this.peeked);
 		this.peeked = next0();
-		return result;
+		return this.current;
 	}
 
 }
