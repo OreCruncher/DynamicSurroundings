@@ -27,6 +27,7 @@ package org.orecruncher.dsurround.commands;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.capabilities.CapabilityDimensionInfo;
 import org.orecruncher.dsurround.capabilities.dimension.IDimensionInfoEx;
@@ -36,6 +37,7 @@ import org.orecruncher.lib.Localization;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -124,7 +126,8 @@ public final class CommandDS extends CommandBase {
 	}
 
 	@Override
-	public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] parms) {
+	public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] parms)
+			throws CommandException {
 
 		try {
 			final EntityPlayerMP player = getCommandSenderAsPlayer(sender);
@@ -234,8 +237,12 @@ public final class CommandDS extends CommandBase {
 				player.sendMessage(feedback);
 			}
 
+		} catch (final CommandException ex) {
+			// What vanilla shows the player in red: a number out of range, no player to run it for
+			throw ex;
 		} catch (final Exception ex) {
-			ex.printStackTrace();
+			ModBase.log().error("/ds failed", ex);
+			throw new CommandException("dsurround.msg.CommandFailed", ex.toString());
 		}
 	}
 

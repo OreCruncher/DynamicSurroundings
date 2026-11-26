@@ -44,6 +44,7 @@ dsurround.msg.RainIntensitySet=§9Rain intensity set to %1$s
 dsurround.msg.MinRainIntensitySet=§9Minimum rain intensity set to %1$s
 dsurround.msg.MaxRainIntensitySet=§9Maximum rain intensity set to %1$s
 dsurround.msg.RainReset=§9World rain parameters have been reset
+dsurround.msg.CommandFailed=Dynamic Surroundings couldn't run that: %s
 dsurround.msg.BiomeReload=§9Json configurations have been reloaded
 
 dsurround.msg.RainTimeSet=§9Rain time set to %1$s

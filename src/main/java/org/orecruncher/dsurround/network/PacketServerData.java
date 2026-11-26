@@ -113,7 +113,10 @@ public class PacketServerData implements IMessage {
 					data.add(String.format("Ticktime Overall:%s %5.3fms (%d TPS)", getTpsFormatPrefix(tps),
 							message.meanTickTime, tps));
 					message.tMap.int2DoubleEntrySet().forEach(entry -> {
-						final String dimName = DimensionManager.getProviderType(entry.getIntKey()).getName();
+						// The server can have dimensions the client doesn't know (another mod's): named by number
+						final String dimName = DimensionManager.isDimensionRegistered(entry.getIntKey())
+								? DimensionManager.getProviderType(entry.getIntKey()).getName()
+								: "Dimension";
 						final int tps1 = (int) Math.min(1000.0D / entry.getDoubleValue(), 20.0D);
 						data.add(String.format("%s (%d):%s %7.3fms (%d TPS)", dimName, entry.getIntKey(),
 								getTpsFormatPrefix(tps1), entry.getDoubleValue(), tps1));

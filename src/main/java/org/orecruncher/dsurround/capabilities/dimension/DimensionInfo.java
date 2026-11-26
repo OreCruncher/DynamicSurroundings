@@ -288,8 +288,10 @@ public final class DimensionInfo implements IDimensionInfoEx {
 	public void deserializeNBT(@Nonnull final NBTTagCompound nbt) {
 		setRainIntensity(nbt.getFloat(NBT.INTENSITY));
 		setCurrentRainIntensity(nbt.getFloat(NBT.CURRENT_INTENSITY));
-		setMinRainIntensity(nbt.getFloat(NBT.MIN_INTENSITY));
-		setMaxRainIntensity(nbt.getFloat(NBT.MAX_INTENSITY));
+		// The saved maximum first, then the minimum within it: the setters clamp each against the other, and the minimum
+		// was clamped against the config's default maximum before the saved one was in
+		this.maxIntensity = MathStuff.clamp(nbt.getFloat(NBT.MAX_INTENSITY), MIN_INTENSITY, MAX_INTENSITY);
+		this.minIntensity = MathStuff.clamp(nbt.getFloat(NBT.MIN_INTENSITY), MIN_INTENSITY, this.maxIntensity);
 		setThunderTimer(nbt.getInteger(NBT.THUNDER_TIMER));
 	}
 
