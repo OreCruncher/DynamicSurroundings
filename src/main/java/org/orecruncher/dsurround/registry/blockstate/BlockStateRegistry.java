@@ -178,6 +178,11 @@ public final class BlockStateRegistry extends Registry {
 					ModBase.log().warn("Unknown block effect type in configuration: [%s]", e.effect);
 				} else if (type.isEnabled()) {
 					final int chance = e.chance != null ? e.chance : 100;
+					if (chance < 0) {
+						// 0 is every time; below that nextInt would throw on every scan
+						ModBase.log().warn("Block effect [%s] has a negative chance (%d), left out", e.effect, chance);
+						continue;
+					}
 					final BlockEffect blockEffect = type.getInstance(chance);
 					if (blockEffect != null) {
 						if (e.conditions != null)

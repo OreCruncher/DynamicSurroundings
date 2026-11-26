@@ -143,10 +143,16 @@ public final class BiomeRegistry extends Registry {
 		final List<BiomeInfo> infoList = getCombinedStream();
 
 		for (final BiomeConfig c : cfg.biomes) {
-			final BiomeMatcher matcher = BiomeMatcher.getMatcher(c);
-			for (final BiomeInfo bi : infoList) {
-				if (matcher.match(bi))
-					bi.update(c);
+			// A bad entry (a script that doesn't compile, a malformed value) costs only
+			// itself, not the whole registry
+			try {
+				final BiomeMatcher matcher = BiomeMatcher.getMatcher(c);
+				for (final BiomeInfo bi : infoList) {
+					if (matcher.match(bi))
+						bi.update(c);
+				}
+			} catch (final Throwable t) {
+				ModBase.log().error("Skipping biome entry with conditions '" + c.conditions + "'", t);
 			}
 		}
 

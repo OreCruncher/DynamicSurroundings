@@ -112,7 +112,9 @@ public class BlockStateProfile extends BlockStateData {
 	@Override
 	@Nullable
 	public SoundEffect getSoundToPlay(@Nonnull final Random random) {
-		return this.sounds != NO_SOUNDS && random.nextInt(getChance()) == 0 ? new WeightTable<>(this.sounds).next()
+		// A chance of 0 or less plays none (nextInt would throw on every scan)
+		return this.sounds != NO_SOUNDS && getChance() > 0 && random.nextInt(getChance()) == 0
+				? new WeightTable<>(this.sounds).next()
 				: null;
 	}
 

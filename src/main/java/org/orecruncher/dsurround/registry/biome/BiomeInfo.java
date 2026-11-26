@@ -34,6 +34,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
+import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.capabilities.season.TemperatureRating;
 import org.orecruncher.dsurround.client.handlers.BiomeSoundEffectsHandler;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
@@ -287,7 +288,8 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 
 	@Nullable
 	public SoundEffect getSpotSound(@Nonnull final Random random) {
-		return this.spotSounds != NO_SOUNDS && random.nextInt(this.spotSoundChance) == 0
+		// A chance of 0 or less plays none (nextInt would throw every time)
+		return this.spotSounds != NO_SOUNDS && this.spotSoundChance > 0 && random.nextInt(this.spotSoundChance) == 0
 				? new WeightTable<>(this.spotSounds).next()
 				: null;
 	}
@@ -306,6 +308,21 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 		return BiomeUtil.areBiomesSimilar(this.biome.getBiome(), biome);
 	}
 
+	// "r,g,b", spaces allowed around the numbers; null, with a warning, if it isn't
+	@Nullable
+	private static Color parseColor(@Nonnull final String text) {
+		final String[] parts = StringUtils.split(text, ',');
+		if (parts != null && parts.length == 3) {
+			try {
+				return new Color(Integer.parseInt(parts[0].trim()), Integer.parseInt(parts[1].trim()),
+						Integer.parseInt(parts[2].trim()));
+			} catch (final NumberFormatException ignored) {
+			}
+		}
+		ModBase.log().warn("'%s' is not a color: three numbers separated by commas, like \"255,128,0\"", text);
+		return null;
+	}
+
 	public void update(@Nonnull final BiomeConfig entry) {
 		addComment(entry.comment);
 		if (entry.hasPrecipitation != null)
@@ -319,14 +336,14 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 		if (entry.fogDensity != null)
 			setFogDensity(entry.fogDensity);
 		if (entry.fogColor != null) {
-			final int[] rgb = MyUtils.splitToInts(entry.fogColor, ',');
-			if (rgb.length == 3)
-				setFogColor(new Color(rgb[0], rgb[1], rgb[2]));
+			final Color color = parseColor(entry.fogColor);
+			if (color != null)
+				setFogColor(color);
 		}
 		if (entry.dustColor != null) {
-			final int[] rgb = MyUtils.splitToInts(entry.dustColor, ',');
-			if (rgb.length == 3)
-				setDustColor(new Color(rgb[0], rgb[1], rgb[2]));
+			final Color color = parseColor(entry.dustColor);
+			if (color != null)
+				setDustColor(color);
 		}
 		if (entry.soundReset != null && entry.soundReset) {
 			addComment("> Sound Reset");
@@ -337,6 +354,10 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 			setSpotSoundChance(entry.spotSoundChance);
 
 		for (final SoundConfig sr : entry.sounds) {
+			if (StringUtils.isEmpty(sr.sound)) {
+				ModBase.log().warn("A sound in the biome entry with conditions '%s' has no sound name", entry.conditions);
+				continue;
+			}
 			if (RegistryManager.SOUND.isSoundBlocked(new ResourceLocation(sr.sound)))
 				continue;
 			final SoundEffect.Builder b = new SoundEffect.Builder(sr);

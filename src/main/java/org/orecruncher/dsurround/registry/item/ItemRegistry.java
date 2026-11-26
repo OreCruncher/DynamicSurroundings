@@ -149,7 +149,14 @@ public final class ItemRegistry extends Registry {
 		if (items == null || items.isEmpty())
 			return;
 
-		final ItemClass ic = ItemClass.valueOf(itemClass);
+		final ItemClass ic;
+		try {
+			ic = ItemClass.valueOf(itemClass);
+		} catch (final IllegalArgumentException e) {
+			// A pack's typo would otherwise stop the whole registry loading
+			ModBase.log().warn("Unknown item class [%s] in configuration, its items left out", itemClass);
+			return;
+		}
 
 		final Set<Class<?>> theList = this.classMap.get(ic);
 
