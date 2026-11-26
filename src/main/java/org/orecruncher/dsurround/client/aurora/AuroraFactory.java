@@ -1,5 +1,4 @@
-/*
- * This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
  *
  * Copyright (c) OreCruncher
  *
@@ -24,84 +23,23 @@
 
 package org.orecruncher.dsurround.client.aurora;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import javax.annotation.Nonnull;
-
-import org.orecruncher.dsurround.ModOptions;
-import org.orecruncher.dsurround.client.shader.Shaders;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * Makes the aurora for a night. There is one style, the classic aurora (ported from the 26.x line); it needs shaders,
+ * and without them it draws nothing (see {@link AuroraRenderer#isAvailable}).
+ */
 @SideOnly(Side.CLIENT)
 public final class AuroraFactory {
 
+	private AuroraFactory() {
+	}
+
 	@Nonnull
 	public static IAurora produce(final long seed) {
-		// The shader may have failed to build, or failed while drawing an earlier aurora
-		if (ModOptions.aurora.auroraUseShader && Shaders.areShadersSupported() && AuroraShaderBand.isShaderUsable())
-			return new AuroraShaderBand(seed);
-		else
-			return new AuroraClassic(seed);
+		return new AuroraClassic(seed);
 	}
-
-	/**
-	 * Preset geometry of an Aurora. A preset is selected by the server when an
-	 * Aurora spawns.
-	 */
-	public static final class AuroraGeometry {
-
-		public final int length;
-		public final float nodeLength;
-		public final float nodeWidth;
-		public final int alphaLimit;
-
-		private static final List<AuroraGeometry> PRESET = new ArrayList<>();
-
-		static {
-			// 10/5; 90/45
-			PRESET.add(new AuroraGeometry(128, 30.0F, 2.0F, 96));
-			PRESET.add(new AuroraGeometry(128, 15.0F, 2.0F, 96));
-			PRESET.add(new AuroraGeometry(64, 30.0F, 2.0F, 96));
-			PRESET.add(new AuroraGeometry(64, 15.0F, 2.0F, 96));
-
-			PRESET.add(new AuroraGeometry(128, 30.0F, 2.0F, 80));
-			PRESET.add(new AuroraGeometry(128, 15.0F, 2.0F, 80));
-			PRESET.add(new AuroraGeometry(64, 30.0F, 2.0F, 80));
-			PRESET.add(new AuroraGeometry(64, 15.0F, 2.0F, 80));
-
-			PRESET.add(new AuroraGeometry(128, 30.0F, 2.0F, 64));
-			PRESET.add(new AuroraGeometry(128, 15.0F, 2.0F, 64));
-			PRESET.add(new AuroraGeometry(64, 30.0F, 2.0F, 64));
-			PRESET.add(new AuroraGeometry(64, 15.0F, 2.0F, 64));
-		}
-
-		private AuroraGeometry(final int length, final float nodeLength, final float nodeWidth, final int alphaLimit) {
-			this.length = length;
-			this.nodeLength = nodeLength;
-			this.nodeWidth = nodeWidth;
-			this.alphaLimit = alphaLimit;
-		}
-
-		@Nonnull
-		public static AuroraGeometry get(@Nonnull final Random random) {
-			final int idx = random.nextInt(PRESET.size());
-			return PRESET.get(idx);
-		}
-
-		@Override
-		@Nonnull
-		public String toString() {
-			final StringBuilder builder = new StringBuilder();
-			builder.append("bandLength:").append(this.length);
-			builder.append(";nodeLength:").append(this.nodeLength);
-			builder.append(";nodeWidth:").append(this.nodeWidth);
-			builder.append(";alphaLimit:").append(this.alphaLimit);
-			return builder.toString();
-		}
-	}
-
 }

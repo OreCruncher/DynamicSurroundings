@@ -35,8 +35,8 @@ public final class Shaders {
 
 	static {
 
-		AURORA = register("Aurora", new ResourceLocation(ModInfo.MOD_ID, "shaders/aurora.vert"),
-				new ResourceLocation(ModInfo.MOD_ID, "shaders/aurora.frag"));
+		AURORA = register("Aurora", new ResourceLocation(ModInfo.MOD_ID, "shaders/aurora_classic.vert"),
+				new ResourceLocation(ModInfo.MOD_ID, "shaders/aurora_classic.frag"));
 	}
 
 	public static boolean areShadersSupported() {
