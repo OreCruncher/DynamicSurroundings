@@ -38,7 +38,6 @@ import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.config.SoundConfig;
 import org.orecruncher.dsurround.registry.config.SoundType;
 import org.orecruncher.dsurround.registry.sound.SoundMetadata;
-import org.orecruncher.dsurround.registry.sound.SoundRegistry;
 import org.orecruncher.lib.WeightTable;
 import org.orecruncher.lib.WeightTable.IEntrySource;
 import org.orecruncher.lib.WeightTable.IItem;
@@ -187,20 +186,30 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 	}
 
 	private float randomRange(final int range) {
+		if (range <= 0)
+			return 0;
 		return RANDOM.nextInt(range) - RANDOM.nextInt(range);
 	}
 
 	@SideOnly(Side.CLIENT)
 	public SoundInstance createSoundAt(@Nonnull final BlockPos pos) {
-		return SoundBuilder.builder(this.sound, SoundRegistry.BIOME).setPosition(pos).build();
+		return spotSound().setPosition(pos).build();
+	}
+
+	// The effect's own volume, pitch and category, as its background sounds have
+	private SoundBuilder spotSound() {
+		return SoundBuilder.builder(this.sound, this.category).setVolume(this.volume).setPitch(getPitch(RANDOM));
 	}
 
 	@SideOnly(Side.CLIENT)
 	public SoundInstance createSoundNear(@Nonnull final Entity player) {
-		final float posX = (float) (player.posX + randomRange(SPOT_SOUND_RANGE));
-		final float posY = (float) (player.posY + player.getEyeHeight() + randomRange(SPOT_SOUND_RANGE));
-		final float posZ = (float) (player.posZ + randomRange(SPOT_SOUND_RANGE));
-		return SoundBuilder.builder(this.sound, SoundRegistry.BIOME).setPosition(posX, posY, posZ).build();
+		// A player sound (a mob's swing, its bow) comes from the entity itself; others
+		// are scattered around it
+		final int range = this.category == SoundCategory.PLAYERS ? 0 : SPOT_SOUND_RANGE;
+		final float posX = (float) (player.posX + randomRange(range));
+		final float posY = (float) (player.posY + player.getEyeHeight() + randomRange(range));
+		final float posZ = (float) (player.posZ + randomRange(range));
+		return spotSound().setPosition(posX, posY, posZ).build();
 	}
 
 	@SideOnly(Side.CLIENT)
