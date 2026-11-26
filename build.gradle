@@ -169,14 +169,15 @@ processResources {
 def benchRun = gradle.startParameter.taskNames.any { it.contains('runClientBench') }
 tasks.named('runClient', RunMinecraftTask).configure {
     def runName = benchRun ? 'runClientBench' : 'runClient'
-    // Named in a profile's environment (dsurround.Environment's devRun)
-    extraJvmArgs.add("-Ddsurround.devRun=${runName}")
+    // System properties, not extraJvmArgs: adding to that list dropped RFG's own arguments, the natives' path among
+    // them, and the game ran without sound (OpenAL not found). Named in a profile's environment (devRun)
+    systemProperty 'dsurround.devRun', runName
     if (benchRun) {
         def folder = file('run-bench')
         workingDir = folder
         def scenario = project.findProperty('scenario')
         if (scenario)
-            extraJvmArgs.add("-Ddsurround.scenario=${file(scenario).absolutePath}")
+            systemProperty 'dsurround.scenario', file(scenario).absolutePath
         doFirst { folder.mkdirs() }
     }
 }
