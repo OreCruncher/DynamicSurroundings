@@ -54,6 +54,20 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   (the aurora, weather, speech bubbles, each particle collection; rain splashes per tick, CPU only). Handler ticks come
   from `EffectManager`'s loop, frames from Forge's render tick (`FrameTimes`).
 
+## Bench (runClientBench)
+- `./gradlew runClientBench -Pscenario=scripts/bench/weather.json` runs a scenario unattended in `run-bench` (its own
+  config, options and worlds) and closes the game; `scripts/bench/README.md` has the format. Results in
+  `run-bench/bench-results/<scenario>-<time>/` (recordings, screenshots, `manifest.json`), read with the 26.x line's
+  `scripts/bench-summary.py` and `jfr-summary.py` from the DynamicSurroundingsFabric repository. Without `-Pscenario`
+  it is a plain client there, for `/dsbench mark`.
+- `org.orecruncher.dsurround.bench` is development only, started by reflection from `profiling/BenchHook`. RFG's dev
+  runs load the `jar` task's output (the -dev jar), so the package is left out of the jar only when no run task is
+  asked for, and `checkReleaseJar` (part of `build`) fails a release jar holding it: build releases without a run task.
+- Settings are `ModOptions` paths (`aurora.maxBands`), set in memory on the Forge properties behind them and synced by
+  `ConfigProcessor`; nothing is saved. Commands run "as the player" go through the real player (the bench world has
+  cheats on), so `/ds` works; others through a sender that keeps their messages.
+- Turn the display's timeout off for a bench and back on after (it runs minutes with no input).
+
 ## Known noise in a dev run's log
 - FML's missing signature data and Maven library folder errors, fernflower's "Unable to simplify switch" (the mixin
   debug export). Neither mod checks a certificate fingerprint any more (dropped in DS 4.0.0 and OreLib 3.6.0.2).

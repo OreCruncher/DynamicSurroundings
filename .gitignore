@@ -32,7 +32,8 @@
 /dumps/
 /asm/
 /screenshots/
-/scripts/
+/scripts/*
+!/scripts/bench/
 /minetweaker.log
 /forge-1.10.2-12.18.2.2179-changelog.txt
 /Paulscode IBXM Library License.txt
@@ -42,3 +43,4 @@
 /secrets.properties
 /mcmodsrepo
 /out/
+/run-bench/

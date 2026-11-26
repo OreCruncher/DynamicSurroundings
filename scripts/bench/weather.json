@@ -1,0 +1,22 @@
+// A full thunderstorm on plains, recorded twice: the rain's cost (Weather, Rain Splashes, the splash particles)
+// and the client tick's while it rains
+{
+  "world": "bench",
+  "seed": 20261126,
+  "setup": ["gamerule doDaylightCycle false", "time set 6000", "gamerule doWeatherCycle false",
+            "gamerule doMobSpawning false"],
+  "warmup": 15,
+  "record": 60,
+  "repeats": 2,
+  "video": {"vsync": false, "maxFps": 260},
+  "scenes": {
+    "plains": {
+      "biome": "minecraft:plains",
+      "commands": ["weather thunder 999999", "ds setstr rain 100"],
+      "profile": "weather"
+    }
+  },
+  "runs": [
+    {"label": "thunderstorm", "scene": "plains"}
+  ]
+}

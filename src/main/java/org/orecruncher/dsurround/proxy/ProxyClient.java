@@ -32,6 +32,7 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.lib.profiling.ProfileFiles;
 import org.orecruncher.dsurround.profiling.Profiler;
+import org.orecruncher.dsurround.profiling.BenchHook;
 import org.orecruncher.dsurround.profiling.FrameTimes;
 import org.orecruncher.dsurround.commands.CommandDSProfile;
 import org.orecruncher.dsurround.ModBase;
@@ -133,6 +134,8 @@ public class ProxyClient extends Proxy implements IProxy, ISelectiveResourceRelo
 		ClientCommandHandler.instance.registerCommand(new CommandDSProfile());
 		FrameTimes.register();
 		ProfileFiles.prune(Profiler.folder(), Profiler.FILE_PREFIX, ProfileFiles.KEPT, ModBase.log());
+		// The development bench (scenario runs, /dsbench), in development runs only
+		BenchHook.start();
 
 		if (ModOptions.effects.disableWaterSuspendParticle)
 			Minecraft.getMinecraft().effectRenderer.registerParticle(EnumParticleTypes.SUSPENDED.getParticleID(), null);

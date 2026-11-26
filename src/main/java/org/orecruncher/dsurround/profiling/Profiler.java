@@ -78,8 +78,24 @@ public final class Profiler {
 	static final int WARM_UP_SECONDS = 10;
 
 	private static final AtomicBoolean BUSY = new AtomicBoolean();
+	// Past the warm-up, recording; set on the profile's thread, read on the render thread (the bench's screenshot)
+	private static volatile boolean recording;
 
 	private Profiler() {
+	}
+
+	/**
+	 * Whether a profile is being made: set up, waiting or recording
+	 */
+	public static boolean isBusy() {
+		return BUSY.get();
+	}
+
+	/**
+	 * Whether a profile is recording now, past its warm-up
+	 */
+	public static boolean isRecording() {
+		return recording;
 	}
 
 	/**
@@ -180,7 +196,12 @@ public final class Profiler {
 			java.nio.file.Files.createDirectories(file.getParent());
 			ProfileSources.warmUp(Duration.ofSeconds(settle));
 			tell(new TextComponentTranslation(KEY + "recording", seconds));
-			ProfileSources.record(file, Duration.ofSeconds(seconds), environment);
+			recording = true;
+			try {
+				ProfileSources.record(file, Duration.ofSeconds(seconds), environment);
+			} finally {
+				recording = false;
+			}
 			// A summary to paste where a player asks for help; the recording is still made without one
 			String text = null;
 			ProfileHeadline headline = null;

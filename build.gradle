@@ -5,6 +5,7 @@
 // run with a Java 8 toolchain (an installed one, or one Gradle downloads).
 
 import com.gtnewhorizons.retrofuturagradle.mcp.InjectTagsTask
+import com.gtnewhorizons.retrofuturagradle.minecraft.RunMinecraftTask
 
 plugins {
     id 'java'
@@ -162,7 +163,36 @@ processResources {
     filesMatching('mcmod.info') { it.expand(props) }
 }
 
+// The development bench (org.orecruncher.dsurround.bench: scenario runs, /dsbench; scripts/bench/README.md). With
+// runClientBench, runClient runs in a folder of its own, run-bench (config, options, worlds), so the dev settings and
+// worlds are never touched, and with -Pscenario=<file> runs that scenario and closes the game
+def benchRun = gradle.startParameter.taskNames.any { it.contains('runClientBench') }
+tasks.named('runClient', RunMinecraftTask).configure {
+    def runName = benchRun ? 'runClientBench' : 'runClient'
+    // Named in a profile's environment (dsurround.Environment's devRun)
+    extraJvmArgs.add("-Ddsurround.devRun=${runName}")
+    if (benchRun) {
+        def folder = file('run-bench')
+        workingDir = folder
+        def scenario = project.findProperty('scenario')
+        if (scenario)
+            extraJvmArgs.add("-Ddsurround.scenario=${file(scenario).absolutePath}")
+        doFirst { folder.mkdirs() }
+    }
+}
+tasks.register('runClientBench') {
+    group = 'Modded Minecraft'
+    description = 'Runs a bench scenario (-Pscenario=<file>) in run-bench, or a plain client there without one'
+    dependsOn 'runClient'
+}
+
+// The development bench is never published. Dev runs load the jar task's output (the -dev jar) too, so it is only
+// left out when no run is asked for; checkReleaseJar fails a build whose release jar has it
+def anyRun = gradle.startParameter.taskNames.any { it.toLowerCase().contains('run') }
 jar {
+    if (!anyRun)
+        exclude 'org/orecruncher/dsurround/bench/**'
+
     // CREDITS.md and LICENSE.md go in the jar, as the MIT license asks
     from('CREDITS.md')
     from('LICENSE.md')
@@ -196,3 +226,22 @@ idea {
         }
     }
 }
+
+def checkReleaseJar = tasks.register('checkReleaseJar') {
+    description = 'Fails if the development bench is in the release jar'
+    dependsOn 'reobfJar'
+    def released = layout.buildDirectory.file("libs/${base.archivesName.get()}-${version}.jar")
+    inputs.file(released)
+    doLast {
+        def zip = new java.util.zip.ZipFile(released.get().asFile)
+        try {
+            def bench = zip.entries().find { it.name.startsWith('org/orecruncher/dsurround/bench/') }
+            if (bench)
+                throw new GradleException("The release jar has the development bench in it (${bench.name}): build it without a run task")
+        } finally {
+            zip.close()
+        }
+    }
+}
+tasks.named('build').configure { dependsOn checkReleaseJar }
+tasks.named('assemble').configure { finalizedBy checkReleaseJar }

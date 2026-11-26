@@ -1,0 +1,22 @@
+// An aurora over snowy tundra at midnight, looking up at it: the aurora's cost, the "before" for reworking it.
+// The aurora fades in over the warm-up
+{
+  "world": "bench",
+  "seed": 20261126,
+  "setup": ["gamerule doDaylightCycle false", "gamerule doWeatherCycle false", "gamerule doMobSpawning false"],
+  "warmup": 30,
+  "record": 60,
+  "repeats": 2,
+  "video": {"vsync": false, "maxFps": 260},
+  "scenes": {
+    "tundra": {
+      "biome": "minecraft:ice_flats",
+      "pitch": -45,
+      "commands": ["time set 18000", "weather clear 999999"],
+      "profile": "aurora"
+    }
+  },
+  "runs": [
+    {"label": "aurora", "scene": "tundra"}
+  ]
+}
