@@ -29,7 +29,7 @@ Without `-Pscenario`, `runClientBench` is a plain client in the bench folder, fo
   "warmup": 15,                // seconds after the terrain is drawn, before recording
   "record": 60,                // seconds recorded a run
   "repeats": 2,                // the runs this many times, every other time reversed (A B, B A)
-  "video": {"vsync": false, "maxFps": 260},       // each optional; 260 is no limit
+  "video": {"width": 1920, "height": 1080, "vsync": false, "maxFps": 260},   // each optional; 260 is no limit
   "screenshots": true,         // one a run, as recording starts, without the HUD
   "volume": 0.5,               // the master volume for the session, if given (and "musicVolume")
   "scenes": {
@@ -68,7 +68,10 @@ Without `-Pscenario`, `runClientBench` is a plain client in the bench folder, fo
 - **Flying**: a scene's `"flySpeed"` flies the player east in blocks a tick at height 230, from the warm-up on, for
   what moving through terrain costs (the always-on block scan, chunk loading).
 
-Not ported from the 26.x line: sounds played around the player, boats, Improved Transparency, the window's size.
+- **The window's size** (`video.width` and `height`, both) is set for the session, out of fullscreen: what a GPU
+  draws scales with the pixels, so runs to compare need the same size (the manifest's `window` says what it was).
+
+Not ported from the 26.x line: sounds played around the player, boats, Improved Transparency.
 
 ## Scenes
 

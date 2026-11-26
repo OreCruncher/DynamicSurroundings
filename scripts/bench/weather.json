@@ -8,7 +8,7 @@
   "warmup": 15,
   "record": 60,
   "repeats": 2,
-  "video": {"vsync": false, "maxFps": 260},
+  "video": {"width": 1920, "height": 1080, "vsync": false, "maxFps": 260},
   "scenes": {
     "plains": {
       "biome": "minecraft:plains",

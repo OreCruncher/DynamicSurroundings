@@ -323,6 +323,8 @@ public final class ScenarioRunner {
 		}
 		if (this.scenario.maxFps != null)
 			mc.gameSettings.limitFramerate = this.scenario.maxFps;
+		if (this.scenario.width != null && this.scenario.height != null)
+			setWindowSize(this.scenario.width, this.scenario.height);
 		if (this.scenario.volume != null)
 			mc.gameSettings.setSoundLevel(SoundCategory.MASTER, this.scenario.volume);
 		if (this.scenario.musicVolume != null)
@@ -705,6 +707,22 @@ public final class ScenarioRunner {
 				text.append(text.length() > 0 ? "; " : "").append(message.getUnformattedText());
 			return text.toString();
 		}
+	}
+
+	/**
+	 * Sets the window's size, out of fullscreen, and the game's framebuffers with it; the manifest says what it is
+	 */
+	private void setWindowSize(final int width, final int height) {
+		final Minecraft mc = Minecraft.getMinecraft();
+		try {
+			if (mc.isFullScreen())
+				mc.toggleFullscreen();
+			org.lwjgl.opengl.Display.setDisplayMode(new org.lwjgl.opengl.DisplayMode(width, height));
+			mc.resize(width, height);
+		} catch (final org.lwjgl.LWJGLException e) {
+			throw new IllegalStateException("unable to set the window to " + width + "x" + height, e);
+		}
+		this.manifest.addProperty("window", mc.displayWidth + "x" + mc.displayHeight);
 	}
 
 	@Nonnull

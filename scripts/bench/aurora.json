@@ -7,7 +7,7 @@
   "warmup": 30,
   "record": 60,
   "repeats": 2,
-  "video": {"vsync": false, "maxFps": 260},
+  "video": {"width": 1920, "height": 1080, "vsync": false, "maxFps": 260},
   "scenes": {
     "tundra": {
       "biome": "minecraft:ice_flats",

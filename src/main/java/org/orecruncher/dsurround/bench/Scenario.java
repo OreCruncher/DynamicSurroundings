@@ -46,7 +46,7 @@ import com.google.gson.stream.JsonReader;
 /**
  * A bench scenario: the world to run in, the scenes, and the runs, each a scene recorded with some settings. Read from
  * a JSON file (comments allowed); see {@code scripts/bench/README.md} for the format. The 26.x line's format, less
- * what 1.12.2 hasn't (sounds, boats, Improved Transparency, the window's size).
+ * what 1.12.2 hasn't (sounds, boats, Improved Transparency).
  */
 final class Scenario {
 
@@ -117,6 +117,12 @@ final class Scenario {
 	final Boolean vsync;
 	@Nullable
 	final Integer maxFps;
+	// The window's size for the session, if both are given: what a GPU draws scales with the pixels, so runs to
+	// compare need the same size
+	@Nullable
+	final Integer width;
+	@Nullable
+	final Integer height;
 	final boolean screenshot;
 	@Nullable
 	final Float volume;
@@ -180,6 +186,8 @@ final class Scenario {
 		this.repeats = json.has("repeats") ? Math.max(1, json.get("repeats").getAsInt()) : 1;
 		this.vsync = video.has("vsync") ? video.get("vsync").getAsBoolean() : null;
 		this.maxFps = video.has("maxFps") ? video.get("maxFps").getAsInt() : null;
+		this.width = video.has("width") ? video.get("width").getAsInt() : null;
+		this.height = video.has("height") ? video.get("height").getAsInt() : null;
 		this.screenshot = !json.has("screenshots") || json.get("screenshots").getAsBoolean();
 		this.volume = json.has("volume") ? json.get("volume").getAsFloat() : null;
 		this.musicVolume = json.has("musicVolume") ? json.get("musicVolume").getAsFloat() : null;
