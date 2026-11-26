@@ -24,6 +24,9 @@
 
 package org.orecruncher.dsurround.capabilities;
 
+import java.util.Map;
+import java.util.WeakHashMap;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -57,10 +60,23 @@ public class CapabilitySeasonInfo {
 		CapabilityManager.INSTANCE.register(ISeasonInfo.class, new NullStorage<>(), SeasonInfo::new);
 	}
 
+	// For worlds without the capability, made as it would have been, one each, kept only while the world is
+	private static final Map<World, ISeasonInfo> FALLBACKS = new WeakHashMap<>();
+
+	/**
+	 * The world's season info. Never null: a world the capability wasn't attached to (another mod's, or one made
+	 * before it was ready) gets what it would have had, so the weather renderers, frost breath and scripts asking
+	 * don't fail on it
+	 */
 	@SideOnly(Side.CLIENT)
-	@Nullable
+	@Nonnull
 	public static ISeasonInfo getCapability(@Nonnull final World world) {
-		return CapabilityUtils.getCapability(world, SEASON_INFO, null);
+		final ISeasonInfo info = CapabilityUtils.getCapability(world, SEASON_INFO, null);
+		if (info != null)
+			return info;
+		synchronized (FALLBACKS) {
+			return FALLBACKS.computeIfAbsent(world, SeasonInfo::factory);
+		}
 	}
 
 	@SideOnly(Side.CLIENT)

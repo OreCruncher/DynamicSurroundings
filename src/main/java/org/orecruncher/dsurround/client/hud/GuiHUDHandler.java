@@ -53,6 +53,9 @@ public final class GuiHUDHandler {
 	}
 
 	public static void register() {
+		// A second connect without a disconnect between left the last one registered
+		// too, and the overlays drew twice
+		unregister();
 		INSTANCE = new GuiHUDHandler();
 		MinecraftForge.EVENT_BUS.register(INSTANCE);
 	}

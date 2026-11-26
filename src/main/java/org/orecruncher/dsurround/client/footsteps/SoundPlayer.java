@@ -123,7 +123,8 @@ public class SoundPlayer implements ISoundPlayer {
 	}
 
 	private long randAB(@Nonnull final Random rng, final long a, final long b) {
-		return a >= b ? a : a + rng.nextInt((int) (b + 1));
+		// From a to b: a + nextInt(b + 1) went as far as a + b
+		return a >= b ? a : a + rng.nextInt((int) (b - a + 1));
 	}
 
 }

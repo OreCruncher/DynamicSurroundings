@@ -338,7 +338,7 @@ public final class ModOptions {
 		@Option("Biomes Alias")
 		@DefaultValue("")
 		@LangKey(biomes.PREFIX + ".Aliases")
-		@Comment("Biomes alias list")
+		@Comment("Biomes treated as another: biome=other, each by registry id (minecraft:plains) or name; the first also gets what the other's configuration gives it")
 		public static String[] biomeAliases = {};
 
 		@Option("Dimension Blacklist")

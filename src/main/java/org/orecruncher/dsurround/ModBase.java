@@ -222,8 +222,19 @@ public class ModBase {
 
 	@SubscribeEvent
 	public void playerLogin(final PlayerLoggedInEvent event) {
-		if (ModOptions.logging.enableVersionChecking)
+		// Only to whoever can act on it: the host in single player or LAN, operators on a server. Every player joining
+		// was told the server's mod had an update
+		if (ModOptions.logging.enableVersionChecking && runsTheServer(event.player))
 			VersionChecker.doCheck(event, ModInfo.MOD_ID);
+	}
+
+	private static boolean runsTheServer(@Nonnull final net.minecraft.entity.player.EntityPlayer player) {
+		final net.minecraft.server.MinecraftServer server = player.getServer();
+		if (server == null)
+			return false;
+		if (!server.isDedicatedServer())
+			return player.getName().equals(server.getServerOwner());
+		return server.getPlayerList().canSendCommands(player.getGameProfile());
 	}
 
 	////////////////////////

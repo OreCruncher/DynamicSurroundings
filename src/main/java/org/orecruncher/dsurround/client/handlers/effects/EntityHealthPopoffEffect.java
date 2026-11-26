@@ -96,7 +96,10 @@ public class EntityHealthPopoffEffect extends EntityEffect {
 
 		final EntityLivingBase entity = (EntityLivingBase) subject;
 		if (this.lastHealth != entity.getHealth()) {
-			final int adjustment = MathHelper.ceil(entity.getHealth() - this.lastHealth);
+			// Rounded away from zero, either way: ceil rounded damage toward zero and healing up, so 2.5 damage
+			// showed 2 and 2.5 healing 3
+			final float change = entity.getHealth() - this.lastHealth;
+			final int adjustment = (int) Math.signum(change) * MathHelper.ceil(Math.abs(change));
 
 			this.lastHealth = entity.getHealth();
 

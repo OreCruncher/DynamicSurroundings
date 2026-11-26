@@ -48,7 +48,6 @@ public class ParticleTextPopOff extends ParticleBase {
 	protected static final int SHADOW_COLOR = Color.BLACK.rgbWithAlpha(1F);
 
 	protected int renderColor = Color.WHITE.rgbWithAlpha(1F);
-	protected boolean grow = true;
 
 	protected String text;
 	protected float drawX;
@@ -104,6 +103,8 @@ public class ParticleTextPopOff extends ParticleBase {
 		final float locY = ((float) (this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpY()));
 		final float locZ = ((float) (this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpZ()));
 
+		this.particleScale = scaleAt((this.particleAge + partialTicks) / 20F);
+
 		final OpenGlState glState = OpenGlState.push();
 		GlStateManager.translate(locX, locY, locZ);
 		GlStateManager.rotate(yaw, 0.0F, 1.0F, 0.0F);
@@ -117,15 +118,21 @@ public class ParticleTextPopOff extends ParticleBase {
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, OpenGlHelper.lastBrightnessX,
 				OpenGlHelper.lastBrightnessY);
 		OpenGlState.pop(glState);
+	}
 
-		if (this.grow) {
-			this.particleScale *= 1.08F;
-			if (this.particleScale > SIZE * 3.0D) {
-				this.grow = false;
-			}
-		} else {
-			this.particleScale *= 0.96F;
-		}
+	// It grows to three times its size, then shrinks, by its age rather than each frame drawn (which ran twice as fast
+	// at 144 frames a second as at 60): at the rates it had at 60, x1.08 a frame growing and x0.96 shrinking
+	private static final float GROW_RATE = (float) (Math.log(1.08) * 60);
+	private static final float SHRINK_RATE = (float) (-Math.log(0.96) * 60);
+	private static final float GROW_SECONDS = (float) (Math.log(3) / GROW_RATE);
+
+	/**
+	 * Its size {@code seconds} after it appeared
+	 */
+	static float scaleAt(final float seconds) {
+		if (seconds < GROW_SECONDS)
+			return SIZE * (float) Math.exp(GROW_RATE * seconds);
+		return SIZE * 3F * (float) Math.exp(-SHRINK_RATE * (seconds - GROW_SECONDS));
 	}
 
 	@Override

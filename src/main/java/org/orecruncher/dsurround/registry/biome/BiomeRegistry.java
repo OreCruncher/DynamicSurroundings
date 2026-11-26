@@ -141,6 +141,7 @@ public final class BiomeRegistry extends Registry {
 
 		cfg.biomeAlias.forEach(this::registerBiomeAlias);
 		final List<BiomeInfo> infoList = getCombinedStream();
+		final Map<BiomeInfo, BiomeInfo> aliased = resolveAliases(infoList);
 
 		for (final BiomeConfig c : cfg.biomes) {
 			// A bad entry (a script that doesn't compile, a malformed value) costs only
@@ -151,6 +152,10 @@ public final class BiomeRegistry extends Registry {
 					if (matcher.match(bi))
 						bi.update(c);
 				}
+				// An aliased biome gets what the biome it is an alias of matches as well
+				for (final Map.Entry<BiomeInfo, BiomeInfo> alias : aliased.entrySet())
+					if (!matcher.match(alias.getKey()) && matcher.match(alias.getValue()))
+						alias.getKey().update(c);
 			} catch (final Throwable t) {
 				ModBase.log().error("Skipping biome entry with conditions '" + c.conditions + "'", t);
 			}
@@ -230,6 +235,38 @@ public final class BiomeRegistry extends Registry {
 		}
 
 		return info;
+	}
+
+	/**
+	 * The aliases (the options' and the configuration's), each biome with the biome it is an alias of, found by
+	 * registry id or by name. They were read and never used after biomes came to be matched by scripts; the old
+	 * matching by name let an alias match the other biome's entries, which this gives back
+	 */
+	@Nonnull
+	private Map<BiomeInfo, BiomeInfo> resolveAliases(@Nonnull final List<BiomeInfo> infos) {
+		final Map<BiomeInfo, BiomeInfo> resolved = new java.util.LinkedHashMap<>();
+		for (final Map.Entry<String, String> entry : this.biomeAliases.entrySet()) {
+			final BiomeInfo biome = find(infos, entry.getKey().trim());
+			final BiomeInfo as = find(infos, entry.getValue().trim());
+			if (biome == null || as == null) {
+				ModBase.log().warn("Biome alias %s=%s: no biome %s", entry.getKey(), entry.getValue(),
+						biome == null ? entry.getKey() : entry.getValue());
+			} else if (biome != as) {
+				resolved.put(biome, as);
+			}
+		}
+		return resolved;
+	}
+
+	@javax.annotation.Nullable
+	private static BiomeInfo find(@Nonnull final List<BiomeInfo> infos, @Nonnull final String idOrName) {
+		for (final BiomeInfo info : infos)
+			if (info.getKey().toString().equalsIgnoreCase(idOrName))
+				return info;
+		for (final BiomeInfo info : infos)
+			if (info.getBiomeName().equalsIgnoreCase(idOrName))
+				return info;
+		return null;
 	}
 
 	private void registerBiomeAlias(@Nonnull final String alias, @Nonnull final String biome) {
