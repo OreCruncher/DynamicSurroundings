@@ -30,6 +30,7 @@ import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.handlers.scanners.AlwaysOnBlockEffectScanner;
 import org.orecruncher.dsurround.client.handlers.scanners.ClientPlayerLocus;
 import org.orecruncher.dsurround.client.handlers.scanners.RandomBlockEffectScanner;
+import org.orecruncher.dsurround.proxy.ProxyClient;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
@@ -55,18 +56,31 @@ public final class AreaBlockEffectsHandler extends EffectHandlerBase {
 	);
 	//@formatter:on
 
+	// The range the chunk cache was last sized for (ProxyClient sizes it at startup)
+	protected int cacheRange = ModOptions.effects.specialEffectRange;
+
 	public AreaBlockEffectsHandler() {
 		super("Area Block Effects");
 	}
 
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
-		// A changed range starts the scan over: blocks are only looked at as they come into range, so
-		// effects past a lowered range would never come back
-		this.alwaysOn.setRange(ModOptions.effects.specialEffectRange);
+		// A changed range starts the scan over (blocks are only looked at as they come into range, so
+		// effects past a lowered range would never come back), and the chunk cache the effects read their
+		// neighbors through has to reach as far. The cache is resized first: a new one is empty until the
+		// next tick fills it, and a scan started against it would find no neighbors.
+		final int range = ModOptions.effects.specialEffectRange;
+		final boolean resized = range != this.cacheRange;
+		if (resized) {
+			ProxyClient.sizeChunkCache();
+			this.cacheRange = range;
+		} else {
+			this.alwaysOn.setRange(range);
+		}
 		this.nearEffects.update();
 		this.farEffects.update();
-		this.alwaysOn.update();
+		if (!resized)
+			this.alwaysOn.update();
 	}
 
 	@Override

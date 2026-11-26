@@ -155,8 +155,15 @@ public class ProxyClient extends Proxy implements IProxy, ISelectiveResourceRelo
 		if (ModEnvironment.Animania.isLoaded())
 			AnimaniaBadge.initialize();
 
-		int r = Math.max(32, ModOptions.effects.specialEffectRange);
-		r += 2;
+		sizeChunkCache();
+	}
+
+	/**
+	 * Sets up the client chunk cache to cover the special effect range: block effects read their neighbors
+	 * through it, and it answers air outside the region it covers. Called again when the range changes.
+	 */
+	public static void sizeChunkCache() {
+		final int r = Math.max(32, ModOptions.effects.specialEffectRange) + 2;
 		ClientChunkCache.initialize(r, !ModOptions.general.enableClientChunkCaching);
 	}
 
