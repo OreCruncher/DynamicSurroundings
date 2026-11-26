@@ -40,7 +40,8 @@ public class VariatorConfig {
 	@SerializedName("stride")
 	public float stride = 0.75F; // 0.95F; slow
 	@SerializedName("strideStair")
-	public float strideStair = this.stride * 0.65F;
+	// Left out, it is 0.65 of this variator's stride (Variator)
+	public float strideStair = -1F;
 	@SerializedName("strideLadder")
 	public float strideLadder = 0.5F;
 	@SerializedName("quadrupedMultiplier")

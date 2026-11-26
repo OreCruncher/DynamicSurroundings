@@ -79,7 +79,7 @@ public class Variator {
 		this.SPEED_TO_JUMP_AS_MULTIFOOT = cfg.speedToJumpAsMultifoot;
 		this.SPEED_TO_RUN = cfg.speedToRun;
 		this.STRIDE = cfg.stride;
-		this.STRIDE_STAIR = cfg.strideStair;
+		this.STRIDE_STAIR = cfg.strideStair > 0 ? cfg.strideStair : cfg.stride * 0.65F;
 		this.STRIDE_LADDER = cfg.strideLadder;
 		this.QUADRUPED_MULTIPLIER = cfg.quadrupedMultiplier;
 		this.PLAY_WANDER = cfg.playWander;
