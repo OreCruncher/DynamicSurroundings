@@ -206,7 +206,8 @@ public class StormSplashRenderer {
 				final BlockPos blockPos = precipHeight.down();
 				final IBlockState state = ClientChunkCache.instance().getBlockState(blockPos);
 				final double posX = locX + this.RANDOM.nextFloat();
-				final double posY = precipHeight.getY() + 0.1F - state.getBoundingBox(world, blockPos).minY;
+				// On top of the block below, as vanilla does: a slab or path is lower than a full block
+				final double posY = blockPos.getY() + 0.1F + state.getBoundingBox(world, blockPos).maxY;
 				final double posZ = locZ + this.RANDOM.nextFloat();
 
 				spawnBlockParticle(state, hasDust, world, posX, posY, posZ);

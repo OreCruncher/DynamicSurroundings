@@ -179,6 +179,10 @@ public final class CommandDS extends CommandBase {
 					final double d = parseDouble(parms[2], 0.0D, 100.0D) / 100.0D;
 					if (COMMAND_OPTION_RAIN.compareToIgnoreCase(parms[1]) == 0) {
 						if (data != null) {
+							// A strength of 0 while raining is taken as "pick one" by the weather
+							// generator, so 0 stops the rain instead
+							if (d == 0)
+								world.provider.resetRainAndThunder();
 							data.setRainIntensity((float) d);
 							feedback = new TextComponentString(Localization.format("dsurround.msg.RainIntensitySet",
 									FORMATTER.format(data.getRainIntensity() * 100)));
