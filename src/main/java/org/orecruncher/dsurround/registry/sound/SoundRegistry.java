@@ -195,10 +195,13 @@ public final class SoundRegistry extends Registry {
 	private boolean isSoundCulledLogical(@Nonnull final ResourceLocation res) {
 		if (ModOptions.sound.soundCullingThreshold > 0) {
 			// Get the last time the sound was seen
-			final int lastOccurance = this.soundCull.getInt(res);
-			if (lastOccurance != 0) {
+			if (this.soundCull.containsKey(res)) {
+				final int lastOccurance = this.soundCull.getInt(res);
 				final int currentTick = EnvironState.getTickCounter();
-				if ((currentTick - lastOccurance) < ModOptions.sound.soundCullingThreshold) {
+				// The tick counter starts over each connect, so a time ahead of it is from
+				// an earlier session
+				final int elapsed = currentTick - lastOccurance;
+				if (elapsed >= 0 && elapsed < ModOptions.sound.soundCullingThreshold) {
 					return true;
 				} else {
 					// Set when it happened and fall through for remapping and stuff
