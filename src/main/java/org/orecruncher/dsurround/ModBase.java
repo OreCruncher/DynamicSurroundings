@@ -88,7 +88,8 @@ public class ModBase {
 	protected static ModLog logger = ModLog.NULL_LOGGER;
 	protected static Configuration config;
 	protected static File dataDirectory;
-	protected static boolean installedOnServer;
+	// Set on the network thread during the handshake, read on the client thread
+	protected static volatile boolean installedOnServer;
 	protected static boolean devMode;
 	protected static boolean isInitialized = false;
 
@@ -205,6 +206,11 @@ public class ModBase {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void clientConnect(@Nonnull final ClientConnectedToServerEvent event) {
+		// The check handler also runs for every server the multiplayer screen pings,
+		// and a vanilla server sends no mod list, so the last ping's answer would
+		// stand. A modded server's handshake runs the check before this event.
+		if ("VANILLA".equals(event.getConnectionType()))
+			installedOnServer = false;
 		proxy.clientConnect(event);
 	}
 
