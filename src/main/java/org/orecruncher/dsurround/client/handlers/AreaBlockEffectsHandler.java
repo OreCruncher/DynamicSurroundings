@@ -49,18 +49,32 @@ public final class AreaBlockEffectsHandler extends EffectHandlerBase {
 		this.locus,
 		RandomBlockEffectScanner.FAR_RANGE
 	);
-	protected final AlwaysOnBlockEffectScanner alwaysOn = new AlwaysOnBlockEffectScanner(
-		this.locus,
-		ModOptions.effects.specialEffectRange
-	);
 	//@formatter:on
+
+	// Made again when the special effect range changes: a scan only looks at blocks once, so
+	// effects past a lowered range would never come back
+	protected AlwaysOnBlockEffectScanner alwaysOn;
+	protected int alwaysOnRange;
+	protected boolean connected;
 
 	public AreaBlockEffectsHandler() {
 		super("Area Block Effects");
+		makeAlwaysOn();
+	}
+
+	private void makeAlwaysOn() {
+		if (this.connected)
+			MinecraftForge.EVENT_BUS.unregister(this.alwaysOn);
+		this.alwaysOnRange = ModOptions.effects.specialEffectRange;
+		this.alwaysOn = new AlwaysOnBlockEffectScanner(this.locus, this.alwaysOnRange);
+		if (this.connected)
+			MinecraftForge.EVENT_BUS.register(this.alwaysOn);
 	}
 
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
+		if (this.alwaysOnRange != ModOptions.effects.specialEffectRange)
+			makeAlwaysOn();
 		this.nearEffects.update();
 		this.farEffects.update();
 		this.alwaysOn.update();
@@ -68,11 +82,13 @@ public final class AreaBlockEffectsHandler extends EffectHandlerBase {
 
 	@Override
 	public void onConnect() {
+		this.connected = true;
 		MinecraftForge.EVENT_BUS.register(this.alwaysOn);
 	}
 
 	@Override
 	public void onDisconnect() {
+		this.connected = false;
 		MinecraftForge.EVENT_BUS.unregister(this.alwaysOn);
 	}
 
