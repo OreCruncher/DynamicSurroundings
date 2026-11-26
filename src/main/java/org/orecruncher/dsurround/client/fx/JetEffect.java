@@ -67,8 +67,10 @@ public abstract class JetEffect extends BlockEffect {
 		return false;
 	}
 
-	protected void addEffect(final ParticleJet fx) {
-		ParticleSystemHandler.addSystem(fx);
+	// Kept under the block that made it, the one canTrigger checks: a jet can start a
+	// block above or below it
+	protected void addEffect(@Nonnull final BlockPos pos, final ParticleJet fx) {
+		ParticleSystemHandler.addSystem(pos, fx);
 	}
 
 }

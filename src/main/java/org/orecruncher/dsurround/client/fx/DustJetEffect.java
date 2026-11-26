@@ -61,6 +61,6 @@ public class DustJetEffect extends JetEffect {
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		final ParticleJet effect = new ParticleDustJet(2, provider.getWorld(), pos.getX() + 0.5D, pos.getY() - 0.2D,
 				pos.getZ() + 0.5D, state);
-		addEffect(effect);
+		addEffect(pos, effect);
 	}
 }

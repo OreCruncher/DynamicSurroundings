@@ -92,7 +92,7 @@ public class SteamJetEffect extends JetEffect {
 			final float spawnHeight = BlockLiquid.getLiquidHeight(state, provider, pos);
 			final ParticleJet effect = new ParticleSteamJet(strength, provider.getWorld(), pos.getX() + 0.5D,
 					spawnHeight, pos.getZ() + 0.5D);
-			addEffect(effect);
+			addEffect(pos, effect);
 		}
 	}
 }

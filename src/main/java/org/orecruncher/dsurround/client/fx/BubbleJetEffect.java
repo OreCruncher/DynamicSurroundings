@@ -67,7 +67,7 @@ public class BubbleJetEffect extends JetEffect {
 		if (liquidBlocks > 0) {
 			final ParticleJet effect = new ParticleBubbleJet(liquidBlocks, provider.getWorld(), pos.getX() + 0.5D,
 					pos.getY() + 0.1D, pos.getZ() + 0.5D);
-			addEffect(effect);
+			addEffect(pos, effect);
 		}
 	}
 

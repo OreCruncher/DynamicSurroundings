@@ -130,7 +130,7 @@ public class WaterSplashJetEffect extends JetEffect {
 
 			final ParticleJet effect = new ParticleWaterSplash(strength, provider.getWorld(), pos, pos.getX() + 0.5D, y,
 					pos.getZ() + 0.5D);
-			addEffect(effect);
+			addEffect(pos, effect);
 		}
 	}
 }

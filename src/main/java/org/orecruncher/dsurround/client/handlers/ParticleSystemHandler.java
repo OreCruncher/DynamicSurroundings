@@ -88,8 +88,8 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 		return !_instance.systems.containsKey(pos);
 	}
 
-	public static void addSystem(@Nonnull final ParticleSystem system) {
-		_instance.systems.put(system.getPos().toImmutable(), system);
+	public static void addSystem(@Nonnull final BlockPos pos, @Nonnull final ParticleSystem system) {
+		_instance.systems.put(pos.toImmutable(), system);
 	}
 
 }

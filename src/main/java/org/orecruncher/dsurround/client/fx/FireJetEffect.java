@@ -82,7 +82,7 @@ public class FireJetEffect extends JetEffect {
 		if (blockCount > 0) {
 			final ParticleJet effect = new ParticleFireJet(blockCount, provider.getWorld(), pos.getX() + 0.5D,
 					spawnHeight, pos.getZ() + 0.5D);
-			addEffect(effect);
+			addEffect(pos, effect);
 		}
 	}
 }

@@ -61,7 +61,7 @@ public class FountainJetEffect extends JetEffect {
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		final ParticleJet effect = new ParticleFountainJet(5, provider.getWorld(), pos.getX() + 0.5D, pos.getY() + 1.1D,
 				pos.getZ() + 0.5D, state);
-		addEffect(effect);
+		addEffect(pos, effect);
 	}
 
 }
