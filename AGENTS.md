@@ -93,6 +93,9 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   `MixinParticle` adds the drift to a marked particle's move; `MixinParticleManager` marks vanilla smoke, large smoke,
   clouds and poofs; `IWindBlown.blow` marks ours (steam, frost breath, fire-jet flames). `ParticleDust` overrides
   `move`, so it never drifts (cave dust, mostly sheltered anyway).
+- `/dsweather wind [speed 0-300 | direction <degrees|N..NW> | clear]` (`CommandDSWeather`, a client command) holds the
+  wind for testing, speed as a percent of a full storm's, as 26.3's does; `/dsweather clear` or disconnecting lets it
+  go. Bench scenarios can run it in a scene's `commands`.
 - Drawn by `GpuDrops` (`rain.particleWeatherOnGpu`, on): the drops uploaded to a vertex buffer once a tick, four vertices
   a drop, and `shaders/drops.vert` making each frame's quads (OpenGL 2.1: the 26.x line's texel buffers need 3.1), or
   without shaders by `DropRenderer` on the CPU, whose math the shader follows: change both. Vanilla turns particles

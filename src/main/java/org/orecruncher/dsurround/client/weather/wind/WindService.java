@@ -76,6 +76,13 @@ public final class WindService {
 		return WIND;
 	}
 
+	/**
+	 * Whether the air is still: the dimension has no weather, so nothing drifts whatever the wind is set to
+	 */
+	public static boolean isStill() {
+		return still;
+	}
+
 	@SubscribeEvent
 	public static void onClientTick(@Nonnull final TickEvent.ClientTickEvent event) {
 		if (event.phase != TickEvent.Phase.END)

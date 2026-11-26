@@ -50,6 +50,13 @@ dsurround.msg.BiomeReload=§9Json configurations have been reloaded
 dsurround.msg.RainTimeSet=§9Rain time set to %1$s
 dsurround.msg.ThunderTimeSet=§9Thunder time set to %1$s
 dsurround.msg.ThunderThresholdSet=§9Thunder threshold set to %1$s
+dsurround.msg.dsweather.wind.status=Wind: %1$s%% of a full storm's, blowing toward %2$s (%3$s degrees)
+dsurround.msg.dsweather.wind.status.set=Wind: %1$s%% of a full storm's, blowing toward %2$s (%3$s degrees), set by /dsweather
+dsurround.msg.dsweather.wind.still=No wind: the air is still in this dimension
+dsurround.msg.dsweather.wind.speed=Wind set to %1$s%% of a full storm's. /dsweather wind clear goes back to the simulated wind.
+dsurround.msg.dsweather.wind.direction=Wind set to blow toward %1$s (%2$s degrees). /dsweather wind clear goes back to the simulated wind.
+dsurround.msg.dsweather.wind.clear=The wind is simulated again
+dsurround.msg.dsweather.wind.clear.notset=No wind was set: the wind is simulated
 
 # Version checking strings
 dsurround.msg.NewVersion=["§6Update Available: §9[",{"text":"§2%1$s §ev%2$s§f","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Click for CurseForge Project Page","color":"aqua"}},"clickEvent":{"action":"open_url","value":"%3$s"}},"§9]"]

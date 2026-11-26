@@ -38,6 +38,7 @@ import org.orecruncher.dsurround.profiling.Profiler;
 import org.orecruncher.dsurround.profiling.BenchHook;
 import org.orecruncher.dsurround.profiling.FrameTimes;
 import org.orecruncher.dsurround.commands.CommandDSProfile;
+import org.orecruncher.dsurround.commands.CommandDSWeather;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.ModOptions;
@@ -137,6 +138,7 @@ public class ProxyClient extends Proxy implements IProxy, ISelectiveResourceRelo
 
 		ClientCommandHandler.instance.registerCommand(new CommandCalc());
 		ClientCommandHandler.instance.registerCommand(new CommandDSProfile());
+		ClientCommandHandler.instance.registerCommand(new CommandDSWeather());
 		FrameTimes.register();
 		ProfileFiles.prune(Profiler.folder(), Profiler.FILE_PREFIX, ProfileFiles.KEPT, ModBase.log());
 		// The development bench (scenario runs, /dsbench), in development runs only
@@ -197,6 +199,8 @@ public class ProxyClient extends Proxy implements IProxy, ISelectiveResourceRelo
 			EffectManager.disconnect();
 			GuiHUDHandler.unregister();
 			Weather.unregister();
+			// A wind held by /dsweather is for the world it was set in
+			WindService.wind().clearSet();
 		});
 	}
 
