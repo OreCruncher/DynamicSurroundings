@@ -189,9 +189,11 @@ public class StormRenderer {
 	}
 
 	/**
-	 * Render rain and snow
+	 * Render rain and snow, and dust
+	 *
+	 * @param dustOnly draws only the dust, where particle weather draws the rain and snow
 	 */
-	public void render(@Nonnull final EntityRenderer renderer, final float partialTicks) {
+	public void render(@Nonnull final EntityRenderer renderer, final float partialTicks, final boolean dustOnly) {
 
 		// Don't use EnvironState - may not have been initialized when rendering
 		// starts.
@@ -243,7 +245,7 @@ public class StormRenderer {
 			for (int gridX = playerX - range; gridX <= playerX + range; ++gridX) {
 				final int column = Columns.index(gridX - playerX, gridZ - playerZ);
 				final PrecipitationType pt = this.columns.type[column];
-				if (pt == PrecipitationType.NONE)
+				if (pt == PrecipitationType.NONE || (dustOnly && pt != PrecipitationType.DUST))
 					continue;
 
 				final int idx = (gridZ - playerZ + 16) * 32 + gridX - playerX + 16;

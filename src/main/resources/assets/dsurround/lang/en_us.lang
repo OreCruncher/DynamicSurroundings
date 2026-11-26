@@ -98,6 +98,10 @@ dsurround.cfg.rain.MaxRainStrength=Default Maximum Rain Strength
 dsurround.cfg.rain.MaxRainStrength.tooltip=Default maximum rain strength for a dimension
 dsurround.cfg.rain.UseVanillaSound=Use Vanilla Rain Sound
 dsurround.cfg.rain.UseVanillaSound.tooltip=Use the Vanilla rain sound rather than the modified one
+dsurround.cfg.rain.ParticleWeather=Particle Weather
+dsurround.cfg.rain.ParticleWeather.tooltip=Draw rain and snow as single drops and flakes around the player rather than sheets (experimental; off under a shader pack)
+dsurround.cfg.rain.ParticleWeatherOnGpu=Particle Weather on the GPU
+dsurround.cfg.rain.ParticleWeatherOnGpu.tooltip=Have the graphics card make particle weather's drops each frame, rather than the CPU (needs shaders)
 dsurround.cfg.rain.EnableMagmaNetherrack=Enable Netherrack and Magma Splash Effect
 dsurround.cfg.rain.EnableMagmaNetherrack.tooltip=Enables/disables the lava particle effect on Netherrack and Magma blocks when raining
 

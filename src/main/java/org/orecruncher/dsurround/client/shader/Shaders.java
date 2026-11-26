@@ -34,6 +34,7 @@ public final class Shaders {
 	public static final ShaderProgram AURORA;
 	public static final ShaderProgram AURORA_CINEMATIC;
 	public static final ShaderProgram AURORA_COMPOSITE;
+	public static final ShaderProgram DROPS;
 
 	static {
 
@@ -43,6 +44,8 @@ public final class Shaders {
 				new ResourceLocation(ModInfo.MOD_ID, "shaders/aurora_cinematic.frag"));
 		AURORA_COMPOSITE = register("Aurora Composite", new ResourceLocation(ModInfo.MOD_ID, "shaders/aurora_composite.vert"),
 				new ResourceLocation(ModInfo.MOD_ID, "shaders/aurora_composite.frag"));
+		DROPS = register("Particle Weather", new ResourceLocation(ModInfo.MOD_ID, "shaders/drops.vert"),
+				new ResourceLocation(ModInfo.MOD_ID, "shaders/drops.frag"));
 	}
 
 	public static boolean areShadersSupported() {

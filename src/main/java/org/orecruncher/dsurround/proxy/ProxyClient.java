@@ -27,6 +27,8 @@ package org.orecruncher.dsurround.proxy;
 import java.util.Arrays;
 import java.util.function.Predicate;
 
+import org.orecruncher.dsurround.client.weather.particle.ParticleWeather;
+
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
@@ -201,6 +203,8 @@ public class ProxyClient extends Proxy implements IProxy, ISelectiveResourceRelo
 		if (resourcePredicate.test(VanillaResourceType.SOUNDS)) {
 			MinecraftForge.EVENT_BUS.post(new RegistryDataEvent.Resources(resourceManager));
 		}
+		if (resourcePredicate.test(VanillaResourceType.TEXTURES))
+			ParticleWeather.reload();
 	}
 
 	@Override

@@ -78,6 +78,18 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   uniforms for its block; the near point at z -1, as 26.x has reverse-Z): change the script, not the shader, and run it
   again when 26.x's shader changes. Bench: `scripts/bench/aurora.json` (classic), `aurora-cinematic.json`.
 
+## Particle weather
+- `rain.particleWeather` (off by default): rain and snow as single drops and flakes, ported from the 26.x line
+  (`client/weather/particle`: `PrecipitationField`, `PrecipitationColumns`, `PackedDrops`, `Snowflakes`, `Wind`, with
+  their tests). Run from `RenderWeather`: ticked by the first frame of each client tick, drawn every frame; the dust is
+  still the sheets of `StormRenderer` (`dustOnly`). Off under an OptiFine shader pack.
+- Drawn by `GpuDrops` (`rain.particleWeatherOnGpu`, on): the drops uploaded to a vertex buffer once a tick, four vertices
+  a drop, and `shaders/drops.vert` making each frame's quads (OpenGL 2.1: the 26.x line's texel buffers need 3.1), or
+  without shaders by `DropRenderer` on the CPU, whose math the shader follows: change both. Vanilla turns particles
+  with `ActiveRenderInfo`'s left (X, 0, Z) and up (YZ, XZ, XY); the other order shears the flakes.
+- Bench: `scripts/bench/particle-weather.json` (sheets, CPU, GPU). At 1920x1080 the GPU drops cost 0.05 ms of CPU a
+  frame, the sheets 0.13, the CPU-built drops 0.32.
+
 ## Known noise in a dev run's log
 - FML's missing signature data and Maven library folder errors, fernflower's "Unable to simplify switch" (the mixin
   debug export). Neither mod checks a certificate fingerprint any more (dropped in DS 4.0.0 and OreLib 3.6.0.2).

@@ -27,6 +27,12 @@ package org.orecruncher.dsurround.client.renderer.weather;
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.profiling.RenderTimers;
+import org.orecruncher.dsurround.capabilities.CapabilityDimensionInfo;
+import org.orecruncher.dsurround.capabilities.dimension.IDimensionInfo;
+import org.orecruncher.dsurround.client.weather.Weather;
+import org.orecruncher.dsurround.client.weather.particle.ParticleWeather;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.MathHelper;
 import org.orecruncher.dsurround.lib.profiling.RenderTimer;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
@@ -91,7 +97,17 @@ public final class RenderWeather extends IRenderHandler {
 	public void render(final float partialTicks, @Nonnull final WorldClient world, @Nonnull final Minecraft mc) {
 		RENDER_TIMER.begin();
 		try {
-			this.stormRenderer.render(mc.entityRenderer, partialTicks);
+			if (ParticleWeather.isActive()) {
+				// The rain and snow as drops; the dust still as sheets
+				final Entity camera = mc.getRenderViewEntity();
+				final IDimensionInfo info = CapabilityDimensionInfo.getCapability(world);
+				if (camera != null && (info == null || info.hasWeather()))
+					ParticleWeather.render(mc.entityRenderer, world, camera, getRendererUpdateCount(),
+							MathHelper.clamp(Weather.getIntensityLevel(), 0F, 1F), partialTicks);
+				this.stormRenderer.render(mc.entityRenderer, partialTicks, true);
+			} else {
+				this.stormRenderer.render(mc.entityRenderer, partialTicks, false);
+			}
 		} finally {
 			RENDER_TIMER.end();
 		}

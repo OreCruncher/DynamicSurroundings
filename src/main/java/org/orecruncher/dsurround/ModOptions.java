@@ -150,6 +150,18 @@ public final class ModOptions {
 		@RestartRequired(server = true)
 		public static boolean useVanillaRainSound = false;
 
+		@Option("Particle Weather")
+		@DefaultValue("false")
+		@LangKey(rain.PREFIX + ".ParticleWeather")
+		@Comment("Draw rain and snow as single drops and flakes around the player rather than sheets (experimental; off under a shader pack)")
+		public static boolean particleWeather = false;
+
+		@Option("Particle Weather on the GPU")
+		@DefaultValue("true")
+		@LangKey(rain.PREFIX + ".ParticleWeatherOnGpu")
+		@Comment("Have the graphics card make particle weather's drops each frame, rather than the CPU (needs shaders)")
+		public static boolean particleWeatherOnGpu = true;
+
 		@Option("Style of rain water ripple")
 		@DefaultValue("3")
 		@LangKey(rain.PREFIX + ".RippleStyle")

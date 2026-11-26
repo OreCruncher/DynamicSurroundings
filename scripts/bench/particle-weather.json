@@ -1,0 +1,31 @@
+// Particle weather (rain.particleWeather) against the sheets of rain and snow: plains in a thunderstorm and snowy
+// tundra in a full storm, each with the sheets, the drops built on the CPU each frame, and the drops made on the GPU
+// (rain.particleWeatherOnGpu)
+{
+  "world": "bench",
+  "seed": 20261126,
+  "setup": ["gamerule doDaylightCycle false", "time set 6000", "gamerule doWeatherCycle false",
+            "gamerule doMobSpawning false"],
+  "warmup": 15,
+  "record": 45,
+  "repeats": 2,
+  "video": {"width": 1920, "height": 1080, "vsync": false, "maxFps": 260},
+  "scenes": {
+    "plains": {"biome": "minecraft:plains", "pitch": 10,
+               "commands": ["weather thunder 999999", "ds setstr rain 100"], "profile": "weather"},
+    "tundra": {"biome": "minecraft:ice_flats", "pitch": 10,
+               "commands": ["weather rain 999999", "ds setstr rain 100"], "profile": "weather"}
+  },
+  "runs": [
+    {"label": "plains-sheets", "scene": "plains", "settings": {"rain.particleWeather": false}},
+    {"label": "plains-cpu", "scene": "plains",
+     "settings": {"rain.particleWeather": true, "rain.particleWeatherOnGpu": false}},
+    {"label": "plains-gpu", "scene": "plains",
+     "settings": {"rain.particleWeather": true, "rain.particleWeatherOnGpu": true}},
+    {"label": "tundra-sheets", "scene": "tundra", "settings": {"rain.particleWeather": false}},
+    {"label": "tundra-cpu", "scene": "tundra",
+     "settings": {"rain.particleWeather": true, "rain.particleWeatherOnGpu": false}},
+    {"label": "tundra-gpu", "scene": "tundra",
+     "settings": {"rain.particleWeather": true, "rain.particleWeatherOnGpu": true}}
+  ]
+}
