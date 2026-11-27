@@ -71,6 +71,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class StormSplashRenderer {
 
+	// How far out rain splashes land, in blocks
+	static final int RAIN_SPLASH_RANGE = 12;
+
 	protected static final int PARTICLE_SOUND_CHANCE = 3;
 	/**
 	 * What the last rain sounds fell on, for the diagnostics overlay
@@ -220,7 +223,8 @@ public class StormSplashRenderer {
 		double spawnZ = 0.0D;
 		int particlesSpawned = 0;
 
-		final int RANGE = Math.max((ModOptions.effects.specialEffectRange + 1) / 2, 10);
+		// Half the old effect range's default, 24: the effect ranges are block and entity effects', not the rain's
+		final int RANGE = RAIN_SPLASH_RANGE;
 		final float rangeFactor = RANGE / 10.0F;
 		int particleCount = (int) (100 * rainStrengthFactor * rainStrengthFactor * rangeFactor);
 

@@ -114,7 +114,7 @@ public class BadgeRenderLayer implements LayerRenderer<EntityLivingBase> {
 			return;
 
 		// Only render if in range
-		final double rangeSq = ModOptions.effects.specialEffectRange * ModOptions.effects.specialEffectRange;
+		final double rangeSq = ModOptions.effects.entityEffectRange * ModOptions.effects.entityEffectRange;
 		final double distSq = entity.getDistanceSq(EnvironState.getPlayer());
 		if (distSq > rangeSq)
 			return;

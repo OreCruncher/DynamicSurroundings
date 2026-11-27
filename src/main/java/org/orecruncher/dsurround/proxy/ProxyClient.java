@@ -182,12 +182,19 @@ public class ProxyClient extends Proxy implements IProxy, ISelectiveResourceRelo
 	}
 
 	/**
-	 * Sets up the client chunk cache to cover the special effect range: block effects read their neighbors
-	 * through it, and it answers air outside the region it covers. Called again when the range changes.
+	 * How far the client chunk cache reaches: past the block and entity effect ranges (block effects read their
+	 * neighbors through it, footsteps the blocks under the feet), and 32 at least
+	 */
+	public static int chunkCacheRange() {
+		return Math.max(32, Math.max(ModOptions.effects.blockEffectRange, ModOptions.effects.entityEffectRange)) + 2;
+	}
+
+	/**
+	 * Sets up the client chunk cache to reach {@link #chunkCacheRange()}: it answers air outside the region it covers.
+	 * Called again when that changes.
 	 */
 	public static void sizeChunkCache() {
-		final int r = Math.max(32, ModOptions.effects.specialEffectRange) + 2;
-		ClientChunkCache.initialize(r, !ModOptions.general.enableClientChunkCaching);
+		ClientChunkCache.initialize(chunkCacheRange(), !ModOptions.general.enableClientChunkCaching);
 	}
 
 	@Override

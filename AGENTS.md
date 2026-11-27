@@ -158,8 +158,8 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   loud as the step and not twice as loud, and heard further (16 blocks x the volume).
 
 ## Footsteps
-- `client/footsteps`: a `Generator` (`GeneratorQP` on four legs) per living entity within `effects.specialEffectRange`
-  (24), run from `FxHandler`'s `LivingUpdateEvent`, so inside the entity's own update: `EntityFootprintEffect` catches
+- `client/footsteps`: a `Generator` (`GeneratorQP` on four legs) per living entity within `effects.entityEffectRange`
+  (32), run from `FxHandler`'s `LivingUpdateEvent`, so inside the entity's own update: `EntityFootprintEffect` catches
   what it throws (a mod's block under the feet that can't answer), logs it once per entity type and turns that
   entity's footsteps off, where it crashed the game ("Ticking entity").
 - A delayed acoustic part (`delayed`, 30 or 50 ms in `mcp.json`) goes to `SoundEffectHandler`'s queue, counted in
@@ -240,6 +240,13 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   nothing), its id and name (`BiomeNameTraits`, whole words: BYG runs an id's words together), then its top block,
   each only filling groups nothing before it did. In the survey 15 of 250 biomes gained a type, no vanilla one.
 - The dump's `typesAdded` and `typeSources` columns show what was worked out and from what.
+
+## Effect ranges
+- Two, as the 26.x line: `effects.blockEffectRange` (40) for always-on block effects (the always-on sphere scanner, and
+  particle systems expire outside it) and `effects.entityEffectRange` (32) for entity effects (`FxHandler`, badges);
+  16 to 64. They were one `specialEffectRange` (24): a config that has it keeps its value for both
+  (`ModOptions.migrateEffectRange`, before the options are read). The client chunk cache reaches past both, 32 at
+  least (`ProxyClient.chunkCacheRange`); rain splashes, which took half the old range, land within a fixed 12.
 
 ## Random block effects
 - `AreaBlockEffectsHandler`: two `RandomBlockEffectScanner`s sample vanilla's random display tick spreads, 667 blocks

@@ -141,8 +141,8 @@ public class FxHandler extends EffectHandlerBase {
 		final long start = System.nanoTime();
 		final IEntityFX cap = CapabilityEntityFXData.getCapability(entity);
 		if (cap != null) {
-			final double distanceThreshold = ModOptions.effects.specialEffectRange
-					* ModOptions.effects.specialEffectRange;
+			final double distanceThreshold = ModOptions.effects.entityEffectRange
+					* ModOptions.effects.entityEffectRange;
 			final boolean inRange = entity.getDistanceSq(EnvironState.getPlayer()) <= distanceThreshold;
 			final EntityEffectHandler handler = cap.get();
 			if (handler != null && !inRange) {
@@ -200,7 +200,7 @@ public class FxHandler extends EffectHandlerBase {
 
 	@SubscribeEvent
 	public void diagnostic(@Nonnull final DiagnosticEvent.Gather event) {
-		final double range = ModOptions.effects.specialEffectRange;
+		final double range = ModOptions.effects.entityEffectRange;
 		final BlockPos min = EnvironState.getPlayerPosition().add(-range, -range, -range);
 		final BlockPos max = EnvironState.getPlayerPosition().add(range, range, range);
 		final AxisAlignedBB box = new AxisAlignedBB(min, max);

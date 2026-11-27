@@ -52,12 +52,12 @@ public final class AreaBlockEffectsHandler extends EffectHandlerBase {
 	);
 	protected final AlwaysOnBlockEffectScanner alwaysOn = new AlwaysOnBlockEffectScanner(
 		this.locus,
-		ModOptions.effects.specialEffectRange
+		ModOptions.effects.blockEffectRange
 	);
 	//@formatter:on
 
 	// The range the chunk cache was last sized for (ProxyClient sizes it at startup)
-	protected int cacheRange = ModOptions.effects.specialEffectRange;
+	protected int cacheRange = ProxyClient.chunkCacheRange();
 
 	public AreaBlockEffectsHandler() {
 		super("Area Block Effects");
@@ -69,11 +69,12 @@ public final class AreaBlockEffectsHandler extends EffectHandlerBase {
 		// effects past a lowered range would never come back), and the chunk cache the effects read their
 		// neighbors through has to reach as far. The cache is resized first: a new one is empty until the
 		// next tick fills it, and a scan started against it would find no neighbors.
-		final int range = ModOptions.effects.specialEffectRange;
-		final boolean resized = range != this.cacheRange;
+		final int range = ModOptions.effects.blockEffectRange;
+		final int cache = ProxyClient.chunkCacheRange();
+		final boolean resized = cache != this.cacheRange;
 		if (resized) {
 			ProxyClient.sizeChunkCache();
-			this.cacheRange = range;
+			this.cacheRange = cache;
 		} else {
 			this.alwaysOn.setRange(range);
 		}

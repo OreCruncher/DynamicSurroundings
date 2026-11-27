@@ -56,7 +56,7 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 
 	@Override
 	public void process(@Nonnull final EntityPlayer player) {
-		final double range = ModOptions.effects.specialEffectRange;
+		final double range = ModOptions.effects.blockEffectRange;
 		final BlockPos min = EnvironState.getPlayerPosition().add(-range, -range, -range);
 		final BlockPos max = EnvironState.getPlayerPosition().add(range, range, range);
 

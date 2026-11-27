@@ -387,12 +387,19 @@ public final class ModOptions {
 
 		protected static final String PREFIX = ModOptions.PREFIX + ".effects";
 
-		@Option("Special Effect Range")
-		@DefaultValue("24")
-		@LangKey(effects.PREFIX + ".FXRange")
+		@Option("Block Effect Range")
+		@DefaultValue("40")
+		@LangKey(effects.PREFIX + ".BlockEffectRange")
 		@RangeInt(min = 16, max = 64)
-		@Comment("Block radius/range around player for special effect application")
-		public static int specialEffectRange = 24;
+		@Comment("Radius around the player, in blocks, where always-on block effects (waterfalls, steam, fountains) are found and shown; past 32, at more cost")
+		public static int blockEffectRange = 40;
+
+		@Option("Entity Effect Range")
+		@DefaultValue("32")
+		@LangKey(effects.PREFIX + ".EntityEffectRange")
+		@RangeInt(min = 16, max = 64)
+		@Comment("Radius around the player, in blocks, within which entities have their effects (footsteps, breath, chat, badges)")
+		public static int entityEffectRange = 32;
 
 		@Option("Wind Blows Particles")
 		@DefaultValue("true")
@@ -786,6 +793,7 @@ public final class ModOptions {
 
 	public static void load(final Configuration config) {
 
+		migrateEffectRange(config);
 		ConfigProcessor.process(config, ModOptions.class);
 		if (ModBase.config() != null)
 			Profiles.tickle();
@@ -800,6 +808,22 @@ public final class ModOptions {
 			for (final String cat : config.getCategoryNames()) {
 				scrubCategory(config.getCategory(cat));
 			}
+	}
+
+	/**
+	 * One "Special Effect Range" covered block and entity effects alike; it became a range for each, as in the 26.x
+	 * line. A config that has it keeps its value for both (unless it already has them), rather than taking the new
+	 * defaults.
+	 */
+	static void migrateEffectRange(final Configuration config) {
+		final ConfigCategory category = config.getCategory(CATEGORY_EFFECTS);
+		final Property old = category.get("Special Effect Range");
+		if (old == null)
+			return;
+		for (final String key : new String[] { "Block Effect Range", "Entity Effect Range" })
+			if (!category.containsKey(key))
+				category.put(key, new Property(key, old.getString(), Property.Type.INTEGER));
+		category.remove("Special Effect Range");
 	}
 
 	private static void scrubCategory(final ConfigCategory category) {
