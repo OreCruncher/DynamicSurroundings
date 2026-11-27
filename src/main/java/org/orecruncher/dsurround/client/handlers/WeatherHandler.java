@@ -30,6 +30,8 @@ import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.sound.SoundInstance;
 import org.orecruncher.dsurround.client.sound.Sounds;
+import org.orecruncher.dsurround.client.renderer.weather.StormSplashRenderer;
+import org.orecruncher.dsurround.client.weather.RainSurfaceTally;
 import org.orecruncher.dsurround.client.weather.Weather;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.event.ThunderEvent;
@@ -82,6 +84,11 @@ public class WeatherHandler extends EffectHandlerBase {
 	@SubscribeEvent
 	public void diagnostic(@Nonnull final DiagnosticEvent.Gather event) {
 		event.output.add(Weather.diagnostic());
+		if (ModOptions.rain.enableRainSurfaces) {
+			final String surfaces = StormSplashRenderer.RAIN_SURFACES.summary();
+			if (!surfaces.isEmpty())
+				event.output.add("Rain sounds on (last " + RainSurfaceTally.SIZE + "): " + surfaces);
+		}
 	}
 
 }

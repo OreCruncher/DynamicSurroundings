@@ -894,6 +894,42 @@
 			"dsurround:ambient/weather/rain_calm4"
 		]
 	},
+	"rain.leaves": {
+		"category": "weather",
+		"sounds": [
+			"dsurround:ambient/weather/rain_leaves1",
+			"dsurround:ambient/weather/rain_leaves2",
+			"dsurround:ambient/weather/rain_leaves3",
+			"dsurround:ambient/weather/rain_leaves4"
+		]
+	},
+	"rain.metal": {
+		"category": "weather",
+		"sounds": [
+			"dsurround:ambient/weather/rain_metal1",
+			"dsurround:ambient/weather/rain_metal2",
+			"dsurround:ambient/weather/rain_metal3",
+			"dsurround:ambient/weather/rain_metal4"
+		]
+	},
+	"rain.glass": {
+		"category": "weather",
+		"sounds": [
+			"dsurround:ambient/weather/rain_glass1",
+			"dsurround:ambient/weather/rain_glass2",
+			"dsurround:ambient/weather/rain_glass3",
+			"dsurround:ambient/weather/rain_glass4"
+		]
+	},
+	"rain.water": {
+		"category": "weather",
+		"sounds": [
+			"dsurround:ambient/weather/rain_water1",
+			"dsurround:ambient/weather/rain_water2",
+			"dsurround:ambient/weather/rain_water3",
+			"dsurround:ambient/weather/rain_water4"
+		]
+	},
 	"thunder": {
 		"category": "weather",
 		"credits": [

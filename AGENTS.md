@@ -150,10 +150,19 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
 - Accent volumes keep 26.x's share of a footstep: 26.x plays them beside vanilla's step (0.15), ours beside DS's
   (about 0.95), so 26.x's factory volume x 6.33 (0.3 is `190`, 0.25 is `158`). The game plays anything over 1 at 1, as
   loud as the step and not twice as loud, and heard further (16 blocks x the volume).
-- `client/weather/RainSurface` (26.x's): what the rain falls on, by heat and water, the `rain_on_*` and
-  `rain_absorbing` tags, then the sound type (leaves step as plants in 1.12.2, so they are by tag); with 26.x's
-  unfiltered volume and pitch for the rain's sound on each, for when the rain-on-surfaces work comes over. The
-  inspection overlay shows a block's surface and what sorted it.
+
+## Rain on surfaces
+- `rain.enableRainSurfaces` (on), ported from the 26.x line: each rain sound (`StormSplashRenderer.playSplashSound`, on
+  the block under the splash it picks) sounds like what it lands on. `client/weather/RainSurface` sorts the block: hot
+  or water, then the `rain_on_metal`, `rain_on_glass`, `rain_on_leaves`, `rain_on_wood` and `rain_absorbing` tags, then
+  the sound type (a mod's own by its step sound; leaves step as plants in 1.12.2, so they are by tag), else hard. Each
+  surface has 26.x's volume and pitch for the rain without filters (1.12.2 has none); leaves, metal, glass and water
+  have rain of their own (`rain.leaves` etc., 26.x's recordings), which takes 70% of the rain's place there (`RainMix`),
+  played as recorded. 26.x splits its rain into calm, medium and heavy and the layer takes its share of all three; here
+  there is the one storm sound.
+- The inspection overlay gives a block's surface and why, the diagnostics overlay what the last 64 rain sounds fell on
+  (`RainSurfaceTally`). Wet steps use `RainSurface` too. Bench: `scripts/bench/rain-surfaces.json` (each material
+  underfoot and as a roof, on and off), to listen to.
 
 ## Known noise in a dev run's log
 - FML's missing signature data and Maven library folder errors, fernflower's "Unable to simplify switch" (the mixin

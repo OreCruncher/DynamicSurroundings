@@ -55,6 +55,30 @@ whether LPs can be monetized on the various streaming services.
      <li>S: <a href="https://www.freesound.org/people/rayjensen/sounds/202749/">Soft, Chilled Crickets Field Recording</a> by <a href="https://www.freesound.org/people/rayjensen/">rayjensen</a> | License: Creative Commons 0</li>
 </ul>
 
+*dsurround:rain.leaves*
+
+<ul>
+     <li>S: <a href="https://freesound.org/people/Garuda1982/sounds/536843/">rain in the forest atmo field recording</a> by <a href="https://freesound.org/people/Garuda1982/">Garuda1982</a> | License: Creative Commons 0 | Modified: four stretches cut, made mono, high-passed, faded in and out, levels matched (for the 26.x line)</li> 
+</ul>
+
+*dsurround:rain.metal*
+
+<ul>
+     <li>S: <a href="https://freesound.org/people/Sassaby/sounds/771981/">Medium rain on a tin roof</a> by <a href="https://freesound.org/people/Sassaby/">Sassaby</a> | License: Creative Commons 0 | Modified: four stretches cut, made mono, high-passed, faded in and out, levels matched (for the 26.x line)</li> 
+</ul>
+
+*dsurround:rain.glass*
+
+<ul>
+     <li>S: <a href="https://freesound.org/people/TRP/sounds/616530/">120503 rain on skylight window interior 2012</a> by <a href="https://freesound.org/people/TRP/">TRP</a> | License: Creative Commons 0 | Modified: four stretches cut, made mono, high-passed, faded in and out, levels matched (for the 26.x line)</li> 
+</ul>
+
+*dsurround:rain.water*
+
+<ul>
+     <li>S: <a href="https://freesound.org/people/YleArkisto/sounds/248282/">Kevyt sade veden pintaan / Light rain on surface of a lake water</a> by <a href="https://freesound.org/people/YleArkisto/">YleArkisto</a> | License: <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> | Modified: four stretches cut, made mono, high-passed, faded in and out, levels matched (for the 26.x line)</li> 
+</ul>
+
 *dsurround:thunder*
 
 <ul>

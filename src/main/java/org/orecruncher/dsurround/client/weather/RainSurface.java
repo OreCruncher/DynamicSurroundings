@@ -52,8 +52,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * What the rain is falling on, from the 26.x line: wet steps use it now (hard ground slaps, soft ground takes the rain
- * in), the rain's sounds on each surface will.
+ * What the rain is falling on, from the 26.x line: the rain sounds like what it lands on (see {@link RainMix}), and wet
+ * steps use it (hard ground slaps, soft ground takes the rain in).
  * <p>
  * Looked up in order: something hot or water, then the {@code rain_on_*} tags (for packs, and blocks whose sound type
  * says the wrong thing), then {@code rain_absorbing}, then the block's sound type, so a mod's blocks mostly sort
@@ -62,9 +62,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * otherwise soft.
  * <p>
  * Each surface has the rain sound's volume and pitch on it, as shares of what they would be: 26.x's numbers without
- * enhanced sound processing (set by ear on its rain-surfaces bench, 2026-11-21). 1.12.2 has no sound filters, so
- * 26.x's filtered numbers aren't here. The inspection overlay gives a block's surface and what sorted it
- * ({@link #describe}).
+ * enhanced sound processing (set by ear on its rain-surfaces bench, 2026-11-21), which are all 1.12.2 can use, having
+ * no sound filters. A volume over 1 still makes the rain louder, as the rain plays well under the sound engine's limit
+ * of 1. Leaves, metal, glass and water also have rain of their own ({@link #layer}), recordings played in place of most
+ * of the rain there (see {@link RainMix}), as pitch can't add a ring, a tick or a patter. The inspection overlay gives a
+ * block's surface and what sorted it ({@link #describe}), and the diagnostics overlay what the last rain sounds fell on
+ * ({@link RainSurfaceTally}).
  */
 @SideOnly(Side.CLIENT)
 public enum RainSurface {
@@ -108,6 +111,26 @@ public enum RainSurface {
 	}
 
 	/**
+	 * The surface's own rain, played in place of most of the rain where a rain sound lands on it, or null for none: what
+	 * pitch can't give (a tin roof's ring, drops ticking on glass, pattering on leaves, plinking on water)
+	 */
+	@Nullable
+	public ResourceLocation layer() {
+		switch (this) {
+		case LEAVES:
+			return Layers.LEAVES;
+		case METAL:
+			return Layers.METAL;
+		case GLASS:
+			return Layers.GLASS;
+		case WATER:
+			return Layers.WATER;
+		default:
+			return null;
+		}
+	}
+
+	/**
 	 * What the rain falls on at a block
 	 */
 	@Nonnull
@@ -146,6 +169,17 @@ public enum RainSurface {
 
 	private static boolean isWater(@Nonnull final IBlockState state) {
 		return state.getMaterial() == Material.WATER;
+	}
+
+	// The surfaces' own rain (sounds.json)
+	private static final class Layers {
+		static final ResourceLocation LEAVES = new ResourceLocation("dsurround", "rain.leaves");
+		static final ResourceLocation METAL = new ResourceLocation("dsurround", "rain.metal");
+		static final ResourceLocation GLASS = new ResourceLocation("dsurround", "rain.glass");
+		static final ResourceLocation WATER = new ResourceLocation("dsurround", "rain.water");
+
+		private Layers() {
+		}
 	}
 
 	/**

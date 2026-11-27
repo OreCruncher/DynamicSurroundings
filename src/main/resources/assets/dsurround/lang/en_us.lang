@@ -95,6 +95,8 @@ dsurround.cfg.logging.FlagMask.tooltip=Bitmask for toggling various debug traces
 
 dsurround.cfg.rain=Rain Options
 dsurround.cfg.rain.tooltip=Options that control rain effects in the client
+dsurround.cfg.rain.RainSurfaces=Rain on Surfaces
+dsurround.cfg.rain.RainSurfaces.tooltip=The rain sounds like what it falls on: duller on grass and sand, ringing on metal, ticking on glass, pattering on leaves, hissing on water
 dsurround.cfg.rain.RippleStyle=Style of rain water ripple
 dsurround.cfg.rain.RippleStyle.tooltip=0: original round, 1: darker round, 2: square, 3: pixelated
 dsurround.cfg.rain.RainVolume=Rain Sound Level

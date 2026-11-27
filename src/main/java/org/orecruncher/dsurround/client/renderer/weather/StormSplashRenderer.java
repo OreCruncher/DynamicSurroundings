@@ -36,7 +36,11 @@ import org.orecruncher.dsurround.client.fx.ParticleCollections;
 import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
 import org.orecruncher.dsurround.client.sound.SoundBuilder;
 import org.orecruncher.dsurround.client.sound.SoundInstance;
+import org.orecruncher.dsurround.client.weather.RainMix;
+import org.orecruncher.dsurround.client.weather.RainSurface;
+import org.orecruncher.dsurround.client.weather.RainSurfaceTally;
 import org.orecruncher.dsurround.client.weather.Weather;
+import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.client.weather.compat.RandomThings;
 import org.orecruncher.lib.WorldUtils;
 import org.orecruncher.lib.chunk.ClientChunkCache;
@@ -66,6 +70,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class StormSplashRenderer {
 
 	protected static final int PARTICLE_SOUND_CHANCE = 3;
+	/**
+	 * What the last rain sounds fell on, for the diagnostics overlay
+	 */
+	public static final RainSurfaceTally RAIN_SURFACES = new RainSurfaceTally();
 	private static final Int2ObjectOpenHashMap<StormSplashRenderer> splashRenderers = new Int2ObjectOpenHashMap<>();
 	private static final StormSplashRenderer DEFAULT = new StormSplashRenderer();
 
@@ -143,9 +151,28 @@ public class StormSplashRenderer {
 			pitch -= (this.RANDOM.nextFloat() - this.RANDOM.nextFloat()) * 0.1F;
 			this.pos.setPos(x, y, z);
 
-			final SoundInstance fx = SoundBuilder.builder(sound, SoundCategory.WEATHER).setVolume(volume)
-					.setPitch(pitch).setPosition(this.pos).build();
+			// With rain on surfaces, the rain sounds like the block it lands on: the one under the splash, which sits a
+			// little over the block's top (see addRainParticles)
+			RainSurface surface = null;
+			if (ModOptions.rain.enableRainSurfaces && pt == PrecipitationType.RAIN
+					&& sound == Weather.getWeatherProperties().getStormSound()) {
+				surface = RainSurface.of(world, new BlockPos(x, y - 0.101D, z));
+				RAIN_SURFACES.add(surface);
+			}
+			final RainMix mix = RainMix.of(surface, volume, pitch);
+
+			final SoundInstance fx = SoundBuilder.builder(sound, SoundCategory.WEATHER).setVolume(mix.volume)
+					.setPitch(mix.pitch).setPosition(this.pos).build();
 			SoundEffectHandler.INSTANCE.playSound(fx);
+			if (mix.layer != null) {
+				final SoundEvent layer = RegistryManager.SOUND.getSound(mix.layer);
+				if (layer != null) {
+					// As recorded: not pitched, a roof's lower pitch included
+					final SoundInstance layerFx = SoundBuilder.builder(layer, SoundCategory.WEATHER)
+							.setVolume(mix.layerVolume).setPitch(1F).setPosition(this.pos).build();
+					SoundEffectHandler.INSTANCE.playSound(layerFx);
+				}
+			}
 		}
 	}
 

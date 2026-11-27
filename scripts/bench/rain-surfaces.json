@@ -1,0 +1,407 @@
+// Rain on surfaces (RainSurface), ported from the 26.x line's: to listen to rather than measure. A 25x25 stage of one
+// material at y 244 over a roofed forest, the player standing on it, or under a roof of it at y 248 (the rain sound
+// plays lower on a roof over the player). The rain sounds play on blocks within 10 blocks of the player's height, so up
+// here every sound is on the stage: the ground is far below. Each stage twice, Rain on Surfaces on and then off; the
+// run's name shows as it starts. The rain is held at 60% (ds setstr), the biome sounds and the music are off. The water
+// stage is a pool with a stone rim. Recordings are made but aren't the point. See README.md for the format.
+{
+  "world": "bench",
+  "seed": 20261127,
+  "setup": [
+    "gamemode creative",
+    "gamerule doDaylightCycle false",
+    "time set 6000",
+    "gamerule doWeatherCycle false",
+    "gamerule doMobSpawning false"
+  ],
+  "volume": 1.0,
+  "musicVolume": 0,
+  "warmup": 3,
+  "record": 12,
+  "repeats": 1,
+  "screenshots": false,
+  "settingSets": {
+    "quiet": {
+      "sound.enableBiomeSounds": false
+    }
+  },
+  "scenes": {
+    "hard": {
+      "biome": "minecraft:roofed_forest",
+      "yaw": 0,
+      "pitch": 20,
+      "commands": [
+        "weather rain 999999",
+        "ds setstr rain 60",
+        "tp @s ~ 245 ~",
+        "fill ~-14 ~-3 ~-14 ~14 ~6 ~14 air",
+        "fill ~-12 ~-1 ~-12 ~12 ~-1 ~12 stone"
+      ],
+      "profile": "general"
+    },
+    "soft": {
+      "biome": "minecraft:roofed_forest",
+      "yaw": 0,
+      "pitch": 20,
+      "commands": [
+        "weather rain 999999",
+        "ds setstr rain 60",
+        "tp @s ~ 245 ~",
+        "fill ~-14 ~-3 ~-14 ~14 ~6 ~14 air",
+        "fill ~-12 ~-1 ~-12 ~12 ~-1 ~12 grass"
+      ],
+      "profile": "general"
+    },
+    "leaves": {
+      "biome": "minecraft:roofed_forest",
+      "yaw": 0,
+      "pitch": 20,
+      "commands": [
+        "weather rain 999999",
+        "ds setstr rain 60",
+        "tp @s ~ 245 ~",
+        "fill ~-14 ~-3 ~-14 ~14 ~6 ~14 air",
+        "fill ~-12 ~-1 ~-12 ~12 ~-1 ~12 leaves 4"
+      ],
+      "profile": "general"
+    },
+    "wood": {
+      "biome": "minecraft:roofed_forest",
+      "yaw": 0,
+      "pitch": 20,
+      "commands": [
+        "weather rain 999999",
+        "ds setstr rain 60",
+        "tp @s ~ 245 ~",
+        "fill ~-14 ~-3 ~-14 ~14 ~6 ~14 air",
+        "fill ~-12 ~-1 ~-12 ~12 ~-1 ~12 planks"
+      ],
+      "profile": "general"
+    },
+    "metal": {
+      "biome": "minecraft:roofed_forest",
+      "yaw": 0,
+      "pitch": 20,
+      "commands": [
+        "weather rain 999999",
+        "ds setstr rain 60",
+        "tp @s ~ 245 ~",
+        "fill ~-14 ~-3 ~-14 ~14 ~6 ~14 air",
+        "fill ~-12 ~-1 ~-12 ~12 ~-1 ~12 iron_block"
+      ],
+      "profile": "general"
+    },
+    "glass": {
+      "biome": "minecraft:roofed_forest",
+      "yaw": 0,
+      "pitch": 20,
+      "commands": [
+        "weather rain 999999",
+        "ds setstr rain 60",
+        "tp @s ~ 245 ~",
+        "fill ~-14 ~-3 ~-14 ~14 ~6 ~14 air",
+        "fill ~-12 ~-1 ~-12 ~12 ~-1 ~12 glass"
+      ],
+      "profile": "general"
+    },
+    "water": {
+      "biome": "minecraft:roofed_forest",
+      "yaw": 0,
+      "pitch": 20,
+      "commands": [
+        "weather rain 999999",
+        "ds setstr rain 60",
+        "tp @s ~ 245 ~",
+        "fill ~-14 ~-3 ~-14 ~14 ~6 ~14 air",
+        "fill ~-13 ~-2 ~-13 ~13 ~-2 ~13 stone",
+        "fill ~-13 ~-1 ~-13 ~13 ~-1 ~-13 stone",
+        "fill ~-13 ~-1 ~13 ~13 ~-1 ~13 stone",
+        "fill ~-13 ~-1 ~-12 ~-13 ~-1 ~12 stone",
+        "fill ~13 ~-1 ~-12 ~13 ~-1 ~12 stone",
+        "fill ~-12 ~-1 ~-12 ~12 ~-1 ~12 water",
+        "setblock ~ ~-1 ~ barrier"
+      ],
+      "profile": "general"
+    },
+    "hot": {
+      "biome": "minecraft:roofed_forest",
+      "yaw": 0,
+      "pitch": 20,
+      "commands": [
+        "weather rain 999999",
+        "ds setstr rain 60",
+        "tp @s ~ 245 ~",
+        "fill ~-14 ~-3 ~-14 ~14 ~6 ~14 air",
+        "fill ~-12 ~-1 ~-12 ~12 ~-1 ~12 magma"
+      ],
+      "profile": "general"
+    },
+    "hard-roof": {
+      "biome": "minecraft:roofed_forest",
+      "yaw": 0,
+      "pitch": 20,
+      "commands": [
+        "weather rain 999999",
+        "ds setstr rain 60",
+        "tp @s ~ 245 ~",
+        "fill ~-14 ~-3 ~-14 ~14 ~6 ~14 air",
+        "setblock ~ ~-1 ~ barrier",
+        "fill ~-12 ~3 ~-12 ~12 ~3 ~12 stone"
+      ],
+      "profile": "general"
+    },
+    "wood-roof": {
+      "biome": "minecraft:roofed_forest",
+      "yaw": 0,
+      "pitch": 20,
+      "commands": [
+        "weather rain 999999",
+        "ds setstr rain 60",
+        "tp @s ~ 245 ~",
+        "fill ~-14 ~-3 ~-14 ~14 ~6 ~14 air",
+        "setblock ~ ~-1 ~ barrier",
+        "fill ~-12 ~3 ~-12 ~12 ~3 ~12 planks"
+      ],
+      "profile": "general"
+    },
+    "metal-roof": {
+      "biome": "minecraft:roofed_forest",
+      "yaw": 0,
+      "pitch": 20,
+      "commands": [
+        "weather rain 999999",
+        "ds setstr rain 60",
+        "tp @s ~ 245 ~",
+        "fill ~-14 ~-3 ~-14 ~14 ~6 ~14 air",
+        "setblock ~ ~-1 ~ barrier",
+        "fill ~-12 ~3 ~-12 ~12 ~3 ~12 iron_block"
+      ],
+      "profile": "general"
+    },
+    "glass-roof": {
+      "biome": "minecraft:roofed_forest",
+      "yaw": 0,
+      "pitch": 20,
+      "commands": [
+        "weather rain 999999",
+        "ds setstr rain 60",
+        "tp @s ~ 245 ~",
+        "fill ~-14 ~-3 ~-14 ~14 ~6 ~14 air",
+        "setblock ~ ~-1 ~ barrier",
+        "fill ~-12 ~3 ~-12 ~12 ~3 ~12 glass"
+      ],
+      "profile": "general"
+    },
+    "leaf-canopy": {
+      "biome": "minecraft:roofed_forest",
+      "yaw": 0,
+      "pitch": 20,
+      "commands": [
+        "weather rain 999999",
+        "ds setstr rain 60",
+        "tp @s ~ 245 ~",
+        "fill ~-14 ~-3 ~-14 ~14 ~6 ~14 air",
+        "setblock ~ ~-1 ~ barrier",
+        "fill ~-12 ~3 ~-12 ~12 ~3 ~12 leaves 4"
+      ],
+      "profile": "general"
+    }
+  },
+  "runs": [
+    {
+      "label": "hard surfaces-on",
+      "caption": "stone, underfoot, surface sounds on",
+      "scene": "hard",
+      "use": "quiet"
+    },
+    {
+      "label": "hard surfaces-off",
+      "caption": "stone, underfoot, surface sounds off",
+      "scene": "hard",
+      "use": "quiet",
+      "settings": {
+        "rain.enableRainSurfaces": false
+      }
+    },
+    {
+      "label": "soft surfaces-on",
+      "caption": "grass, underfoot, surface sounds on",
+      "scene": "soft",
+      "use": "quiet"
+    },
+    {
+      "label": "soft surfaces-off",
+      "caption": "grass, underfoot, surface sounds off",
+      "scene": "soft",
+      "use": "quiet",
+      "settings": {
+        "rain.enableRainSurfaces": false
+      }
+    },
+    {
+      "label": "leaves surfaces-on",
+      "caption": "leaves, underfoot, surface sounds on",
+      "scene": "leaves",
+      "use": "quiet"
+    },
+    {
+      "label": "leaves surfaces-off",
+      "caption": "leaves, underfoot, surface sounds off",
+      "scene": "leaves",
+      "use": "quiet",
+      "settings": {
+        "rain.enableRainSurfaces": false
+      }
+    },
+    {
+      "label": "wood surfaces-on",
+      "caption": "oak planks, underfoot, surface sounds on",
+      "scene": "wood",
+      "use": "quiet"
+    },
+    {
+      "label": "wood surfaces-off",
+      "caption": "oak planks, underfoot, surface sounds off",
+      "scene": "wood",
+      "use": "quiet",
+      "settings": {
+        "rain.enableRainSurfaces": false
+      }
+    },
+    {
+      "label": "metal surfaces-on",
+      "caption": "iron, underfoot, surface sounds on",
+      "scene": "metal",
+      "use": "quiet"
+    },
+    {
+      "label": "metal surfaces-off",
+      "caption": "iron, underfoot, surface sounds off",
+      "scene": "metal",
+      "use": "quiet",
+      "settings": {
+        "rain.enableRainSurfaces": false
+      }
+    },
+    {
+      "label": "glass surfaces-on",
+      "caption": "glass, underfoot, surface sounds on",
+      "scene": "glass",
+      "use": "quiet"
+    },
+    {
+      "label": "glass surfaces-off",
+      "caption": "glass, underfoot, surface sounds off",
+      "scene": "glass",
+      "use": "quiet",
+      "settings": {
+        "rain.enableRainSurfaces": false
+      }
+    },
+    {
+      "label": "water surfaces-on",
+      "caption": "water, underfoot, surface sounds on",
+      "scene": "water",
+      "use": "quiet"
+    },
+    {
+      "label": "water surfaces-off",
+      "caption": "water, underfoot, surface sounds off",
+      "scene": "water",
+      "use": "quiet",
+      "settings": {
+        "rain.enableRainSurfaces": false
+      }
+    },
+    {
+      "label": "hot surfaces-on",
+      "caption": "magma, underfoot, surface sounds on",
+      "scene": "hot",
+      "use": "quiet"
+    },
+    {
+      "label": "hot surfaces-off",
+      "caption": "magma, underfoot, surface sounds off",
+      "scene": "hot",
+      "use": "quiet",
+      "settings": {
+        "rain.enableRainSurfaces": false
+      }
+    },
+    {
+      "label": "hard-roof surfaces-on",
+      "caption": "stone, roof above, surface sounds on",
+      "scene": "hard-roof",
+      "use": "quiet"
+    },
+    {
+      "label": "hard-roof surfaces-off",
+      "caption": "stone, roof above, surface sounds off",
+      "scene": "hard-roof",
+      "use": "quiet",
+      "settings": {
+        "rain.enableRainSurfaces": false
+      }
+    },
+    {
+      "label": "wood-roof surfaces-on",
+      "caption": "oak planks, roof above, surface sounds on",
+      "scene": "wood-roof",
+      "use": "quiet"
+    },
+    {
+      "label": "wood-roof surfaces-off",
+      "caption": "oak planks, roof above, surface sounds off",
+      "scene": "wood-roof",
+      "use": "quiet",
+      "settings": {
+        "rain.enableRainSurfaces": false
+      }
+    },
+    {
+      "label": "metal-roof surfaces-on",
+      "caption": "iron, roof above, surface sounds on",
+      "scene": "metal-roof",
+      "use": "quiet"
+    },
+    {
+      "label": "metal-roof surfaces-off",
+      "caption": "iron, roof above, surface sounds off",
+      "scene": "metal-roof",
+      "use": "quiet",
+      "settings": {
+        "rain.enableRainSurfaces": false
+      }
+    },
+    {
+      "label": "glass-roof surfaces-on",
+      "caption": "glass, roof above, surface sounds on",
+      "scene": "glass-roof",
+      "use": "quiet"
+    },
+    {
+      "label": "glass-roof surfaces-off",
+      "caption": "glass, roof above, surface sounds off",
+      "scene": "glass-roof",
+      "use": "quiet",
+      "settings": {
+        "rain.enableRainSurfaces": false
+      }
+    },
+    {
+      "label": "leaf-canopy surfaces-on",
+      "caption": "leaves, roof above, surface sounds on",
+      "scene": "leaf-canopy",
+      "use": "quiet"
+    },
+    {
+      "label": "leaf-canopy surfaces-off",
+      "caption": "leaves, roof above, surface sounds off",
+      "scene": "leaf-canopy",
+      "use": "quiet",
+      "settings": {
+        "rain.enableRainSurfaces": false
+      }
+    }
+  ]
+}

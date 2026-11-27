@@ -150,6 +150,12 @@ public final class ModOptions {
 		@RestartRequired(server = true)
 		public static boolean useVanillaRainSound = false;
 
+		@Option("Rain on Surfaces")
+		@DefaultValue("true")
+		@LangKey(rain.PREFIX + ".RainSurfaces")
+		@Comment("The rain sounds like what it falls on: duller on grass and sand, ringing on metal, ticking on glass, pattering on leaves, hissing on water")
+		public static boolean enableRainSurfaces = true;
+
 		@Option("Particle Weather")
 		@DefaultValue("false")
 		@LangKey(rain.PREFIX + ".ParticleWeather")
