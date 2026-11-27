@@ -37,6 +37,7 @@ import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
 import org.orecruncher.dsurround.client.sound.SoundBuilder;
 import org.orecruncher.dsurround.client.sound.SoundInstance;
 import org.orecruncher.dsurround.client.weather.RainMix;
+import org.orecruncher.dsurround.client.weather.RainSoundSpots;
 import org.orecruncher.dsurround.client.weather.RainSurface;
 import org.orecruncher.dsurround.client.weather.RainSurfaceTally;
 import org.orecruncher.dsurround.client.weather.Weather;
@@ -249,7 +250,39 @@ public class StormSplashRenderer {
 
 		if (particlesSpawned > 0 && this.RANDOM.nextInt(PARTICLE_SOUND_CHANCE) < this.rainSoundCounter++) {
 			this.rainSoundCounter = 0;
-			playSplashSound(season, world, entity, spawnX, spawnY, spawnZ);
+			// Mostly near the player (see RainSoundSpots), or on a splash's spot if no column nearby will do
+			if (!findSoundSpot(season, world, entity, RANGE))
+				playSplashSound(season, world, entity, spawnX, spawnY, spawnZ);
 		}
+	}
+
+	/**
+	 * Picks a spot for the rain sound, mostly near the player, and plays it there: on top of what the rain lands on in
+	 * a column, as a splash is
+	 *
+	 * @return whether a spot was found and the sound played
+	 */
+	protected boolean findSoundSpot(final ISeasonInfo season, final World world, final Entity entity, final int range) {
+		final int playerY = MathHelper.floor(entity.posY);
+		for (int i = 0; i < RainSoundSpots.TRIES; i++) {
+			final double distance = RainSoundSpots.distance(this.RANDOM.nextDouble(), range);
+			final double angle = this.RANDOM.nextDouble() * Math.PI * 2D;
+			final double x = entity.posX + Math.cos(angle) * distance;
+			final double z = entity.posZ + Math.sin(angle) * distance;
+			this.pos.setPos(x, 0, z);
+			if (RandomThings.shouldRain(world, this.pos))
+				continue;
+			final BlockPos precipHeight = getPrecipitationHeight(season, range / 2, this.pos);
+			final PrecipitationType pt = season.getPrecipitationType(precipHeight, null);
+			if ((pt != PrecipitationType.DUST && pt != PrecipitationType.RAIN) || precipHeight.getY() > playerY + range
+					|| precipHeight.getY() < playerY - range)
+				continue;
+			final BlockPos blockPos = precipHeight.down();
+			final IBlockState state = ClientChunkCache.instance().getBlockState(blockPos);
+			final double y = blockPos.getY() + 0.1F + state.getBoundingBox(world, blockPos).maxY;
+			playSplashSound(season, world, entity, x, y, z);
+			return true;
+		}
+		return false;
 	}
 }

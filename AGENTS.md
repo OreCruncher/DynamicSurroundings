@@ -160,6 +160,11 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   have rain of their own (`rain.leaves` etc., 26.x's recordings), which takes 70% of the rain's place there (`RainMix`),
   played as recorded. 26.x splits its rain into calm, medium and heavy and the layer takes its share of all three; here
   there is the one storm sound.
+- Where a rain sound plays (`RainSoundSpots`, `StormSplashRenderer.findSoundSpot`): not on one of the tick's splashes,
+  as vanilla (8% within 2 blocks, median 6) but in a column of its own, any way round and mostly near: `12 * roll^2`
+  blocks out (41% within 2, median 3). Standing on a few blocks of glass, more sounds land on it, so its own rain
+  doesn't come and go (5x5: 14% to 49% of the sounds, 17 dB of swing to 3). Not in the 26.x line yet: to evaluate there
+  (its glass would pulse the same way, as vanilla's rain tick picks the spot).
 - The inspection overlay gives a block's surface and why, the diagnostics overlay what the last 64 rain sounds fell on
   (`RainSurfaceTally`). Wet steps use `RainSurface` too. Bench: `scripts/bench/rain-surfaces.json` (each material
   underfoot and as a roof, on and off), to listen to.
