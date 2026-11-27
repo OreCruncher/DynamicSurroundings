@@ -382,6 +382,8 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 				continue;
 			final SoundEffect.Builder b = new SoundEffect.Builder(sr);
 			final SoundEffect s = b.build();
+			s.compileConditions(entry.comment != null ? "biome rule '" + entry.comment + "'"
+					: "the biome rule with conditions '" + entry.conditions + "'");
 			if (s.getSoundType() == SoundType.SPOT)
 				addSpotSound(s);
 			else

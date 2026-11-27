@@ -164,6 +164,7 @@ public final class BlockStateRegistry extends Registry {
 					if (sr.soundCategory == null)
 						b.setSoundCategory(SoundCategory.BLOCKS);
 					final SoundEffect eff = b.build();
+					eff.compileConditions("a sound of block [" + blockName + "]");
 					blockData.addSound(eff);
 				}
 			}
@@ -185,8 +186,10 @@ public final class BlockStateRegistry extends Registry {
 					}
 					final BlockEffect blockEffect = type.getInstance(chance);
 					if (blockEffect != null) {
-						if (e.conditions != null)
+						if (e.conditions != null) {
 							blockEffect.setConditions(e.conditions);
+							blockEffect.compileConditions("the " + e.effect + " effect of block [" + blockName + "]");
+						}
 						blockData.addEffect(blockEffect);
 					}
 				}

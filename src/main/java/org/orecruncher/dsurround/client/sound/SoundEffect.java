@@ -282,9 +282,23 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 	// IEntrySource<T>
 	@Override
 	public boolean matches() {
+		return compiledConditions().check();
+	}
+
+	@Nonnull
+	private Script compiledConditions() {
 		if (this.script == null)
 			this.script = ExpressionEngine.instance().compile(this.conditions);
-		return this.script.check();
+		return this.script;
+	}
+
+	/**
+	 * Compiles the conditions now, as the config loads, and reports them once if they don't compile
+	 *
+	 * @param where where they came from, for the report: "biome rule 'Desert wind'"
+	 */
+	public void compileConditions(@Nonnull final String where) {
+		ExpressionEngine.instance().reportIfBroken(compiledConditions(), where);
 	}
 
 	@Override

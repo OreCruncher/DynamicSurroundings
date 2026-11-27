@@ -98,9 +98,23 @@ public abstract class BlockEffect implements ISpecialEffect {
 	 * Whether the effect's conditions hold now
 	 */
 	protected boolean conditionsMet() {
+		return compiledConditions().check();
+	}
+
+	@Nonnull
+	private Script compiledConditions() {
 		if (this.script == null)
 			this.script = ExpressionEngine.instance().compile(getConditions());
-		return this.script.check();
+		return this.script;
+	}
+
+	/**
+	 * Compiles the conditions now, as the config loads, and reports them once if they don't compile
+	 *
+	 * @param where where they came from, for the report: "block [minecraft:lava]"
+	 */
+	public void compileConditions(@Nonnull final String where) {
+		ExpressionEngine.instance().reportIfBroken(compiledConditions(), where);
 	}
 
 	/**

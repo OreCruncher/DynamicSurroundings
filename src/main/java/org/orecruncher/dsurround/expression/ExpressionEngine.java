@@ -22,7 +22,9 @@
  */
 package org.orecruncher.dsurround.expression;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.lib.expression.ExpressionCache;
@@ -41,6 +43,8 @@ public final class ExpressionEngine {
 	}
 
 	private final ExpressionCache cache = new ExpressionCache(ModBase.log());
+	// The scripts reported as broken, so each is reported once however many places use it
+	private final Set<String> reported = new HashSet<>();
 
 	private ExpressionEngine() {
 		this.cache.add(new BattleVariables());
@@ -74,6 +78,18 @@ public final class ExpressionEngine {
 	 */
 	public Script compile(final String exp) {
 		return this.cache.compile(exp);
+	}
+
+	/**
+	 * Reports a script that doesn't compile, naming where it came from, once: config errors show as the config loads,
+	 * rather than when a sound or effect is first checked
+	 *
+	 * @param where where it came from: "biome rule 'Desert wind'", "block [minecraft:lava]"
+	 */
+	public void reportIfBroken(final Script script, final String where) {
+		if (!script.isCompiled() && this.reported.add(script.getExpression()))
+			ModBase.log().warn("Conditions [%s] in %s don't work, so they are never true: %s", script.getExpression(),
+					where, script.getError());
 	}
 
 	public boolean check(final String exp) {

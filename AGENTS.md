@@ -230,6 +230,13 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   each only filling groups nothing before it did. In the survey 15 of 250 biomes gained a type, no vanilla one.
 - The dump's `typesAdded` and `typeSources` columns show what was worked out and from what.
 
+## Scripts (conditions)
+- Conditions run through OreLib's `ExpressionCache` (`expression/ExpressionEngine`). Sounds and block effects keep
+  the compiled `Script` (`SoundEffect.matches`, `BlockEffect.conditionsMet`), compiled as the config loads
+  (`compileConditions`): one that doesn't compile is logged once, naming the biome rule or block it is in, with
+  OreLib's reason (an unknown name gets the nearest known one suggested). Biome rule conditions (`BiomeMatcher`) are
+  compiled then too ("Skipping biome entry ...").
+
 ## Known noise in a dev run's log
 - FML's missing signature data and Maven library folder errors, fernflower's "Unable to simplify switch" (the mixin
   debug export). Neither mod checks a certificate fingerprint any more (dropped in DS 4.0.0 and OreLib 3.6.0.2).
