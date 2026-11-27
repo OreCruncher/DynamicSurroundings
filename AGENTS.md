@@ -257,7 +257,9 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   falling blocks (it counted the landing block and the lip too, 2 more), rechecked every half second.
 - Splashes: 5 plus 2.5 a block of drop, at most 20, between half and all of that each time, by the Particles option and
   fewer far from the camera (`WaterfallSplashes`), living twice a spray's life. Sounds: `WaterfallSounds` (ticked by
-  `ParticleSystemHandler`) plays a loop for at most 32 waterfalls within 20 blocks, those with the most impact
+  `ParticleSystemHandler`) plays a loop for at most 32 waterfalls within hearing (each tier's range is 16 blocks times
+  its `sounds.json` volume above 1, as the game sets it, plus 4: `waterfall.4` is 1.5 and `waterfall.5` 2, so big falls
+  carry to 24 and 32 blocks, no louder close by), those with the most impact
   (loudness squared over distance squared), tiers moved down to the new strength so each sounds as it did; every splash
   had a loop of its own before. `effects.waterfallCutoff` keeps its old scale (strength + 2). The diagnostics overlay
   has the counts.

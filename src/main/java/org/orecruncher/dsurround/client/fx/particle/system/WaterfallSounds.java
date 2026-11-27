@@ -44,7 +44,12 @@ import org.orecruncher.lib.random.XorShiftRandom;
 
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.Sound;
+import net.minecraft.client.audio.SoundEventAccessor;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
@@ -52,8 +57,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * The sounds of the waterfalls around the player, from the 26.x line's WaterfallSounds: a looping sound at each,
- * louder for a bigger drop, but at most {@link #SOUND_INSTANCE_CAP} at once, those with the most impact (loudness
- * squared over distance squared: a loud near one beats a quiet far one) and only those near enough to be heard.
+ * louder for a bigger drop and heard further (waterfall.4 and waterfall.5 have volumes above 1), but at most
+ * {@link #SOUND_INSTANCE_CAP} at once, those with the most impact (loudness squared over distance squared: a loud near
+ * one beats a quiet far one) and only those near enough to be heard.
  * Every waterfall had a loop of its own before, however many there were, crowding out other sounds at a big
  * cascade. The splashes ({@link ParticleWaterSplash}) are tracked while alive; ticked by the particle system handler.
  * Client thread only.
@@ -64,12 +70,13 @@ public final class WaterfallSounds {
 	static final int SOUND_INSTANCE_CAP = 32;
 	// How often which waterfalls are heard is worked out, in ticks
 	static final int SOUND_CHECK_INTERVAL = 4;
-	// A waterfall loop is heard 16 blocks out (its volume is 1); one a little further plays, so it is there as the
-	// player comes nearer
-	static final double SOUND_RANGE_SQ = 20D * 20D;
+	// A loop plays a little beyond where it can be heard, so it is there as the player comes nearer
+	static final double SOUND_RANGE_MARGIN = 4D;
 
 	private static final Set<ParticleWaterSplash> WATERFALLS = new ReferenceOpenHashSet<>();
 	private static final Map<ParticleWaterSplash, PositionedEmitter> SOUNDS = new Reference2ObjectOpenHashMap<>();
+	// Each tier's squared play range, from its volume in sounds.json
+	private static final Map<SoundEffect, Double> RANGE_SQ = new Reference2ObjectOpenHashMap<>();
 	private static final XorShiftRandom RANDOM = new XorShiftRandom();
 	private static int ticks;
 
@@ -100,6 +107,37 @@ public final class WaterfallSounds {
 	}
 
 	/**
+	 * How far a sound is heard, as the game works it out: 16 blocks, times its volume where that is above 1 (it plays
+	 * no louder than 1 close by, but carries further). waterfall.4 and waterfall.5 are louder in sounds.json, so a big
+	 * waterfall is heard from further off.
+	 */
+	static double heardRange(final float volume) {
+		return 16D * Math.max(volume, 1F);
+	}
+
+	/**
+	 * The squared distance a waterfall's loop plays to, from its sound's volume in sounds.json (the game's sound
+	 * registry, as resource packs left it)
+	 */
+	private static double rangeSq(final int strength) {
+		final SoundEffect sound = soundFor(strength);
+		Double rangeSq = RANGE_SQ.get(sound);
+		if (rangeSq == null) {
+			final double range = heardRange(volumeOf(sound)) + SOUND_RANGE_MARGIN;
+			rangeSq = range * range;
+			RANGE_SQ.put(sound, rangeSq);
+		}
+		return rangeSq;
+	}
+
+	private static float volumeOf(@Nonnull final SoundEffect sound) {
+		final SoundEventAccessor accessor = Minecraft.getMinecraft().getSoundHandler()
+				.getAccessor(new ResourceLocation(sound.getSoundName()));
+		final Sound entry = accessor == null ? null : accessor.cloneEntry();
+		return entry == null || entry == SoundHandler.MISSING_SOUND ? 1F : entry.getVolume();
+	}
+
+	/**
 	 * A strength on the scale the "Waterfall Cutoff" option has always used, which counted 2 more than the drop, so a
 	 * setting means what it did
 	 */
@@ -108,15 +146,17 @@ public final class WaterfallSounds {
 	}
 
 	/**
-	 * The waterfalls to hear: those in range and at or above the cutoff, and of those, if there are more than
-	 * {@code cap}, the {@code cap} with the most impact
+	 * The waterfalls to hear: those within the range their sound plays to and at or above the cutoff, and of those, if
+	 * there are more than {@code cap}, the {@code cap} with the most impact
 	 */
 	@Nonnull
 	static <T> List<T> chooseHeard(@Nonnull final Collection<T> waterfalls, @Nonnull final ToIntFunction<T> strength,
-			@Nonnull final ToDoubleFunction<T> distanceSq, final int cap, final double rangeSq, final int cutoff) {
+			@Nonnull final ToDoubleFunction<T> distanceSq, final int cap, @Nonnull final ToDoubleFunction<T> rangeSq,
+			final int cutoff) {
 		final List<T> heard = new ArrayList<>();
 		for (final T w : waterfalls)
-			if (distanceSq.applyAsDouble(w) <= rangeSq && cutoffScale(strength.applyAsInt(w)) >= cutoff)
+			if (distanceSq.applyAsDouble(w) <= rangeSq.applyAsDouble(w)
+					&& cutoffScale(strength.applyAsInt(w)) >= cutoff)
 				heard.add(w);
 		if (heard.size() > cap) {
 			heard.sort(Comparator.comparingDouble((T w) -> {
@@ -163,6 +203,8 @@ public final class WaterfallSounds {
 		SOUNDS.values().forEach(PositionedEmitter::stop);
 		SOUNDS.clear();
 		WATERFALLS.clear();
+		// Resource packs may differ next time
+		RANGE_SQ.clear();
 	}
 
 	/**
@@ -179,7 +221,8 @@ public final class WaterfallSounds {
 
 	private static void choose(@Nonnull final Vec3d listener) {
 		final List<ParticleWaterSplash> heard = chooseHeard(WATERFALLS, ParticleWaterSplash::getStrength,
-				w -> w.distanceSq(listener), SOUND_INSTANCE_CAP, SOUND_RANGE_SQ, ModOptions.effects.waterfallCutoff);
+				w -> w.distanceSq(listener), SOUND_INSTANCE_CAP, w -> rangeSq(w.getStrength()),
+				ModOptions.effects.waterfallCutoff);
 		final Set<ParticleWaterSplash> keep = new ReferenceOpenHashSet<>(heard);
 		SOUNDS.entrySet().removeIf(e -> {
 			if (keep.contains(e.getKey()))

@@ -2027,7 +2027,10 @@
 			"Creative Commons Attribution 4.0"
 		],
 		"sounds": [
-			"dsurround:ambient/stream/waterfall4"
+			{
+				"name": "dsurround:ambient/stream/waterfall4",
+				"volume": 1.5
+			}
 		]
 	},
 	"waterfall.5": {
@@ -2038,7 +2041,10 @@
 			"Creative Commons Attribution 4.0"
 		],
 		"sounds": [
-			"dsurround:ambient/stream/waterfall5"
+			{
+				"name": "dsurround:ambient/stream/waterfall5",
+				"volume": 2.0
+			}
 		]
 	},
 	"village.rooster": {

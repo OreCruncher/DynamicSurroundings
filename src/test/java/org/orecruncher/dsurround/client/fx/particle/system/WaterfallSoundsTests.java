@@ -50,7 +50,7 @@ public class WaterfallSoundsTests {
 	}
 
 	private static List<Fall> heard(final List<Fall> falls, final int cap, final int cutoff) {
-		return WaterfallSounds.chooseHeard(falls, f -> f.strength, f -> f.distanceSq, cap, 20D * 20D, cutoff);
+		return WaterfallSounds.chooseHeard(falls, f -> f.strength, f -> f.distanceSq, cap, f -> 20D * 20D, cutoff);
 	}
 
 	@Test
@@ -83,6 +83,22 @@ public class WaterfallSoundsTests {
 		assertEquals(1, heard(Arrays.asList(new Fall(3, 5), new Fall(2, 5)), 32, 5).size());
 		// More than 10 turns them off
 		assertEquals(0, heard(Arrays.asList(new Fall(10, 5)), 32, 11).size());
+	}
+
+	@Test
+	public void aLouderSoundIsHeardFurther() {
+		// 16 blocks at a volume of 1 or less; times the volume above it
+		assertEquals(16D, WaterfallSounds.heardRange(0.8F), 1e-9);
+		assertEquals(16D, WaterfallSounds.heardRange(1F), 1e-9);
+		assertEquals(24D, WaterfallSounds.heardRange(1.5F), 1e-9);
+		assertEquals(32D, WaterfallSounds.heardRange(2F), 1e-9);
+		// Each waterfall by its own range: a big one 28 blocks off is heard, a small one isn't
+		final Fall big = new Fall(8, 28);
+		final Fall small = new Fall(1, 28);
+		final List<Fall> chosen = WaterfallSounds.chooseHeard(Arrays.asList(big, small), f -> f.strength,
+				f -> f.distanceSq, 32, f -> f.strength >= 7 ? 36D * 36D : 20D * 20D, 0);
+		assertEquals(1, chosen.size());
+		assertTrue(chosen.contains(big));
 	}
 
 	@Test
