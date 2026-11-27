@@ -38,6 +38,7 @@ import org.orecruncher.dsurround.registry.blockstate.BlockStateUtil;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -65,6 +66,19 @@ public class RandomBlockEffectScanner extends RandomScanner {
 		setLogger(ModBase.log());
 	}
 
+	/**
+	 * Whether a sampled block may start its effects under the Particles option, as the 26.x line has it: all of them at
+	 * All, about two in three at Decreased, none at Minimal. The effects spawn their particles straight into the
+	 * particle manager, which skips the option; sounds aren't affected.
+	 *
+	 * @param particleSetting the option: 0 All, 1 Decreased, 2 Minimal
+	 */
+	static boolean startsEffects(final int particleSetting, @Nonnull final Random rand) {
+		if (particleSetting >= 2)
+			return false;
+		return particleSetting != 1 || rand.nextInt(3) != 0;
+	}
+
 	@Override
 	protected boolean interestingBlock(@Nonnull final IBlockState state) {
 		return BlockStateUtil.getStateData(state).hasSoundsOrEffects();
@@ -75,7 +89,7 @@ public class RandomBlockEffectScanner extends RandomScanner {
 		final IBlockAccessEx provider = this.locus.getWorld();
 		final BlockStateData profile = BlockStateUtil.getStateData(state);
 		final BlockEffect[] effects = profile.getEffects();
-		if (effects != BlockStateData.NO_EFFECTS)
+		if (effects != BlockStateData.NO_EFFECTS && startsEffects(Minecraft.getMinecraft().gameSettings.particleSetting, rand))
 			for (final BlockEffect be : effects) {
 				if (be.canTrigger(provider, state, pos, rand))
 					be.doEffect(provider, state, pos, rand);

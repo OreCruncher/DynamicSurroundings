@@ -241,6 +241,13 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   each only filling groups nothing before it did. In the survey 15 of 250 biomes gained a type, no vanilla one.
 - The dump's `typesAdded` and `typeSources` columns show what was worked out and from what.
 
+## Random block effects
+- `AreaBlockEffectsHandler`: two `RandomBlockEffectScanner`s sample vanilla's random display tick spreads, 667 blocks
+  a tick each within 16 and 32 (as the 26.x line's `RandomBlockSampler`, whose effects-only tail past 32 isn't here:
+  no block effect range option), and `AlwaysOnBlockEffectScanner` keeps always-on effects in a sphere. A sampled
+  block starts its effects by the Particles option, as 26.x: all at All, about two in three at Decreased, none at
+  Minimal (`startsEffects`; their particles skipped the option); its sounds play either way.
+
 ## Scripts (conditions)
 - Conditions run through OreLib's `ExpressionCache` (`expression/ExpressionEngine`). Sounds and block effects keep
   the compiled `Script` (`SoundEffect.matches`, `BlockEffect.conditionsMet`), compiled as the config loads
