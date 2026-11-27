@@ -30,6 +30,7 @@ import org.lwjgl.opengl.GL11;
 import org.orecruncher.dsurround.profiling.RenderTimers;
 import org.orecruncher.dsurround.lib.profiling.RenderTimer;
 import org.orecruncher.dsurround.ModInfo;
+import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.capabilities.CapabilitySpeechData;
 import org.orecruncher.dsurround.capabilities.speech.ISpeechData;
 import org.orecruncher.dsurround.capabilities.speech.RenderContext;
@@ -159,6 +160,10 @@ public class SpeechDataRenderer {
 
 	@SubscribeEvent
 	public static void onRenderWorldLast(@Nonnull final RenderWorldLastEvent event) {
+		// Bubbles come only from players' chat and entity chat: with both off there are none, and looking for them
+		// walked every loaded entity every frame (0.05 ms a frame, as much as all the area block effects)
+		if (!ModOptions.speechbubbles.enableSpeechBubbles && !ModOptions.speechbubbles.enableEntityChat)
+			return;
 		final EntityPlayer player = EnvironState.getPlayer();
 		if (player != null) {
 			RENDER_TIMER.begin();
