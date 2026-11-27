@@ -40,8 +40,6 @@ import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
 import org.orecruncher.dsurround.registry.acoustics.IOptions;
 import org.orecruncher.dsurround.registry.acoustics.ISoundPlayer;
 import org.orecruncher.dsurround.registry.sound.SoundRegistry;
-import org.orecruncher.lib.TimeUtils;
-import org.orecruncher.lib.collections.ObjectArray;
 import org.orecruncher.lib.random.XorShiftRandom;
 
 import net.minecraft.util.SoundEvent;
@@ -49,11 +47,18 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * Plays a footstep's acoustics. A delayed part (the second half of a step, say) goes to the sound handler's queue,
+ * counted in ticks: it was timed in milliseconds and dropped if more than 1.2 times its delay late, which, checked once
+ * a tick, any late tick did (a garbage collection, chunks loading, a pause), and stalled while the entity rode or slept.
+ */
 @SideOnly(Side.CLIENT)
 public class SoundPlayer implements ISoundPlayer {
 
+	// A tick, in milliseconds: what a delay given in milliseconds is counted in
+	static final int TICK_MILLIS = 50;
+
 	protected final Random random = XorShiftRandom.current();
-	protected final ObjectArray<PendingSound> pending = new ObjectArray<>();
 	protected final float scale;
 
 	public SoundPlayer(final float volumeScale) {
@@ -83,43 +88,29 @@ public class SoundPlayer implements ISoundPlayer {
 	@Override
 	public void playSound(@Nonnull final Vec3d location, @Nonnull final SoundEvent sound, final float volume,
 			final float pitch, @Nullable final IOptions options) {
-		// If it is a delayed sound queue it up. Otherwise play it.
-		if (options != null && options.isDelayedSound()) {
-			final long delay = TimeUtils.currentTimeMillis()
-					+ randAB(this.random, options.getDelayMin(), options.getDelayMax());
-			this.pending.add(new PendingSound(location, sound, volume, pitch, delay, options.getDelayMax()));
-		} else {
-			actuallyPlaySound(location, sound, volume, pitch);
-		}
-	}
-
-	protected void actuallyPlaySound(@Nonnull final Vec3d entity, @Nonnull final SoundEvent sound, final float volume,
-			final float pitch) {
+		// A delayed sound is queued, in ticks; otherwise it plays now
+		final int ticks = options != null && options.isDelayedSound()
+				? delayTicks(randAB(this.random, options.getDelayMin(), options.getDelayMax()))
+				: 0;
 		try {
-			final SoundInstance s = SoundBuilder.builder(sound, SoundRegistry.FOOTSTEPS).setPosition(entity)
+			final SoundInstance s = SoundBuilder.builder(sound, SoundRegistry.FOOTSTEPS).setPosition(location)
 					.setVolume(volume * this.scale).setPitch(pitch).build();
-			SoundEffectHandler.INSTANCE.playSound(s);
+			SoundEffectHandler.INSTANCE.playSound(s, ticks);
 		} catch (final Throwable t) {
 			ModBase.log().error("Unable to play sound", t);
 		}
 	}
 
+	/**
+	 * A delay in milliseconds as ticks: rounded up, and at least one (the next tick)
+	 */
+	static int delayTicks(final long millis) {
+		return (int) Math.max(1L, (millis + TICK_MILLIS - 1) / TICK_MILLIS);
+	}
+
 	@Override
 	public Random getRNG() {
 		return this.random;
-	}
-
-	public void think() {
-		final long time = TimeUtils.currentTimeMillis();
-
-		this.pending.removeIf(sound -> {
-			if (sound.getTimeToPlay() <= time) {
-				if (!sound.isLate(time))
-					sound.playSound(this);
-				return true;
-			}
-			return false;
-		});
 	}
 
 	private long randAB(@Nonnull final Random rng, final long a, final long b) {

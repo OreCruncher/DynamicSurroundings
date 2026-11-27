@@ -157,6 +157,15 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   (about 0.95), so 26.x's factory volume x 6.33 (0.3 is `190`, 0.25 is `158`). The game plays anything over 1 at 1, as
   loud as the step and not twice as loud, and heard further (16 blocks x the volume).
 
+## Footsteps
+- `client/footsteps`: a `Generator` (`GeneratorQP` on four legs) per living entity within `effects.specialEffectRange`
+  (24), run from `FxHandler`'s `LivingUpdateEvent`, so inside the entity's own update: `EntityFootprintEffect` catches
+  what it throws (a mod's block under the feet that can't answer), logs it once per entity type and turns that
+  entity's footsteps off, where it crashed the game ("Ticking entity").
+- A delayed acoustic part (`delayed`, 30 or 50 ms in `mcp.json`) goes to `SoundEffectHandler`'s queue, counted in
+  ticks (`SoundPlayer.delayTicks`: rounded up, at least the next tick): it was timed in milliseconds and dropped if
+  more than 1.2 times its delay late, which any late tick did, and stalled while the entity rode or slept.
+
 ## Rain on surfaces
 - `rain.enableRainSurfaces` (on), ported from the 26.x line: each rain sound (`StormSplashRenderer.playSplashSound`, on
   the block under the splash it picks) sounds like what it lands on. `client/weather/RainSurface` sorts the block: hot

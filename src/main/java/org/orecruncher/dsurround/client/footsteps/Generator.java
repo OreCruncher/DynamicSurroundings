@@ -148,9 +148,7 @@ public class Generator {
 		simulateAirborne(entity);
 		simulateBrushes(entity);
 
-		// Flush!
-		this.soundPlayer.think();
-
+		// Flush the footprints (delayed sounds are the sound handler's to play)
 		if (this.footprints.size() > 0) {
 			this.footprints.forEach(GENERATE_PRINT);
 			this.footprints.clear();

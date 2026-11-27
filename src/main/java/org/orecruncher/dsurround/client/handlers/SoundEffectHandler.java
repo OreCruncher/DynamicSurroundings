@@ -166,12 +166,21 @@ public class SoundEffectHandler extends EffectHandlerBase {
 
 	public boolean playSoundAt(@Nonnull final BlockPos pos, @Nonnull final SoundEffect sound, final int tickDelay) {
 
-		final SoundInstance s = sound.createSoundAt(pos);
-		if (tickDelay == 0)
-			return playSound(s);
+		return playSound(sound.createSoundAt(pos), tickDelay);
+	}
 
-		s.setState(SoundState.DELAYED);
-		this.pending.add(new PendingSound(s, tickDelay));
+	/**
+	 * Plays a sound after some ticks. Counted in the client's ticks, not time: a late tick plays it late rather than
+	 * not at all, and it waits while the game is paused.
+	 *
+	 * @return whether it played now (false when queued)
+	 */
+	public boolean playSound(@Nonnull final ISoundInstance sound, final int tickDelay) {
+		if (tickDelay <= 0)
+			return playSound(sound);
+
+		sound.setState(SoundState.DELAYED);
+		this.pending.add(new PendingSound(sound, tickDelay));
 		return false;
 	}
 

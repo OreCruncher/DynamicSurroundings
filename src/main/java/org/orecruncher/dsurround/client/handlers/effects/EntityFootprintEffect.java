@@ -23,11 +23,14 @@
  */
 package org.orecruncher.dsurround.client.handlers.effects;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.effects.EntityEffect;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactory;
@@ -51,7 +54,13 @@ public class EntityFootprintEffect extends EntityEffect {
 
 	protected static final Random RANDOM = XorShiftRandom.current();
 
+	// The entity types whose footsteps failed, so each is logged once
+	private static final Set<Class<?>> FAILED = new HashSet<>();
+
 	protected Generator generator;
+	// Footsteps failed for this entity, and are off for it until its effects are made again (out of range and back,
+	// a config reload)
+	protected boolean failed;
 
 	@Nonnull
 	@Override
@@ -67,8 +76,19 @@ public class EntityFootprintEffect extends EntityEffect {
 
 	@Override
 	public void update(@Nonnull final Entity subject) {
-		if (this.generator != null)
+		if (this.generator == null || this.failed)
+			return;
+		try {
 			this.generator.generateFootsteps((EntityLivingBase) subject);
+		} catch (final Throwable t) {
+			// Footsteps run in the entity's own update, so an error here would crash the game ("Ticking entity"):
+			// most likely a mod's block under its feet (its shape, whether it is a ladder) that can't answer here
+			this.failed = true;
+			this.generator = null;
+			if (FAILED.add(subject.getClass()))
+				ModBase.log().error(String.format("Footsteps failed for %s at %s and are off for it",
+						subject.getName(), subject.getPosition()), t);
+		}
 	}
 
 	@Override
@@ -110,7 +130,7 @@ public class EntityFootprintEffect extends EntityEffect {
 
 		@Override
 		public void update(@Nonnull final Entity subject) {
-			if (this.lastStyle != ModOptions.effects.footprintStyle) {
+			if (!this.failed && this.lastStyle != ModOptions.effects.footprintStyle) {
 				this.generator = RegistryManager.FOOTSTEPS.createGenerator((EntityLivingBase) subject);
 				this.lastStyle = ModOptions.effects.footprintStyle;
 			}
