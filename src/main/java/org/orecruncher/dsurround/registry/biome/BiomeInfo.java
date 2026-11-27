@@ -119,6 +119,17 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 		this.traits = getBiomeTypes().stream().map(BiomeDictionary.Type::getName).collect(Collectors.joining(" "));
 	}
 
+	/**
+	 * How many background sounds and spot sounds the config gives the biome, for /dsdump biomes
+	 */
+	public int getSoundCount() {
+		return this.sounds.length;
+	}
+
+	public int getSpotSoundCount() {
+		return this.spotSounds.length;
+	}
+
 	public boolean isRiver() {
 		return this.isRiver;
 	}

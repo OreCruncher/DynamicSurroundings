@@ -140,6 +140,11 @@ dependencies {
     compileOnly rfg.deobf("curse.maven:serene-seasons-291874:${propertyString('sereneseasons_file')}")
     compileOnly rfg.deobf("curse.maven:ctm-267602:${propertyString('ctm_file')}")
 
+    // -PbiomeMods: dev runs load biome mods too, for surveying biome classification (/dsdump biomes)
+    if (project.hasProperty('biomeMods')) {
+        runtimeOnly rfg.deobf("curse.maven:biomes-o-plenty-220318:${propertyString('biomesoplenty_file')}")
+    }
+
     // Plain unit tests (src/test), no game running
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

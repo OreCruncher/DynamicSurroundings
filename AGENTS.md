@@ -183,6 +183,15 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   with its channels swapped, the same sound in mono, so it is gone and `waterfine` plays `water` alone.
 - Still to come: the events only in 26.x (new biome loops, eagle, turtledove, whales, electric arcs, the medium rain).
 
+## Biome survey (/dsdump biomes)
+- `/dsdump biomes` (`CommandDSDump`, a client command) writes every biome to
+  `config/dsurround/dumps/biomes-<time>.csv`: its mod, Forge biome dictionary types and whether Forge guessed them
+  (read from `logs/latest.log`, "No types have been added to Biome"), climate, top block, the decorator's counts
+  (trees, grass, flowers...: -999 trees where a biome places its own, as BoP's and roofed forest), and what DS gives it
+  (sounds, spot sounds, fog, dust, aurora, the config entries matched). The log gets a per-mod summary.
+- `-PbiomeMods` makes dev runs load biome mods as well (Biomes O' Plenty so far), for surveying them; the dump can run
+  unattended from a bench scenario's `commands`.
+
 ## Known noise in a dev run's log
 - FML's missing signature data and Maven library folder errors, fernflower's "Unable to simplify switch" (the mixin
   debug export). Neither mod checks a certificate fingerprint any more (dropped in DS 4.0.0 and OreLib 3.6.0.2).
