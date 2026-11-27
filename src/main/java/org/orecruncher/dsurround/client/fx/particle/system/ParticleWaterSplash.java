@@ -24,127 +24,129 @@
 
 package org.orecruncher.dsurround.client.fx.particle.system;
 
-import org.orecruncher.dsurround.ModOptions;
+import javax.annotation.Nonnull;
+
 import org.orecruncher.dsurround.client.fx.ParticleCollections;
+import org.orecruncher.dsurround.client.fx.WaterfallColumn;
 import org.orecruncher.dsurround.client.fx.WaterSplashJetEffect;
-import org.orecruncher.dsurround.client.fx.particle.mote.IParticleMote;
-import org.orecruncher.dsurround.client.sound.PositionedEmitter;
-import org.orecruncher.dsurround.client.sound.SoundEffect;
-import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.lib.WorldUtils;
 import org.orecruncher.lib.chunk.ClientChunkCache;
 import org.orecruncher.lib.math.MathStuff;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * A waterfall's splash where the falling water lands, from the 26.x line's WaterfallEffect (without its mist and
+ * foam): splashes thrown up from the impact, more and further for a bigger drop, fewer far from the camera. Its
+ * strength is the height of the drop ({@link WaterfallColumn#strength}); it checks every half second that it is still
+ * a waterfall and recounts the drop, taking a new strength when it changed. Its sound is {@link WaterfallSounds}'.
+ */
 @SideOnly(Side.CLIENT)
 public class ParticleWaterSplash extends ParticleJet {
 
-	private static final SoundEffect[] fallSounds = new SoundEffect[11];
-	static {
-		// The smallest falls as the next size up: waterfall.0 was non-commercial, gone as in the 26.x line
-		fallSounds[0] = Sounds.WATERFALL1;
-		fallSounds[1] = Sounds.WATERFALL1;
-		fallSounds[2] = Sounds.WATERFALL1;
-		fallSounds[3] = Sounds.WATERFALL1;
-		fallSounds[4] = Sounds.WATERFALL2;
-		fallSounds[5] = Sounds.WATERFALL3;
-		fallSounds[6] = Sounds.WATERFALL3;
-		fallSounds[7] = Sounds.WATERFALL4;
-		fallSounds[8] = Sounds.WATERFALL4;
-		fallSounds[9] = Sounds.WATERFALL5;
-		fallSounds[10] = Sounds.WATERFALL5;
-	}
+	// Splashes live this many times a rain splash's life, as the 26.x line's
+	static final int SPLASH_LIFE = 2;
 
 	private static final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-
 	private final BlockPos location;
-	private PositionedEmitter emitter;
+	private int strength;
 	protected int particleLimit;
+	private boolean tracked;
 
 	public ParticleWaterSplash(final int strength, final World world, final BlockPos loc, final double x,
 			final double y, final double z) {
 		super(0, strength, world, x, y, z, 4);
 		this.location = loc.toImmutable();
-		setSpawnCount((int) (strength * 2.5F));
+		setStrength(strength);
 	}
 
-	public void setSpawnCount(final int limit) {
-		this.particleLimit = MathStuff.clamp(limit, 5, 20);
+	private void setStrength(final int strength) {
+		this.strength = strength;
+		// 5 splashes, and 2.5 more a block of drop: the counts there were when strength counted 2 more than the drop
+		this.particleLimit = MathStuff.clamp(5 + (int) (strength * 2.5F), 5, 20);
 	}
 
-	public int getSpawnCount() {
-		switch (SETTINGS.particleSetting) {
-		case 2:
-			return 0;
-		case 0:
-			return this.particleLimit;
-		default:
-			return this.particleLimit / 2;
-		}
+	public int getStrength() {
+		return this.strength;
+	}
+
+	public double getPosX() {
+		return this.posX;
+	}
+
+	public double getPosY() {
+		return this.posY;
+	}
+
+	public double getPosZ() {
+		return this.posZ;
+	}
+
+	public double distanceSq(@Nonnull final Vec3d point) {
+		return point.squareDistanceTo(this.posX, this.posY, this.posZ);
 	}
 
 	@Override
 	public boolean shouldDie() {
-		return (this.particleAge % 10) == 0
-				&& !WaterSplashJetEffect.isValidSpawnBlock(WorldUtils.getDefaultBlockStateProvider(), this.location);
-	}
-
-	private boolean setupSound() {
-		return this.emitter == null && isAlive() && this.jetStrength >= ModOptions.effects.waterfallCutoff
-				&& RANDOM.nextInt(6) == 0;
+		// Every half second: is it still a waterfall, and is the drop the same height?
+		if ((this.particleAge % 10) != 0)
+			return false;
+		if (!WaterSplashJetEffect.isValidSpawnBlock(WorldUtils.getDefaultBlockStateProvider(), this.location))
+			return true;
+		final int now = WaterfallColumn.strength(WorldUtils.getDefaultBlockStateProvider(), this.location);
+		if (now != this.strength) {
+			setStrength(now);
+			WaterfallSounds.restart(this);
+		}
+		return this.strength <= 0;
 	}
 
 	@Override
 	protected void soundUpdate() {
-		if (setupSound()) {
-			pos.setPos(this.posX, this.posY, this.posZ);
-			final int idx = MathStuff.clamp(this.jetStrength, 0, fallSounds.length - 1);
-			this.emitter = new PositionedEmitter(fallSounds[idx], pos);
-			this.emitter.setPitch(1F + 0.2F * (RANDOM.nextFloat() - RANDOM.nextFloat()));
+		if (!this.tracked) {
+			WaterfallSounds.track(this);
+			this.tracked = true;
 		}
-
-		if (this.emitter != null)
-			this.emitter.update();
 	}
 
 	@Override
 	protected void cleanUp() {
-		if (this.emitter != null)
-			this.emitter.stop();
-		this.emitter = null;
+		WaterfallSounds.untrack(this);
+		this.tracked = false;
 		super.cleanUp();
 	}
 
-	// Entity.resetHeight()
 	@Override
 	protected void spawnJetParticle() {
-		if (ParticleCollections.canFitWaterSpray()) {
-			final int splashCount = getSpawnCount();
-
-			for (int j = 0; (float) j < splashCount; ++j) {
-				final double xOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
-				final double zOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
-
-				if (ClientChunkCache.instance()
-						.getBlockState(pos.setPos(this.posX + xOffset, this.posY, this.posZ + zOffset)).getMaterial()
-						.isSolid())
-					continue;
-
-				final int motionStr = this.jetStrength + 3;
-				final double motionX = xOffset * (motionStr / 20.0D);
-				final double motionZ = zOffset * (motionStr / 20.0D);
-				final double motionY = 0.1D + RANDOM.nextFloat() * motionStr / 20.0D;
-				final IParticleMote particle = ParticleCollections.addWaterSpray(this.world, this.posX + xOffset,
-						(this.posY), this.posZ + zOffset, motionX, motionY, motionZ);
-				// If we could not add the collection is full. No sense beating a dead horse.
-				if (particle == null)
-					break;
-			}
+		if (!ParticleCollections.canFitWaterSpray())
+			return;
+		final Entity camera = Minecraft.getMinecraft().getRenderViewEntity();
+		final double distanceSq = camera == null ? 0D : camera.getDistanceSq(this.posX, this.posY, this.posZ);
+		final int splashCount = WaterfallSplashes.byDistance(
+				WaterfallSplashes.count(this.particleLimit, SETTINGS.particleSetting, RANDOM.nextInt(Integer.MAX_VALUE)),
+				distanceSq);
+		// How far splashes fly: grows with the drop, from 0.2 for the smallest waterfall
+		final double motionStr = (this.strength + 3) / 20D;
+		for (int j = 0; j < splashCount; ++j) {
+			final double xOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
+			final double zOffset = (RANDOM.nextFloat() * 2.0F - 1.0F);
+			if (ClientChunkCache.instance()
+					.getBlockState(pos.setPos(this.posX + xOffset, this.posY, this.posZ + zOffset)).getMaterial()
+					.isSolid())
+				continue;
+			final double motionX = xOffset * motionStr;
+			final double motionZ = zOffset * motionStr;
+			final double motionY = 0.1D + RANDOM.nextFloat() * motionStr;
+			// If it could not be added the collection is full: no sense beating a dead horse
+			if (ParticleCollections.addWaterSpray(this.world, this.posX + xOffset, this.posY, this.posZ + zOffset,
+					motionX, motionY, motionZ, SPLASH_LIFE) == null)
+				break;
 		}
 	}
-
 }

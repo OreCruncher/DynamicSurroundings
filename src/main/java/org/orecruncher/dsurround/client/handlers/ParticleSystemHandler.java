@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.fx.particle.system.ParticleSystem;
+import org.orecruncher.dsurround.client.fx.particle.system.WaterfallSounds;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.lib.BlockPosHelper;
 
@@ -68,17 +69,21 @@ public class ParticleSystemHandler extends EffectHandlerBase {
 			}
 			return !system.isAlive();
 		});
+		// The waterfalls' sounds, chosen from the splashes still alive
+		WaterfallSounds.update(player);
 	}
 
 	@Override
 	public void onConnect() {
 		_instance = this;
 		this.systems.clear();
+		WaterfallSounds.clear();
 	}
 
 	@Override
 	public void onDisconnect() {
 		this.systems.clear();
+		WaterfallSounds.clear();
 		_instance = null;
 	}
 

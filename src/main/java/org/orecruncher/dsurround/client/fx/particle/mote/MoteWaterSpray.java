@@ -90,4 +90,11 @@ public class MoteWaterSpray extends MoteMotionBase {
 				z + (rotationYZ * this.f4 - rotationXZ * this.f4), this.texU1, this.texV2);
 	}
 
+
+	/**
+	 * Lives {@code times} times as long
+	 */
+	public void stretchLife(final int times) {
+		this.maxAge *= Math.max(times, 1);
+	}
 }

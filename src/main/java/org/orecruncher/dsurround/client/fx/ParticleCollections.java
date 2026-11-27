@@ -38,6 +38,7 @@ import org.orecruncher.dsurround.client.fx.particle.mote.MoteWaterSpray;
 import org.orecruncher.dsurround.client.fx.particle.mote.ParticleCollectionFireFly;
 import org.orecruncher.dsurround.client.fx.particle.mote.ParticleCollectionFootprint;
 import org.orecruncher.dsurround.client.fx.particle.mote.ParticleCollectionRipples;
+import org.orecruncher.dsurround.client.fx.particle.system.WaterfallSounds;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.registry.footstep.FootprintStyle;
 
@@ -87,6 +88,21 @@ public final class ParticleCollections {
 		IParticleMote mote = null;
 		if (theSprays.get().canFit()) {
 			mote = new MoteWaterSpray(world, x, y, z, dX, dY, dZ);
+			theSprays.get().addParticle(mote);
+		}
+		return mote;
+	}
+
+	/**
+	 * A water spray that lives {@code lifeTimes} times as long as one normally does (a waterfall's splashes)
+	 */
+	@Nullable
+	public static IParticleMote addWaterSpray(@Nonnull final World world, final double x, final double y,
+			final double z, final double dX, final double dY, final double dZ, final int lifeTimes) {
+		MoteWaterSpray mote = null;
+		if (theSprays.get().canFit()) {
+			mote = new MoteWaterSpray(world, x, y, z, dX, dY, dZ);
+			mote.stretchLife(lifeTimes);
 			theSprays.get().addParticle(mote);
 		}
 		return mote;
@@ -143,5 +159,6 @@ public final class ParticleCollections {
 		event.output.add(TextFormatting.AQUA + theRipples.toString());
 		event.output.add(TextFormatting.AQUA + theSprays.toString());
 		event.output.add(TextFormatting.AQUA + theFireFlies.toString());
+		event.output.add(TextFormatting.AQUA + WaterfallSounds.diagnostic());
 	}
 }

@@ -248,6 +248,20 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   block starts its effects by the Particles option, as 26.x: all at All, about two in three at Decreased, none at
   Minimal (`startsEffects`; their particles skipped the option); its sounds play either way.
 
+## Waterfalls
+- From the 26.x line's waterfall effect, without its mist, foam and rings: the `splash` block effect (water, Streams'
+  rivers, the Betweenlands' waters in the configs) starts a `ParticleWaterSplash` where `WaterfallColumn` says falling
+  water lands (falling liquid directly above, room to spread sideways, a source or solid top below: any flowing water
+  above counted before, so a pool's bottom beside moving water made one). Vanilla water says it is falling (level 8
+  up); a mod's fluid is taken as falling where the same fluid goes on above it. Its strength is the drop's height in
+  falling blocks (it counted the landing block and the lip too, 2 more), rechecked every half second.
+- Splashes: 5 plus 2.5 a block of drop, at most 20, between half and all of that each time, by the Particles option and
+  fewer far from the camera (`WaterfallSplashes`), living twice a spray's life. Sounds: `WaterfallSounds` (ticked by
+  `ParticleSystemHandler`) plays a loop for at most 32 waterfalls within 20 blocks, those with the most impact
+  (loudness squared over distance squared), tiers moved down to the new strength so each sounds as it did; every splash
+  had a loop of its own before. `effects.waterfallCutoff` keeps its old scale (strength + 2). The diagnostics overlay
+  has the counts.
+
 ## Scripts (conditions)
 - Conditions run through OreLib's `ExpressionCache` (`expression/ExpressionEngine`). Sounds and block effects keep
   the compiled `Script` (`SoundEffect.matches`, `BlockEffect.conditionsMet`), compiled as the config loads
