@@ -80,6 +80,7 @@ public final class Sounds {
 
 	// Weather stuff
 	public final static SoundEvent RAIN;
+	public final static SoundEvent RAIN_MEDIUM;
 	public final static SoundEvent DUST;
 
 	// Minecraft Cave Stuff
@@ -88,6 +89,7 @@ public final class Sounds {
 	static {
 		// Weather
 		RAIN = RegistryManager.SOUND.getSound(new ResourceLocation(ModInfo.RESOURCE_ID, "rain"));
+		RAIN_MEDIUM = RegistryManager.SOUND.getSound(new ResourceLocation(ModInfo.RESOURCE_ID, "rain.medium"));
 		DUST = RegistryManager.SOUND.getSound(new ResourceLocation(ModInfo.RESOURCE_ID, "dust"));
 
 		// SoundEffects

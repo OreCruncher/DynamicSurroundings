@@ -302,6 +302,12 @@ whether LPs can be monetized on the various streaming services.
      <li>S: <a href="https://freesound.org/people/mlaramie/sounds/193876/">even more rain.wav</a> by <a href="https://freesound.org/people/mlaramie/">mlaramie</a> | License: Creative Commons 0 | Modified: four stretches cut, faded in and out, levels matched</li> 
 </ul>
 
+*dsurround:rain.medium*
+
+<ul>
+     <li>S: <a href="https://freesound.org/people/Ryding/sounds/718518/">Medium rain</a> by <a href="https://freesound.org/people/Ryding/">Ryding</a> | License: <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a> | Modified: four stretches cut, made mono, faded in and out, levels matched</li> 
+</ul>
+
 *dsurround:dust*
 
 <ul>

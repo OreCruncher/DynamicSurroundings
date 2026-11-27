@@ -2482,5 +2482,19 @@
 				"volume": 0.26
 			}
 		]
+	},
+	"rain.medium": {
+		"category": "weather",
+		"credits": [
+			"§aMedium rain",
+			"Ryding",
+			"Creative Commons Attribution 4.0"
+		],
+		"sounds": [
+			"dsurround:ambient/weather/rain_medium1",
+			"dsurround:ambient/weather/rain_medium2",
+			"dsurround:ambient/weather/rain_medium3",
+			"dsurround:ambient/weather/rain_medium4"
+		]
 	}
 }

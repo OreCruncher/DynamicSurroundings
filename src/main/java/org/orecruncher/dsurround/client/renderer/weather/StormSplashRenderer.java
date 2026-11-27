@@ -36,6 +36,7 @@ import org.orecruncher.dsurround.client.fx.ParticleCollections;
 import org.orecruncher.dsurround.client.handlers.SoundEffectHandler;
 import org.orecruncher.dsurround.client.sound.SoundBuilder;
 import org.orecruncher.dsurround.client.sound.SoundInstance;
+import org.orecruncher.dsurround.client.sound.Sounds;
 import org.orecruncher.dsurround.client.weather.RainMix;
 import org.orecruncher.dsurround.client.weather.RainSoundSpots;
 import org.orecruncher.dsurround.client.weather.RainSurface;
@@ -143,11 +144,11 @@ public class StormSplashRenderer {
 		final Block block = ClientChunkCache.instance().getBlockState(this.pos).getBlock();
 		final SoundEvent sound = getBlockSoundFX(block, pt);
 		if (sound != null) {
-			final float volume = calculateRainSoundVolume(world);
 			float pitch = 1.0F;
 			final int playerY = MathHelper.floor(player.posY);
 			this.pos.setPos(player.posX, 0, player.posZ);
-			if (y > player.posY + 1.0D && season.getPrecipitationHeight(this.pos).getY() > playerY)
+			final boolean above = y > player.posY + 1.0D && season.getPrecipitationHeight(this.pos).getY() > playerY;
+			if (above)
 				pitch = 0.5F;
 			pitch -= (this.RANDOM.nextFloat() - this.RANDOM.nextFloat()) * 0.1F;
 			this.pos.setPos(x, y, z);
@@ -160,21 +161,33 @@ public class StormSplashRenderer {
 				surface = RainSurface.of(world, new BlockPos(x, y - 0.101D, z));
 				RAIN_SURFACES.add(surface);
 			}
-			final RainMix mix = RainMix.of(surface, volume, pitch);
 
-			final SoundInstance fx = SoundBuilder.builder(sound, SoundCategory.WEATHER).setVolume(mix.volume)
-					.setPitch(mix.pitch).setPosition(this.pos).build();
-			SoundEffectHandler.INSTANCE.playSound(fx);
+			// The mod's rain is three, blended by the storm's strength at vanilla's volume for where it plays (see
+			// RainMix); vanilla's rain by option, and dust, are one sound at the storm's volume
+			final boolean blend = pt == PrecipitationType.RAIN && sound == Sounds.RAIN;
+			final RainMix mix = blend
+					? RainMix.of(surface, above ? RainMix.VANILLA_VOLUME_ABOVE : RainMix.VANILLA_VOLUME, pitch,
+							Weather.getIntensityLevel())
+					: RainMix.single(surface, calculateRainSoundVolume(world), pitch);
+
+			playRain(sound, mix.volume, mix.pitch);
+			if (mix.mediumVolume > 0F)
+				playRain(Sounds.RAIN_MEDIUM, mix.mediumVolume, mix.pitch);
+			if (mix.heavyVolume > 0F)
+				playRain(above ? SoundEvents.WEATHER_RAIN_ABOVE : SoundEvents.WEATHER_RAIN, mix.heavyVolume, mix.pitch);
 			if (mix.layer != null) {
 				final SoundEvent layer = RegistryManager.SOUND.getSound(mix.layer);
-				if (layer != null) {
-					// As recorded: not pitched, a roof's lower pitch included
-					final SoundInstance layerFx = SoundBuilder.builder(layer, SoundCategory.WEATHER)
-							.setVolume(mix.layerVolume).setPitch(1F).setPosition(this.pos).build();
-					SoundEffectHandler.INSTANCE.playSound(layerFx);
-				}
+				// As recorded: not pitched, a roof's lower pitch included
+				if (layer != null)
+					playRain(layer, mix.layerVolume, 1F);
 			}
 		}
+	}
+
+	private void playRain(final SoundEvent sound, final float volume, final float pitch) {
+		final SoundInstance fx = SoundBuilder.builder(sound, SoundCategory.WEATHER).setVolume(volume).setPitch(pitch)
+				.setPosition(this.pos).build();
+		SoundEffectHandler.INSTANCE.playSound(fx);
 	}
 
 	public void addRainParticles(final EntityRenderer theThis) {

@@ -158,8 +158,14 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   the sound type (a mod's own by its step sound; leaves step as plants in 1.12.2, so they are by tag), else hard. Each
   surface has 26.x's volume and pitch for the rain without filters (1.12.2 has none); leaves, metal, glass and water
   have rain of their own (`rain.leaves` etc., 26.x's recordings), which takes 70% of the rain's place there (`RainMix`),
-  played as recorded. 26.x splits its rain into calm, medium and heavy and the layer takes its share of all three; here
-  there is the one storm sound.
+  played as recorded; the layer takes its share of all three rains (below).
+- The rain is three, as the 26.x line's (`RainMix`, from its `RainMix` and `StormSounds`): the calm rain (`rain`), 0.5
+  to 1 of vanilla's volume as the storm (`Weather.getIntensityLevel()`) strengthens, the medium rain (`rain.medium`)
+  through middling storms (in from 0.2, full 0.5 to 0.7, gone at 1), and vanilla's own rain (`weather.rain`, or
+  `weather.rain.above` on a roof above) from 0.5, full at 0.9; each at vanilla's volume for where it plays (0.2 in the
+  open, 0.1 on a roof above, at half the pitch). Vanilla's recordings are some 19 dB louder than the calm and medium
+  rain, so a drizzle patters, a steady rain hisses and a downpour roars. It was one sound at the storm's volume (0.05
+  to 1, swaying with noise), which `rain.useVanillaRainSound` and dust still are.
 - Where a rain sound plays (`RainSoundSpots`, `StormSplashRenderer.findSoundSpot`): not on one of the tick's splashes,
   as vanilla (8% within 2 blocks, median 6) but in a column of its own, any way round and mostly near: `12 * roll^2`
   blocks out (41% within 2, median 3). Standing on a few blocks of glass, more sounds land on it, so its own rain
@@ -192,7 +198,7 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   DENSE); eagles beside hawks; turtledoves in woods; the deep underground below Y 16. The creature spots the 26.x line
   never had (insect buzz, bison, elephants, primates, crocodiles, rattlesnakes) and the wolf rule are this line's.
   Not brought: 26.x's storm wind (no `weather` variable for the wind yet), fog changes and actors.
-- Still to come: electric arcs, the skeleton's bow, the log and organic footsteps, the medium rain.
+- Still to come: electric arcs, the skeleton's bow, the log and organic footsteps.
 
 ## Biome survey (/dsdump biomes)
 - `/dsdump biomes` (`CommandDSDump`, a client command) writes every biome to
