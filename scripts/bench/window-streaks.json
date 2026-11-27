@@ -1,0 +1,19 @@
+{
+  "world": "bench",
+  "seed": 20261126,
+  "setup": ["gamerule doDaylightCycle false", "time set 6000", "gamerule doWeatherCycle false",
+            "gamerule doMobSpawning false"],
+  "warmup": 15,
+  "record": 10,
+  "repeats": 1,
+  "video": {"width": 1920, "height": 1080, "vsync": false, "maxFps": 260},
+  "scenes": {
+    "wall": {"biome": "minecraft:plains", "yaw": -90, "pitch": 0,
+             "commands": ["fill ~2 ~ ~-8 ~2 ~3 ~8 glass", "weather thunder 999999", "ds setstr rain 100",
+                          "dsweather wind speed 200", "dsweather wind direction E", "dsweather frost clear"]}
+  },
+  "runs": [
+    {"label": "sheets", "scene": "wall", "settings": {"rain.particleWeather": false}},
+    {"label": "particles", "scene": "wall", "settings": {"rain.particleWeather": true}}
+  ]
+}

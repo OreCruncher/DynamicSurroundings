@@ -162,6 +162,18 @@ public final class ModOptions {
 		@Comment("Have the graphics card make particle weather's drops each frame, rather than the CPU (needs shaders)")
 		public static boolean particleWeatherOnGpu = true;
 
+		@Option("Window Frost")
+		@DefaultValue("true")
+		@LangKey(rain.PREFIX + ".WindowFrost")
+		@Comment("Frost on the outside of windows in the cold, thickest before sunrise (needs shaders; off under a shader pack)")
+		public static boolean windowFrost = true;
+
+		@Option("Window Streaks")
+		@DefaultValue("true")
+		@LangKey(rain.PREFIX + ".WindowStreaks")
+		@Comment("Rain runs down the windward side of windows near the player, and drips off their bottom edge")
+		public static boolean windowStreaks = true;
+
 		@Option("Style of rain water ripple")
 		@DefaultValue("3")
 		@LangKey(rain.PREFIX + ".RippleStyle")

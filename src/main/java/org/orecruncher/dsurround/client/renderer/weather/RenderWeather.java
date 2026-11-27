@@ -30,7 +30,9 @@ import org.orecruncher.dsurround.profiling.RenderTimers;
 import org.orecruncher.dsurround.capabilities.CapabilityDimensionInfo;
 import org.orecruncher.dsurround.capabilities.dimension.IDimensionInfo;
 import org.orecruncher.dsurround.client.weather.Weather;
+import org.orecruncher.dsurround.client.weather.frost.WindowFrost;
 import org.orecruncher.dsurround.client.weather.particle.ParticleWeather;
+import org.orecruncher.dsurround.client.weather.streaks.WindowRain;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import org.orecruncher.dsurround.lib.profiling.RenderTimer;
@@ -95,6 +97,9 @@ public final class RenderWeather extends IRenderHandler {
 
 	@Override
 	public void render(final float partialTicks, @Nonnull final WorldClient world, @Nonnull final Minecraft mc) {
+		// Behind the rain: the rain beyond a window is seen through its frost
+		WindowFrost.renderBeforeWeather();
+		WindowRain.renderBeforeWeather(partialTicks);
 		RENDER_TIMER.begin();
 		try {
 			if (ParticleWeather.isActive()) {

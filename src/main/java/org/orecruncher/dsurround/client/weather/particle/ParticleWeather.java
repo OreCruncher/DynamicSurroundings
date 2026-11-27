@@ -234,7 +234,7 @@ public final class ParticleWeather {
 	/**
 	 * Whether an OptiFine shader pack is in use
 	 */
-	static boolean shaderPackInUse() {
+	public static boolean shaderPackInUse() {
 		if (!lookedForShaders) {
 			lookedForShaders = true;
 			shaderPackLoaded = shadersField("net.optifine.shaders.Shaders");

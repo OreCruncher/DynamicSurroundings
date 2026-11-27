@@ -57,6 +57,12 @@ dsurround.msg.dsweather.wind.speed=Wind set to %1$s%% of a full storm's. /dsweat
 dsurround.msg.dsweather.wind.direction=Wind set to blow toward %1$s (%2$s degrees). /dsweather wind clear goes back to the simulated wind.
 dsurround.msg.dsweather.wind.clear=The wind is simulated again
 dsurround.msg.dsweather.wind.clear.notset=No wind was set: the wind is simulated
+dsurround.msg.dsweather.frost.status=Window frost follows the weather
+dsurround.msg.dsweather.frost.status.set=Window frost: %1$s%%, set by /dsweather
+dsurround.msg.dsweather.frost=Window frost set to %1$s%%. /dsweather frost clear goes back to the weather's.
+dsurround.msg.dsweather.frost.clear=Window frost follows the weather again
+dsurround.msg.dsweather.frost.clear.notset=No window frost was set: it follows the weather
+dsurround.msg.dsweather.clear=The wind and the window frost follow the weather again
 
 # Version checking strings
 dsurround.msg.NewVersion=["§6Update Available: §9[",{"text":"§2%1$s §ev%2$s§f","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Click for CurseForge Project Page","color":"aqua"}},"clickEvent":{"action":"open_url","value":"%3$s"}},"§9]"]
@@ -109,6 +115,10 @@ dsurround.cfg.rain.ParticleWeather=Particle Weather
 dsurround.cfg.rain.ParticleWeather.tooltip=Draw rain and snow as single drops and flakes around the player rather than sheets (experimental; off under a shader pack)
 dsurround.cfg.rain.ParticleWeatherOnGpu=Particle Weather on the GPU
 dsurround.cfg.rain.ParticleWeatherOnGpu.tooltip=Have the graphics card make particle weather's drops each frame, rather than the CPU (needs shaders)
+dsurround.cfg.rain.WindowFrost=Window Frost
+dsurround.cfg.rain.WindowFrost.tooltip=Frost on the outside of windows in the cold, thickest before sunrise (needs shaders; off under a shader pack)
+dsurround.cfg.rain.WindowStreaks=Window Streaks
+dsurround.cfg.rain.WindowStreaks.tooltip=Rain runs down the windward side of windows near the player, and drips off their bottom edge
 dsurround.cfg.rain.EnableMagmaNetherrack=Enable Netherrack and Magma Splash Effect
 dsurround.cfg.rain.EnableMagmaNetherrack.tooltip=Enables/disables the lava particle effect on Netherrack and Magma blocks when raining
 

@@ -103,6 +103,30 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
 - Bench: `scripts/bench/particle-weather.json` (sheets, CPU, GPU). At 1920x1080 the GPU drops cost 0.05 ms of CPU a
   frame, the sheets 0.13, the CPU-built drops 0.32.
 
+## Window frost
+- `client/weather/frost`, ported from the 26.x line (`rain.windowFrost`, on; needs shaders, off under an OptiFine
+  shader pack): `FrostFaces` finds the outsides of glass, `FrostField` keeps them a section at a time near the player,
+  `FrostConditions` says how much (cold, time of day, sun on the glass), `FrostTexture` makes the pattern at run time,
+  `FrostRenderer` and `shaders/frost.*` draw it. `WindowFrost` runs it: ticked on the client tick, drawn from
+  `RenderWeather` before the rain, or at `RenderWorldLastEvent` where another weather renderer is in place. No depth
+  copy as in 26.3: drawn into the main framebuffer after the translucent blocks, an ordinary depth test does.
+- Windows are found by class (`client/weather/Windows`: glass, stained glass and their panes, not glowstone or iron
+  bars), 1.12.2 having no tags. Pane shapes are worked out from their connections (`FrostFaces.shapeOf`): a pane that
+  reaches nothing is only a post in 1.12.2, too thin to frost. A one-layer snow has a collision box of no height, taken
+  as open.
+- `/dsweather frost 0-100 | clear` holds it for testing. Bench: `scripts/bench/window-frost.json` (a glass and pane wall
+  in Ice Plains at noon: as it comes, held at 100% and at 40%).
+
+## Window streaks
+- `client/weather/streaks`, ported from the 26.x line (`rain.windowStreaks`, on): `RainOnWindows` (from 26.3's
+  `Landings.seedWindows`) starts drops on the windward side of windows near the camera, `WindowStreaks` runs them down
+  the glass, dripping off the bottom edge as vanilla's dripping water. It needs no falling drops, so it runs with the
+  sheets as well as particle weather; 26.3's drops blown into windows aren't followed. `WindowRain` ticks and draws
+  them, untextured and without a shader, after the frost and before the rain.
+- `RayWalk` follows a line through collision boxes and fluid surfaces over an `IBlockAccess` (1.12.2's ray trace is on
+  `World` only, and tests use a fake). Bench: `scripts/bench/window-streaks.json` (a glass wall
+  in a thunderstorm, `/dsweather wind speed 200` and `direction E`, with the sheets and with particle weather).
+
 ## Known noise in a dev run's log
 - FML's missing signature data and Maven library folder errors, fernflower's "Unable to simplify switch" (the mixin
   debug export). Neither mod checks a certificate fingerprint any more (dropped in DS 4.0.0 and OreLib 3.6.0.2).

@@ -1,0 +1,26 @@
+{
+  "world": "bench",
+  "seed": 20261126,
+  "setup": ["gamerule doDaylightCycle false", "time set 6000", "gamerule doWeatherCycle false",
+            "gamerule doMobSpawning false", "weather clear 999999"],
+  "warmup": 8,
+  "record": 10,
+  "repeats": 1,
+  "video": {"width": 1920, "height": 1080, "vsync": false, "maxFps": 260},
+  "scenes": {
+    "natural": {"biome": "minecraft:ice_flats", "yaw": -90, "pitch": 5,
+                "commands": ["fill ~3 ~ ~-4 ~3 ~3 ~-1 glass", "fill ~3 ~ ~1 ~3 ~3 ~4 glass_pane",
+                             "fill ~3 ~ ~ ~3 ~3 ~ stone", "dsweather frost clear"]},
+    "full": {"biome": "minecraft:ice_flats", "yaw": -90, "pitch": 5,
+             "commands": ["fill ~3 ~ ~-4 ~3 ~3 ~-1 glass", "fill ~3 ~ ~1 ~3 ~3 ~4 glass_pane",
+                          "fill ~3 ~ ~ ~3 ~3 ~ stone", "dsweather frost 100"]},
+    "part": {"biome": "minecraft:ice_flats", "yaw": -90, "pitch": 5,
+             "commands": ["fill ~3 ~ ~-4 ~3 ~3 ~-1 glass", "fill ~3 ~ ~1 ~3 ~3 ~4 glass_pane",
+                          "fill ~3 ~ ~ ~3 ~3 ~ stone", "dsweather frost 40"]}
+  },
+  "runs": [
+    {"label": "natural", "scene": "natural", "settings": {}},
+    {"label": "full", "scene": "full", "settings": {}},
+    {"label": "part", "scene": "part", "settings": {}}
+  ]
+}

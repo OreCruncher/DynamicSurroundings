@@ -28,6 +28,8 @@ import java.util.Arrays;
 import java.util.function.Predicate;
 
 import org.orecruncher.dsurround.client.weather.particle.ParticleWeather;
+import org.orecruncher.dsurround.client.weather.frost.WindowFrost;
+import org.orecruncher.dsurround.client.weather.streaks.WindowRain;
 import org.orecruncher.dsurround.client.weather.wind.WindService;
 
 import javax.annotation.Nonnull;
@@ -106,6 +108,8 @@ public class ProxyClient extends Proxy implements IProxy, ISelectiveResourceRelo
 		register(RenderWeather.class);
 		register(ParticleWeather.class);
 		register(WindService.class);
+		register(WindowFrost.class);
+		register(WindowRain.class);
 		register(Weather.class);
 		register(WorldEventDetector.class);
 		register(ParticleCollections.class);
@@ -201,6 +205,7 @@ public class ProxyClient extends Proxy implements IProxy, ISelectiveResourceRelo
 			Weather.unregister();
 			// A wind held by /dsweather is for the world it was set in
 			WindService.wind().clearSet();
+			WindowFrost.disconnect();
 		});
 	}
 

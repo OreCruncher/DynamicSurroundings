@@ -31,6 +31,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.orecruncher.dsurround.client.weather.frost.WindowFrost;
 import org.orecruncher.dsurround.client.weather.wind.Wind;
 import org.orecruncher.dsurround.client.weather.wind.WindService;
 import org.orecruncher.lib.Localization;
@@ -46,11 +47,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * /dsweather holds the weather's look for testing, as the 26.x line's command does; this line has only the wind to
- * hold. /dsweather wind shows the wind; wind speed 0-300 holds its speed, as a percent of a full storm's wind (a
- * thunderstorm or a dust storm blows harder); wind direction holds the way it blows toward, as degrees clockwise from
- * north or a compass point; wind clear, or /dsweather clear, lets it go its own way. Disconnecting clears it too. A
- * client command: the wind is the client's own.
+ * /dsweather holds the weather's look for testing, as the 26.x line's command does. /dsweather wind shows the wind;
+ * wind speed 0-300 holds its speed, as a percent of a full storm's wind (a thunderstorm or a dust storm blows harder);
+ * wind direction holds the way it blows toward, as degrees clockwise from north or a compass point; wind clear lets it
+ * go its own way. /dsweather frost 0-100 gives every window that much frost, as a percent of the most, whatever the
+ * weather; frost clear goes back to the weather's. /dsweather clear lets both go. Disconnecting clears them too. A
+ * client command: the wind and the frost are the client's own.
  */
 @SideOnly(Side.CLIENT)
 public final class CommandDSWeather extends CommandBase {
@@ -60,6 +62,7 @@ public final class CommandDSWeather extends CommandBase {
 	private static final String WIND = "wind";
 	private static final String SPEED = "speed";
 	private static final String DIRECTION = "direction";
+	private static final String FROST = "frost";
 	// A full storm's wind is 100: thunderstorms and dust storms blow harder
 	private static final int MAX_WIND_PERCENT = 300;
 
@@ -73,7 +76,8 @@ public final class CommandDSWeather extends CommandBase {
 	@Nonnull
 	public String getUsage(@Nonnull final ICommandSender sender) {
 		return "/" + COMMAND + " wind [speed 0-" + MAX_WIND_PERCENT + " | direction <0-360|"
-				+ String.join("|", Wind.compassPoints()) + "> | clear] | /" + COMMAND + " clear";
+				+ String.join("|", Wind.compassPoints()) + "> | clear] | /" + COMMAND + " frost [0-100 | clear] | /"
+				+ COMMAND + " clear";
 	}
 
 	@Override
@@ -92,7 +96,22 @@ public final class CommandDSWeather extends CommandBase {
 		final Wind wind = WindService.wind();
 		final String message;
 		if (args.length == 1 && CLEAR.equalsIgnoreCase(args[0])) {
-			message = clear(wind);
+			wind.clearSet();
+			WindowFrost.clearForced();
+			message = Localization.format("dsurround.msg.dsweather.clear");
+		} else if (args.length == 1 && FROST.equalsIgnoreCase(args[0])) {
+			final float frost = WindowFrost.forced();
+			message = Float.isNaN(frost) ? Localization.format("dsurround.msg.dsweather.frost.status")
+					: Localization.format("dsurround.msg.dsweather.frost.status.set", Math.round(frost * 100F));
+		} else if (args.length == 2 && FROST.equalsIgnoreCase(args[0]) && CLEAR.equalsIgnoreCase(args[1])) {
+			final boolean wasSet = !Float.isNaN(WindowFrost.forced());
+			WindowFrost.clearForced();
+			message = Localization.format(
+					wasSet ? "dsurround.msg.dsweather.frost.clear" : "dsurround.msg.dsweather.frost.clear.notset");
+		} else if (args.length == 2 && FROST.equalsIgnoreCase(args[0])) {
+			final int percent = parseInt(args[1], 0, 100);
+			WindowFrost.setForced(percent / 100F);
+			message = Localization.format("dsurround.msg.dsweather.frost", percent);
 		} else if (args.length == 1 && WIND.equalsIgnoreCase(args[0])) {
 			message = status(wind);
 		} else if (args.length == 2 && WIND.equalsIgnoreCase(args[0]) && CLEAR.equalsIgnoreCase(args[1])) {
@@ -143,7 +162,9 @@ public final class CommandDSWeather extends CommandBase {
 	public List<String> getTabCompletions(@Nonnull final MinecraftServer server, @Nonnull final ICommandSender sender,
 			@Nonnull final String[] args, @Nullable final BlockPos targetPos) {
 		if (args.length == 1)
-			return getListOfStringsMatchingLastWord(args, WIND, CLEAR);
+			return getListOfStringsMatchingLastWord(args, WIND, FROST, CLEAR);
+		if (args.length == 2 && FROST.equalsIgnoreCase(args[0]))
+			return getListOfStringsMatchingLastWord(args, CLEAR);
 		if (args.length == 2 && WIND.equalsIgnoreCase(args[0]))
 			return getListOfStringsMatchingLastWord(args, SPEED, DIRECTION, CLEAR);
 		if (args.length == 3 && WIND.equalsIgnoreCase(args[0]) && DIRECTION.equalsIgnoreCase(args[1]))
