@@ -48,6 +48,7 @@ import javax.annotation.Nullable;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.dsurround.registry.biome.BiomeUtil;
+import org.orecruncher.dsurround.registry.biome.traits.BiomeTraits;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -134,11 +135,11 @@ public final class CommandDSDump extends CommandBase {
 		final String stamp = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.ROOT).format(new Date());
 		final File file = new File(folder, "biomes-" + stamp + ".csv");
 
-		// Per mod: biomes, without types, guessed, without any sound
+		// Per mod: biomes, without types, guessed, with types worked out, without any sound
 		final Map<String, int[]> byMod = new TreeMap<>();
 		int total = 0;
 		try (final PrintWriter out = new PrintWriter(Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8))) {
-			out.println("biome,mod,name,types,typesGuessed,temperature,rainfall,canRain,snow,highHumidity,topBlock,"
+			out.println("biome,mod,name,types,typesGuessed,typesAdded,typeSources,temperature,rainfall,canRain,snow,highHumidity,topBlock,"
 					+ "fillerBlock,trees,extraTreeChance,grass,flowers,deadBushes,cacti,waterlilies,mushrooms,"
 					+ "backgroundSounds,spotSounds,fog,dust,aurora,configEntries");
 			for (final Biome biome : biomes) {
@@ -157,6 +158,10 @@ public final class CommandDSDump extends CommandBase {
 				row.add(name(biome));
 				row.add(types.stream().map(BiomeDictionary.Type::getName).sorted().collect(Collectors.joining(" ")));
 				row.add(wasGuessed);
+				final BiomeTraits traits = info.getTraits();
+				final Set<String> added = traits == null ? Collections.<String>emptySet() : traits.added();
+				row.add(String.join(" ", added));
+				row.add(traits == null ? "" : traits.describe());
 				row.add(biome.getDefaultTemperature());
 				row.add(biome.getRainfall());
 				row.add(biome.canRain());
@@ -180,23 +185,25 @@ public final class CommandDSDump extends CommandBase {
 				row.add(String.join("; ", info.getComments()));
 				out.println(row.stream().map(CommandDSDump::csv).collect(Collectors.joining(",")));
 
-				final int[] counts = byMod.computeIfAbsent(mod, k -> new int[4]);
+				final int[] counts = byMod.computeIfAbsent(mod, k -> new int[5]);
 				counts[0]++;
 				if (types.isEmpty())
 					counts[1]++;
 				if (wasGuessed)
 					counts[2]++;
-				if (sounds == 0 && spots == 0)
+				if (!added.isEmpty())
 					counts[3]++;
+				if (sounds == 0 && spots == 0)
+					counts[4]++;
 				total++;
 			}
 		}
 
 		ModBase.log().info("/dsdump biomes: %d biomes written to %s", total, file.getPath());
-		ModBase.log().info("  mod: biomes / no types / types guessed by Forge / no sounds from DS");
+		ModBase.log().info("  mod: biomes / no types / types guessed by Forge / types worked out by DS / no sounds from DS");
 		for (final Map.Entry<String, int[]> e : byMod.entrySet()) {
 			final int[] c = e.getValue();
-			ModBase.log().info("  %s: %d / %d / %d / %d", e.getKey(), c[0], c[1], c[2], c[3]);
+			ModBase.log().info("  %s: %d / %d / %d / %d / %d", e.getKey(), c[0], c[1], c[2], c[3], c[4]);
 		}
 		return file;
 	}

@@ -189,8 +189,23 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   (read from `logs/latest.log`, "No types have been added to Biome"), climate, top block, the decorator's counts
   (trees, grass, flowers...: -999 trees where a biome places its own, as BoP's and roofed forest), and what DS gives it
   (sounds, spot sounds, fog, dust, aurora, the config entries matched). The log gets a per-mod summary.
-- `-PbiomeMods` makes dev runs load biome mods as well (Biomes O' Plenty so far), for surveying them; the dump can run
-  unattended from a bench scenario's `commands`.
+- `-PbiomeMods` makes dev runs load Biomes O' Plenty as well, and `-PbiomeMods=<folder>` every mod jar in that folder
+  (release jars, deobfuscated), for surveying them; the dump can run unattended from a bench scenario's `commands`.
+- Surveyed (vanilla, BoP, Biomes You Go, Traverse, AbyssalCraft): every biome had types from its mod, none guessed by
+  Forge. The gaps are biomes typed too loosely (AbyssalCraft's swamp, lake, forest and ocean only `DEAD`), and type
+  combinations the biome configs have no rule for (snowy dense forests, with no background sound).
+
+## Biome traits
+- `registry/biome/traits`, the 26.x line's biome traits with Forge's biome dictionary types for traits: `BiomeHandler`
+  gives a biome its dictionary types plus those `BiomeTraits` works out, so `biome.isSwamp` in the configs and the
+  runtime variables see them; the names are Forge's. No game in it (`BiomeEvidence`), tested.
+- A biome whose mod gave it a kind (forest, plains, swamp... `TraitGroup.KIND`) or a dimension keeps its types: a type
+  it lacks is taken as one it hasn't (Forge has no temperate), and guessing over them made vanilla's forest dense and
+  its oceans wet. Only what follows is added (snowy is cold: BYG's snowy forests become cold, as vanilla's are). A
+  biome with neither is worked out from its climate (Forge's thresholds; not one left at 0.5/0.5, which then says
+  nothing), its id and name (`BiomeNameTraits`, whole words: BYG runs an id's words together), then its top block,
+  each only filling groups nothing before it did. In the survey 15 of 250 biomes gained a type, no vanilla one.
+- The dump's `typesAdded` and `typeSources` columns show what was worked out and from what.
 
 ## Known noise in a dev run's log
 - FML's missing signature data and Maven library folder errors, fernflower's "Unable to simplify switch" (the mixin

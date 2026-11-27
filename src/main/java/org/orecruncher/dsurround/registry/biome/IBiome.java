@@ -26,6 +26,9 @@ package org.orecruncher.dsurround.registry.biome;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.orecruncher.dsurround.registry.biome.traits.BiomeTraits;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -61,6 +64,14 @@ public interface IBiome {
 	boolean isHighHumidity();
 
 	float getRainfall();
+
+	/**
+	 * Where the biome's types came from, or null for a fake biome
+	 */
+	@Nullable
+	default BiomeTraits getTraits() {
+		return null;
+	}
 
 	default boolean isFake() {
 		return false;

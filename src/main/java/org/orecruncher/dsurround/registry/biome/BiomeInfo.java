@@ -39,6 +39,7 @@ import org.orecruncher.dsurround.capabilities.season.TemperatureRating;
 import org.orecruncher.dsurround.client.handlers.BiomeSoundEffectsHandler;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
 import org.orecruncher.dsurround.registry.RegistryManager;
+import org.orecruncher.dsurround.registry.biome.traits.BiomeTraits;
 import org.orecruncher.dsurround.registry.config.BiomeConfig;
 import org.orecruncher.dsurround.registry.config.SoundConfig;
 import org.orecruncher.dsurround.registry.config.SoundType;
@@ -160,6 +161,14 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 	
 	public String getBiomeTraits() {
 		return this.traits;
+	}
+
+	/**
+	 * Where the biome's types came from, or null for a fake biome
+	 */
+	@Nullable
+	public BiomeTraits getTraits() {
+		return this.biome.getTraits();
 	}
 
 	void addComment(@Nonnull final String comment) {

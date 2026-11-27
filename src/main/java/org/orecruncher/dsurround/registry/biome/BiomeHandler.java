@@ -23,15 +23,20 @@
 package org.orecruncher.dsurround.registry.biome;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModInfo;
+import org.orecruncher.dsurround.registry.biome.traits.BiomeEvidence;
+import org.orecruncher.dsurround.registry.biome.traits.BiomeTraits;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.TempCategory;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -42,13 +47,16 @@ public class BiomeHandler implements IBiome {
 	protected final Biome biome;
 	protected final int id;
 	protected String name;
+	protected final BiomeTraits traits;
 	protected final Set<Type> types;
 
 	public BiomeHandler(@Nonnull final Biome biome) {
 		this.biome = biome;
 		this.id = Biome.getIdForBiome(this.biome);
-		this.types = BiomeUtil.getBiomeTypes(this.biome);
 		this.name = BiomeUtil.getBiomeName(this.biome);
+		// The biome dictionary's types, and those worked out where its mod gave too few (BiomeTraits)
+		this.traits = BiomeTraits.from(evidence(this.biome, this.name));
+		this.types = this.traits.names().stream().map(BiomeDictionary.Type::getType).collect(Collectors.toSet());
 	}
 
 	@Override
@@ -74,6 +82,25 @@ public class BiomeHandler implements IBiome {
 	@Override
 	public Set<Type> getTypes() {
 		return this.types;
+	}
+
+	@Override
+	public BiomeTraits getTraits() {
+		return this.traits;
+	}
+
+	@Nonnull
+	private static BiomeEvidence evidence(@Nonnull final Biome biome, @Nonnull final String name) {
+		final ResourceLocation key = biome.getRegistryName();
+		final Set<String> types = BiomeUtil.getBiomeTypes(biome).stream().map(Type::getName).collect(Collectors.toSet());
+		return new BiomeEvidence(key == null ? "" : key.getResourcePath(), name, types, biome.getDefaultTemperature(),
+				biome.getRainfall(), biome.canRain(), biome.getEnableSnow(), biome.isHighHumidity(), blockId(biome.topBlock));
+	}
+
+	@Nonnull
+	private static String blockId(final IBlockState state) {
+		final ResourceLocation key = state == null ? null : state.getBlock().getRegistryName();
+		return key == null ? "" : key.toString();
 	}
 
 	@Override
