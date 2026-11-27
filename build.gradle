@@ -140,9 +140,19 @@ dependencies {
     compileOnly rfg.deobf("curse.maven:serene-seasons-291874:${propertyString('sereneseasons_file')}")
     compileOnly rfg.deobf("curse.maven:ctm-267602:${propertyString('ctm_file')}")
 
-    // -PbiomeMods: dev runs load biome mods too, for surveying biome classification (/dsdump biomes)
+    // -PbiomeMods: dev runs load biome mods too, for surveying biome classification (/dsdump biomes): Biomes O' Plenty,
+    // and with -PbiomeMods=<folder> every mod jar in that folder (release jars, deobfuscated for the dev run)
     if (project.hasProperty('biomeMods')) {
         runtimeOnly rfg.deobf("curse.maven:biomes-o-plenty-220318:${propertyString('biomesoplenty_file')}")
+        def folder = project.findProperty('biomeMods')
+        if (folder && folder != 'true') {
+            def dir = file(folder)
+            if (!dir.isDirectory())
+                throw new GradleException("-PbiomeMods=${folder}: not a folder")
+            dir.listFiles().findAll { it.name.endsWith('.jar') }.sort { it.name }.each { jar ->
+                runtimeOnly rfg.deobf(files(jar))
+            }
+        }
     }
 
     // Plain unit tests (src/test), no game running
