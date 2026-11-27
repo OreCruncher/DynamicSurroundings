@@ -72,7 +72,6 @@ public final class Sounds {
 	public final static SoundEffect FIRE;
 
 	// Waterfalls
-	public final static SoundEffect WATERFALL0;
 	public final static SoundEffect WATERFALL1;
 	public final static SoundEffect WATERFALL2;
 	public final static SoundEffect WATERFALL3;
@@ -127,7 +126,6 @@ public final class Sounds {
 				.build();
 
 		// Waterfalls
-		WATERFALL0 = new SoundEffect.Builder("waterfall.0", SoundCategory.AMBIENT).build();
 		WATERFALL1 = new SoundEffect.Builder("waterfall.1", SoundCategory.AMBIENT).build();
 		WATERFALL2 = new SoundEffect.Builder("waterfall.2", SoundCategory.AMBIENT).build();
 		WATERFALL3 = new SoundEffect.Builder("waterfall.3", SoundCategory.AMBIENT).build();

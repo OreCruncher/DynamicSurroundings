@@ -169,6 +169,17 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   (`RainSurfaceTally`). Wet steps use `RainSurface` too. Bench: `scripts/bench/rain-surfaces.json` (each material
   underfoot and as a roof, on and off), to listen to.
 
+## Sounds from the 26.x line
+- `scripts/sound-port-map.py [26.x repository] -o report.md` pairs 26.x's sound events with ours (prefixes such as
+  `biome.` and `item.` taken off, then a table of renames) and sorts them: identical, moved, re-encoded, re-made, new,
+  keep; with ffprobe on the path, each file's length and channels. Footsteps are apart: ours are 1.12.2's own acoustics.
+- Brought over so far: the re-encoded and re-made non-footstep sounds, under our event names. Each kept our volume,
+  matched for loudness (26.x keeps many recordings quiet and raises them in its own config, which our sounds.json can't:
+  where a volume would pass 1, the missing gain is baked into the file), and 26.x's credits. `waterfall.0`
+  (non-commercial) is gone as in 26.x, its falls playing `waterfall.1`; `waterfall.5` is 26.x's rebuilt one.
+- Still to come: the stereo footsteps (ours are stereo, so they play as if at the player's ears; 26.x's are mono), and
+  the events only in 26.x (new biome loops, eagle, turtledove, whales, electric arcs, the medium rain).
+
 ## Known noise in a dev run's log
 - FML's missing signature data and Maven library folder errors, fernflower's "Unable to simplify switch" (the mixin
   debug export). Neither mod checks a certificate fingerprint any more (dropped in DS 4.0.0 and OreLib 3.6.0.2).

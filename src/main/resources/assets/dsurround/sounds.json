@@ -892,6 +892,11 @@
 			"dsurround:ambient/weather/rain_calm2",
 			"dsurround:ambient/weather/rain_calm3",
 			"dsurround:ambient/weather/rain_calm4"
+		],
+		"credits": [
+			"§aeven more rain.wav",
+			"mlaramie",
+			"Creative Commons 0"
 		]
 	},
 	"rain.leaves": {
@@ -939,15 +944,15 @@
 			"",
 			"§aDonner1.wav",
 			"swuing",
-			"Attribution",
+			"Creative Commons Attribution 4.0",
 			"",
 			"§aThunder - 1",
 			"bone666138",
-			"Attribution",
+			"Creative Commons Attribution 4.0",
 			"",
 			"§aThunder - 2",
 			"bone666138",
-			"Attribution",
+			"Creative Commons Attribution 4.0",
 			"",
 			"§aDistant Thunder.wav",
 			"sarson",
@@ -987,7 +992,17 @@
 	"dust": {
 		"category": "weather",
 		"sounds": [
-			"dsurround:ambient/weather/dust"
+			"dsurround:ambient/weather/dust1",
+			"dsurround:ambient/weather/dust2",
+			"dsurround:ambient/weather/dust3",
+			"dsurround:ambient/weather/dust4",
+			"dsurround:ambient/weather/dust5",
+			"dsurround:ambient/weather/dust6"
+		],
+		"credits": [
+			"§aDesert sand - Dune atmosphere",
+			"Vrymaa",
+			"Creative Commons 0"
 		]
 	},
 	"ice": {
@@ -995,16 +1010,21 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/ice/crack1",
-				"volume": 0.5
+				"volume": 0.602
 			},
 			{
 				"name": "dsurround:ambient/ice/crack2",
-				"volume": 0.5
+				"volume": 0.602
 			},
 			{
 				"name": "dsurround:ambient/ice/crack3",
-				"volume": 0.5
+				"volume": 0.602
 			}
+		],
+		"credits": [
+			"§aPublic domain recording",
+			"Source not recorded",
+			"Public domain"
 		]
 	},
 	"frog": {
@@ -1029,20 +1049,24 @@
 		"credits": [
 			"§aNight Crickets & Bullfrogs.wav",
 			"sunsinger",
-			"Creative Commons Attributions 3.0 Unported"
+			"Creative Commons Attribution 3.0"
 		],
 		"sounds": [
 			{
-				"name": "dsurround:ambient/frog/bullfrog1"
+				"name": "dsurround:ambient/frog/bullfrog1",
+				"volume": 0.903
 			},
 			{
-				"name": "dsurround:ambient/frog/bullfrog2"
+				"name": "dsurround:ambient/frog/bullfrog2",
+				"volume": 0.903
 			},
 			{
-				"name": "dsurround:ambient/frog/bullfrog3"
+				"name": "dsurround:ambient/frog/bullfrog3",
+				"volume": 0.903
 			},
 			{
-				"name": "dsurround:ambient/frog/bullfrog4"
+				"name": "dsurround:ambient/frog/bullfrog4",
+				"volume": 0.903
 			}
 		]
 	},
@@ -1064,12 +1088,14 @@
 		"category": "ds_biome",
 		"credits": [
 			"§adesertwind1FINAL.wav",
-			"nageor",
+			"slugzilla",
 			"Creative Commons 0"
 		],
 		"sounds": [
 			{
-				"name": "dsurround:ambient/outside/desert_wind"
+				"name": "dsurround:ambient/outside/desert_wind",
+				"stream": true,
+				"volume": 0.989
 			}
 		]
 	},
@@ -1078,12 +1104,13 @@
 		"credits": [
 			"§aMerlothPark_morning_ambiance.wav",
 			"reinsamba",
-			"Attribution"
+			"Creative Commons Attribution 4.0"
 		],
 		"sounds": [
 			{
 				"name": "dsurround:ambient/outside/savanna_day",
-				"stream": true
+				"stream": true,
+				"volume": 0.977
 			}
 		]
 	},
@@ -1120,8 +1147,14 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/outside/deep_crickets",
-				"stream": true
+				"stream": true,
+				"volume": 0.977
 			}
+		],
+		"credits": [
+			"§aCrickets chirping in the Night at the Forest 001",
+			"Borgory",
+			"Creative Commons 0"
 		]
 	},
 	"plains": {
@@ -1141,14 +1174,15 @@
 	"forest": {
 		"category": "ds_biome",
 		"credits": [
-			"§a001_forrest.wav",
-			"joepsporck",
+			"§asfx_amb_forest_spring_afternoon-01.wav",
+			"bajko",
 			"Creative Commons 0"
 		],
 		"sounds": [
 			{
 				"name": "dsurround:ambient/outside/forest",
-				"stream": true
+				"stream": true,
+				"volume": 0.912
 			}
 		]
 	},
@@ -1157,8 +1191,14 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/outside/deep_forest",
-				"stream": true
+				"stream": true,
+				"volume": 0.966
 			}
+		],
+		"credits": [
+			"§aSussex Woodland & Meadow Bird Sounds, Evening.MP3",
+			"Vonora",
+			"Creative Commons 0"
 		]
 	},
 	"beach": {
@@ -1194,7 +1234,7 @@
 		"credits": [
 			"§arbh Mpls Bog birds.wav",
 			"RHumphries",
-			"Attribution"
+			"Creative Commons Attribution 4.0"
 		],
 		"sounds": [
 			{
@@ -1208,10 +1248,14 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/outside/jungle",
-				"volume": 0.2,
-				"pitch": 0.8,
-				"stream": true
+				"stream": true,
+				"volume": 0.198
 			}
+		],
+		"credits": [
+			"§aForest Ambience.wav",
+			"CHRISFOPFILMS",
+			"Creative Commons 0"
 		]
 	},
 	"soulsand": {
@@ -1254,6 +1298,11 @@
 			"dsurround:ambient/birds/bird8",
 			"dsurround:ambient/birds/bird9",
 			"dsurround:ambient/birds/bird10"
+		],
+		"credits": [
+			"§aHappy birds",
+			"sphion",
+			"Creative Commons 0"
 		]
 	},
 	"woodpecker": {
@@ -1269,18 +1318,18 @@
 	"raptor": {
 		"category": "ambient",
 		"sounds": [
-			{
-				"name": "dsurround:ambient/birds/bald_eagle_chirp",
-				"weight": 2
-			},
-			{
-				"name": "dsurround:ambient/birds/red_tailed_hawk",
-				"weight": 1
-			},
-			{
-				"name": "dsurround:ambient/birds/red_shouldered_hawk",
-				"weight": 2
-			}
+			"dsurround:ambient/birds/red_shouldered_hawk",
+			"dsurround:ambient/birds/red_shouldered_hawk2",
+			"dsurround:ambient/birds/red_shouldered_hawk3"
+		],
+		"credits": [
+			"§aHawkMP3VersionWinterJan22nd2017.mp3",
+			"kvgarlic",
+			"Creative Commons 0",
+			"",
+			"§aBird - Red-shouldered hawk",
+			"Vrymaa",
+			"Creative Commons 0"
 		]
 	},
 	"crow": {
@@ -1308,44 +1357,91 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/owl/owl1",
-				"volume": 0.3
+				"volume": 0.356
 			},
 			{
 				"name": "dsurround:ambient/owl/owl2",
-				"volume": 0.3
+				"volume": 0.356
 			},
 			{
 				"name": "dsurround:ambient/owl/owl3",
-				"volume": 0.3
+				"volume": 0.356
+			},
+			{
+				"name": "dsurround:ambient/owl/owl4",
+				"volume": 0.356
+			},
+			{
+				"name": "dsurround:ambient/owl/owl5",
+				"volume": 0.356
+			},
+			{
+				"name": "dsurround:ambient/owl/owl6",
+				"volume": 0.356
+			},
+			{
+				"name": "dsurround:ambient/owl/owl7",
+				"volume": 0.356
+			},
+			{
+				"name": "dsurround:ambient/owl/owl8",
+				"volume": 0.356
+			},
+			{
+				"name": "dsurround:ambient/owl/owl9",
+				"volume": 0.356
+			},
+			{
+				"name": "dsurround:ambient/owl/owl10",
+				"volume": 0.356
+			},
+			{
+				"name": "dsurround:ambient/owl/owl11",
+				"volume": 0.356
 			}
+		],
+		"credits": [
+			"§aGreat Horned Owl Duet at Canaveral Seashore",
+			"felix.blume",
+			"Creative Commons 0"
 		]
 	},
 	"loon": {
 		"category": "ambient",
 		"sounds": [
-			{
-				"name": "dsurround:ambient/birds/loon1"
-			},
-			{
-				"name": "dsurround:ambient/birds/loon2"
-			}
+			"dsurround:ambient/birds/loon1",
+			"dsurround:ambient/birds/loon2",
+			"dsurround:ambient/birds/loon3",
+			"dsurround:ambient/birds/loon4",
+			"dsurround:ambient/birds/loon5",
+			"dsurround:ambient/birds/loon6"
+		],
+		"credits": [
+			"§aLoon / Diver call 3",
+			"nicStage",
+			"Creative Commons Attribution 4.0"
 		]
 	},
 	"nightingale": {
 		"category": "ambient",
 		"sounds": [
-			{
-				"name": "dsurround:ambient/birds/nightingale1"
-			},
-			{
-				"name": "dsurround:ambient/birds/nightingale2"
-			},
-			{
-				"name": "dsurround:ambient/birds/nightingale3"
-			},
-			{
-				"name": "dsurround:ambient/birds/nightingale4"
-			}
+			"dsurround:ambient/birds/nightingale1",
+			"dsurround:ambient/birds/nightingale2",
+			"dsurround:ambient/birds/nightingale3",
+			"dsurround:ambient/birds/nightingale4",
+			"dsurround:ambient/birds/nightingale5",
+			"dsurround:ambient/birds/nightingale6",
+			"dsurround:ambient/birds/nightingale7",
+			"dsurround:ambient/birds/nightingale8",
+			"dsurround:ambient/birds/nightingale9",
+			"dsurround:ambient/birds/nightingale10",
+			"dsurround:ambient/birds/nightingale11",
+			"dsurround:ambient/birds/nightingale12"
+		],
+		"credits": [
+			"§anightingale song 5.wav",
+			"reinsamba",
+			"Creative Commons Attribution 4.0"
 		]
 	},
 	"underground": {
@@ -1353,14 +1449,18 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/underground/ambient",
-				"volume": 0.3,
-				"stream": true
+				"stream": true,
+				"volume": 0.303
 			}
 		]
 	},
 	"rockfall": {
 		"category": "ambient",
 		"credits": [
+			"§aRockfall in mine.wav",
+			"Benboncan",
+			"Creative Commons Attribution 4.0",
+			"",
 			"§aRocks falling over rocks, over a steep hill, like a cliff.flac",
 			"gfrog",
 			"Creative Commons 0",
@@ -1370,9 +1470,18 @@
 			"Creative Commons 0"
 		],
 		"sounds": [
-			"dsurround:ambient/underground/smallslide1",
-			"dsurround:ambient/underground/smallslide2",
-			"dsurround:ambient/underground/smallslide3"
+			{
+				"name": "dsurround:ambient/underground/smallslide1",
+				"volume": 0.892
+			},
+			{
+				"name": "dsurround:ambient/underground/smallslide2",
+				"volume": 0.892
+			},
+			{
+				"name": "dsurround:ambient/underground/smallslide3",
+				"volume": 0.892
+			}
 		]
 	},
 	"bigrockfall": {
@@ -1380,7 +1489,11 @@
 		"credits": [
 			"§aRockfall in mine.wav",
 			"Benboncan",
-			"Attribution",
+			"Creative Commons Attribution 4.0",
+			"",
+			"§aRocks falling over rocks, over a steep hill, like a cliff.flac",
+			"gfrog",
+			"Creative Commons 0",
 			"",
 			"§aRocks.wav",
 			"adamgryu",
@@ -1389,11 +1502,11 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/underground/bigslide1",
-				"volume": 0.4
+				"volume": 0.441
 			},
 			{
 				"name": "dsurround:ambient/underground/bigslide2",
-				"volume": 0.4
+				"volume": 0.441
 			}
 		]
 	},
@@ -1433,12 +1546,49 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/seagulls/seagulls1",
-				"volume": 0.3
+				"volume": 0.26
 			},
 			{
 				"name": "dsurround:ambient/seagulls/seagulls2",
-				"volume": 0.3
+				"volume": 0.26
+			},
+			{
+				"name": "dsurround:ambient/seagulls/seagulls3",
+				"volume": 0.26
+			},
+			{
+				"name": "dsurround:ambient/seagulls/seagulls4",
+				"volume": 0.26
+			},
+			{
+				"name": "dsurround:ambient/seagulls/seagulls5",
+				"volume": 0.26
+			},
+			{
+				"name": "dsurround:ambient/seagulls/seagulls6",
+				"volume": 0.26
+			},
+			{
+				"name": "dsurround:ambient/seagulls/seagulls7",
+				"volume": 0.26
+			},
+			{
+				"name": "dsurround:ambient/seagulls/seagulls8",
+				"volume": 0.26
+			},
+			{
+				"name": "dsurround:ambient/seagulls/seagulls9",
+				"volume": 0.26
 			}
+		],
+		"credits": [
+			"§aHerring Gull 1.wav",
+			"Canardo55",
+			"Creative Commons 0",
+			"",
+			"§aSeagull trill and whine",
+			"nigelcoop",
+			"Creative Commons 0"
 		]
 	},
 	"coyote": {
@@ -1462,20 +1612,25 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/wolf/wolf1",
-				"volume": 0.3
+				"volume": 0.314
 			},
 			{
 				"name": "dsurround:ambient/wolf/wolf2",
-				"volume": 0.3
+				"volume": 0.314
 			},
 			{
 				"name": "dsurround:ambient/wolf/wolf3",
-				"volume": 0.3
+				"volume": 0.314
 			},
 			{
 				"name": "dsurround:ambient/wolf/wolf4",
-				"volume": 0.3
+				"volume": 0.314
 			}
+		],
+		"credits": [
+			"§aCooper Creek 20160313_014852 solitary wolf howl very clear.wav",
+			"betchkal",
+			"Creative Commons 0"
 		]
 	},
 	"underdeepocean": {
@@ -1483,7 +1638,7 @@
 		"credits": [
 			"§aunderwater ambience.wav",
 			"AlienXXX",
-			"Attribution"
+			"Creative Commons Attribution 4.0"
 		],
 		"sounds": [
 			{
@@ -1497,7 +1652,7 @@
 		"credits": [
 			"§aunderwater ambience.wav",
 			"AlienXXX",
-			"Attribution"
+			"Creative Commons Attribution 4.0"
 		],
 		"sounds": [
 			{
@@ -1513,6 +1668,11 @@
 				"name": "dsurround:ambient/underwater/river",
 				"stream": true
 			}
+		],
+		"credits": [
+			"§aunderwater ambience.wav",
+			"AlienXXX",
+			"Creative Commons Attribution 4.0"
 		]
 	},
 	"underwater": {
@@ -1534,30 +1694,44 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/whale/whale1",
-				"volume": 0.3
+				"volume": 0.226
 			},
 			{
 				"name": "dsurround:ambient/whale/whale2",
-				"volume": 0.3
+				"volume": 0.226
 			},
 			{
 				"name": "dsurround:ambient/whale/whale3",
-				"volume": 0.3
+				"volume": 0.226
 			},
 			{
 				"name": "dsurround:ambient/whale/whale4",
-				"volume": 0.3
+				"volume": 0.226
 			},
 			{
 				"name": "dsurround:ambient/whale/whale5",
-				"volume": 0.3
+				"volume": 0.226
+			},
+			{
+				"name": "dsurround:ambient/whale/whale6",
+				"volume": 0.226
 			}
+		],
+		"credits": [
+			"§aSounds in the Ocean",
+			"NOAA Fisheries",
+			"Public domain (U.S. government work)"
 		]
 	},
 	"heartbeat": {
 		"category": "player",
 		"sounds": [
 			"dsurround:ambient/steve/heartbeat"
+		],
+		"credits": [
+			"§aHeartbeat",
+			"acertingart",
+			"Creative Commons Attribution 4.0"
 		]
 	},
 	"tummy": {
@@ -1601,10 +1775,12 @@
 	"jump": {
 		"category": "player",
 		"sounds": [
-			{
-				"name": "dsurround:ambient/steve/jump",
-				"volume": 0.8
-			}
+			"dsurround:ambient/steve/jump1"
+		],
+		"credits": [
+			"§aSharp Exhale",
+			"sblitzer",
+			"Creative Commons 0"
 		]
 	},
 	"bees": {
@@ -1709,6 +1885,11 @@
 		"sounds": [
 			"dsurround:ambient/book/newsprint1",
 			"dsurround:ambient/book/newsprint2"
+		],
+		"credits": [
+			"§aPublic domain recording",
+			"Source not recorded",
+			"Public domain"
 		]
 	},
 	"pageflip": {
@@ -1717,6 +1898,11 @@
 			"dsurround:ambient/book/pageflip1",
 			"dsurround:ambient/book/pageflip2",
 			"dsurround:ambient/book/pageflip3"
+		],
+		"credits": [
+			"§aPublic domain recording",
+			"Source not recorded",
+			"Public domain"
 		]
 	},
 	"pageflipheavy": {
@@ -1725,6 +1911,11 @@
 			"dsurround:ambient/book/pageflipheavy1",
 			"dsurround:ambient/book/pageflipheavy2",
 			"dsurround:ambient/book/pageflipheavy3"
+		],
+		"credits": [
+			"§aPublic domain recording",
+			"Source not recorded",
+			"Public domain"
 		]
 	},
 	"bookshelf": {
@@ -1732,35 +1923,35 @@
 		"sounds": [
 			{
 				"name": "dsurround:ambient/book/newsprint1",
-				"volume": 0.175
+				"volume": 0.232
 			},
 			{
 				"name": "dsurround:ambient/book/newsprint2",
-				"volume": 0.175
+				"volume": 0.232
 			},
 			{
 				"name": "dsurround:ambient/book/pageflip1",
-				"volume": 0.175
+				"volume": 0.232
 			},
 			{
 				"name": "dsurround:ambient/book/pageflip2",
-				"volume": 0.175
+				"volume": 0.232
 			},
 			{
 				"name": "dsurround:ambient/book/pageflip3",
-				"volume": 0.175
+				"volume": 0.232
 			},
 			{
 				"name": "dsurround:ambient/book/pageflipheavy1",
-				"volume": 0.175
+				"volume": 0.232
 			},
 			{
 				"name": "dsurround:ambient/book/pageflipheavy2",
-				"volume": 0.175
+				"volume": 0.232
 			},
 			{
 				"name": "dsurround:ambient/book/pageflipheavy3",
-				"volume": 0.175
+				"volume": 0.232
 			}
 		]
 	},
@@ -1821,23 +2012,12 @@
 			}
 		]
 	},
-	"waterfall.0": {
-		"category": "ambient",
-		"credits": [
-			"§aWaterfall Winspit Dorset.wav",
-			"genghis attenborough",
-			"Attribution Noncommercial"
-		],
-		"sounds": [
-			"dsurround:ambient/stream/waterfall0"
-		]
-	},
 	"waterfall.1": {
 		"category": "ambient",
 		"credits": [
-			"§aRunning-water-mountain-stream.mp3",
-			"Alexander",
-			"Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)"
+			"§aWaterfall, Small, B.wav",
+			"InspectorJ",
+			"Creative Commons Attribution 4.0"
 		],
 		"sounds": [
 			"dsurround:ambient/stream/waterfall1"
@@ -1868,9 +2048,9 @@
 	"waterfall.4": {
 		"category": "ambient",
 		"credits": [
-			"§a Waterfall, Large, A.wav",
+			"§aWaterfall, Large, A.wav",
 			"InspectorJ",
-			"Attribution"
+			"Creative Commons Attribution 4.0"
 		],
 		"sounds": [
 			"dsurround:ambient/stream/waterfall4"
@@ -1879,9 +2059,9 @@
 	"waterfall.5": {
 		"category": "ambient",
 		"credits": [
-			"§aWaterfall, Small, B.wav",
+			"§aWaterfall, Large, A.wav",
 			"InspectorJ",
-			"Attribution"
+			"Creative Commons Attribution 4.0"
 		],
 		"sounds": [
 			"dsurround:ambient/stream/waterfall5"
@@ -1950,7 +2130,12 @@
 	"blunt.equip": {
 		"category": "player",
 		"sounds": [
-			"dsurround:ambient/items/blunt_draw"
+			"dsurround:items/blunt_draw"
+		],
+		"credits": [
+			"§aPresence Footsteps",
+			"Hurricaaane (Ha3)",
+			"WTFPL v2"
 		]
 	},
 	"blunt.swing": {
@@ -1982,16 +2167,26 @@
 	"bow.loose": {
 		"category": "player",
 		"sounds": [
-			"dsurround:ambient/items/bow_loose1",
-			"dsurround:ambient/items/bow_loose2",
-			"dsurround:ambient/items/bow_loose3",
-			"dsurround:ambient/items/bow_loose4"
+			"dsurround:items/bow_loose1",
+			"dsurround:items/bow_loose2",
+			"dsurround:items/bow_loose3",
+			"dsurround:items/bow_loose4"
+		],
+		"credits": [
+			"§aPublic domain recording",
+			"Source not recorded",
+			"Public domain"
 		]
 	},
 	"sword.equip": {
 		"category": "player",
 		"sounds": [
-			"dsurround:ambient/items/sword_draw"
+			"dsurround:items/sword_draw"
+		],
+		"credits": [
+			"§aPresence Footsteps",
+			"Hurricaaane (Ha3)",
+			"WTFPL v2"
 		]
 	},
 	"sword.swing": {
@@ -2017,19 +2212,32 @@
 	"tool.swing": {
 		"category": "player",
 		"sounds": [
-			"dsurround:ambient/items/swoosh1",
-			"dsurround:ambient/items/swoosh2",
-			"dsurround:ambient/items/swoosh3",
-			"dsurround:ambient/items/swoosh4",
-			"dsurround:ambient/items/swoosh5",
-			"dsurround:ambient/items/swoosh6",
-			"dsurround:ambient/items/swoosh7"
+			"dsurround:items/swoosh1",
+			"dsurround:items/swoosh2",
+			"dsurround:items/swoosh3",
+			"dsurround:items/swoosh4",
+			"dsurround:items/swoosh5",
+			"dsurround:items/swoosh6",
+			"dsurround:items/swoosh7"
+		],
+		"credits": [
+			"§aSwing Whoosh.wav",
+			"yutface",
+			"Creative Commons 0"
 		]
 	},
 	"utility.equip": {
 		"category": "player",
 		"sounds": [
-			"dsurround:ambient/items/utility_draw"
+			{
+				"name": "dsurround:items/utility_zippo",
+				"volume": 0.457
+			}
+		],
+		"credits": [
+			"§aZippo click sound",
+			"dawith (submitted by qubodup)",
+			"Creative Commons 0"
 		]
 	},
 	"shield.equip": {
@@ -2053,10 +2261,15 @@
 	"potion.equip": {
 		"category": "player",
 		"sounds": [
-			"dsurround:ambient/items/potion_slosh1",
-			"dsurround:ambient/items/potion_slosh2",
-			"dsurround:ambient/items/potion_slosh3",
-			"dsurround:ambient/items/potion_slosh4"
+			"dsurround:items/potion_slosh1",
+			"dsurround:items/potion_slosh2",
+			"dsurround:items/potion_slosh3",
+			"dsurround:items/potion_slosh4"
+		],
+		"credits": [
+			"§aWater + glass bottle, sloshing 2",
+			"giddster",
+			"Creative Commons 0"
 		]
 	},
 	"silence": {

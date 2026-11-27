@@ -45,8 +45,9 @@ public class ParticleWaterSplash extends ParticleJet {
 
 	private static final SoundEffect[] fallSounds = new SoundEffect[11];
 	static {
-		fallSounds[0] = Sounds.WATERFALL0;
-		fallSounds[1] = Sounds.WATERFALL0;
+		// The smallest falls as the next size up: waterfall.0 was non-commercial, gone as in the 26.x line
+		fallSounds[0] = Sounds.WATERFALL1;
+		fallSounds[1] = Sounds.WATERFALL1;
 		fallSounds[2] = Sounds.WATERFALL1;
 		fallSounds[3] = Sounds.WATERFALL1;
 		fallSounds[4] = Sounds.WATERFALL2;
