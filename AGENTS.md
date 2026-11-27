@@ -177,8 +177,11 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   matched for loudness (26.x keeps many recordings quiet and raises them in its own config, which our sounds.json can't:
   where a volume would pass 1, the missing gain is baked into the file), and 26.x's credits. `waterfall.0`
   (non-commercial) is gone as in 26.x, its falls playing `waterfall.1`; `waterfall.5` is 26.x's rebuilt one.
-- Still to come: the stereo footsteps (ours are stereo, so they play as if at the player's ears; 26.x's are mono), and
-  the events only in 26.x (new biome loops, eagle, turtledove, whales, electric arcs, the medium rain).
+- Footsteps are mono, as 26.x's (they were stereo, which Minecraft plays at the ears, neither panned nor fading with
+  distance, other entities' steps included): each file's channels averaged and brought back to its old loudness (the
+  mean of its channels' power; up to 3.1 dB for metalbox, whose channels were two takes). `water_stereofix` was `water`
+  with its channels swapped, the same sound in mono, so it is gone and `waterfine` plays `water` alone.
+- Still to come: the events only in 26.x (new biome loops, eagle, turtledove, whales, electric arcs, the medium rain).
 
 ## Known noise in a dev run's log
 - FML's missing signature data and Maven library folder errors, fernflower's "Unable to simplify switch" (the mixin

@@ -828,32 +828,6 @@
 			"dsurround:footsteps/water/water_wander5"
 		]
 	},
-	"water_stereofix.water_through": {
-		"category": "player",
-		"sounds": [
-			"dsurround:footsteps/water_stereofix/water_through1",
-			"dsurround:footsteps/water_stereofix/water_through10",
-			"dsurround:footsteps/water_stereofix/water_through11",
-			"dsurround:footsteps/water_stereofix/water_through2",
-			"dsurround:footsteps/water_stereofix/water_through3",
-			"dsurround:footsteps/water_stereofix/water_through4",
-			"dsurround:footsteps/water_stereofix/water_through5",
-			"dsurround:footsteps/water_stereofix/water_through6",
-			"dsurround:footsteps/water_stereofix/water_through7",
-			"dsurround:footsteps/water_stereofix/water_through8",
-			"dsurround:footsteps/water_stereofix/water_through9"
-		]
-	},
-	"water_stereofix.water_wander": {
-		"category": "player",
-		"sounds": [
-			"dsurround:footsteps/water_stereofix/water_wander1",
-			"dsurround:footsteps/water_stereofix/water_wander2",
-			"dsurround:footsteps/water_stereofix/water_wander3",
-			"dsurround:footsteps/water_stereofix/water_wander4",
-			"dsurround:footsteps/water_stereofix/water_wander5"
-		]
-	},
 	"weakice.weakice_walk": {
 		"category": "player",
 		"sounds": [

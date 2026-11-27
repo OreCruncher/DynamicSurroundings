@@ -2259,31 +2259,9 @@
 			}
 		},
 		"waterfine": {
-			"walk": {
-				"type": "probability",
-				"array": [
-					1,
-					"water.water_through",
-					1,
-					"water_stereofix.water_through"
-				]
-			},
-			"wander": {
-				"type": "probability",
-				"array": [
-					1,
-					"water.water_wander",
-					1,
-					"water_stereofix.water_wander"
-				]
-			},
-			"land": {
-				"type": "simultaneous",
-				"array": [
-					"water.water_through",
-					"water_stereofix.water_through"
-				]
-			}
+			"walk": "water.water_through",
+			"wander": "water.water_wander",
+			"land": "water.water_through"
 		},
 		"stoneutility": {
 			"walk": {
