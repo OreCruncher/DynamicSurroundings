@@ -1,0 +1,7 @@
+{
+  "values": [
+    "minecraft:grass",
+    "minecraft:dirt[variant=dirt]",
+    "minecraft:dirt[variant=coarse_dirt]"
+  ]
+}

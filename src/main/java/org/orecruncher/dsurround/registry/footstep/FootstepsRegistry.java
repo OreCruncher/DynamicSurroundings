@@ -38,7 +38,6 @@ import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
 import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
-import org.orecruncher.dsurround.registry.acoustics.RainSplashAcoustic;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateMatcher;
 import org.orecruncher.dsurround.registry.config.ModConfiguration;
 import org.orecruncher.dsurround.registry.config.ModConfiguration.ForgeEntry;
@@ -107,7 +106,9 @@ public final class FootstepsRegistry extends Registry {
 
 	public IAcoustic[] SWIM;
 	public IAcoustic[] JUMP;
-	public IAcoustic[] SPLASH;
+	public IAcoustic[] WET_SURFACE;
+	public IAcoustic[] WET_MUD;
+	public IAcoustic[] WET_SLAP;
 	public IAcoustic[] FLOOR_SQUEAK;
 
 	public FootstepsRegistry() {
@@ -136,7 +137,9 @@ public final class FootstepsRegistry extends Registry {
 		// It's a hack - needs refactor
 		this.SWIM = null;
 		this.JUMP = null;
-		this.SPLASH = null;
+		this.WET_SURFACE = null;
+		this.WET_MUD = null;
+		this.WET_SLAP = null;
 		this.FLOOR_SQUEAK = null;
 
 		seedMap();
@@ -166,8 +169,9 @@ public final class FootstepsRegistry extends Registry {
 		this.SWIM = RegistryManager.ACOUSTICS.compileAcoustics("_SWIM");
 		this.JUMP = RegistryManager.ACOUSTICS.compileAcoustics("_JUMP");
 		this.FLOOR_SQUEAK = RegistryManager.ACOUSTICS.compileAcoustics("floorsqueak");
-		this.SPLASH = new IAcoustic[] {
-				new RainSplashAcoustic(RegistryManager.ACOUSTICS.compileAcoustics("waterfine")) };
+		this.WET_SURFACE = RegistryManager.ACOUSTICS.compileAcoustics("_WETSURFACE");
+		this.WET_MUD = RegistryManager.ACOUSTICS.compileAcoustics("_WETMUD");
+		this.WET_SLAP = RegistryManager.ACOUSTICS.compileAcoustics("_WETSLAP");
 
 		this.defaultVariator = getVariator("default");
 		this.childVariator = getVariator("child");

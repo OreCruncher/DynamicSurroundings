@@ -38,6 +38,19 @@ public final class BlockTags {
 	// Wooden floors that squeak now and then underfoot
 	public static final String FLOOR_SQUEAKS = effects("floor_squeaks");
 
+	// Watery things on top of a block (a lily pad): a step splashes
+	public static final String WATERY_STEP = effects("watery_step");
+
+	// Ground that turns to mud in the rain (grass, dirt): a step squelches once it is muddy
+	public static final String TRACKS_MUD_WHEN_WET = effects("tracks_mud_when_wet");
+
+	// What the rain is falling on, ahead of the block's sound type (see RainSurface)
+	public static final String RAIN_ON_METAL = effects("rain_on_metal");
+	public static final String RAIN_ON_GLASS = effects("rain_on_glass");
+	public static final String RAIN_ON_LEAVES = effects("rain_on_leaves");
+	public static final String RAIN_ON_WOOD = effects("rain_on_wood");
+	public static final String RAIN_ABSORBING = effects("rain_absorbing");
+
 	/**
 	 * Every tag the mod uses, whose files are read
 	 */

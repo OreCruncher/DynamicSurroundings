@@ -581,6 +581,16 @@
 			"dsurround:footsteps/metalbox/metalbox_wander4"
 		]
 	},
+	"wet_slap.slap": {
+		"category": "player",
+		"sounds": [
+			"dsurround:footsteps/wet_slap/slap1",
+			"dsurround:footsteps/wet_slap/slap2",
+			"dsurround:footsteps/wet_slap/slap3",
+			"dsurround:footsteps/wet_slap/slap4",
+			"dsurround:footsteps/wet_slap/slap5"
+		]
+	},
 	"mud.mud_walk": {
 		"category": "player",
 		"sounds": [

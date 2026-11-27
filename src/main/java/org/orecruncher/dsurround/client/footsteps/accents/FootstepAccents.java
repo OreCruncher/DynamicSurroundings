@@ -49,7 +49,7 @@ public class FootstepAccents {
 
 	static {
 		providers.add(new ArmorAccents());
-		providers.add(new RainSplashAccent());
+		providers.add(new WaterySurfaceAccent());
 		providers.add(new FloorSqueakAccent());
 	}
 

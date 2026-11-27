@@ -141,6 +141,19 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   holds the block states; the log gives each tag's count, and the inspection overlay a block's tags.
 - Floor squeaks (`sound.enableFloorSqueaks`, `FloorSqueakAccent`, from the 26.x line): one step in ten on the
   `floor_squeaks` tag (planks, wooden slabs and stairs) adds `floorsqueak`.
+- Wet steps (`sound.enablePuddleSound`, `WaterySurfaceAccent`, from the 26.x line, in place of the old rain splash):
+  a lily pad (`watery_step`) splashes, shallow water over the feet a thinned splash, and ground in the rain by how
+  soaked it is (`client/weather/GroundWetness`: rain strength times `Shelter.exposure`, where the season says rain):
+  `tracks_mud_when_wet` ground (grass, dirt) squelches (`_WETMUD`), hard ground a light slap (`_WETSLAP`: 1.12.2 has no
+  filters, so `footsteps/wet_slap` is the splash's lighter takes with 26.x's high-pass baked in, shorter, level-matched), soft ground nothing. In water deeper than about 0.4 the generator plays the swim
+  sound and no accents, so wading is mostly that. Accents get their own volume and pitch through `ScaledAcoustic`.
+- Accent volumes keep 26.x's share of a footstep: 26.x plays them beside vanilla's step (0.15), ours beside DS's
+  (about 0.95), so 26.x's factory volume x 6.33 (0.3 is `190`, 0.25 is `158`). The game plays anything over 1 at 1, as
+  loud as the step and not twice as loud, and heard further (16 blocks x the volume).
+- `client/weather/RainSurface` (26.x's): what the rain falls on, by heat and water, the `rain_on_*` and
+  `rain_absorbing` tags, then the sound type (leaves step as plants in 1.12.2, so they are by tag); with 26.x's
+  unfiltered volume and pitch for the rain's sound on each, for when the rain-on-surfaces work comes over. The
+  inspection overlay shows a block's surface and what sorted it.
 
 ## Known noise in a dev run's log
 - FML's missing signature data and Maven library folder errors, fernflower's "Unable to simplify switch" (the mixin

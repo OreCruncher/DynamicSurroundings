@@ -605,10 +605,10 @@ public final class ModOptions {
 		@Comment("Enable/disable item swing sounds")
 		public static boolean enableSwingSounds = true;
 
-		@Option("Rain Puddle Sound")
+		@Option("Wet Steps")
 		@DefaultValue("true")
 		@LangKey(sound.PREFIX + ".Puddle")
-		@Comment("Enable/disable rain puddle sound when moving in the rain")
+		@Comment("Enable/disable the sound of steps in shallow water and on ground wet from the rain: a splash, a squelch on mud, a light slap on hard ground")
 		public static boolean enablePuddleSound = true;
 
 		@Option("Floor Squeaks")

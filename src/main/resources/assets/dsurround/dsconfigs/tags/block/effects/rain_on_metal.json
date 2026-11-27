@@ -1,0 +1,8 @@
+{
+  "values": [
+    "minecraft:cauldron",
+    "minecraft:hopper",
+    "ore:blockIron",
+    "ore:blockGold"
+  ]
+}

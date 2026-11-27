@@ -1,0 +1,21 @@
+{
+  "values": [
+    "minecraft:grass",
+    "minecraft:dirt",
+    "minecraft:mycelium",
+    "minecraft:farmland",
+    "minecraft:grass_path",
+    "minecraft:sand",
+    "minecraft:gravel",
+    "minecraft:clay",
+    "minecraft:soul_sand",
+    "minecraft:snow",
+    "minecraft:snow_layer",
+    "minecraft:wool",
+    "minecraft:carpet",
+    "minecraft:hay_block",
+    "ore:sand",
+    "ore:gravel",
+    "ore:blockWool"
+  ]
+}

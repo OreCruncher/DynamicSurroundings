@@ -38,6 +38,7 @@ import org.orecruncher.dsurround.client.handlers.EffectManager;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.handlers.FxHandler;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
+import org.orecruncher.dsurround.client.weather.RainSurface;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateData;
 import org.orecruncher.dsurround.registry.blockstate.BlockStateMatcher;
@@ -109,6 +110,8 @@ public class InspectionHUD extends Gui implements IGuiOverlay {
 			final SoundType st = state.getBlock().getSoundType(state, EnvironState.getWorld(), pos,
 					EnvironState.getPlayer());
 			text.add("Step Sound: " + st.getStepSound().getSoundName().toString());
+
+			text.add("Rain Surface: " + RainSurface.describe(EnvironState.getWorld(), pos));
 
 			if (RegistryManager.FOOTSTEPS.hasFootprint(state))
 				text.add("Footprints Generated");

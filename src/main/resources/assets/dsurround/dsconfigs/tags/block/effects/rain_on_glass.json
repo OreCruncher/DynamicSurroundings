@@ -1,0 +1,10 @@
+{
+  "values": [
+    "minecraft:glass",
+    "minecraft:stained_glass",
+    "minecraft:glass_pane",
+    "minecraft:stained_glass_pane",
+    "ore:blockGlass",
+    "ore:paneGlass"
+  ]
+}

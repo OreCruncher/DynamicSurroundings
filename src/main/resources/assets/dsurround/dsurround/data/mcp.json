@@ -761,11 +761,38 @@
 		}
 	],
 	"acoustics": {
+		"_WETSURFACE": {
+			"walk": {
+				"name": "water.water_through",
+				"vol_min": 190,
+				"vol_max": 190,
+				"pitch_min": 80,
+				"pitch_max": 120
+			}
+		},
+		"_WETSLAP": {
+			"walk": {
+				"name": "wet_slap.slap",
+				"vol_min": 190,
+				"vol_max": 190,
+				"pitch_min": 80,
+				"pitch_max": 120
+			}
+		},
+		"_WETMUD": {
+			"walk": {
+				"name": "mud.mud_walk",
+				"vol_min": 158,
+				"vol_max": 158,
+				"pitch_min": 80,
+				"pitch_max": 120
+			}
+		},
 		"floorsqueak": {
 			"walk": {
 				"name": "floorsqueak.floorsqueak",
-				"vol_min": 30,
-				"vol_max": 30,
+				"vol_min": 190,
+				"vol_max": 190,
 				"pitch_min": 80,
 				"pitch_max": 120
 			}
