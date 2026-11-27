@@ -219,6 +219,36 @@ public abstract class BiomeMatcher {
 
 			});
 
+			// The biome's own temperature (not at a height): the 26.x line's forests are temperate between 0.2 and 1
+			this.exp.addVariable(new Variant("biome.temperature") {
+				@Override
+				public int compareTo(@Nonnull IVariant o) {
+					return Float.compare(asNumber(), o.asNumber());
+				}
+
+				@Override
+				public float asNumber() {
+					return ConditionsImpl.this.current.getTemperature();
+				}
+
+				@Override
+				public String asString() {
+					return Float.toString(asNumber());
+				}
+
+				@Override
+				public boolean asBoolean() {
+					return asNumber() != 0F;
+				}
+
+				@Nonnull
+				@Override
+				public IVariant add(@Nonnull IVariant term) {
+					return new NumberValue(asNumber() + term.asNumber());
+				}
+
+			});
+
 			// Fake biome
 			this.exp.addVariable(new Variant("biome.isFake") {
 

@@ -2251,5 +2251,236 @@
 		"sounds": [
 			"dsurround:ambient/silence"
 		]
+	},
+	"ocean": {
+		"category": "ds_biome",
+		"credits": [
+			"§aocean waves surround me.wav",
+			"bohitomi",
+			"Creative Commons Attribution 4.0"
+		],
+		"sounds": [
+			{
+				"name": "dsurround:ambient/outside/ocean",
+				"volume": 0.4,
+				"stream": true
+			}
+		]
+	},
+	"forest.pine": {
+		"category": "ds_biome",
+		"credits": [
+			"§aNord_Odal_Nyhus_04_juni_2011_open_forest_birds_insects_wind_through_large_pines.wav",
+			"nfsgit",
+			"Creative Commons 0"
+		],
+		"sounds": [
+			{
+				"name": "dsurround:ambient/outside/pine_forest",
+				"stream": true
+			}
+		]
+	},
+	"forest.silent": {
+		"category": "ds_biome",
+		"credits": [
+			"§aSilent forest",
+			"ZHRØ",
+			"Creative Commons 0"
+		],
+		"sounds": [
+			{
+				"name": "dsurround:ambient/outside/silent_forest",
+				"stream": true
+			}
+		]
+	},
+	"forest.sparse": {
+		"category": "ds_biome",
+		"credits": [
+			"§a001_forrest.wav",
+			"joepsporck",
+			"Creative Commons 0"
+		],
+		"sounds": [
+			{
+				"name": "dsurround:ambient/outside/sparse_forest",
+				"stream": true
+			}
+		]
+	},
+	"jungle.sparse": {
+		"category": "ds_biome",
+		"credits": [
+			"§aPeruvian Amazon birds frogs daytime",
+			"nonamethefish",
+			"Creative Commons 0"
+		],
+		"sounds": [
+			{
+				"name": "dsurround:ambient/outside/sparse_jungle",
+				"volume": 0.2,
+				"stream": true
+			}
+		]
+	},
+	"underground.deep": {
+		"category": "ds_biome",
+		"sounds": [
+			{
+				"name": "dsurround:ambient/underground/deep",
+				"volume": 0.3,
+				"stream": true
+			}
+		]
+	},
+	"wind.arctic": {
+		"category": "ds_biome",
+		"credits": [
+			"§aHowling Wind Ambience",
+			"DBlover",
+			"Creative Commons 0"
+		],
+		"sounds": [
+			{
+				"name": "dsurround:ambient/outside/arctic_wind",
+				"stream": true
+			}
+		]
+	},
+	"eagle": {
+		"category": "ambient",
+		"credits": [
+			"§aBald Eagle Calls / Chirps",
+			"Kinoton",
+			"Creative Commons 0"
+		],
+		"sounds": [
+			{
+				"name": "dsurround:ambient/birds/bald_eagle1"
+			},
+			{
+				"name": "dsurround:ambient/birds/bald_eagle2"
+			},
+			{
+				"name": "dsurround:ambient/birds/bald_eagle3"
+			},
+			{
+				"name": "dsurround:ambient/birds/bald_eagle4"
+			}
+		]
+	},
+	"turtledove": {
+		"category": "ambient",
+		"credits": [
+			"§aturtledove sounds",
+			"csengeri",
+			"Creative Commons 0"
+		],
+		"sounds": [
+			{
+				"name": "dsurround:ambient/birds/turtledove1"
+			},
+			{
+				"name": "dsurround:ambient/birds/turtledove2"
+			},
+			{
+				"name": "dsurround:ambient/birds/turtledove3"
+			}
+		]
+	},
+	"whale.right": {
+		"category": "ambient",
+		"credits": [
+			"§aSounds in the Ocean",
+			"NOAA Fisheries",
+			"Public domain (U.S. government work)"
+		],
+		"sounds": [
+			{
+				"name": "dsurround:ambient/whale/right1",
+				"volume": 0.226
+			},
+			{
+				"name": "dsurround:ambient/whale/right2",
+				"volume": 0.226
+			},
+			{
+				"name": "dsurround:ambient/whale/right3",
+				"volume": 0.226
+			},
+			{
+				"name": "dsurround:ambient/whale/right4",
+				"volume": 0.226
+			},
+			{
+				"name": "dsurround:ambient/whale/right5",
+				"volume": 0.226
+			}
+		]
+	},
+	"whale.minke": {
+		"category": "ambient",
+		"credits": [
+			"§aSounds in the Ocean",
+			"NOAA Fisheries",
+			"Public domain (U.S. government work)"
+		],
+		"sounds": [
+			{
+				"name": "dsurround:ambient/whale/minke1",
+				"volume": 0.226
+			},
+			{
+				"name": "dsurround:ambient/whale/minke2",
+				"volume": 0.226
+			},
+			{
+				"name": "dsurround:ambient/whale/minke3",
+				"volume": 0.226
+			},
+			{
+				"name": "dsurround:ambient/whale/minke4",
+				"volume": 0.226
+			}
+		]
+	},
+	"seagulls.flock": {
+		"category": "ambient",
+		"credits": [
+			"§aSeagulls / gaviotas clean wildtrack",
+			"Soojay",
+			"Creative Commons 0"
+		],
+		"sounds": [
+			{
+				"name": "dsurround:ambient/seagulls/flock1",
+				"volume": 0.26
+			},
+			{
+				"name": "dsurround:ambient/seagulls/flock2",
+				"volume": 0.26
+			},
+			{
+				"name": "dsurround:ambient/seagulls/flock3",
+				"volume": 0.26
+			},
+			{
+				"name": "dsurround:ambient/seagulls/flock4",
+				"volume": 0.26
+			},
+			{
+				"name": "dsurround:ambient/seagulls/flock5",
+				"volume": 0.26
+			},
+			{
+				"name": "dsurround:ambient/seagulls/flock6",
+				"volume": 0.26
+			},
+			{
+				"name": "dsurround:ambient/seagulls/flock7",
+				"volume": 0.26
+			}
+		]
 	}
 }

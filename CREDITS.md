@@ -41,6 +41,12 @@ whether LPs can be monetized on the various streaming services.
      <li>S: <a href="https://www.freesound.org/people/c97059890/sounds/21754/">Fiji Beach (Stereo)128kbps.mp3</a> by <a href="https://www.freesound.org/people/c97059890/">c97059890</a> | License: Creative Commons 0</li> 
 </ul>
 
+*dsurround:ocean*
+
+<ul>
+     <li>S: <a href="https://freesound.org/people/bohitomi/sounds/240219/">ocean waves surround me.wav</a> by <a href="https://freesound.org/people/bohitomi/">bohitomi</a> | License: <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a></li> 
+</ul>
+
 *dsurround:bigrockfall / dsurround:rockfall*
 
 <ul>
@@ -102,6 +108,12 @@ whether LPs can be monetized on the various streaming services.
      <li>S: <a href="https://www.freesound.org/people/felix.blume/sounds/156414/">Wind blowing into some cactus spine, on the top of the mountain, in the desert of Atacama (Chile).</a> by <a href="https://www.freesound.org/people/felix.blume/">felix.blume</a> | License: Creative Commons 0 | Modified: a 62 s loop cut, made mono, toned to the old loop, level matched</li> 
 </ul>
 
+*dsurround:wind.arctic*
+
+<ul>
+     <li>S: <a href="https://freesound.org/people/DBlover/sounds/405601/">Howling Wind Ambience</a> by <a href="https://freesound.org/people/DBlover/">DBlover</a> | License: Creative Commons 0 | Modified: a 40 s loop cut, bass reduced, level matched</li> 
+</ul>
+
 *dsurround:bog*
 
 <ul>
@@ -120,10 +132,34 @@ whether LPs can be monetized on the various streaming services.
      <li>S: <a href="https://freesound.org/people/CHRISFOPFILMS/sounds/346225/">Forest Ambience.wav</a> by <a href="https://freesound.org/people/CHRISFOPFILMS/">CHRISFOPFILMS</a> | License: Creative Commons 0 | Modified: cut into a loop, made mono, high-passed, level matched</li> 
 </ul>
 
+*dsurround:jungle.sparse*
+
+<ul>
+     <li>S: <a href="https://freesound.org/people/nonamethefish/sounds/653743/">Peruvian Amazon birds frogs daytime</a> by <a href="https://freesound.org/people/nonamethefish/">nonamethefish</a> | License: Creative Commons 0 | Modified: cut into a loop, made mono, high-passed, level matched</li> 
+</ul>
+
 *dsurround:forest*
 
 <ul>
      <li>S: <a href="https://freesound.org/people/bajko/sounds/385280/">sfx_amb_forest_spring_afternoon-01.wav</a> by <a href="https://freesound.org/people/bajko/">bajko</a> | License: Creative Commons 0 | Modified: cut into a loop, made mono, level matched</li> 
+</ul>
+
+*dsurround:forest.sparse*
+
+<ul>
+     <li>S: <a href="https://www.freesound.org/people/joepsporck/sounds/262037/">001_forrest.wav</a> by <a href="https://www.freesound.org/people/joepsporck/">joepsporck</a> | License: Creative Commons 0 | Modified: a loop cut, made mono, tone matched to the old loop, level matched</li> 
+</ul>
+
+*dsurround:forest.pine*
+
+<ul>
+     <li>S: <a href="https://freesound.org/people/nfsgit/sounds/121960/">Nord_Odal_Nyhus_04_juni_2011_open_forest_birds_insects_wind_through_large_pines.wav</a> by <a href="https://www.freesound.org/people/nfsgit/">nfsgit</a> | License: Creative Commons 0</li> 
+</ul>
+
+*dsurround:forest.silent*
+
+<ul>
+     <li>S: <a href="https://freesound.org/people/ZHR%C3%98/sounds/753418/">Silent forest</a> by <a href="https://freesound.org/people/ZHR%C3%98/">ZHRØ</a> | License: Creative Commons 0 | Modified: cut into a loop, made mono, filtered (rumble and hiss reduced), level matched</li> 
 </ul>
 
 *dsurround:deep_forest*
@@ -175,6 +211,12 @@ whether LPs can be monetized on the various streaming services.
      <li>S: <a href="https://freesound.org/people/nigelcoop/sounds/75195/">Seagull trill and whine</a> by <a href="https://freesound.org/people/nigelcoop/">nigelcoop</a> | License: Creative Commons 0</li> 
 </ul>
 
+*dsurround:seagulls.flock*
+
+<ul>
+     <li>S: <a href="https://freesound.org/people/Soojay/sounds/462462/">Seagulls / gaviotas clean wildtrack</a> by <a href="https://freesound.org/people/Soojay/">Soojay</a> | License: Creative Commons 0 | Modified: stretches of calling cut, made mono, filtered, surf and wind reduced, levels matched</li> 
+</ul>
+
 *dsurround:desert.wind*
 
 <ul>
@@ -193,11 +235,23 @@ whether LPs can be monetized on the various streaming services.
      <li>S: <a href="https://freesound.org/people/sphion/sounds/158527/">Happy birds</a> by <a href="https://freesound.org/people/sphion/">sphion</a> | License: Creative Commons 0</li> 
 </ul>
 
+*dsurround:turtledove*
+
+<ul>
+     <li>S: <a href="https://freesound.org/people/csengeri/sounds/351726/">turtledove sounds</a> by <a href="https://www.freesound.org/people/csengeri/">csengeri</a> | License: Creative Commons 0</li> 
+</ul>
+
 *dsurround:raptor*
 
 <ul>
      <li>S: <a href="https://freesound.org/people/kvgarlic/sounds/377759/">HawkMP3VersionWinterJan22nd2017.mp3</a> by <a href="https://freesound.org/people/kvgarlic/">kvgarlic</a> | License: Creative Commons 0 | Used for: red_shouldered_hawk | Modified: 5 s cut, made mono</li> 
      <li>S: <a href="https://freesound.org/people/Vrymaa/sounds/770032/">Bird - Red-shouldered hawk</a> by <a href="https://freesound.org/people/Vrymaa/">Vrymaa</a> | License: Creative Commons 0 | Used for: red_shouldered_hawk2-3 | Modified: two calls cut, high-passed, levels matched</li> 
+</ul>
+
+*dsurround:eagle*
+
+<ul>
+     <li>S: <a href="https://freesound.org/people/Kinoton/sounds/832476/">Bald Eagle Calls / Chirps</a> by <a href="https://freesound.org/people/Kinoton/">Kinoton</a> | License: Creative Commons 0 | Modified: four phrases cut, high-passed, highs softened, levels matched</li> 
 </ul>
 
 *dsurround:wolf*
@@ -206,7 +260,7 @@ whether LPs can be monetized on the various streaming services.
      <li>S: <a href="https://freesound.org/people/betchkal/sounds/500646/">Cooper Creek 20160313_014852 solitary wolf howl very clear.wav</a> by <a href="https://freesound.org/people/betchkal/">betchkal</a> | License: Creative Commons 0 | Modified: four howls cut, reverb reduced, sped up 1.4x with the pitch kept, levels matched</li> 
 </ul>
 
-*dsurround:whale*
+*dsurround:whale / dsurround:whale.right / dsurround:whale.minke*
 
 <ul>
      <li>S: Humpback whale song, North Atlantic right whale upcalls and sounds, minke whale pulse trains, from <a href="https://www.fisheries.noaa.gov/national/science-data/sounds-ocean">Sounds in the Ocean</a> by NOAA Fisheries, Northeast Fisheries Science Center, Passive Acoustics Branch | License: Public domain (U.S. government work) | Modified: calls cut, made mono, filtered, right whale background noise reduced, levels matched</li> 

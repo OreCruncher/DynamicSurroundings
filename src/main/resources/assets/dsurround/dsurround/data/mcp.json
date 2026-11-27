@@ -1,7 +1,7 @@
 {
 	"biomes": [
 		{
-			"conditions": "!biome.isMountain && ((biome.isWasteland && !biome.isSwamp) || biome.isHills)",
+			"conditions": "!biome.isMountain && !(biome.isSnowy && !(biome.isForest || biome.isConiferous || biome.isNether || biome.isEnd || biome.isFake)) && ((biome.isWasteland && !biome.isSwamp) || (biome.isHills && !biome.isForest))",
 			"_comment": "Wind for Hills/Wasteland",
 			"sounds": [
 				{
@@ -21,7 +21,7 @@
 			]
 		},
 		{
-			"conditions": "biome.isSandy && biome.isDry && !(biome.isLush || biome.isHills || biome.isMountain || biome.isPlains)",
+			"conditions": "biome.isSandy && biome.isDry && !(biome.isLush || biome.isHills || biome.isMountain || biome.isPlains || biome.isSnowy)",
 			"_comment": "Desert wind",
 			"sounds": [
 				{
@@ -31,12 +31,32 @@
 			]
 		},
 		{
-			"conditions": "biome.isJungle && biome.isWet",
+			"conditions": "biome.isSnowy && !(biome.isForest || biome.isConiferous || biome.isNether || biome.isEnd || biome.isFake)",
+			"_comment": "Arctic wind",
+			"sounds": [
+				{
+					"sound": "dsurround:wind.arctic"
+				}
+			]
+		},
+		{
+			"conditions": "biome.isJungle && biome.isDense && !(biome.isSparse || biome.isSwamp || biome.isOcean)",
 			"_comment": "Basic Jungle and Tropical",
 			"soundReset": true,
 			"sounds": [
 				{
 					"sound": "dsurround:jungle",
+					"conditions": "weather.isNotRaining"
+				}
+			]
+		},
+		{
+			"conditions": "biome.isJungle && !biome.isOcean && (biome.isSparse || biome.isSwamp || !biome.isDense)",
+			"_comment": "Sparse and swampy Jungle (in 1.12.2 a jungle that isn't dense, as the jungle edge)",
+			"soundReset": true,
+			"sounds": [
+				{
+					"sound": "dsurround:jungle.sparse",
 					"conditions": "weather.isNotRaining"
 				}
 			]
@@ -93,7 +113,7 @@
 			]
 		},
 		{
-			"conditions": "biome.isForest && !(biome.isHot || biome.isSwamp || biome.isDead || biome.isSnowy || biome.isCold || biome.isOcean || biome.isWasteland || biome.isJungle || biome.isDense)",
+			"conditions": "biome.isForest && !(biome.isDead || biome.isWasteland || biome.isSwamp || biome.isOcean || biome.isJungle || biome.isSpooky || biome.isSparse) && biome.temperature >= 0.2 && biome.temperature <= 1.0",
 			"_comment": "Basic Forest w/Crickets",
 			"sounds": [
 				{
@@ -107,7 +127,31 @@
 			]
 		},
 		{
-			"conditions": "biome.isForest && biome.isDense && !(biome.isHot || biome.isSwamp || biome.isDead || biome.isSnowy || biome.isCold || biome.isOcean || biome.isWasteland || biome.isJungle)",
+			"conditions": "biome.isForest && biome.isSparse && !(biome.isDead || biome.isWasteland || biome.isSwamp || biome.isOcean || biome.isJungle || biome.isSpooky) && biome.temperature >= 0.2 && biome.temperature <= 1.0",
+			"_comment": "Sparse Forest w/Crickets",
+			"sounds": [
+				{
+					"sound": "dsurround:forest.sparse",
+					"conditions": "weather.isNotRaining && !weather.canWaterFreeze && diurnal.isDay"
+				},
+				{
+					"sound": "dsurround:crickets",
+					"conditions": "weather.isNotRaining && !weather.canWaterFreeze && diurnal.isNight"
+				}
+			]
+		},
+		{
+			"conditions": "biome.isConiferous && !(biome.isSnowy || biome.isCold || biome.isForest || biome.isSwamp)",
+			"_comment": "Pine Forest",
+			"sounds": [
+				{
+					"sound": "dsurround:forest.pine",
+					"conditions": "weather.isNotRaining && !weather.canWaterFreeze && diurnal.isDay"
+				}
+			]
+		},
+		{
+			"conditions": "biome.isForest && biome.isSpooky && !(biome.isDead || biome.isWasteland || biome.isSwamp || biome.isOcean || biome.isJungle) && biome.temperature >= 0.2 && biome.temperature <= 1.0",
 			"_comment": "Deep Forest w/Crickets",
 			"sounds": [
 				{
@@ -121,12 +165,12 @@
 			]
 		},
 		{
-			"conditions": "biome.isForest && biome.isCold && !(biome.isSwamp || biome.isSnowy || biome.isDead || biome.isDense)",
-			"_comment": "Simple Forest",
+			"conditions": "(biome.isForest || biome.isConiferous) && (biome.isSnowy || biome.isCold) && !(biome.isForest && biome.temperature >= 0.2 && biome.temperature <= 1.0 && !(biome.isDead || biome.isWasteland || biome.isSwamp))",
+			"_comment": "Silent forest, in cold woods that no other forest loop covers",
 			"sounds": [
 				{
-					"sound": "dsurround:forest",
-					"conditions": "weather.isNotRaining && !weather.canWaterFreeze && diurnal.isDay"
+					"sound": "dsurround:forest.silent",
+					"conditions": "weather.isNotRaining && !diurnal.isNight"
 				}
 			]
 		},
@@ -142,7 +186,7 @@
 			]
 		},
 		{
-			"conditions": "(biome.isOcean || biome.isBeach) && !(biome.isCold || biome.isSnowy)",
+			"conditions": "biome.isBeach && !(biome.isCold || biome.isSnowy)",
 			"_comment": "Beach",
 			"sounds": [
 				{
@@ -151,7 +195,22 @@
 				{
 					"sound": "dsurround:seagulls",
 					"conditions": "diurnal.isDay",
+					"soundType": "spot",
+					"weight": 4
+				},
+				{
+					"sound": "dsurround:seagulls.flock",
+					"conditions": "diurnal.isDay",
 					"soundType": "spot"
+				}
+			]
+		},
+		{
+			"conditions": "biome.isOcean",
+			"_comment": "Ocean background",
+			"sounds": [
+				{
+					"sound": "dsurround:ocean"
 				}
 			]
 		},
@@ -170,8 +229,8 @@
 			"soundReset": true,
 			"sounds": [
 				{
-					"sound": "dsurround:beach",
-					"pitch": 0.4
+					"sound": "dsurround:ocean",
+					"pitch": 0.7
 				}
 			]
 		},
@@ -333,7 +392,14 @@
 				{
 					"sound": "dsurround:raptor",
 					"conditions": "weather.isNotRaining && diurnal.isDay",
-					"soundType": "spot"
+					"soundType": "spot",
+					"weight": 5
+				},
+				{
+					"sound": "dsurround:eagle",
+					"conditions": "weather.isNotRaining && diurnal.isDay",
+					"soundType": "spot",
+					"weight": 5
 				}
 			]
 		},
@@ -343,6 +409,17 @@
 			"sounds": [
 				{
 					"sound": "dsurround:loon",
+					"conditions": "weather.isNotRaining && !diurnal.isNight",
+					"soundType": "spot"
+				}
+			]
+		},
+		{
+			"conditions": "(biome.isForest || biome.isConiferous) && !(biome.isSwamp || biome.isWasteland || biome.isJungle || biome.isDead || biome.isNether || biome.isEnd || biome.isFake)",
+			"_comment": "Turtledove",
+			"sounds": [
+				{
+					"sound": "dsurround:turtledove",
 					"conditions": "weather.isNotRaining && !diurnal.isNight",
 					"soundType": "spot"
 				}
@@ -376,7 +453,11 @@
 			"sounds": [
 				{
 					"sound": "dsurround:underground",
-					"conditions": "player.isInside && player.Y < 33"
+					"conditions": "player.isInside && player.Y < 33 && player.Y >= 16"
+				},
+				{
+					"sound": "dsurround:underground.deep",
+					"conditions": "player.isInside && player.Y < 16"
 				},
 				{
 					"sound": "dsurround:rockfall",
@@ -415,6 +496,15 @@
 				{
 					"sound": "dsurround:whale",
 					"soundType": "spot"
+				},
+				{
+					"sound": "dsurround:whale.right",
+					"soundType": "spot"
+				},
+				{
+					"sound": "dsurround:whale.minke",
+					"soundType": "spot",
+					"weight": 3
 				}
 			]
 		},

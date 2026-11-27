@@ -181,7 +181,18 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   distance, other entities' steps included): each file's channels averaged and brought back to its old loudness (the
   mean of its channels' power; up to 3.1 dB for metalbox, whose channels were two takes). `water_stereofix` was `water`
   with its channels swapped, the same sound in mono, so it is gone and `waterfine` plays `water` alone.
-- Still to come: the events only in 26.x (new biome loops, eagle, turtledove, whales, electric arcs, the medium rain).
+- 26.x's biome sounds: `ocean`, `forest.sparse`, `forest.pine`, `forest.silent`, `jungle.sparse`, `wind.arctic`,
+  `underground.deep`, `eagle`, `turtledove`, `whale.right`, `whale.minke`, `seagulls.flock`, at 26.x's volumes scaled
+  as their siblings' were (whales x0.75, gulls x0.87), with 26.x's rules in `mcp.json`'s biomes in Forge's types:
+  forests temperate by `biome.temperature` (0.2 to 1, as 26.x; added to the biome conditions), so vanilla's taigas
+  (COLD at 0.25) have the forest, sparse forests their own loop, deep forest only the spooky ones (not every dense
+  one), cold woods no other forest covers the silent forest; the open sea its own waves (deep ocean them at 0.7), the
+  beach the surf and gulls; arctic wind where it is snowy and not wooded (1.12.2 has no icy), in place of the hills'
+  and wasteland's, and none in wooded hills (26.x has hill wind only where it is windswept); the sparse jungle loop for a jungle that isn't dense (the jungle edge: every other 1.12.2 jungle is
+  DENSE); eagles beside hawks; turtledoves in woods; the deep underground below Y 16. The creature spots the 26.x line
+  never had (insect buzz, bison, elephants, primates, crocodiles, rattlesnakes) and the wolf rule are this line's.
+  Not brought: 26.x's storm wind (no `weather` variable for the wind yet), fog changes and actors.
+- Still to come: electric arcs, the skeleton's bow, the log and organic footsteps, the medium rain.
 
 ## Biome survey (/dsdump biomes)
 - `/dsdump biomes` (`CommandDSDump`, a client command) writes every biome to
