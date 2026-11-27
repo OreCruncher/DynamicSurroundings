@@ -34,6 +34,7 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.footsteps.Generator;
 import org.orecruncher.dsurround.client.footsteps.GeneratorQP;
+import org.orecruncher.dsurround.client.footsteps.facade.FacadeHelper;
 import org.orecruncher.dsurround.registry.Registry;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.acoustics.AcousticRegistry;
@@ -221,6 +222,7 @@ public final class FootstepsRegistry extends Registry {
 
 	@Override
 	protected void complete() {
+		FacadeHelper.initialize();
 		if (ModOptions.logging.enableDebugLogging) {
 			if (this.missingAcoustics.size() > 0) {
 				ModBase.log().info("          >>>> MISSING ACOUSTIC ENTRIES <<<< ");

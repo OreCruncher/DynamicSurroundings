@@ -165,6 +165,8 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
 - A delayed acoustic part (`delayed`, 30 or 50 ms in `mcp.json`) goes to `SoundEffectHandler`'s queue, counted in
   ticks (`SoundPlayer.delayTicks`: rounded up, at least the next tick): it was timed in milliseconds and dropped if
   more than 1.2 times its delay late, which any late tick did, and stalled while the entity rode or slept.
+- `FacadeHelper` scans every block for facade blocks once, as the footsteps registry completes (it ran at the first
+  footstep of a session, a stall then).
 
 ## Rain on surfaces
 - `rain.enableRainSurfaces` (on), ported from the 26.x line: each rain sound (`StormSplashRenderer.playSplashSound`, on

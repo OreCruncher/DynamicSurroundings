@@ -232,7 +232,8 @@ public class Generator {
 
 			float distance = 0f;
 
-			if (entity.isOnLadder() && !entity.onGround) {
+			// As found at the start of the tick: asking again looked up the block, and the mod's ladder hook, twice
+			if (this.isOnLadder && !entity.onGround) {
 				distance = this.VAR.STRIDE_LADDER;
 			} else if (!this.isInWater && MathStuff.abs(this.yPosition - entity.posY) > 0.4d) {
 				// This ensures this does not get recorded as landing, but as a

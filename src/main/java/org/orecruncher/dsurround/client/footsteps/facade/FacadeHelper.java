@@ -95,6 +95,14 @@ public final class FacadeHelper {
 
 	}
 
+	/**
+	 * Finds the facade blocks now, as the config loads: the scan of every block runs once, when the class loads, and
+	 * ran at the first footstep of a session otherwise, a stall then
+	 */
+	public static void initialize() {
+		// Loading the class is the work
+	}
+
 	@Nonnull
 	public static IBlockState resolveState(@Nonnull final EntityLivingBase entity, @Nonnull final IBlockState state,
 			@Nonnull final IBlockAccess world, @Nonnull final Vec3d pos, @Nullable final EnumFacing side) {
