@@ -611,6 +611,12 @@ public final class ModOptions {
 		@Comment("Enable/disable rain puddle sound when moving in the rain")
 		public static boolean enablePuddleSound = true;
 
+		@Option("Floor Squeaks")
+		@DefaultValue("true")
+		@LangKey(sound.PREFIX + ".FloorSqueaks")
+		@Comment("Enable/disable the occasional squeak of a wooden floor underfoot")
+		public static boolean enableFloorSqueaks = true;
+
 		@Option("Sound Culling Threshold")
 		@DefaultValue("20")
 		@LangKey(sound.PREFIX + ".CullInterval")

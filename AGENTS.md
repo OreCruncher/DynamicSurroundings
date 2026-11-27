@@ -127,6 +127,21 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   `World` only, and tests use a fake). Bench: `scripts/bench/window-streaks.json` (a glass wall
   in a thunderstorm, `/dsweather wind speed 200` and `direction E`, with the sheets and with particle weather).
 
+## Block tags
+- `registry/tags`: the mod's own block tags, as the 26.x line has (1.12.2 has none of the game's), laid out as
+  26.x's: `dsurround:effects/floor_squeaks` (`BlockTags`) is every `assets/<namespace>/dsconfigs/tags/block/effects/
+  floor_squeaks.json` (`{"values": [...]}`) in mod jars and resource packs, read through the resource manager; ours
+  are in `src/main/resources/assets/<namespace>/dsconfigs`. A namespace that isn't an installed mod's counts only for
+  a player's resource pack. 1.12.2 can't list a folder, so the files read are those of the tags in `BlockTags.ALL` and
+  of the tags they name. Entries are block names as written elsewhere in the config (`minecraft:planks`, with states
+  `[variant=oak]`), `ore:<name>` (the blocks of the ore dictionary's items, which picks up mods' blocks that have an
+  item) or `#<tag>`; a name without a namespace is `dsurround:`. A `tags` section in a config file
+  (`"effects/floor_squeaks": [...]`) adds to them, for players' external config files. `TagResolver` does the paths,
+  files and resolving with no game in it (tested); `TagRegistry` (`RegistryManager.TAGS.is(BlockTags.X, state)`)
+  holds the block states; the log gives each tag's count, and the inspection overlay a block's tags.
+- Floor squeaks (`sound.enableFloorSqueaks`, `FloorSqueakAccent`, from the 26.x line): one step in ten on the
+  `floor_squeaks` tag (planks, wooden slabs and stairs) adds `floorsqueak`.
+
 ## Known noise in a dev run's log
 - FML's missing signature data and Maven library folder errors, fernflower's "Unable to simplify switch" (the mixin
   debug export). Neither mod checks a certificate fingerprint any more (dropped in DS 4.0.0 and OreLib 3.6.0.2).

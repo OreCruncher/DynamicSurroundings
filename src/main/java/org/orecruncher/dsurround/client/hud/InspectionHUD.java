@@ -79,6 +79,7 @@ public class InspectionHUD extends Gui implements IGuiOverlay {
 	private static final String TEXT_ALWAYS_ON_EFFECTS = TextFormatting.DARK_PURPLE + "<Always On Effects>";
 	private static final String TEXT_BLOCK_SOUNDS = TextFormatting.DARK_PURPLE + "<Block Sounds>";
 	private static final String TEXT_DICTIONARY_NAMES = TextFormatting.DARK_PURPLE + "<Dictionary Names>";
+	private static final String TEXT_TAGS = TextFormatting.DARK_PURPLE + "<Tags>";
 
 	private static List<String> gatherOreNames(final ItemStack stack) {
 		final List<String> result = new ArrayList<>();
@@ -143,6 +144,13 @@ public class InspectionHUD extends Gui implements IGuiOverlay {
 				for (final BlockEffect e : effects) {
 					text.add(TextFormatting.GOLD + e.getEffectType().getName());
 				}
+			}
+
+			final List<String> tags = RegistryManager.TAGS.tagsOf(state);
+			if (tags.size() > 0) {
+				text.add(TEXT_TAGS);
+				for (final String tag : tags)
+					text.add(TextFormatting.GOLD + tag);
 			}
 
 			final SoundEffect[] sounds = data.getSounds();

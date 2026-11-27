@@ -50,6 +50,7 @@ public class FootstepAccents {
 	static {
 		providers.add(new ArmorAccents());
 		providers.add(new RainSplashAccent());
+		providers.add(new FloorSqueakAccent());
 	}
 
 	public static void provide(@Nonnull final EntityLivingBase entity, @Nullable final BlockPos pos,

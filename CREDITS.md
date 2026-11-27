@@ -29,6 +29,12 @@ whether LPs can be monetized on the various streaming services.
 
 ##### Credits
 
+*Footstep sounds (dsurround:armor.\*, wood.\*, squeakywood.\*, floorsqueak.floorsqueak and the others in sounds/footsteps)*
+
+<ul>
+     <li>S: <a href="https://github.com/Hurricaaane/Presence-Footsteps">Presence Footsteps</a> by Hurricaaane (Ha3) | License: <a href="https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/minecraft-mods/1290546-presence-footsteps-an-overly-complicated-sound">WTFPL v2</a></li> 
+</ul>
+
 *dsurround:beach*
 
 <ul>

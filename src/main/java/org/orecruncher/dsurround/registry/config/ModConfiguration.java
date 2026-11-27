@@ -78,6 +78,10 @@ public final class ModConfiguration {
 	@SerializedName("primitiveAcoustics")
 	public Map<String, String> primitiveAcoustics = ImmutableMap.of();
 
+	// Block tags: each tag's entries (blocks, ore:names, #tags), see TagRegistry
+	@SerializedName("tags")
+	public Map<String, List<String>> tags = ImmutableMap.of();
+
 	public static class ForgeEntry {
 		@SerializedName("acousticProfile")
 		public String acousticProfile = null;

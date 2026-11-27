@@ -1,4 +1,21 @@
 {
+	"floorsqueak.floorsqueak": {
+		"category": "player",
+		"sounds": [
+			{
+				"name": "dsurround:footsteps/floor_squeak/floorsqueak1",
+				"volume": 0.2
+			},
+			{
+				"name": "dsurround:footsteps/floor_squeak/floorsqueak2",
+				"volume": 0.2
+			},
+			{
+				"name": "dsurround:footsteps/floor_squeak/floorsqueak3",
+				"volume": 0.2
+			}
+		]
+	},
 	"armor.light_walk": {
 		"category": "player",
 		"credits": [

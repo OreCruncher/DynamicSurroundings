@@ -108,6 +108,7 @@ public final class FootstepsRegistry extends Registry {
 	public IAcoustic[] SWIM;
 	public IAcoustic[] JUMP;
 	public IAcoustic[] SPLASH;
+	public IAcoustic[] FLOOR_SQUEAK;
 
 	public FootstepsRegistry() {
 		super("Footsteps Registry");
@@ -136,6 +137,7 @@ public final class FootstepsRegistry extends Registry {
 		this.SWIM = null;
 		this.JUMP = null;
 		this.SPLASH = null;
+		this.FLOOR_SQUEAK = null;
 
 		seedMap();
 	}
@@ -163,6 +165,7 @@ public final class FootstepsRegistry extends Registry {
 	protected void postInit() {
 		this.SWIM = RegistryManager.ACOUSTICS.compileAcoustics("_SWIM");
 		this.JUMP = RegistryManager.ACOUSTICS.compileAcoustics("_JUMP");
+		this.FLOOR_SQUEAK = RegistryManager.ACOUSTICS.compileAcoustics("floorsqueak");
 		this.SPLASH = new IAcoustic[] {
 				new RainSplashAcoustic(RegistryManager.ACOUSTICS.compileAcoustics("waterfine")) };
 

@@ -37,6 +37,7 @@ import org.orecruncher.dsurround.registry.effect.EffectRegistry;
 import org.orecruncher.dsurround.registry.footstep.FootstepsRegistry;
 import org.orecruncher.dsurround.registry.item.ItemRegistry;
 import org.orecruncher.dsurround.registry.sound.SoundRegistry;
+import org.orecruncher.dsurround.registry.tags.TagRegistry;
 import org.orecruncher.lib.Singleton;
 import org.orecruncher.lib.collections.ObjectArray;
 import org.orecruncher.lib.task.Scheduler;
@@ -58,6 +59,8 @@ public final class RegistryManager {
 	public static BiomeRegistry BIOME;
 	@SideOnly(Side.CLIENT)
 	public static BlockStateRegistry BLOCK;
+	@SideOnly(Side.CLIENT)
+	public static TagRegistry TAGS;
 	@SideOnly(Side.CLIENT)
 	public static ItemRegistry ITEMS;
 	@SideOnly(Side.CLIENT)
@@ -104,6 +107,7 @@ public final class RegistryManager {
 			ACOUSTICS = new AcousticRegistry();
 			BIOME = new BiomeRegistry();
 			BLOCK = new BlockStateRegistry();
+			TAGS = new TagRegistry();
 			FOOTSTEPS = new FootstepsRegistry();
 			ITEMS = new ItemRegistry();
 			EFFECTS = new EffectRegistry();

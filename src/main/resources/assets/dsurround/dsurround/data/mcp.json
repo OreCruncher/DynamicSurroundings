@@ -761,6 +761,15 @@
 		}
 	],
 	"acoustics": {
+		"floorsqueak": {
+			"walk": {
+				"name": "floorsqueak.floorsqueak",
+				"vol_min": 30,
+				"vol_max": 30,
+				"pitch_min": 80,
+				"pitch_max": 120
+			}
+		},
 		"none": {
 		},
 		"_JUMP": {

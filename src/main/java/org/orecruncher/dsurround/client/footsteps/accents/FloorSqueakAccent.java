@@ -1,0 +1,72 @@
+/* This file is part of Dynamic Surroundings, licensed under the MIT License (MIT).
+ *
+ * Copyright (c) OreCruncher
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+package org.orecruncher.dsurround.client.footsteps.accents;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.orecruncher.dsurround.ModOptions;
+import org.orecruncher.dsurround.client.footsteps.IFootstepAccentProvider;
+import org.orecruncher.dsurround.registry.RegistryManager;
+import org.orecruncher.dsurround.registry.acoustics.IAcoustic;
+import org.orecruncher.dsurround.registry.tags.BlockTags;
+import org.orecruncher.lib.chunk.ClientChunkCache;
+import org.orecruncher.lib.collections.ObjectArray;
+import org.orecruncher.lib.random.XorShiftRandom;
+
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+/**
+ * Now and then a step on a wooden floor (the {@code floor_squeaks} tag) squeaks, as in the 26.x line
+ */
+@SideOnly(Side.CLIENT)
+public class FloorSqueakAccent implements IFootstepAccentProvider {
+
+	// One step in this many squeaks
+	static final int SQUEAK_ONE_IN = 10;
+
+	private final XorShiftRandom random = new XorShiftRandom();
+
+	@Override
+	@Nonnull
+	public String getName() {
+		return "Floor Squeak Accent";
+	}
+
+	@Override
+	public void provide(@Nonnull final EntityLivingBase entity, @Nullable final BlockPos pos,
+			@Nonnull final ObjectArray<IAcoustic> in) {
+		if (!ModOptions.sound.enableFloorSqueaks || pos == null)
+			return;
+		final IAcoustic[] squeak = RegistryManager.FOOTSTEPS.FLOOR_SQUEAK;
+		if (squeak == null || squeak.length == 0)
+			return;
+		if (this.random.nextInt(SQUEAK_ONE_IN) == 0
+				&& RegistryManager.TAGS.is(BlockTags.FLOOR_SQUEAKS, ClientChunkCache.instance().getBlockState(pos)))
+			in.addAll(squeak);
+	}
+}
