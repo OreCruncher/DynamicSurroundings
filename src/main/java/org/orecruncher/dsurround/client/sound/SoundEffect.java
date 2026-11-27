@@ -42,6 +42,7 @@ import org.orecruncher.lib.WeightTable;
 import org.orecruncher.lib.WeightTable.IEntrySource;
 import org.orecruncher.lib.WeightTable.IItem;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
+import org.orecruncher.lib.expression.Script;
 import org.orecruncher.lib.random.XorShiftRandom;
 
 import com.google.common.base.MoreObjects;
@@ -67,6 +68,8 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 
 	private SoundType type;
 	private String conditions;
+	// The conditions, compiled the first time they are checked
+	private Script script;
 	private SoundCategory category;
 	private float volume;
 	private float pitch;
@@ -118,6 +121,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 
 	protected SoundEffect setConditions(@Nonnull final String cond) {
 		this.conditions = cond;
+		this.script = null;
 		return this;
 	}
 
@@ -278,7 +282,9 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 	// IEntrySource<T>
 	@Override
 	public boolean matches() {
-		return ExpressionEngine.instance().check(this.conditions);
+		if (this.script == null)
+			this.script = ExpressionEngine.instance().compile(this.conditions);
+		return this.script.check();
 	}
 
 	@Override

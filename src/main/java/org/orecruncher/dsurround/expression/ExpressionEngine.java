@@ -28,6 +28,7 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.lib.expression.ExpressionCache;
 import org.orecruncher.lib.expression.IDynamicVariant;
 import org.orecruncher.lib.expression.IVariant;
+import org.orecruncher.lib.expression.Script;
 
 public final class ExpressionEngine {
 
@@ -66,6 +67,13 @@ public final class ExpressionEngine {
 
 	public List<String> getNaughtyList() {
 		return this.cache.getNaughtyList();
+	}
+
+	/**
+	 * Compiles a script once, for a caller that evaluates it often to keep (a sound's or block effect's conditions)
+	 */
+	public Script compile(final String exp) {
+		return this.cache.compile(exp);
 	}
 
 	public boolean check(final String exp) {

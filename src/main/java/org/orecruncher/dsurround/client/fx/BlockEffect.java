@@ -32,6 +32,7 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.dsurround.expression.ExpressionEngine;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
+import org.orecruncher.lib.expression.Script;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -43,6 +44,8 @@ public abstract class BlockEffect implements ISpecialEffect {
 
 	private int chance;
 	protected String conditions = StringUtils.EMPTY;
+	// The conditions, compiled the first time they are checked
+	private Script script;
 
 	public BlockEffect() {
 		this(100);
@@ -57,6 +60,7 @@ public abstract class BlockEffect implements ISpecialEffect {
 
 	public void setConditions(@Nullable final String conditions) {
 		this.conditions = conditions == null ? StringUtils.EMPTY : conditions.intern();
+		this.script = null;
 	}
 
 	@Nonnull
@@ -87,7 +91,16 @@ public abstract class BlockEffect implements ISpecialEffect {
 		if (!alwaysExecute() && random.nextInt(getChance()) != 0)
 			return false;
 
-		return ExpressionEngine.instance().check(getConditions());
+		return conditionsMet();
+	}
+
+	/**
+	 * Whether the effect's conditions hold now
+	 */
+	protected boolean conditionsMet() {
+		if (this.script == null)
+			this.script = ExpressionEngine.instance().compile(getConditions());
+		return this.script.check();
 	}
 
 	/**

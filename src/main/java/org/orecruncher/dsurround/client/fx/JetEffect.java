@@ -31,7 +31,6 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.client.fx.particle.system.ParticleJet;
 import org.orecruncher.dsurround.client.handlers.ParticleSystemHandler;
-import org.orecruncher.dsurround.expression.ExpressionEngine;
 import org.orecruncher.lib.chunk.IBlockAccessEx;
 
 import net.minecraft.block.state.IBlockState;
@@ -62,7 +61,7 @@ public abstract class JetEffect extends BlockEffect {
 	public boolean canTrigger(@Nonnull final IBlockAccessEx provider, @Nonnull final IBlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		if (alwaysExecute() || random.nextInt(getChance()) == 0) {
-			return ParticleSystemHandler.okToSpawn(pos) && ExpressionEngine.instance().check(getConditions());
+			return ParticleSystemHandler.okToSpawn(pos) && conditionsMet();
 		}
 		return false;
 	}
