@@ -75,6 +75,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 	private int repeatDelayRandom;
 	private int repeatDelay;
 	private String soundTitle = StringUtils.EMPTY;
+	private boolean followsWind;
 
 	protected SoundEffect(final ResourceLocation resource, final SoundCategory category) {
 		this(resource, category, 1.0F, 1.0F, 0, false);
@@ -143,6 +144,18 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 	protected SoundEffect setSoundTitle(@Nonnull final String title) {
 		this.soundTitle = title;
 		return this;
+	}
+
+	protected SoundEffect setFollowsWind(final boolean flag) {
+		this.followsWind = flag;
+		return this;
+	}
+
+	/**
+	 * Whether this is a wind loop, whose volume follows the wind (see WindSounds)
+	 */
+	public boolean followsWind() {
+		return this.followsWind;
 	}
 
 	public String getSoundName() {
@@ -307,6 +320,7 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 			setRepeatDelay(record.repeatDelay == null ? 0 : record.repeatDelay);
 			setRepeatDelayRandom(record.repeatDelayRandom == null ? 0 : record.repeatDelayRandom);
 			setSoundTitle(record.title != null ? record.title : StringUtils.EMPTY);
+			setFollowsWind(record.followsWind != null && record.followsWind);
 
 			SoundType t = null;
 			if (record.soundType != null)
@@ -340,6 +354,11 @@ public final class SoundEffect implements ISpecialEffect, IEntrySource<SoundEffe
 			}
 
 			setSoundCategory(sc);
+		}
+
+		public Builder setFollowsWind(final boolean flag) {
+			this.effect.setFollowsWind(flag);
+			return this;
 		}
 
 		public Builder setSoundTitle(@Nonnull final String title) {

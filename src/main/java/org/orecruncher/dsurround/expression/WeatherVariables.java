@@ -26,6 +26,7 @@ import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
 import org.orecruncher.dsurround.capabilities.season.ISeasonInfo;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.weather.Weather;
+import org.orecruncher.dsurround.client.weather.wind.WindService;
 import org.orecruncher.lib.expression.Dynamic;
 import org.orecruncher.lib.expression.DynamicVariantList;
 
@@ -40,6 +41,10 @@ public class WeatherVariables extends DynamicVariantList {
 		add(new Dynamic.DynamicBoolean("weather.isNotRaining", () -> !Weather.isRaining()));
 		add(new Dynamic.DynamicBoolean("weather.isNotThundering", () -> !Weather.isThundering()));
 		add(new Dynamic.DynamicNumber("weather.rainfall", () -> (float) Weather.getIntensityLevel()));
+		// The wind, from the 26.x line: a storm wind brings a wind loop where a biome has none of its own
+		add(new Dynamic.DynamicBoolean("weather.isStormWind", () -> WindService.isStormWind()));
+		add(new Dynamic.DynamicBoolean("weather.isWindy", () -> WindService.isWindy()));
+		add(new Dynamic.DynamicNumber("weather.windSpeed", () -> (float) WindService.percentOfFullStorm()));
 		add(new Dynamic.DynamicNumber("weather.temperatureValue", () -> {
 			final World world = EnvironState.getWorld();
 			final ISeasonInfo season = CapabilitySeasonInfo.getCapability(world);

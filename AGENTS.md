@@ -96,6 +96,12 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
 - `/dsweather wind [speed 0-300 | direction <degrees|N..NW> | clear]` (`CommandDSWeather`, a client command) holds the
   wind for testing, speed as a percent of a full storm's, as 26.3's does; `/dsweather clear` or disconnecting lets it
   go. Bench scenarios can run it in a scene's `commands`.
+- Wind sounds, from the 26.x line (`WindSounds`): a biome sound with `"followsWind": true` (the wind loops in
+  `mcp.json`) is scaled by the wind where the player is, gusts included (0.4 in a calm, 1 at a full storm's wind, up to
+  1.3 beyond; half under cover, by `Shelter.exposure`), and not played where the air is still. `weather.isStormWind`
+  (on from 70% of a full storm's steady wind, off below 55%), `weather.isWindy` (50%) and `weather.windSpeed` (the
+  percent) are condition variables; the storm wind rule gives biomes with no wind of their own (not mountains, hills,
+  wastelands, deserts, snowy open land, the Nether or the End) the wind loop while it blows.
 - Drawn by `GpuDrops` (`rain.particleWeatherOnGpu`, on): the drops uploaded to a vertex buffer once a tick, four vertices
   a drop, and `shaders/drops.vert` making each frame's quads (OpenGL 2.1: the 26.x line's texel buffers need 3.1), or
   without shaders by `DropRenderer` on the CPU, whose math the shader follows: change both. Vanilla turns particles
@@ -197,7 +203,7 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   and wasteland's, and none in wooded hills (26.x has hill wind only where it is windswept); the sparse jungle loop for a jungle that isn't dense (the jungle edge: every other 1.12.2 jungle is
   DENSE); eagles beside hawks; turtledoves in woods; the deep underground below Y 16. The creature spots the 26.x line
   never had (insect buzz, bison, elephants, primates, crocodiles, rattlesnakes) and the wolf rule are this line's.
-  Not brought: 26.x's storm wind (no `weather` variable for the wind yet), fog changes and actors.
+  Not brought: 26.x's fog changes and actors.
 - Still to come: electric arcs, the skeleton's bow, the log and organic footsteps.
 
 ## Biome survey (/dsdump biomes)

@@ -54,5 +54,8 @@ public class SoundConfig {
 	public Boolean spotSound = null;
 	@SerializedName("step")
 	public Boolean step = null;
+	// A wind loop: its volume follows the wind (see WindSounds)
+	@SerializedName("followsWind")
+	public Boolean followsWind = null;
 
 }

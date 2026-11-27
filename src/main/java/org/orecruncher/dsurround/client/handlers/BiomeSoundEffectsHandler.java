@@ -30,6 +30,7 @@ import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.handlers.scanners.BiomeScanner;
 import org.orecruncher.dsurround.client.sound.SoundEffect;
+import org.orecruncher.dsurround.client.weather.wind.WindService;
 import org.orecruncher.dsurround.registry.RegistryManager;
 import org.orecruncher.dsurround.registry.biome.BiomeInfo;
 import org.orecruncher.lib.collections.ObjectArray;
@@ -71,6 +72,13 @@ public class BiomeSoundEffectsHandler extends EffectHandlerBase {
 		// Scale the volumes in the resulting list based on the weights
 		final float area = this.biomes.getBiomeArea();
 		result.replaceAll((fx, v) -> 0.1F + 0.9F * (v / area));
+
+		// Wind loops rise and fall with the wind, and swell as gusts pass (WindSounds); where the air is still there is
+		// no wind to hear
+		final boolean still = WindService.isStill();
+		final float windScale = WindService.loopScale();
+		result.object2FloatEntrySet().removeIf(e -> e.getKey().followsWind() && still);
+		result.replaceAll((fx, v) -> fx.followsWind() ? v * windScale : v);
 	}
 
 	@Override

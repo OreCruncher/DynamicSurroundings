@@ -64,6 +64,10 @@ public final class WindService {
 	private static final Wind WIND = new Wind();
 	private static final Random RANDOM = new XorShiftRandom();
 	private static boolean still = true;
+	// The steady wind as a percent of a full storm's, whether that is a storm wind, and how loud wind loops play
+	private static int percent;
+	private static boolean stormWind;
+	private static float loopScale;
 
 	private WindService() {
 	}
@@ -83,6 +87,35 @@ public final class WindService {
 		return still;
 	}
 
+	/**
+	 * Whether the steady wind is a storm's (weather.isStormWind), as of the last tick
+	 */
+	public static boolean isStormWind() {
+		return stormWind;
+	}
+
+	/**
+	 * Whether the steady wind is a strong one (weather.isWindy), as of the last tick
+	 */
+	public static boolean isWindy() {
+		return WindSounds.isWindy(percent);
+	}
+
+	/**
+	 * The steady wind, as a percent of a full storm's (weather.windSpeed)
+	 */
+	public static int percentOfFullStorm() {
+		return percent;
+	}
+
+	/**
+	 * How loud wind loops play, for the wind where the player is, a passing gust included, and how open to the sky they
+	 * are (see WindSounds); none where the air is still
+	 */
+	public static float loopScale() {
+		return loopScale;
+	}
+
 	@SubscribeEvent
 	public static void onClientTick(@Nonnull final TickEvent.ClientTickEvent event) {
 		if (event.phase != TickEvent.Phase.END)
@@ -97,6 +130,9 @@ public final class WindService {
 		if (still) {
 			// Still air: nothing drifts
 			SceneWind.clear();
+			percent = 0;
+			stormWind = false;
+			loopScale = 0F;
 			return;
 		}
 		final float rainLevel = MathHelper.clamp(Weather.getIntensityLevel(), 0F, 1F);
@@ -105,6 +141,11 @@ public final class WindService {
 		WIND.setReach(PrecipitationField.DEFAULT_RADIUS);
 		WIND.tick(rainLevel, world.isThundering(), dusty, world.getWorldTime() / 24000L, RANDOM);
 		SceneWind.update(WIND, camera.posX, camera.posZ);
+
+		percent = Wind.percentOfFullStorm(WIND.speed());
+		stormWind = WindSounds.isStormWind(percent, stormWind);
+		final float exposure = Shelter.exposure(world, new BlockPos(camera.posX, eyeY, camera.posZ));
+		loopScale = WindSounds.loopScale(WIND.speed() * WIND.gustFactor(0F, 0F), exposure);
 	}
 
 	/**
@@ -117,8 +158,12 @@ public final class WindService {
 
 	@SubscribeEvent
 	public static void onWorldUnload(@Nonnull final WorldEvent.Unload event) {
-		if (event.getWorld().isRemote)
+		if (event.getWorld().isRemote) {
 			SceneWind.clear();
+			percent = 0;
+			stormWind = false;
+			loopScale = 0F;
+		}
 	}
 
 	/**
@@ -131,6 +176,8 @@ public final class WindService {
 
 	@SubscribeEvent
 	public static void diagnostics(@Nonnull final DiagnosticEvent.Gather event) {
-		event.output.add(TextFormatting.AQUA + (still ? "Wind: none in this dimension" : diagnosticText(WIND)));
+		event.output.add(TextFormatting.AQUA + (still ? "Wind: none in this dimension"
+				: diagnosticText(WIND) + String.format(Locale.ROOT, " %d%%%s, loops x%.2f", percent,
+						stormWind ? " storm" : "", loopScale)));
 	}
 }

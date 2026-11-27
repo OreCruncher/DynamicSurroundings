@@ -1,13 +1,25 @@
 {
 	"biomes": [
 		{
+			"conditions": "!(biome.isNether || biome.isEnd || biome.isFake || biome.isMountain || (biome.isSnowy && !(biome.isForest || biome.isConiferous)) || (biome.isWasteland && !biome.isSwamp) || (biome.isHills && !biome.isForest) || (biome.isSandy && biome.isDry && !(biome.isLush || biome.isHills || biome.isPlains || biome.isSnowy)))",
+			"_comment": "Storm wind, where the biome has no wind of its own: as loud as the wind blows",
+			"sounds": [
+				{
+					"sound": "dsurround:wind",
+					"conditions": "weather.isStormWind",
+					"followsWind": true
+				}
+			]
+		},
+		{
 			"conditions": "!biome.isMountain && !(biome.isSnowy && !(biome.isForest || biome.isConiferous || biome.isNether || biome.isEnd || biome.isFake)) && ((biome.isWasteland && !biome.isSwamp) || (biome.isHills && !biome.isForest))",
 			"_comment": "Wind for Hills/Wasteland",
 			"sounds": [
 				{
 					"sound": "dsurround:wind",
 					"volume": 0.2,
-					"pitch": 1.5
+					"pitch": 1.5,
+					"followsWind": true
 				}
 			]
 		},
@@ -16,7 +28,8 @@
 			"_comment": "Wind for Mountain",
 			"sounds": [
 				{
-					"sound": "dsurround:wind"
+					"sound": "dsurround:wind",
+					"followsWind": true
 				}
 			]
 		},
@@ -26,7 +39,8 @@
 			"sounds": [
 				{
 					"sound": "dsurround:desert.wind",
-					"volume": 0.15
+					"volume": 0.15,
+					"followsWind": true
 				}
 			]
 		},
@@ -35,7 +49,8 @@
 			"_comment": "Arctic wind",
 			"sounds": [
 				{
-					"sound": "dsurround:wind.arctic"
+					"sound": "dsurround:wind.arctic",
+					"followsWind": true
 				}
 			]
 		},
@@ -531,7 +546,8 @@
 			"_comment": "Clouds explicit set",
 			"sounds": [
 				{
-					"sound": "dsurround:wind"
+					"sound": "dsurround:wind",
+					"followsWind": true
 				}
 			]
 		},
