@@ -23,13 +23,20 @@
  */
 package org.orecruncher.dsurround.client.handlers.effects;
 
+import java.util.Set;
+
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.effects.EventEffect;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.sound.ISoundInstance;
 import org.orecruncher.dsurround.client.sound.Sounds;
+
+import com.google.common.collect.ImmutableSet;
+
+import net.minecraft.inventory.Container;
 
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
@@ -39,7 +46,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class CraftingSoundEffect extends EventEffect {
 
+	// Crafting screens of other mods that play a sound of their own when something is made (Tinkers' tool station
+	// and tool forge, whose crafting also fires the crafting event); a subclass counts too
+	private static final Set<String> OWN_SOUND = ImmutableSet.of(
+			"slimeknights.tconstruct.tools.common.inventory.ContainerToolStation");
+
 	private int craftSoundThrottle = 0;
+
+	static boolean playsItsOwnSound(@Nullable final Container container) {
+		for (Class<?> c = container == null ? null : container.getClass(); c != null; c = c.getSuperclass())
+			if (OWN_SOUND.contains(c.getName()))
+				return true;
+		return false;
+	}
 
 	@SubscribeEvent
 	public void onEvent(@Nonnull final ItemCraftedEvent event) {
@@ -47,6 +66,9 @@ public class CraftingSoundEffect extends EventEffect {
 			return;
 
 		if (this.craftSoundThrottle >= (EnvironState.getTickCounter() - 30))
+			return;
+
+		if (playsItsOwnSound(event.player.openContainer))
 			return;
 
 		this.craftSoundThrottle = EnvironState.getTickCounter();
