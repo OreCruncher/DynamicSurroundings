@@ -62,6 +62,7 @@ import org.orecruncher.dsurround.client.sound.BackgroundMute;
 import org.orecruncher.dsurround.client.sound.SoundEngine;
 import org.orecruncher.dsurround.client.weather.Weather;
 import org.orecruncher.dsurround.commands.CommandCalc;
+import org.orecruncher.dsurround.client.handlers.effects.EntitySwingEffect;
 import org.orecruncher.dsurround.event.WorldEventDetector;
 import org.orecruncher.dsurround.lib.compat.ModEnvironment;
 import org.orecruncher.dsurround.registry.RegistryDataEvent;
@@ -116,6 +117,7 @@ public class ProxyClient extends Proxy implements IProxy, ISelectiveResourceRelo
 		register(WorldEventDetector.class);
 		register(ParticleCollections.class);
 		register(PointLights.class);
+		register(EntitySwingEffect.class);
 	}
 
 	@Override
