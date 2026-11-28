@@ -321,6 +321,9 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
 ## Other mods
 - OptiFine shader packs: fog processing is off (`FogHandler.doFog`), with particle weather, frost and point lights
   (`ParticleWeather.shaderPackInUse`): the pack draws its own sky, and our fog showed as a band below it (#831).
+- A mod that puts a sound of its own in place of one of ours (`PlaySoundEvent`, Ender IO's padding) has that sound
+  tracked as ours (`SoundEngine.standIns`): looked for as ours, ours was taken as done and looping effects started
+  another each tick (#580).
 - Futurepack sets blocks in a client world of its own from its own thread while loading: `WorldEventDetector` passes on
   only the player's world's block updates, on the game's thread (#806).
 - Animania's farm addon is optional: `AnimaniaBadge` names its classes only when it is installed (#808).

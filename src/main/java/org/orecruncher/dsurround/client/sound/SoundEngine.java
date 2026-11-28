@@ -50,6 +50,7 @@ import org.orecruncher.lib.ThreadGuard;
 import org.orecruncher.lib.ThreadGuard.Action;
 import org.orecruncher.lib.math.MathStuff;
 
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
@@ -110,6 +111,11 @@ public final class SoundEngine {
 	private final Set<ISoundInstance> queuedSounds = new ReferenceOpenHashSet<>(256);
 
 	private String playedSoundId = null;
+	private ISound playedSound = null;
+	// Sounds of ours another mod put a sound of its own in place of (PlaySoundEvent: Ender IO's padding), and that
+	// sound: it is the one playing, so it is the one looked for and stopped. Looked for as ours, ours was taken as
+	// done the next tick, and a looping effect started it again each tick, piling up loops never stopped (#580)
+	private final Map<ISoundInstance, ISound> standIns = new Reference2ObjectOpenHashMap<>();
 
 	private SoundEngine() {
 		MinecraftForge.EVENT_BUS.register(this);
@@ -194,7 +200,8 @@ public final class SoundEngine {
 			sound.setState(SoundState.DONE);
 			break;
 		case PLAYING:
-			getSoundManager().stopSound(sound);
+			getSoundManager().stopSound(playing(sound));
+			this.standIns.remove(sound);
 			// Done now, so a repeating sound isn't put back in the delayed queue
 			sound.setState(SoundState.DONE);
 			break;
@@ -213,6 +220,7 @@ public final class SoundEngine {
 		clearOrphans();
 		this.queuedSounds.forEach(s -> s.setState(SoundState.DONE));
 		this.queuedSounds.clear();
+		this.standIns.clear();
 	}
 
 	/**
@@ -236,11 +244,14 @@ public final class SoundEngine {
 	protected boolean playSound0(@Nonnull final ISoundInstance sound) {
 		if (canFitSound()) {
 			this.playedSoundId = null;
+			this.playedSound = null;
 			try {
 				getSoundManager().playSound(sound);
 				if (this.playedSoundId != null) {
 					this.queuedSounds.add(sound);
 					sound.setState(SoundState.PLAYING);
+					if (this.playedSound != null && this.playedSound != sound)
+						this.standIns.put(sound, this.playedSound);
 				} else if (sound.getState() == SoundState.QUEUED) {
 					// The SoundManager turned it down (its category muted, say): ending it,
 					// or it would be tried again every tick and never leave the queue
@@ -318,15 +329,15 @@ public final class SoundEngine {
 				case DELAYED:
 					// The sound play is delayed. Check to see if Minecraft
 					// transitioned it's state.
-					if (!delayedSounds.containsKey(sound)) {
-						sound.setState(playingInv.containsKey(sound) ? SoundState.PLAYING : SoundState.DONE);
+					if (!delayedSounds.containsKey(playing(sound))) {
+						sound.setState(playingInv.containsKey(playing(sound)) ? SoundState.PLAYING : SoundState.DONE);
 					}
 					break;
 				case PLAYING:
 					// The sound is playing. Check to see if the Minecraft
 					// sound engine transitioned to a different state.
-					if (!playingInv.containsKey(sound)) {
-						sound.setState(delayedSounds.containsKey(sound) ? SoundState.DELAYED : SoundState.DONE);
+					if (!playingInv.containsKey(playing(sound))) {
+						sound.setState(delayedSounds.containsKey(playing(sound)) ? SoundState.DELAYED : SoundState.DONE);
 					}
 					break;
 				case NONE:
@@ -338,7 +349,11 @@ public final class SoundEngine {
 				}
 				// Remove all terminal sounds because they no longer
 				// need to be tracked.
-				return sound.getState().isTerminal();
+				if (sound.getState().isTerminal()) {
+					this.standIns.remove(sound);
+					return true;
+				}
+				return false;
 			});
 		}
 	}
@@ -388,6 +403,14 @@ public final class SoundEngine {
 	public void onSoundSourceEvent(@Nonnull final SoundSourceEvent event) {
 		this.guard.check("playSound");
 		this.playedSoundId = event.getUuid();
+		this.playedSound = event.getSound();
+	}
+
+	// The sound playing for one of ours: another mod's in its place, or ours
+	@Nonnull
+	private ISound playing(@Nonnull final ISoundInstance sound) {
+		final ISound standIn = this.standIns.get(sound);
+		return standIn != null ? standIn : sound;
 	}
 
 	/**
