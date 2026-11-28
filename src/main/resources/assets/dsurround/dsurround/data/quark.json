@@ -41,7 +41,7 @@
 		"quark:hardened_clay_tiles_slab": "sandstone",
 		"quark:hardened_clay_tiles_slab_double": "sandstone",
 		"quark:hardened_clay_tiles_stairs": "sandstone",
-		"quark:iron_ladder": "ladder_default",
+		"quark:iron_ladder": "metalbar",
 		"quark:iron_plate": "hardmetal",
 		"quark:iron_plate_slab": "hardmetal",
 		"quark:iron_plate_slab_double": "hardmetal",

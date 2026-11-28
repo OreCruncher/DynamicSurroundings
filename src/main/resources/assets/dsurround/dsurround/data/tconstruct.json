@@ -140,7 +140,7 @@
 		"tconstruct:slime_vine_purple_end+foliage": "leaves",
 		"tconstruct:slime_vine_purple_mid": "leaves",
 		"tconstruct:slime_vine_purple_mid+foliage": "leaves",
-		"tconstruct:stone_ladder": "ladder_default",
+		"tconstruct:stone_ladder": "stone",
 		"tconstruct:stone_torch": "NOT_EMITTER",
 		"tconstruct:wood_rail": "NOT_EMITTER",
 		"tconstruct:wood_rail+foliage": "bluntwood",
