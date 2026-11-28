@@ -116,9 +116,9 @@ public final class ScenarioRunner {
 	// The height the player is flown at: over the mountains and trees
 	private static final double FLY_HEIGHT = 230D;
 	// What a command says when it fails only because there was nothing to change: a scene's building commands, once
-	// the scene is built
+	// the scene is built, and a selector that found nothing (clearing dropped items when none fell)
 	static final Set<String> NOTHING_TO_CHANGE = ImmutableSet.of("commands.fill.failed", "commands.setblock.noChange",
-			"commands.clone.failed");
+			"commands.clone.failed", "commands.generic.selector.notFound");
 
 	private final Scenario scenario;
 	private final Path results;
@@ -608,19 +608,30 @@ public final class ScenarioRunner {
 		final MinecraftServer server = server();
 		server.addScheduledTask(() -> {
 			final List<EntityPlayerMP> players = server.getPlayerList().getPlayers();
-			if (asPlayer && !players.isEmpty()) {
-				// As the player itself, as typing it would: some commands insist on a player (/ds). The bench world is
-				// made with cheats on, so the player may use them; what a command says goes to its chat
+			if (asPlayer && !players.isEmpty() && isPlayerOnly(command)) {
+				// As the player itself, as typing it would: /ds insists on a player. The bench world is made with cheats
+				// on, so the player may use them; what a command says goes to its chat
 				final int succeeded = server.getCommandManager().executeCommand(players.get(0), command);
 				if (succeeded == 0 && this.commandFailures.add(command))
 					ModBase.log().warn("Bench: command failed: %s", command);
 				return;
 			}
-			final BenchCommandSender sender = new BenchCommandSender(server, null);
+			// Others as the player (where they stand, @s), through a sender that keeps what they say: a fill that only
+			// had nothing to change (a scene already built) isn't a failure, which the player's chat couldn't tell
+			final BenchCommandSender sender = new BenchCommandSender(server,
+					asPlayer && !players.isEmpty() ? players.get(0) : null);
 			final int succeeded = server.getCommandManager().executeCommand(sender, command);
 			if (succeeded == 0 && !sender.nothingToChange() && this.commandFailures.add(command))
 				ModBase.log().warn("Bench: command failed: %s (%s)", command, sender.said());
 		});
+	}
+
+	/**
+	 * Whether a command needs the player itself as its sender: /ds (getCommandSenderAsPlayer)
+	 */
+	static boolean isPlayerOnly(@Nonnull final String command) {
+		final String name = command.trim().split("\\s+", 2)[0];
+		return "ds".equalsIgnoreCase(name);
 	}
 
 	/**

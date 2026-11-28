@@ -1,0 +1,131 @@
+// A wandering crowd (entity effects: footsteps and prints, breath, the per-entity effect handlers): the 26.x line's
+// crowd.json, in 1.12.2's commands, for comparing the two lines. 48 cows, sheep and pigs free to wander in a fenced pen
+// of snow blocks built high over snowy plains (1.12.2's ice_flats), at noon in clear weather; they leave prints in the
+// snow and their breath shows in the cold. Against prints off and breath off (as 26.x), and the entity effect range at
+// 16 and 48 (the default is 32; the pen reaches 31 blocks out each way). Wandering mobs move as they like, so runs
+// differ more than a still scene's. See README.md for the format.
+{
+  "world": "bench",
+  "seed": 20261126,
+  "setup": [
+    "gamerule doDaylightCycle false",
+    "gamerule doWeatherCycle false",
+    "gamerule doMobSpawning false",
+    "gamerule mobGriefing false"
+  ],
+  "video": {
+    "width": 1920,
+    "height": 1080,
+    "vsync": false,
+    "maxFps": 260
+  },
+  "warmup": 10,
+  "record": 45,
+  "repeats": 2,
+  "scenes": {
+    "pen": {
+      "biome": "minecraft:ice_flats",
+      "yaw": 0,
+      "pitch": 25,
+      "offset": [
+        0,
+        -160
+      ],
+      "commands": [
+        "time set 6000",
+        "weather clear 999999",
+        "kill @e[type=!player]",
+        "kill @e[type=item]",
+        "tp @s ~ 130 ~",
+        "fill ~-31 ~-1 ~-31 ~31 ~-1 ~31 snow",
+        "fill ~-31 ~ ~-31 ~31 ~ ~-31 fence",
+        "fill ~-31 ~ ~31 ~31 ~ ~31 fence",
+        "fill ~-31 ~ ~-31 ~-31 ~ ~31 fence",
+        "fill ~31 ~ ~-31 ~31 ~ ~31 fence",
+        "summon cow ~-24 ~ ~-24 {PersistenceRequired:1b}",
+        "summon sheep ~-24 ~ ~-16 {PersistenceRequired:1b}",
+        "summon pig ~-24 ~ ~-8 {PersistenceRequired:1b}",
+        "summon cow ~-24 ~ ~0 {PersistenceRequired:1b}",
+        "summon sheep ~-24 ~ ~8 {PersistenceRequired:1b}",
+        "summon pig ~-24 ~ ~16 {PersistenceRequired:1b}",
+        "summon cow ~-24 ~ ~24 {PersistenceRequired:1b}",
+        "summon sheep ~-16 ~ ~-24 {PersistenceRequired:1b}",
+        "summon pig ~-16 ~ ~-16 {PersistenceRequired:1b}",
+        "summon cow ~-16 ~ ~-8 {PersistenceRequired:1b}",
+        "summon sheep ~-16 ~ ~0 {PersistenceRequired:1b}",
+        "summon pig ~-16 ~ ~8 {PersistenceRequired:1b}",
+        "summon cow ~-16 ~ ~16 {PersistenceRequired:1b}",
+        "summon sheep ~-16 ~ ~24 {PersistenceRequired:1b}",
+        "summon pig ~-8 ~ ~-24 {PersistenceRequired:1b}",
+        "summon cow ~-8 ~ ~-16 {PersistenceRequired:1b}",
+        "summon sheep ~-8 ~ ~-8 {PersistenceRequired:1b}",
+        "summon pig ~-8 ~ ~0 {PersistenceRequired:1b}",
+        "summon cow ~-8 ~ ~8 {PersistenceRequired:1b}",
+        "summon sheep ~-8 ~ ~16 {PersistenceRequired:1b}",
+        "summon pig ~-8 ~ ~24 {PersistenceRequired:1b}",
+        "summon cow ~0 ~ ~-24 {PersistenceRequired:1b}",
+        "summon sheep ~0 ~ ~-16 {PersistenceRequired:1b}",
+        "summon pig ~0 ~ ~-8 {PersistenceRequired:1b}",
+        "summon cow ~0 ~ ~8 {PersistenceRequired:1b}",
+        "summon sheep ~0 ~ ~16 {PersistenceRequired:1b}",
+        "summon pig ~0 ~ ~24 {PersistenceRequired:1b}",
+        "summon cow ~8 ~ ~-24 {PersistenceRequired:1b}",
+        "summon sheep ~8 ~ ~-16 {PersistenceRequired:1b}",
+        "summon pig ~8 ~ ~-8 {PersistenceRequired:1b}",
+        "summon cow ~8 ~ ~0 {PersistenceRequired:1b}",
+        "summon sheep ~8 ~ ~8 {PersistenceRequired:1b}",
+        "summon pig ~8 ~ ~16 {PersistenceRequired:1b}",
+        "summon cow ~8 ~ ~24 {PersistenceRequired:1b}",
+        "summon sheep ~16 ~ ~-24 {PersistenceRequired:1b}",
+        "summon pig ~16 ~ ~-16 {PersistenceRequired:1b}",
+        "summon cow ~16 ~ ~-8 {PersistenceRequired:1b}",
+        "summon sheep ~16 ~ ~0 {PersistenceRequired:1b}",
+        "summon pig ~16 ~ ~8 {PersistenceRequired:1b}",
+        "summon cow ~16 ~ ~16 {PersistenceRequired:1b}",
+        "summon sheep ~16 ~ ~24 {PersistenceRequired:1b}",
+        "summon pig ~24 ~ ~-24 {PersistenceRequired:1b}",
+        "summon cow ~24 ~ ~-16 {PersistenceRequired:1b}",
+        "summon sheep ~24 ~ ~-8 {PersistenceRequired:1b}",
+        "summon pig ~24 ~ ~0 {PersistenceRequired:1b}",
+        "summon cow ~24 ~ ~8 {PersistenceRequired:1b}",
+        "summon sheep ~24 ~ ~16 {PersistenceRequired:1b}",
+        "summon pig ~24 ~ ~24 {PersistenceRequired:1b}"
+      ],
+      "profile": "general"
+    }
+  },
+  "runs": [
+    {
+      "label": "crowd-default",
+      "scene": "pen"
+    },
+    {
+      "label": "crowd-noprints",
+      "scene": "pen",
+      "settings": {
+        "effects.enableFootprints": false
+      }
+    },
+    {
+      "label": "crowd-nobreath",
+      "scene": "pen",
+      "settings": {
+        "effects.showBreath": false
+      }
+    },
+    {
+      "label": "crowd-range16",
+      "scene": "pen",
+      "settings": {
+        "effects.entityEffectRange": 16
+      }
+    },
+    {
+      "label": "crowd-range48",
+      "scene": "pen",
+      "settings": {
+        "effects.entityEffectRange": 48
+      }
+    }
+  ]
+}

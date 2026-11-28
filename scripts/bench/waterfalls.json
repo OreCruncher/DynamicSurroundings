@@ -1,0 +1,57 @@
+// Waterfalls and flame jets (always-on block effects) at three block effect ranges: the 26.x line's
+// performance-rest.json waterfall scene, in 1.12.2's commands, for comparing the two lines. Built by its commands on a
+// stage they clear and floor at the player's feet, the same each run whatever the ground was: a wide lava pool just
+// ahead (south) for flame jets, and water sources 18 blocks up falling to the floor beyond it, in sunflower plains
+// (1.12.2's mutated_plains) so it isn't where the plains scenes are found. 26.x's waterfalls have mist and foam, which
+// 1.12.2's don't. See README.md for the format.
+{
+  "world": "bench",
+  "seed": 20261126,
+  "setup": [
+    "gamerule doDaylightCycle false",
+    "gamerule doWeatherCycle false",
+    "gamerule doMobSpawning false",
+    "gamerule doFireTick false",
+    "gamerule mobGriefing false"
+  ],
+  "video": {"width": 1920, "height": 1080, "vsync": false, "maxFps": 260},
+  "warmup": 10,
+  "record": 45,
+  "repeats": 2,
+  "scenes": {
+    "waterfall": {
+      "biome": "minecraft:mutated_plains",
+      "yaw": 0,
+      "pitch": -10,
+      "commands": [
+        "time set 6000",
+        "weather clear 999999",
+        "fill ~-24 ~ ~-4 ~24 ~19 ~16 air",
+        "fill ~-24 ~ ~17 ~24 ~19 ~38 air",
+        "fill ~-24 ~-3 ~-4 ~24 ~-2 ~38 dirt 0 replace air",
+        "fill ~-24 ~-1 ~-4 ~24 ~-1 ~38 grass",
+        "fill ~-10 ~-2 ~2 ~10 ~-2 ~6 stone",
+        "fill ~-10 ~-1 ~2 ~10 ~-1 ~6 lava"
+      ],
+      // Clearing under the cliff drops its gravel onto the stage, and items: both cleared once they have landed. The
+      // sources are flowing_water: 1.12.2's water is the still block, which doesn't flow until a neighbor changes
+      "settledCommands": [
+        "fill ~-24 ~ ~-4 ~24 ~19 ~16 air",
+        "fill ~-24 ~ ~17 ~24 ~19 ~38 air",
+        "kill @e[type=item,r=64]",
+        "setblock ~-8 ~18 ~18 flowing_water",
+        "setblock ~0 ~18 ~16 flowing_water",
+        "setblock ~8 ~18 ~18 flowing_water",
+        "setblock ~-14 ~18 ~26 flowing_water",
+        "setblock ~14 ~18 ~26 flowing_water",
+        "setblock ~0 ~18 ~30 flowing_water"
+      ],
+      "profile": "general"
+    }
+  },
+  "runs": [
+    {"label": "waterfall-default", "scene": "waterfall", "settings": {"effects.blockEffectRange": 40}},
+    {"label": "waterfall-range32", "scene": "waterfall", "settings": {"effects.blockEffectRange": 32}},
+    {"label": "waterfall-range64", "scene": "waterfall", "settings": {"effects.blockEffectRange": 64}}
+  ]
+}

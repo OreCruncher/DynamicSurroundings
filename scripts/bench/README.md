@@ -47,7 +47,7 @@ Without `-Pscenario`, `runClientBench` is a plain client in the bench folder, fo
 ```
 
 - **Settings** are `ModOptions` paths: the nested class, then the field (`rain.allowBackgroundThunder`,
-  `aurora.maxBands`, `effects.specialEffectRange`). Each is set on the Forge config property behind the field, in memory,
+  `aurora.maxBands`, `effects.blockEffectRange`). Each is set on the Forge config property behind the field, in memory,
   and `ConfigProcessor` brings the fields in step, as the config screen does; nothing is written to the config file. A
   setting needing the game restarted (`@RestartRequired(server = true)`) is refused up front. Before each run, every
   setting any run sets is put back to what it was when the session started, and again at the end. Some settings are
@@ -72,6 +72,15 @@ Without `-Pscenario`, `runClientBench` is a plain client in the bench folder, fo
   draws scales with the pixels, so runs to compare need the same size (the manifest's `window` says what it was).
 
 Not ported from the 26.x line: sounds played around the player, boats, Improved Transparency.
+
+## Scenarios
+
+- `weather.json`, `particle-weather.json`, `rain-surfaces.json`, `window-frost.json`, `window-streaks.json`,
+  `aurora.json`, `aurora-cinematic.json`: the features they are named for.
+- `busy.json`: busier scenes for finding what costs (a crowd, waterfalls and lava, a forest thunderstorm, flying).
+- `waterfalls.json`, `crowd.json`, `fireflies.json`: the 26.x line's scenes of those names (its `performance-rest.json`
+  waterfall stage, its crowd pen, its poppy field at night) in 1.12.2's commands, with its run labels, for comparing
+  the two lines run for run.
 
 ## Scenes
 

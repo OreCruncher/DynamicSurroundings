@@ -1,0 +1,47 @@
+// Fireflies at their busiest: the player standing in a field of poppies at night, fireflies all around. The 26.x line's
+// fireflies.json, in 1.12.2's commands, for comparing the two lines; 1.12.2's fireflies are a random block effect of
+// flowers at night (no lights or glow, which 26.x's runs also turn off one at a time). The field is built by the
+// commands on a stage they clear and floor at the player's feet, in birch forest. Fireflies aren't seeded, so runs
+// differ. See README.md for the format.
+{
+  "world": "bench",
+  "seed": 20261126,
+  "setup": [
+    "gamerule doDaylightCycle false",
+    "gamerule doWeatherCycle false",
+    "gamerule doMobSpawning false",
+    "gamerule mobGriefing false"
+  ],
+  "video": {"width": 1920, "height": 1080, "vsync": false, "maxFps": 260},
+  "warmup": 10,
+  "record": 45,
+  "repeats": 2,
+  "scenes": {
+    "field": {
+      "biome": "minecraft:birch_forest",
+      "pitch": 5,
+      "commands": [
+        "time set 18000",
+        "weather clear 999999",
+        "fill ~-24 ~ ~-24 ~24 ~19 ~-1 air",
+        "fill ~-24 ~ ~0 ~24 ~19 ~24 air",
+        "fill ~-24 ~-3 ~-24 ~24 ~-2 ~24 dirt 0 replace air",
+        "fill ~-24 ~-1 ~-24 ~24 ~-1 ~24 grass"
+      ],
+      // Clearing the trees drops what was in them onto the stage: cleared once it has landed, then the flowers. A block's
+      // effects are made as the config loads, so enableFireflies needs the reload, each run, as the next one must undo it
+      "settledCommands": [
+        "fill ~-24 ~ ~-24 ~24 ~19 ~-1 air",
+        "fill ~-24 ~ ~0 ~24 ~19 ~24 air",
+        "kill @e[type=item,r=64]",
+        "fill ~-24 ~ ~-24 ~24 ~ ~24 red_flower",
+        "ds reload"
+      ],
+      "profile": "general"
+    }
+  },
+  "runs": [
+    {"label": "fireflies-default", "scene": "field"},
+    {"label": "fireflies-off", "scene": "field", "settings": {"effects.enableFireflies": false}}
+  ]
+}
