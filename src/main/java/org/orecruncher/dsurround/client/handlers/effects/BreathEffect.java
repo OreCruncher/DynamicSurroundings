@@ -30,6 +30,7 @@ import javax.annotation.Nonnull;
 
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
+import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 import org.orecruncher.dsurround.client.effects.EntityEffect;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactory;
 import org.orecruncher.dsurround.client.effects.IEntityEffectFactoryFilter;
@@ -123,6 +124,10 @@ public class BreathEffect extends EntityEffect {
 	}
 
 	protected boolean showFrostBreath(final Entity entity, @Nonnull final IBlockState headBlock) {
+		// Not the player's in a building, as the indoor sounds take it (inside, not underground): a cave is still cold
+		// (#730)
+		if (entity == EnvironState.getPlayer() && EnvironState.isPlayerInside() && !EnvironState.isPlayerUnderground())
+			return false;
 		if (headBlock.getMaterial() == Material.AIR) {
 			final World world = entity.getEntityWorld();
 			final BlockPos entityPos = entity.getPosition();
