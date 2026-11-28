@@ -39,6 +39,7 @@ import org.orecruncher.dsurround.client.handlers.fog.HolisticFogRangeCalculator;
 import org.orecruncher.dsurround.client.handlers.fog.MorningFogRangeCalculator;
 import org.orecruncher.dsurround.client.handlers.fog.SeasonFogRangeCalculator;
 import org.orecruncher.dsurround.client.handlers.fog.WeatherFogRangeCalculator;
+import org.orecruncher.dsurround.client.weather.particle.ParticleWeather;
 import org.orecruncher.dsurround.event.DiagnosticEvent;
 import org.orecruncher.dsurround.lib.OutOfBandTimerEMA;
 import org.orecruncher.dsurround.lib.compat.ModEnvironment;
@@ -71,8 +72,11 @@ public class FogHandler extends EffectHandlerBase {
 		super("Fog Handler");
 	}
 
+	// Not under an OptiFine shader pack: it draws its own sky and fog, and ours showed as a band of fog color
+	// between its sky and the ground (#831)
 	private boolean doFog() {
-		return ModOptions.fog.enableFogProcessing && EnvironState.getDimensionInfo().hasFog();
+		return ModOptions.fog.enableFogProcessing && EnvironState.getDimensionInfo().hasFog()
+				&& !ParticleWeather.shaderPackInUse();
 	}
 
 	@Override

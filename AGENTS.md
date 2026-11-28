@@ -318,6 +318,10 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   OreLib's reason (an unknown name gets the nearest known one suggested). Biome rule conditions (`BiomeMatcher`) are
   compiled then too ("Skipping biome entry ...").
 
+## Other mods
+- OptiFine shader packs: fog processing is off (`FogHandler.doFog`), with particle weather, frost and point lights
+  (`ParticleWeather.shaderPackInUse`): the pack draws its own sky, and our fog showed as a band below it (#831).
+
 ## Known noise in a dev run's log
 - FML's missing signature data and Maven library folder errors, fernflower's "Unable to simplify switch" (the mixin
   debug export). Neither mod checks a certificate fingerprint any more (dropped in DS 4.0.0 and OreLib 3.6.0.2).
