@@ -512,6 +512,13 @@ public final class SoundEngine {
 			SoundSystemConfig.setStreamingBufferSize(ModOptions.sound.streamBufferSize * 1024);
 		ModBase.log().info("Stream buffers: %d x %d", SoundSystemConfig.getNumberStreamingBuffers(),
 				SoundSystemConfig.getStreamingBufferSize());
+
+		// A looping stream (biome loops) goes back to its start while its last buffers still play only with this
+		// set (Source.stream). Without it, paulscode let the stream play out, noticed on its stream thread (20 ms
+		// polls), then opened the file again and decoded its first buffers before playing: a gap at each loop. It
+		// says whether sounds queued after a stream share its format; the game queues none, and a loop is the same
+		// file
+		SoundSystemConfig.setStreamQueueFormatsMatch(true);
 	}
 
 }
