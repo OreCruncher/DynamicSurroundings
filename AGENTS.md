@@ -217,6 +217,15 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   Not brought: 26.x's fog changes and actors.
 - Still to come: electric arcs, the skeleton's bow, the log and organic footsteps.
 
+## Looping streams
+- Biome loops have no repeat delay, so the game passes the loop to paulscode, whose stream thread loops the file; not
+  DS's tick or vanilla's. Paulscode goes back to a stream's start while its last buffers still play only with
+  `SoundSystemConfig.streamQueueFormatsMatch` set (`SoundEngine.configureSound` sets it). Unset, the default, it let the
+  stream play out, noticed (20 ms polls), opened the file again and decoded before playing: a hitch at every loop,
+  which DS's small stream buffers (3 x 32 KB) left uncovered.
+- With the loop seamless, a file whose ends don't meet clicks: `ambient/outside/ocean.ogg` (26.x's, the same there)
+  jumps from -0.023 to 0 at its seam, which a short crossfade would fix.
+
 ## Biome survey (/dsdump biomes)
 - `/dsdump biomes` (`CommandDSDump`, a client command) writes every biome to
   `config/dsurround/dumps/biomes-<time>.csv`: its mod, Forge biome dictionary types and whether Forge guessed them
