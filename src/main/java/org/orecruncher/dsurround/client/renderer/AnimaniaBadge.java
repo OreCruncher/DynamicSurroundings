@@ -60,6 +60,33 @@ public final class AnimaniaBadge implements IEntityBadgeProvider {
 	private static final IBadgeDisplayCheck BADGE_DISPLAY_CHECK = () -> KeyHandler.ANIMANIA_BADGES == null
 			|| KeyHandler.ANIMANIA_BADGES.isKeyDown() || KeyHandler.ANIMANIA_BADGES.getKeyCode() == Keyboard.KEY_NONE;
 
+	// The farm addon's animals, looked at only when it is installed: Animania's base and extra addon alone have
+	// animals that eat too, and naming the farm classes then failed to load them (#808)
+	private static final boolean FARM = classPresent("com.animania.addons.farm.common.entity.sheep.EntityEweBase");
+
+	private static boolean classPresent(@Nonnull final String name) {
+		try {
+			Class.forName(name, false, AnimaniaBadge.class.getClassLoader());
+			return true;
+		} catch (final ClassNotFoundException | LinkageError e) {
+			return false;
+		}
+	}
+
+	private static final class Farm {
+		static boolean isEwe(@Nonnull final EntityLivingBase e) {
+			return e instanceof EntityEweBase;
+		}
+
+		static boolean isPiglet(@Nonnull final EntityLivingBase e) {
+			return e instanceof EntityPigletBase;
+		}
+
+		static boolean isPig(@Nonnull final EntityLivingBase e) {
+			return e instanceof EntityAnimaniaPig;
+		}
+	}
+
 	@Nonnull
 	@Override
 	public ItemStack getStackToDisplay(@Nonnull final EntityLivingBase e) {
@@ -89,9 +116,9 @@ public final class AnimaniaBadge implements IEntityBadgeProvider {
 	 */
 	@Override
 	public float adjustY(@Nonnull final EntityLivingBase e) {
-		if (e instanceof EntityEweBase)
+		if (FARM && Farm.isEwe(e))
 			return 1F;
-		if (e instanceof EntityPigletBase)
+		if (FARM && Farm.isPiglet(e))
 			return -0.5F;
 		return 0.15F;
 	}
@@ -104,9 +131,9 @@ public final class AnimaniaBadge implements IEntityBadgeProvider {
 	 */
 	@Override
 	public float scale(@Nonnull final EntityLivingBase e) {
-		if (e instanceof EntityEweBase)
+		if (FARM && Farm.isEwe(e))
 			return 1.5F;
-		if (e instanceof EntityAnimaniaPig && !(e instanceof EntityPigletBase))
+		if (FARM && Farm.isPig(e) && !Farm.isPiglet(e))
 			return 0.75F;
 		return 0.5F;
 	}

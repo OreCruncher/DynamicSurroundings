@@ -321,6 +321,7 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
 ## Other mods
 - OptiFine shader packs: fog processing is off (`FogHandler.doFog`), with particle weather, frost and point lights
   (`ParticleWeather.shaderPackInUse`): the pack draws its own sky, and our fog showed as a band below it (#831).
+- Animania's farm addon is optional: `AnimaniaBadge` names its classes only when it is installed (#808).
 
 ## Known noise in a dev run's log
 - FML's missing signature data and Maven library folder errors, fernflower's "Unable to simplify switch" (the mixin
