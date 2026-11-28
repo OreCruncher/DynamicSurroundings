@@ -121,6 +121,8 @@ dsurround.cfg.rain.WindowFrost=Window Frost
 dsurround.cfg.rain.WindowFrost.tooltip=Frost on the outside of windows in the cold, thickest before sunrise (needs shaders; off under a shader pack)
 dsurround.cfg.rain.WindowStreaks=Window Streaks
 dsurround.cfg.rain.WindowStreaks.tooltip=Rain runs down the windward side of windows near the player, and drips off their bottom edge
+dsurround.cfg.rain.SnowOnSides=Snow on Sides
+dsurround.cfg.rain.SnowOnSides.tooltip=With particle weather on, snowflakes blown against the side of a wall, leaves or a tree trunk stick there for a moment before melting, as they do on the ground. Off, they only settle on top of things.
 dsurround.cfg.rain.EnableMagmaNetherrack=Enable Netherrack and Magma Splash Effect
 dsurround.cfg.rain.EnableMagmaNetherrack.tooltip=Enables/disables the lava particle effect on Netherrack and Magma blocks when raining
 

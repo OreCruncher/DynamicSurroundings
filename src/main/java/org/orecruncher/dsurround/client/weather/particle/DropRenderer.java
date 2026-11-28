@@ -295,6 +295,70 @@ final class DropRenderer {
 	}
 
 	/**
+	 * Writes the snow flecks into {@code quads}, around the camera, to be drawn as the falling snow is (the snow texture
+	 * bound, or untextured if {@code snowflakes} is empty). Each lies flat on the face it landed on, the top of a block
+	 * or a side it was blown into, as the flake it fell as, at the flake's size, fading and shrinking as it melts.
+	 *
+	 * @param snowflakes the flakes of the snow texture; empty to draw plain flecks
+	 * @param largest    the largest of them, in pixels: the others are drawn in proportion
+	 */
+	static void build(@Nonnull final SnowFlecks flecks, @Nonnull final Quads quads, @Nonnull final View view,
+			final float partialTick, @Nonnull final List<Snowflakes.Flake> snowflakes, final int largest) {
+		quads.begin(flecks.count);
+		for (int i = 0; i < flecks.count; i++) {
+			final float remaining = flecks.remaining(i, partialTick);
+			if (remaining <= 0F)
+				continue;
+			final float x = (float) (flecks.x[i] - view.x);
+			final float y = (float) (flecks.y[i] - view.y);
+			final float z = (float) (flecks.z[i] - view.z);
+			float half = (SNOW_MIN_HALF_SIZE + SNOW_HALF_SIZE_RANGE * flecks.size[i]) * SnowFlecks.sizeFor(remaining);
+			float u0 = 0F, v0 = 0F, u1 = 0F, v1 = 0F;
+			if (!snowflakes.isEmpty()) {
+				final Snowflakes.Flake flake = snowflakes.get(PackedDrops.variant(flecks.variant[i], snowflakes.size()));
+				half *= flake.size / (float) largest;
+				u0 = flake.u0;
+				v0 = flake.v0;
+				u1 = flake.u1;
+				v1 = flake.v1;
+			}
+			final int color = color(1F, 1F, 1F, SNOW_ALPHA * remaining);
+			final int light = light(flecks.light[i]);
+			// The corners, each a quarter turn from the last, as far out as a falling flake's (see billboard), in the
+			// plane of the face it lies on
+			final float corner = half * SQRT_OF_TWO;
+			final float cu = flecks.turnCos[i] * corner, cv = flecks.turnSin[i] * corner;
+			final byte face = flecks.face[i];
+			fleckCorner(quads, face, x, y, z, cu, cv, u0, v0, color, light);
+			fleckCorner(quads, face, x, y, z, -cv, cu, u0, v1, color, light);
+			fleckCorner(quads, face, x, y, z, -cu, -cv, u1, v1, color, light);
+			fleckCorner(quads, face, x, y, z, cv, -cu, u1, v0, color, light);
+		}
+	}
+
+	private static final float SQRT_OF_TWO = (float) Math.sqrt(2D);
+
+	/**
+	 * Adds a corner of a fleck lying on a face, offset from its center by (u, v) in the plane of the face: x and z on
+	 * the top of a block, z and y on a west or east side, x and y on a north or south side
+	 */
+	private static void fleckCorner(final Quads quads, final byte face, final float x, final float y, final float z,
+			final float u, final float v, final float texU, final float texV, final int color, final int light) {
+		switch (face) {
+		case SnowFlecks.FACE_WEST:
+		case SnowFlecks.FACE_EAST:
+			quads.vertex(x, y + v, z + u, texU, texV, color, light);
+			break;
+		case SnowFlecks.FACE_NORTH:
+		case SnowFlecks.FACE_SOUTH:
+			quads.vertex(x + u, y + v, z, texU, texV, color, light);
+			break;
+		default:
+			quads.vertex(x + u, y, z + v, texU, texV, color, light);
+		}
+	}
+
+	/**
 	 * The share of the rain and snow drawn at a distance from the camera, horizontally: all of it near, falling off
 	 * steadily to {@link #THIN_KEEP_AT_EDGE} at the edge of the cylinder
 	 */

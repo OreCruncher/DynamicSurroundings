@@ -1,0 +1,23 @@
+// Snow flecks (particle weather): flakes landing on a stone floor cleared of snow, and blown east into a stone wall
+// in front of the camera, where they stick to its side (rain.snowOnSides), against sides off and the sheets
+{
+  "world": "bench",
+  "seed": 20261126,
+  "setup": ["gamerule doDaylightCycle false", "time set 6000", "gamerule doWeatherCycle false",
+            "gamerule doMobSpawning false"],
+  "warmup": 15,
+  "record": 10,
+  "repeats": 1,
+  "video": {"width": 1920, "height": 1080, "vsync": false, "maxFps": 260},
+  "scenes": {
+    "snow-wall": {"biome": "minecraft:ice_flats", "yaw": -90, "pitch": 15,
+             "commands": ["fill ~-2 ~ ~-8 ~6 ~4 ~8 air", "fill ~-2 ~-1 ~-8 ~6 ~-1 ~8 stone",
+                          "fill ~4 ~ ~-8 ~4 ~3 ~8 stone", "weather rain 999999", "ds setstr rain 100",
+                          "dsweather wind speed 150", "dsweather wind direction E"]}
+  },
+  "runs": [
+    {"label": "sides", "scene": "snow-wall", "settings": {"rain.particleWeather": true, "rain.snowOnSides": true}},
+    {"label": "no-sides", "scene": "snow-wall", "settings": {"rain.particleWeather": true, "rain.snowOnSides": false}},
+    {"label": "sheets", "scene": "snow-wall", "settings": {"rain.particleWeather": false}}
+  ]
+}

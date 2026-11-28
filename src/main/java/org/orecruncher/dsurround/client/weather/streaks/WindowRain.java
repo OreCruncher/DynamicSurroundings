@@ -49,8 +49,11 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -128,6 +131,17 @@ public final class WindowRain {
 		final float rainLevel = MathHelper.clamp(Weather.getIntensityLevel(), 0F, 1F);
 		SEEDER.seedWindows(current, COLUMNS, camera.posX, camera.posY + camera.getEyeHeight(), camera.posZ, rainLevel,
 				WindService.wind(), STREAKS, RANDOM);
+	}
+
+	/**
+	 * A rain drop of particle weather blown against the side of a window: it runs down the glass, as the 26.x line's do
+	 *
+	 * @param size how big the drop was, 0 to 1
+	 */
+	public static void blownIntoWindow(@Nonnull final BlockPos window, @Nonnull final EnumFacing side,
+			@Nonnull final Vec3d at, final float size) {
+		if (isActive() && world != null)
+			RainOnWindows.startStreak(world, window, side, at, size, STREAKS, RANDOM);
 	}
 
 	/**

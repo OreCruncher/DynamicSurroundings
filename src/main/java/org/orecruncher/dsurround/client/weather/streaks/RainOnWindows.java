@@ -49,7 +49,8 @@ import net.minecraft.world.World;
  * rains and the stronger the wind, a column near the camera is looked down for a window. A window whose windward side
  * is open to the rain, with nothing in front of it and the sky above, gets a drop somewhere on that side. Windows
  * indoors, under eaves, or facing away from the wind stay dry. This needs no drops falling, so it runs with the sheets
- * of rain as well as particle weather; the 26.x line's drops blown into windows aren't followed here.
+ * of rain as well as particle weather; with particle weather, drops blown into windows start streaks too
+ * ({@link WindowRain#blownIntoWindow}).
  */
 public final class RainOnWindows {
 
@@ -171,7 +172,7 @@ public final class RainOnWindows {
 	 *
 	 * @param size how big the drop was, 0 to 1
 	 */
-	private static void startStreak(@Nonnull final World world, @Nonnull final BlockPos window,
+	static void startStreak(@Nonnull final World world, @Nonnull final BlockPos window,
 			@Nonnull final EnumFacing side, @Nonnull final Vec3d at, final float size,
 			@Nonnull final WindowStreaks streaks, @Nonnull final Random random) {
 		// Down the glass to where it ends: a drop runs down a window of several blocks, then drips off its bottom edge

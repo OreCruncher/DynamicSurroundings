@@ -23,6 +23,7 @@
 
 package org.orecruncher.dsurround.client.weather.particle;
 
+import org.orecruncher.dsurround.client.weather.streaks.WindowRain;
 import org.orecruncher.dsurround.client.weather.wind.WindService;
 import java.lang.reflect.Field;
 import java.util.List;
@@ -54,9 +55,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * Particle weather: rain and snow drawn as single drops and flakes around the player, in place of vanilla's sheets,
  * ported from the 26.x line ({@link PrecipitationField} and {@link DropRenderer}), blown by the scene's wind
- * ({@link WindService}). No
- * landings of its own (the splashes are still the storm splash renderer's). Dust is still
- * drawn as sheets. Off under an OptiFine shader pack, which draws the weather its own way.
+ * ({@link WindService}). Where snow lands it leaves flecks that melt away, on the ground and, blown by the wind,
+ * on the sides of walls and trees ({@link Landings}, {@link SnowFlecks}); rain blown against a window runs down it
+ * ({@link WindowRain}). The splashes are still the storm splash renderer's. Dust is still drawn as sheets. Off under an OptiFine shader pack, which draws the weather its own way.
  * <p>
  * Run from the weather renderer, so it only runs where the mod draws the weather: the drops are ticked by the first
  * frame of each client tick (the renderer's tick count), then drawn every frame: uploaded once a tick for the GPU to
@@ -70,12 +71,22 @@ public final class ParticleWeather {
 	 * Drops at full strength, at the field's range; the 26.x line's default
 	 */
 	static final int MAX_DROPS = 6000;
+	/**
+	 * Snow flecks at once, the 26.x line's default. Snow lands far more slowly than rain, and the flecks melt in a few
+	 * seconds.
+	 */
+	static final int MAX_SNOW_FLECKS = 1024;
+	// Where a rain drop blown in meets a window: it runs down the glass
+	private static final Landings.WindowHit WINDOWS = WindowRain::blownIntoWindow;
 
 	private static final ParticleWeather INSTANCE = new ParticleWeather();
 
 	private final PrecipitationField field = new PrecipitationField(MAX_DROPS);
 	private final WorldColumns columns = new WorldColumns();
 	private final Snowflakes snowflakes = new Snowflakes();
+	private final SnowFlecks flecks = new SnowFlecks(MAX_SNOW_FLECKS);
+	private final Landings landings = new Landings();
+	private final DropRenderer.Quads fleckQuads = new DropRenderer.Quads();
 	private final DropRenderer.Quads rain = new DropRenderer.Quads();
 	private final DropRenderer.Quads snow = new DropRenderer.Quads();
 	private final GpuDrops gpu = new GpuDrops();
@@ -120,10 +131,13 @@ public final class ParticleWeather {
 			this.world = world;
 			this.columns.setWorld(world);
 			this.field.clear();
+			this.flecks.clear();
 			this.lastTick = Integer.MIN_VALUE;
 		}
 		if (tick == this.lastTick)
 			return;
+		// They melt whether or not anything falls
+		this.flecks.tick();
 		// Ticks missed (the game paused, or the weather not drawn): the columns found then may be out of date
 		if (tick != this.lastTick + 1)
 			this.field.idle();
@@ -135,6 +149,8 @@ public final class ParticleWeather {
 		this.field.tick(this.columns, camera.posX, camera.posY + camera.getEyeHeight(), camera.posZ, rainLevel,
 				density(Minecraft.getMinecraft().gameSettings.particleSetting), WindService.wind(), this.random);
 		this.uploadDue = true;
+		this.landings.land(world, this.field, this.flecks, Minecraft.getMinecraft().gameSettings.particleSetting,
+				ModOptions.rain.snowOnSides, WindowRain.isActive() ? WINDOWS : null, this.random);
 	}
 
 	/**
@@ -146,6 +162,7 @@ public final class ParticleWeather {
 			INSTANCE.world = null;
 			INSTANCE.columns.setWorld(null);
 			INSTANCE.field.clear();
+			INSTANCE.flecks.clear();
 		}
 	}
 
@@ -153,8 +170,8 @@ public final class ParticleWeather {
 	public static void diagnostics(@Nonnull final DiagnosticEvent.Gather event) {
 		if (!isActive() || INSTANCE.world == null)
 			return;
-		event.output.add(TextFormatting.AQUA + String.format(Locale.ROOT, "Particle weather: %d drops",
-				INSTANCE.field.count()));
+		event.output.add(TextFormatting.AQUA + String.format(Locale.ROOT, "Particle weather: %d drops, %d snow flecks",
+				INSTANCE.field.count(), INSTANCE.flecks.count()));
 	}
 
 	/**
@@ -166,7 +183,7 @@ public final class ParticleWeather {
 	}
 
 	private void draw(@Nonnull final EntityRenderer renderer, final float partialTicks) {
-		if (this.field.count() == 0)
+		if (this.field.count() == 0 && this.flecks.count() == 0)
 			return;
 		final Minecraft mc = Minecraft.getMinecraft();
 		final RenderManager manager = mc.getRenderManager();
@@ -177,6 +194,7 @@ public final class ParticleWeather {
 				mc.gameSettings.thirdPersonView != 0 ? 4F : 0F);
 		final List<Snowflakes.Flake> flakes = this.snowflakes.flakes(mc.getResourceManager());
 		final boolean onGpu = ModOptions.rain.particleWeatherOnGpu && this.gpu.isAvailable();
+		DropRenderer.build(this.flecks, this.fleckQuads, view, partialTicks, flakes, this.snowflakes.largest());
 		if (onGpu) {
 			// Uploaded once a tick; the shader makes each frame's quads
 			if (this.uploadDue) {
@@ -187,7 +205,7 @@ public final class ParticleWeather {
 			this.uploadDue = true;
 			DropRenderer.build(this.field, this.rain, this.snow, view, partialTicks, flakes,
 					this.snowflakes.largest(), RainColor.USUAL);
-			if (this.rain.count() == 0 && this.snow.count() == 0)
+			if (this.rain.count() == 0 && this.snow.count() == 0 && this.fleckQuads.count() == 0)
 				return;
 		}
 
@@ -207,7 +225,8 @@ public final class ParticleWeather {
 		if (onGpu) {
 			// Rain and snow in one draw: the shader leaves the rain untextured
 			mc.getTextureManager().bindTexture(Snowflakes.TEXTURE);
-			this.gpu.draw(view.x, view.y, view.z, partialTicks, view, this.field.radius(), RainColor.USUAL);
+			if (this.field.count() > 0)
+				this.gpu.draw(view.x, view.y, view.z, partialTicks, view, this.field.radius(), RainColor.USUAL);
 		} else {
 			GlStateManager.disableTexture2D();
 			this.rain.draw();
@@ -215,6 +234,17 @@ public final class ParticleWeather {
 			if (this.snow.count() > 0) {
 				mc.getTextureManager().bindTexture(Snowflakes.TEXTURE);
 				this.snow.draw();
+			}
+		}
+		// The flecks, cut from the snow texture as the falling flakes are (plain without one)
+		if (this.fleckQuads.count() > 0) {
+			if (flakes.isEmpty()) {
+				GlStateManager.disableTexture2D();
+				this.fleckQuads.draw();
+				GlStateManager.enableTexture2D();
+			} else {
+				mc.getTextureManager().bindTexture(Snowflakes.TEXTURE);
+				this.fleckQuads.draw();
 			}
 		}
 

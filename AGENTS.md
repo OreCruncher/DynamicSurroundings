@@ -83,6 +83,17 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   (`client/weather/particle`: `PrecipitationField`, `PrecipitationColumns`, `PackedDrops`, `Snowflakes`, `Wind`, with
   their tests). Run from `RenderWeather`: ticked by the first frame of each client tick, drawn every frame; the dust is
   still the sheets of `StormRenderer` (`dustOnly`). Off under an OptiFine shader pack. The drops are blown by the scene's wind (below).
+- Off by default because it came over as an experiment (the 26.x line has it on): the sheets are what 1.12.2 players
+  know, and it was the first port on the list. The window frost and streaks don't need it and are on.
+- Landings (`Landings`, from 26.3's): where a snowflake lands it leaves a fleck (`SnowFlecks`, tested) that lies flat
+  as the flake it fell as, then shrinks and fades (30 to 70 ticks; 1024 at most), not on water, snow or magma. One the
+  field says was blown in below its column's top is followed on (`RayWalk`, 8 blocks, 32 a tick with the rain's) to
+  what it hits: the side of a wall, leaves or a trunk, where it sticks (`rain.snowOnSides`), or the ground under
+  cover. A rain drop blown into a window starts a streak (`WindowRain.blownIntoWindow`). 26.3's splashes, smoke and
+  damp spots aren't here (the splashes are still `StormSplashRenderer`'s). Drawn by `DropRenderer` on the CPU each
+  frame, in GPU mode too, after the drops with the snow texture. Bench: `scripts/bench/snow-flecks.json` (Ice Plains, a
+  stone floor and wall, wind east: the weather pass 0.18 ms of CPU with sides, 0.13 without). Bench scene names are
+  remembered per world: a new scenario needs its own, or it runs where the old one was.
 
 ## Wind
 - `client/weather/wind`, ported from the 26.x line: `WindService` ticks the one `Wind` every client tick, particle
@@ -127,7 +138,7 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
 - `client/weather/streaks`, ported from the 26.x line (`rain.windowStreaks`, on): `RainOnWindows` (from 26.3's
   `Landings.seedWindows`) starts drops on the windward side of windows near the camera, `WindowStreaks` runs them down
   the glass, dripping off the bottom edge as vanilla's dripping water. It needs no falling drops, so it runs with the
-  sheets as well as particle weather; 26.3's drops blown into windows aren't followed. `WindowRain` ticks and draws
+  sheets as well as particle weather; with particle weather, drops blown into a window start streaks too (above). `WindowRain` ticks and draws
   them, untextured and without a shader, after the frost and before the rain.
 - `RayWalk` follows a line through collision boxes and fluid surfaces over an `IBlockAccess` (1.12.2's ray trace is on
   `World` only, and tests use a fake). Bench: `scripts/bench/window-streaks.json` (a glass wall

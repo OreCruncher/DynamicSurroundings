@@ -180,6 +180,12 @@ public final class ModOptions {
 		@Comment("Rain runs down the windward side of windows near the player, and drips off their bottom edge")
 		public static boolean windowStreaks = true;
 
+		@Option("Snow on Sides")
+		@DefaultValue("true")
+		@LangKey(rain.PREFIX + ".SnowOnSides")
+		@Comment("With particle weather on, snowflakes blown against the side of a wall, leaves or a tree trunk stick there for a moment before melting, as they do on the ground")
+		public static boolean snowOnSides = true;
+
 		@Option("Style of rain water ripple")
 		@DefaultValue("3")
 		@LangKey(rain.PREFIX + ".RippleStyle")
