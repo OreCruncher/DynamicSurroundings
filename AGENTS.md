@@ -321,6 +321,8 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
 ## Other mods
 - OptiFine shader packs: fog processing is off (`FogHandler.doFog`), with particle weather, frost and point lights
   (`ParticleWeather.shaderPackInUse`): the pack draws its own sky, and our fog showed as a band below it (#831).
+- Futurepack sets blocks in a client world of its own from its own thread while loading: `WorldEventDetector` passes on
+  only the player's world's block updates, on the game's thread (#806).
 - Animania's farm addon is optional: `AnimaniaBadge` names its classes only when it is installed (#808).
 
 ## Known noise in a dev run's log

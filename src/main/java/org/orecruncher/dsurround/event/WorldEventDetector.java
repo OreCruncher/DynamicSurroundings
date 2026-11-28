@@ -30,6 +30,7 @@ import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
@@ -60,6 +61,12 @@ public class WorldEventDetector implements IWorldEventListener {
 	@Override
 	public void notifyBlockUpdate(@Nonnull final World worldIn, @Nonnull final BlockPos pos,
 			@Nonnull final IBlockState oldState, @Nonnull final IBlockState newState, final int flags) {
+
+		// Only the world the player is in, on the game's thread: Futurepack sets blocks in a client world of its own
+		// from a thread of its own while the game loads, and the state looked at here isn't ready then (#806)
+		final Minecraft mc = Minecraft.getMinecraft();
+		if (worldIn != mc.world || !mc.isCallingFromMinecraftThread())
+			return;
 
 		if (worldIn.provider.getDimension() == EnvironState.getDimensionId()) {
 			final BlockUpdateEvent event = new BlockUpdateEvent(worldIn, pos, oldState, newState, flags);
