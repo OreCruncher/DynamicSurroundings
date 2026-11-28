@@ -791,10 +791,10 @@ public final class ModOptions {
 			public static String commandNameCalc = "calc";
 
 			@Option("alias")
-			@DefaultValue("c math")
+			@DefaultValue("math")
 			@LangKey(calc.PREFIX + ".Alias")
 			@Comment("Alias for the command")
-			public static String commandAliasCalc = "c math";
+			public static String commandAliasCalc = "math";
 		}
 	}
 
