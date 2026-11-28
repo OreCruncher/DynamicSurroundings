@@ -151,7 +151,7 @@ public class ParticleCollection extends ParticleBase {
 	private static final Map<ResourceLocation, RenderTimer> TIMERS = new HashMap<>();
 
 	@Nonnull
-	private static RenderTimer timerFor(@Nonnull final ResourceLocation texture) {
+	protected static RenderTimer timerFor(@Nonnull final ResourceLocation texture) {
 		return TIMERS.computeIfAbsent(texture, t -> {
 			String name = t.getResourcePath();
 			name = name.substring(name.lastIndexOf('/') + 1).replace(".png", "");

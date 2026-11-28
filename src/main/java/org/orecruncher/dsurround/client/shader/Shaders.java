@@ -36,6 +36,7 @@ public final class Shaders {
 	public static final ShaderProgram AURORA_COMPOSITE;
 	public static final ShaderProgram DROPS;
 	public static final ShaderProgram FROST;
+	public static final ShaderProgram POINT_LIGHT;
 
 	static {
 
@@ -49,6 +50,8 @@ public final class Shaders {
 				new ResourceLocation(ModInfo.MOD_ID, "shaders/drops.frag"));
 		FROST = register("Window Frost", new ResourceLocation(ModInfo.MOD_ID, "shaders/frost.vert"),
 				new ResourceLocation(ModInfo.MOD_ID, "shaders/frost.frag"));
+		POINT_LIGHT = register("Point Lights", new ResourceLocation(ModInfo.MOD_ID, "shaders/point_light.vert"),
+				new ResourceLocation(ModInfo.MOD_ID, "shaders/point_light.frag"));
 	}
 
 	public static boolean areShadersSupported() {

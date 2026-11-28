@@ -457,6 +457,18 @@ public final class ModOptions {
 		@Comment("Enable Firefly effect around plants")
 		public static boolean enableFireflies = true;
 
+		@Option("Enable Firefly Glow")
+		@DefaultValue("true")
+		@LangKey(effects.PREFIX + ".FireflyGlow")
+		@Comment("Enable/disable a soft glow around fireflies")
+		public static boolean enableFireflyGlow = true;
+
+		@Option("Enable Firefly Light")
+		@DefaultValue("true")
+		@LangKey(effects.PREFIX + ".FireflyLight")
+		@Comment("Enable/disable fireflies lighting the grass, leaves and ground close to them (needs shaders; not with a shader pack)")
+		public static boolean enableFireflyLight = true;
+
 		@Option("Enable Water Splash")
 		@DefaultValue("true")
 		@LangKey(effects.PREFIX + ".Splash")

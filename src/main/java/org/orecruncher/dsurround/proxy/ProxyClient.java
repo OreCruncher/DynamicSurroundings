@@ -49,6 +49,7 @@ import org.orecruncher.dsurround.capabilities.CapabilityEntityFXData;
 import org.orecruncher.dsurround.capabilities.CapabilitySeasonInfo;
 import org.orecruncher.dsurround.capabilities.CapabilitySpeechData;
 import org.orecruncher.dsurround.client.fx.ParticleCollections;
+import org.orecruncher.dsurround.client.fx.light.PointLights;
 import org.orecruncher.dsurround.client.fx.particle.ParticleDripOverride;
 import org.orecruncher.dsurround.client.gui.HumDinger;
 import org.orecruncher.dsurround.client.handlers.EffectManager;
@@ -114,6 +115,7 @@ public class ProxyClient extends Proxy implements IProxy, ISelectiveResourceRelo
 		register(Weather.class);
 		register(WorldEventDetector.class);
 		register(ParticleCollections.class);
+		register(PointLights.class);
 	}
 
 	@Override

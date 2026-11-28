@@ -271,6 +271,26 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   had a loop of its own before. `effects.waterfallCutoff` keeps its old scale (strength + 2). The diagnostics overlay
   has the counts.
 
+## Fireflies
+- From the 26.x line (`client/fx/firefly`, tested): each flashes in one of three rhythms (`FireflyFlash`), dark most of
+  its life and not drawn then, and wanders (`WanderingFlight`), steering around blocks with a collision box rather than
+  bumping into them, dipping before a flash and rising while lit. `MoteFireFly` is vanilla's end rod sparkle in
+  yellow-green, lit by its own flash; `ParticleCollectionFireFly` draws a halo (`textures/particles/firefly_glow.png`,
+  `effects.enableFireflyGlow`) under each lit one. The spawn chance is still 1.12.2's (1 in 50 samples).
+- Point lights (`client/fx/light`, `effects.enableFireflyLight`): each lit firefly records a light as it is drawn
+  (`PointLightList`, relative to the camera; the nearest 64 drawn, fading from the 48th), and `PointLights` draws them at
+  `RenderWorldLastEvent`: the main framebuffer's depth copied into a texture (`glCopyTexSubImage2D`; a blit into a
+  texture of its own format measured no faster), then a quad a light, added (`ONE, ONE`), by `shaders/point_light.*`
+  (GLSL 1.20 from 26.x's, `gl_ProjectionMatrixInverse` for the view position). Each quad sits at the depth of its
+  sphere's far side, tested `GL_GREATER`, so pixels beyond the light's reach are dropped before shading: 1.12.2 doesn't
+  cull particles, and in the bench field some 200 fireflies are lit at once, several close enough that their quads
+  cover the screen; that test halved the lights' GPU time (0.44 to 0.22 ms). 1.12.2's translucent blocks leave no
+  depth, so the light falls on what is under water or behind glass. Off without shaders or under an OptiFine shader
+  pack. The old Albedo light hook (commented out) is gone.
+- Each lit firefly's quad is written whole (`BufferBuilder.addVertexData`): element by element, building them was the
+  fireflies' main cost on the CPU. `FireflyFlash.brightness` looks at the latest two pulses only (the same answer).
+- Bench: `scripts/bench/fireflies.json` (default, no lights, no glow, off).
+
 ## Scripts (conditions)
 - Conditions run through OreLib's `ExpressionCache` (`expression/ExpressionEngine`). Sounds and block effects keep
   the compiled `Script` (`SoundEffect.matches`, `BlockEffect.conditionsMet`), compiled as the config loads

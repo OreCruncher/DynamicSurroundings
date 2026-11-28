@@ -1,8 +1,8 @@
 // Fireflies at their busiest: the player standing in a field of poppies at night, fireflies all around. The 26.x line's
 // fireflies.json, in 1.12.2's commands, for comparing the two lines; 1.12.2's fireflies are a random block effect of
-// flowers at night (no lights or glow, which 26.x's runs also turn off one at a time). The field is built by the
-// commands on a stage they clear and floor at the player's feet, in birch forest. Fireflies aren't seeded, so runs
-// differ. See README.md for the format.
+// flowers at night, and as 26.x's they have a glow and light their surroundings, each turned off in a run of its own.
+// The field is built by the commands on a stage they clear and floor at the player's feet, in birch forest. Fireflies
+// aren't seeded, so runs differ. See README.md for the format.
 {
   "world": "bench",
   "seed": 20261126,
@@ -42,6 +42,8 @@
   },
   "runs": [
     {"label": "fireflies-default", "scene": "field"},
+    {"label": "fireflies-nolights", "scene": "field", "settings": {"effects.enableFireflyLight": false}},
+    {"label": "fireflies-noglow", "scene": "field", "settings": {"effects.enableFireflyGlow": false}},
     {"label": "fireflies-off", "scene": "field", "settings": {"effects.enableFireflies": false}}
   ]
 }

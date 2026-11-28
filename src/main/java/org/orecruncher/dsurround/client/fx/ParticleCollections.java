@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModInfo;
 import org.orecruncher.dsurround.client.fx.particle.mote.IParticleMote;
+import org.orecruncher.dsurround.client.fx.light.PointLights;
 import org.orecruncher.dsurround.client.fx.particle.mote.MoteFireFly;
 import org.orecruncher.dsurround.client.fx.particle.mote.MoteFootprint;
 import org.orecruncher.dsurround.client.fx.particle.mote.MoteRainSplash;
@@ -68,7 +69,7 @@ public final class ParticleCollections {
 	private final static CollectionHelper theSprays = new CollectionHelper("Water Spray", SPRAY_TEXTURE);
 	private final static CollectionHelper thePrints = new CollectionHelper("Footprints",
 			ParticleCollectionFootprint.FACTORY, FOOTPRINT_TEXTURE);
-	private final static CollectionHelper theFireFlies = new LightedCollectionHelper("Fireflies",
+	private final static CollectionHelper theFireFlies = new CollectionHelper("Fireflies",
 			ParticleCollectionFireFly.FACTORY, FIREFLY_TEXTURE);
 
 	@Nullable
@@ -159,6 +160,8 @@ public final class ParticleCollections {
 		event.output.add(TextFormatting.AQUA + theRipples.toString());
 		event.output.add(TextFormatting.AQUA + theSprays.toString());
 		event.output.add(TextFormatting.AQUA + theFireFlies.toString());
+		event.output.add(TextFormatting.AQUA + (PointLights.fireflyLightsOn() ? "Point lights: " + PointLights.drawn() + " drawn"
+				: "Point lights: off"));
 		event.output.add(TextFormatting.AQUA + WaterfallSounds.diagnostic());
 	}
 }
