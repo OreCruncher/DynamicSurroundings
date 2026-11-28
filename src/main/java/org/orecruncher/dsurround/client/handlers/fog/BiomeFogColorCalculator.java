@@ -118,11 +118,16 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 			return super.calculate(event);
 
 		// WorldProvider.getFogColor() - need to calculate the scale based
-		// on sunlight and stuff.
+		// on sunlight and stuff. Not where there is no surface (the Nether): its sun stands still at midnight, which
+		// took any fog color set for it down to almost black, and the Nether's provider doesn't scale it (#598)
 		final float partialTicks = (float) event.getRenderPartialTicks();
-		final float celestialAngle = world.getCelestialAngle(partialTicks);
-		final float baseScale = MathStuff.clamp(MathStuff.cos(celestialAngle * MathStuff.PI_F * 2.0F) * 2.0F + 0.5F, 0,
-				1);
+		final float baseScale;
+		if (world.provider.isSurfaceWorld()) {
+			final float celestialAngle = world.getCelestialAngle(partialTicks);
+			baseScale = MathStuff.clamp(MathStuff.cos(celestialAngle * MathStuff.PI_F * 2.0F) * 2.0F + 0.5F, 0, 1);
+		} else {
+			baseScale = 1F;
+		}
 
 		double rScale = baseScale * 0.94F + 0.06F;
 		double gScale = baseScale * 0.94F + 0.06F;
