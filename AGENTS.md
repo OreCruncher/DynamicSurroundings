@@ -79,12 +79,12 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   again when 26.x's shader changes. Bench: `scripts/bench/aurora.json` (classic), `aurora-cinematic.json`.
 
 ## Particle weather
-- `rain.particleWeather` (off by default): rain and snow as single drops and flakes, ported from the 26.x line
+- `rain.particleWeather` (on by default, as in the 26.x line): rain and snow as single drops and flakes, ported from the 26.x line
   (`client/weather/particle`: `PrecipitationField`, `PrecipitationColumns`, `PackedDrops`, `Snowflakes`, `Wind`, with
   their tests). Run from `RenderWeather`: ticked by the first frame of each client tick, drawn every frame; the dust is
   still the sheets of `StormRenderer` (`dustOnly`). Off under an OptiFine shader pack. The drops are blown by the scene's wind (below).
-- Off by default because it came over as an experiment (the 26.x line has it on): the sheets are what 1.12.2 players
-  know, and it was the first port on the list. The window frost and streaks don't need it and are on.
+- It came over off, as an experiment, and was turned on once the landings were in. A config written before keeps
+  the value saved in it (Forge writes every option out), so players who had it off stay with the sheets.
 - Landings (`Landings`, from 26.3's): where a snowflake lands it leaves a fleck (`SnowFlecks`, tested) that lies flat
   as the flake it fell as, then shrinks and fades (30 to 70 ticks; 1024 at most), not on water, snow or magma. One the
   field says was blown in below its column's top is followed on (`RayWalk`, 8 blocks, 32 a tick with the rain's) to

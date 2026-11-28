@@ -157,10 +157,10 @@ public final class ModOptions {
 		public static boolean enableRainSurfaces = true;
 
 		@Option("Particle Weather")
-		@DefaultValue("false")
+		@DefaultValue("true")
 		@LangKey(rain.PREFIX + ".ParticleWeather")
-		@Comment("Draw rain and snow as single drops and flakes around the player rather than sheets (experimental; off under a shader pack)")
-		public static boolean particleWeather = false;
+		@Comment("Draw rain and snow as single drops and flakes around the player rather than sheets (off under a shader pack)")
+		public static boolean particleWeather = true;
 
 		@Option("Particle Weather on the GPU")
 		@DefaultValue("true")
