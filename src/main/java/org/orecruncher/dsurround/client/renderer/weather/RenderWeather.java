@@ -39,6 +39,7 @@ import org.orecruncher.dsurround.lib.profiling.RenderTimer;
 import org.orecruncher.dsurround.ModBase;
 import org.orecruncher.dsurround.ModOptions;
 import org.orecruncher.dsurround.client.handlers.EnvironStateHandler.EnvironState;
+import org.orecruncher.dsurround.lib.compat.ModEnvironment;
 import org.orecruncher.lib.ReflectedField.IntegerField;
 
 import net.minecraft.client.Minecraft;
@@ -126,6 +127,13 @@ public final class RenderWeather extends IRenderHandler {
 
 		if (!ModOptions.asm.enableWeatherASM || !e.getWorld().isRemote)
 			return;
+
+		// Weather2 has weather of its own, and ours over it cut its rain sounds and hid its overcast (#322, #574);
+		// the server leaves the rain to it too
+		if (ModEnvironment.Weather2.isLoaded()) {
+			ModBase.log().info("Not hooking the weather renderer: Weather2 is installed");
+			return;
+		}
 
 		// Only want to hook if the provider doesn't have special
 		// weather handling.

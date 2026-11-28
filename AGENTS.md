@@ -319,6 +319,8 @@ build moved off ForgeGradle 3, and Mixin comes from MixinBooter.
   compiled then too ("Skipping biome entry ...").
 
 ## Other mods
+- Weather2: DS doesn't put its weather renderer in (`RenderWeather.onWorldLoad`), so its rain, splashes and rain sounds
+  stand aside, as the server's rain already did (`AtmosphereService`); both drawing cut Weather2's rain sounds (#322).
 - OptiFine shader packs: fog processing is off (`FogHandler.doFog`), with particle weather, frost and point lights
   (`ParticleWeather.shaderPackInUse`): the pack draws its own sky, and our fog showed as a band below it (#831).
 - A mod that puts a sound of its own in place of one of ours (`PlaySoundEvent`, Ender IO's padding) has that sound
