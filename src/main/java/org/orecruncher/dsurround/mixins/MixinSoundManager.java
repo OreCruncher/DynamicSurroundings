@@ -44,7 +44,8 @@ public abstract class MixinSoundManager {
 		if (!(current instanceof GuiErrorBase)) {
 			try {
 				ci.setReturnValue(SoundEngine.getClampedVolume(sound));
-			} catch (final Exception ignore) {
+			} catch (final Exception | LinkageError ignore) {
+				// DS may not have loaded (a mod sorting failure leaves OreLib out): vanilla's volume, and Forge's error screen (#819)
 			}
 		}
 	}
